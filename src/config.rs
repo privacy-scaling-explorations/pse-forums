@@ -49,7 +49,7 @@ impl Default for Config {
     fn default() -> Self {
         Config {
             db: "freedit.db".into(),
-            addr: "127.0.0.1:3001".into(),
+            addr: "0.0.0.0:3001".into(),
             rebuild_index: None,
             avatars_path: "static/imgs/avatars".into(),
             inn_icons_path: "static/imgs/inn_icons".into(),
