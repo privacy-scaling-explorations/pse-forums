@@ -29,12 +29,7 @@ async fn main() -> Result<(), AppError> {
     #[cfg(not(debug_assertions))]
     tokio::spawn(async move {
         loop {
-            let snapshot_path = PathBuf::from("snapshots");
-            // create snapshot dir if needed
-            if !snapshot_path.exists() {
-                fs::create_dir_all(&snapshot_path).unwrap();
-            }
-            // create a snapshot
+            let snapshot_path = &CONFIG.snapshots_path;
             create_snapshot(&snapshot_path, &DB);
             // remove snapshots older than 48 hours
             if let Err(e) = prune_snapshots(&snapshot_path) {
@@ -108,9 +103,9 @@ fn create_snapshot(snapshot_path: &PathBuf, db: &sled::Db) {
     info!(%checksum);
 
     let timestamp = SystemTime::now()
-       .duration_since(UNIX_EPOCH)
-       .unwrap()
-       .as_secs();
+        .duration_since(UNIX_EPOCH)
+        .unwrap()
+        .as_secs();
 
     // create a temporary directory for writing the snapshot
     // we don't do this in the system tmpdir because it may
@@ -134,9 +129,9 @@ fn create_snapshot(snapshot_path: &PathBuf, db: &sled::Db) {
 fn prune_snapshots(snapshot_path: &PathBuf) -> Result<(), AppError> {
     let contents = fs::read_dir(snapshot_path)?;
     let now = SystemTime::now()
-       .duration_since(UNIX_EPOCH)
-       .unwrap()
-       .as_secs();
+        .duration_since(UNIX_EPOCH)
+        .unwrap()
+        .as_secs();
 
     for name in contents {
         let name = name?;

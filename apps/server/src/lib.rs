@@ -58,6 +58,6 @@ pub static DB: LazyLock<Db> = LazyLock::new(|| {
     let db_url = &CONFIG.db;
     let config = sled::Config::default().path(db_url);
     let db = config.open().unwrap();
-    info!(%db_url);
+    info!("{}", db_url.display());
     db
 });
