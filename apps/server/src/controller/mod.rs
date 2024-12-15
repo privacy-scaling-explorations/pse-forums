@@ -136,6 +136,7 @@ use self::fmt::md2html;
 use self::tantivy::{ToDoc, FIELDS};
 use self::user::Role;
 use crate::error::AppError;
+use ::tantivy::TantivyDocument;
 use bincode::config::standard;
 use bincode::{Decode, Encode};
 use garde::Validate;
@@ -143,7 +144,6 @@ use jiff::{Timestamp, ToSpan};
 use serde::{Deserialize, Serialize};
 use sled::Db;
 use std::fmt::Display;
-use tantivy::TantivyDocument;
 
 /// user
 ///
