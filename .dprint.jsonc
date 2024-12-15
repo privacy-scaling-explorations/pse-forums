@@ -1,4 +1,5 @@
 {
+  "exec": { "commands": [{ "command": "rustfmt", "exts": ["rs"] }] },
   "excludes": ["apps/server/static"],
   "typescript": {
     "quoteProps": "asNeeded",
@@ -11,5 +12,6 @@
     "https://plugins.dprint.dev/toml-0.6.3.wasm",
     "https://plugins.dprint.dev/g-plane/malva-v0.11.1.wasm",
     "https://plugins.dprint.dev/g-plane/pretty_yaml-v0.5.0.wasm",
+    "https://plugins.dprint.dev/exec-0.5.1.json@492414e39dea4dccc07b4af796d2f4efdb89e84bae2bd4e1e924c0cc050855bf",
   ],
 }
