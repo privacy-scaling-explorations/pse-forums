@@ -8,6 +8,9 @@ pre-commit:
       stage_fixed: true
     lint-jtsx:
       run: bun biome lint --config-path=.biome.jsonc --no-errors-on-unmatched
-    #tsc:
-    #  glob: "apps/client/**/*.{cjs,js,jsx,mjs,ts,tsx}"
-    #  run: bun tsc-files -p tsconfig.json -p apps/client/tsconfig.json {staged_files}
+    tsc:
+      run: |
+        bun tsc-files apps/client/src/**/*.{ts,tsx} \
+        -p apps/client/tsconfig.app.json \
+        -p apps/client/tsconfig.node.json \
+        -p apps/client/tsconfig.json

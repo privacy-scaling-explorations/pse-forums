@@ -24,7 +24,7 @@ function App() {
         </a>
       </div>
       <h1>Vite + React</h1>
-      <RouterProvider router={router} />
+      <RouterProvider router={route} />
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
