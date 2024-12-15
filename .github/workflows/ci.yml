@@ -47,6 +47,10 @@ jobs:
 
   client:
     needs: _client
+    # workaround for https://github.com/orgs/community/discussions/13690
+    # (branch protection rules always require their defined status check(s) even if the  corresponding jobs are skipped)
+    # https://stackoverflow.com/questions/69354003/github-action-job-fire-when-previous-job-skipped/77066140#77066140
+    if: ${{ !(failure() || cancelled()) }}
     runs-on: ubuntu-latest
     steps:
       - name: Client checks OK
@@ -135,7 +139,7 @@ jobs:
 
   server:
     needs: _server
-    if: ${{ !(failure() || cancelled())}}
+    if: ${{ !(failure() || cancelled()) }}
     runs-on: ubuntu-latest
     steps:
       - name: Server checks OK (passed or skipped)
