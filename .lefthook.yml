@@ -7,8 +7,10 @@ pre-commit:
       run: bun dprint fmt
       stage_fixed: true
     lint-jtsx:
+      # TODO: do this only if staged files from apps/client/** ?
       run: bun biome lint --config-path=.biome.jsonc --no-errors-on-unmatched
     tsc:
+      # TODO: do this only if staged files from apps/client/**/*.{js,tsx,tsx} ?
       run: |
         bun tsc-files apps/client/src/**/*.{ts,tsx} \
         -p apps/client/tsconfig.app.json \
