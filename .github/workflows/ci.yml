@@ -61,7 +61,7 @@ jobs:
           files: ${{ needs.changed-files.outputs.all_changed_files }}
 
   _server:
-    needs: changed_files
+    needs: changed-files
     if: needs.changed-files.outputs.server_any_changed == 'true'
     name: Cargo test, clippy and doc
     runs-on: ${{ matrix.os }}
@@ -141,7 +141,7 @@ jobs:
         run: exit 0
 
   Deploy:
-    needs: cargo
+    needs: server
     name: Deploy to GitHub Pages
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
