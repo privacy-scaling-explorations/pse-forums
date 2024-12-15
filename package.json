@@ -8,6 +8,7 @@
     ],
     "devDependencies": {
         "@biomejs/biome": "1.9.4",
+        "dprint": "^0.47.6",
         "lefthook": "^1.9.2"
     }
 }
