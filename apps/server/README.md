@@ -20,14 +20,14 @@ All donations go towards hosting costs and continued development of freedit. Tha
 
 ## Features
 
-* Easy to deploy: one binary to run, using embedded database [sled](https://github.com/spacejam/sled) 
-* No javascript at all, for safety maximization. ([Why javascript is evil](https://thehackernews.com/2022/05/tails-os-users-advised-not-to-use-tor.html))
-* e2ee private message
-* Math and Code highlighting support without JavaScript
-* Markdown support
-* inn: Subgroup like Subreddits
-* solo: Personal space like Twitter
-* Online rss reader
+- Easy to deploy: one binary to run, using embedded database [sled](https://github.com/spacejam/sled)
+- No javascript at all, for safety maximization. ([Why javascript is evil](https://thehackernews.com/2022/05/tails-os-users-advised-not-to-use-tor.html))
+- e2ee private message
+- Math and Code highlighting support without JavaScript
+- Markdown support
+- inn: Subgroup like Subreddits
+- solo: Personal space like Twitter
+- Online rss reader
 
 ## Usage
 
@@ -49,9 +49,10 @@ cd freedit && cargo build -r
 
 ## Documentation
 
-* online doc: <https://freedit-org.github.io/freedit/freedit/index.html>
+- online doc: <https://freedit-org.github.io/freedit/freedit/index.html>
 
-* generate local documentation:
+- generate local documentation:
+
 ```bash
 cargo doc --no-deps --open
 ```
@@ -65,6 +66,6 @@ cd freedit && cargo run
 
 ## Credits
 
-* icon: <https://iconoir.com/>
-* CSS framework: <https://bulma.io/>
-* Rust crates: [Cargo.toml](https://github.com/freedit-org/freedit/blob/main/Cargo.toml)
+- icon: <https://iconoir.com/>
+- CSS framework: <https://bulma.io/>
+- Rust crates: [Cargo.toml](https://github.com/freedit-org/freedit/blob/main/Cargo.toml)

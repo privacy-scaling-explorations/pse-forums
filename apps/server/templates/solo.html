@@ -1,195 +1,225 @@
-{% extends "layout.html" %} 
-
-{% block csp %}
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; 
+{% extends "layout.html" %} {% block csp %}
+<meta
+  http-equiv="Content-Security-Policy"
+  content="default-src 'self'; 
   img-src 'self'; script-src 'none'; style-src 'self' 'unsafe-inline'; object-src 'none';
-  font-src 'none'; form-action 'self'; frame-src 'none'; media-src 'none'; manifest-src 'none'; worker-src 'none';"> 
-{% endblock %}
-
-{% block tabs %}
-    <li><a href="/inn/0">Inn</a></li>
-    <li class="is-active"><a href="/solo/user/0">Solo</a></li>
-{% endblock %}
-
-{% block content %}
-    <div class="level is-mobile px-3">
-        <div class="level-left">
-            <div class="tabs is-small is-toggle is-toggle-rounded">
-                <ul>
-                    <li><a href="/solo/user/0">{{ "all"|l10n(page_data.lang) }}</a></li>
-                    {% match page_data.claim %} {% when Some with (val) %}
-                        <li><a href="/solo/user/0?filter=Following">{{ "following"|l10n(page_data.lang) }}</a></li>
-                        <li><a href="/solo/user/{{val.uid}}?filter=Like">{{ "like"|l10n(page_data.lang) }}</a></li>
-                    {% else %}
-                    {% endmatch %}
-                    <li class="is-active"><a href="/solo/{{solo.sid}}">#{{solo.sid}}</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="level-right">
-            <div class="buttons">
-            </div>
-        </div>
+  font-src 'none'; form-action 'self'; frame-src 'none'; media-src 'none'; manifest-src 'none'; worker-src 'none';"
+>
+{% endblock %} {% block tabs %}
+<li><a href="/inn/0">Inn</a></li>
+<li class="is-active"><a href="/solo/user/0">Solo</a></li>
+{% endblock %} {% block content %}
+<div class="level is-mobile px-3">
+  <div class="level-left">
+    <div class="tabs is-small is-toggle is-toggle-rounded">
+      <ul>
+        <li><a href="/solo/user/0">{{ "all"|l10n(page_data.lang) }}</a></li>
+        {% match page_data.claim %} {% when Some with (val) %}
+        <li>
+          <a href="/solo/user/0?filter=Following"
+          >{{ "following"|l10n(page_data.lang) }}</a>
+        </li>
+        <li>
+          <a href="/solo/user/{{val.uid}}?filter=Like"
+          >{{ "like"|l10n(page_data.lang) }}</a>
+        </li>
+        {% else %} {% endmatch %}
+        <li class="is-active">
+          <a href="/solo/{{solo.sid}}">#{{solo.sid}}</a>
+        </li>
+      </ul>
     </div>
+  </div>
+  <div class="level-right">
+    <div class="buttons"></div>
+  </div>
+</div>
 
-    <article class="media box">
-        <figure class="media-left is-hidden-mobile">
-            <p class="image is-48x48">
-                <a href="/user/{{solo.uid}}"><img src="/static/avatars/{{solo.uid}}.png"></a>
-            </p>
-        </figure>
-        <div class="media-content">
-            <div class="content">
-                <p>
-                    {% match solo.reply_to %}{% when Some with (val) %}
-                        <small> Replying to <a href="/solo/{{val}}">{{val}}</a></small><br>
-                    {% else %}{% endmatch %}
-                    <a href="/solo/user/{{solo.uid}}"> <strong>{{solo.username}}</strong> </a>
-                    <small>{{solo.created_at}}</small>
-                    <br> {{solo.content}}
-                </p>
-            </div>
-            <nav class="level is-mobile">
-                <div class="level-left">
-                    <a class="level-item" href="/solo/{{solo.sid}}/like">
-                        <span class="icon is-small">
-                            {% if solo.like %}❤️{% else %}🤍{% endif %}
-                        </span>
-                        {% if solo.like_count > 0 %}
-                        <span>{{solo.like_count}}</span>
-                        {% endif %}
-                    </a>
-                    {% if solo.can_delete %}
-                    <a class="level-item" href="#delete">🗑️</a>
-                    <div id="delete" class="overlay">
-                        <div class="popup content">
-                            <h3>{{ "delete_permanently"|l10n(page_data.lang) }}</h3>
-                            <a class="close" href="#">&times;</a>
-                            <p>{{ "delete_sure"|l10n(page_data.lang) }}</p>
-                            <a href="/solo/{{solo.sid}}/delete" class="button is-danger">{{ "delete"|l10n(page_data.lang) }}</a>
-                        </div>
-                    </div>
-                    {% endif %}
-                    <a href="/solo/{{solo.sid}}">💬
-                        {% if solo.replies.len() >0 %}
-                            {{solo.replies.len()}}
-                        {% endif %}
-                    </a>
-                </div>
-            </nav>
+<article class="media box">
+  <figure class="media-left is-hidden-mobile">
+    <p class="image is-48x48">
+      <a href="/user/{{solo.uid}}"><img
+          src="/static/avatars/{{solo.uid}}.png"
+        ></a>
+    </p>
+  </figure>
+  <div class="media-content">
+    <div class="content">
+      <p>
+        {% match solo.reply_to %}{% when Some with (val) %}
+        <small> Replying to <a href="/solo/{{val}}">{{val}}</a></small>
+        <br>
+        {% else %}{% endmatch %}
+        <a href="/solo/user/{{solo.uid}}">
+          <strong>{{solo.username}}</strong>
+        </a>
+        <small>{{solo.created_at}}</small>
+        <br> {{solo.content}}
+      </p>
+    </div>
+    <nav class="level is-mobile">
+      <div class="level-left">
+        <a class="level-item" href="/solo/{{solo.sid}}/like">
+          <span class="icon is-small">
+            {% if solo.like %}❤️{% else %}🤍{% endif %}
+          </span>
+          {% if solo.like_count > 0 %}
+          <span>{{solo.like_count}}</span>
+          {% endif %}
+        </a>
+        {% if solo.can_delete %}
+        <a class="level-item" href="#delete">🗑️</a>
+        <div id="delete" class="overlay">
+          <div class="popup content">
+            <h3>{{ "delete_permanently"|l10n(page_data.lang) }}</h3>
+            <a class="close" href="#">&times;</a>
+            <p>{{ "delete_sure"|l10n(page_data.lang) }}</p>
+            <a href="/solo/{{solo.sid}}/delete" class="button is-danger"
+            >{{ "delete"|l10n(page_data.lang) }}</a>
+          </div>
         </div>
-        
-        <div class="media-right">
-            {% if solo.solo_type == 20 %}
-                {% include "icons/lock_square.svg" %}
-            {% else if solo.solo_type == 10 %}
-                {% include "icons/lock.svg" %}
-            {% else %}{% endif %}
-        </div>
-    </article>
+        {% endif %}
+        <a href="/solo/{{solo.sid}}">💬 {% if solo.replies.len() >0 %}
+          {{solo.replies.len()}} {% endif %}
+        </a>
+      </div>
+    </nav>
+  </div>
+
+  <div class="media-right">
+    {% if solo.solo_type == 20 %} {% include "icons/lock_square.svg" %} {% else
+    if solo.solo_type == 10 %} {% include "icons/lock.svg" %} {% else %}{% endif
+    %}
+  </div>
+</article>
 
 {% for solo in reply_solos %}
 <article class="media box">
-    <figure class="media-left is-hidden-mobile">
-        <p class="image is-48x48">
-            <a href="/user/{{solo.uid}}"><img src="/static/avatars/{{solo.uid}}.png"></a>
-        </p>
-    </figure>
-    <div class="media-content">
-        <div class="content">
-            <p>
-                <a href="/solo/user/{{solo.uid}}"> <strong>{{solo.username}}</strong> </a>
-                <br> <small>{{solo.created_at}}</small>
-                <br> {{solo.content}}
-            </p>
+  <figure class="media-left is-hidden-mobile">
+    <p class="image is-48x48">
+      <a href="/user/{{solo.uid}}"><img
+          src="/static/avatars/{{solo.uid}}.png"
+        ></a>
+    </p>
+  </figure>
+  <div class="media-content">
+    <div class="content">
+      <p>
+        <a href="/solo/user/{{solo.uid}}">
+          <strong>{{solo.username}}</strong>
+        </a>
+        <br>
+        <small>{{solo.created_at}}</small>
+        <br> {{solo.content}}
+      </p>
+    </div>
+    <nav class="level is-mobile">
+      <div class="level-left">
+        <a class="level-item" href="/solo/{{solo.sid}}/like">
+          <span class="icon is-small">
+            {% if solo.like %}❤️{% else %}🤍{% endif %}
+          </span>
+          {% if solo.like_count > 0 %}
+          <span>{{solo.like_count}}</span>
+          {% endif %}
+        </a>
+        {% match page_data.claim %} {% when Some with (claim) %} {% if solo.uid
+        == claim.uid %}
+        <a class="level-item" href="#delete_{{solo.sid}}">🗑️</a>
+        <div id="delete_{{solo.sid}}" class="overlay">
+          <div class="popup content">
+            <h3>{{ "delete_permanently"|l10n(page_data.lang) }}</h3>
+            <a class="close" href="#">&times;</a>
+            <p>{{ "delete_sure"|l10n(page_data.lang) }}</p>
+            <a href="/solo/{{solo.sid}}/delete" class="button is-danger"
+            >{{ "delete"|l10n(page_data.lang) }}</a>
+          </div>
         </div>
-        <nav class="level is-mobile">
-            <div class="level-left">
-                <a class="level-item" href="/solo/{{solo.sid}}/like">
-                    <span class="icon is-small">
-                        {% if solo.like %}❤️{% else %}🤍{% endif %}
-                    </span>
-                    {% if solo.like_count > 0 %}
-                    <span>{{solo.like_count}}</span>
-                    {% endif %}
-                </a>
-                {% match page_data.claim %} {% when Some with (claim) %}
-                {% if solo.uid == claim.uid %}
-                <a class="level-item" href="#delete_{{solo.sid}}">🗑️</a>
-                <div id="delete_{{solo.sid}}" class="overlay">
-                    <div class="popup content">
-                        <h3>{{ "delete_permanently"|l10n(page_data.lang) }}</h3>
-                        <a class="close" href="#">&times;</a>
-                        <p>{{ "delete_sure"|l10n(page_data.lang) }}</p>
-                        <a href="/solo/{{solo.sid}}/delete" class="button is-danger">{{ "delete"|l10n(page_data.lang) }}</a>
-                    </div>
-                </div>
-                {% endif %}
-                {% else %}{% endmatch %}
-                <a href="/solo/{{solo.sid}}">🎤
-                    {% if solo.replies.len() >0 %}
-                        {{solo.replies.len()}}
-                    {% endif %}
-                </a>
-            </div>
-        </nav>
-    </div>
-    <div class="media-right">
-        {% if solo.solo_type == 20 %}
-            {% include "icons/lock_square.svg" %}
-        {% else if solo.solo_type == 10 %}
-            {% include "icons/lock.svg" %}
-        {% else %}{% endif %}
-    </div>
+        {% endif %} {% else %}{% endmatch %}
+        <a href="/solo/{{solo.sid}}">🎤 {% if solo.replies.len() >0 %}
+          {{solo.replies.len()}} {% endif %}
+        </a>
+      </div>
+    </nav>
+  </div>
+  <div class="media-right">
+    {% if solo.solo_type == 20 %} {% include "icons/lock_square.svg" %} {% else
+    if solo.solo_type == 10 %} {% include "icons/lock.svg" %} {% else %}{% endif
+    %}
+  </div>
 </article>
-{% endfor %}
-
-{% match page_data.claim %} {% when Some with (claim) %}
-    <article class="media box">
-        <figure class="media-left is-hidden-mobile">
-            <p class="image is-48x48">
-                <img src="/static/avatars/{{claim.uid}}.png">
-            </p>
-        </figure>
-        <div class="media-content">
-            <form id="solo" action="/solo/user/0" method="post">
-                <fieldset>
-                    <div class="field">
-                        <p class="control">
-                            <textarea name="content" class="textarea" required minlength="1" maxlength="950" placeholder="Writing is thinking on paper. Write anything down...Now!"></textarea>
-                        </p>
-                        <div class="select is-small">
-                            <select name="solo_type" title="Who can see">
-                                <option value="0" selected>{{ "everyone"|l10n(page_data.lang) }}</option>
-                                <option value="10">{{ "following"|l10n(page_data.lang) }}</option>
-                                <option value="20">{{ "just_me"|l10n(page_data.lang) }}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <input type="hidden" name="reply_to" value="{{solo.sid}}"> 
-                    <nav class="level is-mobile">
-                        <div class="level-left">
-                            <div class="level-item">
-                                <a href="/upload" class="button is-success is-small is-responsive" target="_blank">{{ "upload"|l10n(page_data.lang) }}</a>
-                            </div>
-                        </div>
-                        <div class="level-right">
-                            <div class="level-item">
-                                <div class="field is-grouped">
-                                    <div class="control">
-                                        <div class="buttons">
-                                            <button type="submit" form="solo" class="button is-info is-small is-responsive">{{ "submit"|l10n(page_data.lang) }}</button>
-                                            <button type="submit" class="button is-info is-small is-responsive" formaction="/preview" formtarget="_blank">{{ "preview"|l10n(page_data.lang) }}</button>
-                                        </div>
-                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </nav>
-                </fieldset>
-            </form>
+{% endfor %} {% match page_data.claim %} {% when Some with (claim) %}
+<article class="media box">
+  <figure class="media-left is-hidden-mobile">
+    <p class="image is-48x48">
+      <img src="/static/avatars/{{claim.uid}}.png">
+    </p>
+  </figure>
+  <div class="media-content">
+    <form id="solo" action="/solo/user/0" method="post">
+      <fieldset>
+        <div class="field">
+          <p class="control">
+            <textarea
+              name="content"
+              class="textarea"
+              required
+              minlength="1"
+              maxlength="950"
+              placeholder="Writing is thinking on paper. Write anything down...Now!"
+            ></textarea>
+          </p>
+          <div class="select is-small">
+            <select name="solo_type" title="Who can see">
+              <option value="0" selected>
+                {{ "everyone"|l10n(page_data.lang) }}
+              </option>
+              <option value="10">{{ "following"|l10n(page_data.lang) }}</option>
+              <option value="20">{{ "just_me"|l10n(page_data.lang) }}</option>
+            </select>
+          </div>
         </div>
-    </article>
+        <input type="hidden" name="reply_to" value="{{solo.sid}}">
+        <nav class="level is-mobile">
+          <div class="level-left">
+            <div class="level-item">
+              <a
+                href="/upload"
+                class="button is-success is-small is-responsive"
+                target="_blank"
+              >{{ "upload"|l10n(page_data.lang) }}</a>
+            </div>
+          </div>
+          <div class="level-right">
+            <div class="level-item">
+              <div class="field is-grouped">
+                <div class="control">
+                  <div class="buttons">
+                    <button
+                      type="submit"
+                      form="solo"
+                      class="button is-info is-small is-responsive"
+                    >
+                      {{ "submit"|l10n(page_data.lang) }}
+                    </button>
+                    <button
+                      type="submit"
+                      class="button is-info is-small is-responsive"
+                      formaction="/preview"
+                      formtarget="_blank"
+                    >
+                      {{ "preview"|l10n(page_data.lang) }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </fieldset>
+    </form>
+  </div>
+</article>
 {% else %} {% endmatch %}
 
 <div class="divider"></div>
