@@ -53,14 +53,14 @@ pub(crate) async fn upload_pic_post(
                     return Err(AppError::Unauthorized);
                 }
                 target = format!("/mod/{iid}");
-                format!("{}/{}.png", &CONFIG.inn_icons_path, iid)
+                format!("{}/{}.png", &CONFIG.inn_icons_path.display(), iid)
             } else {
                 return Err(AppError::NotFound);
             }
         }
         "user" => {
             target = "/user/setting".to_string();
-            format!("{}/{}.png", &CONFIG.avatars_path, claim.uid)
+            format!("{}/{}.png", &CONFIG.avatars_path.display(), claim.uid)
         }
         _ => unreachable!(),
     };
@@ -177,7 +177,7 @@ pub(crate) async fn image_delete(
 
         if count == 0 {
             let img = String::from_utf8_lossy(&v1);
-            let path = format!("{}/{}", CONFIG.upload_path, img);
+            let path = format!("{}/{}", CONFIG.upload_path.display(), img);
             remove_file(path).await?;
         }
     } else {
@@ -315,7 +315,7 @@ pub(crate) async fn upload_post(
         let digest = context.finish();
         let sha1 = HEXLOWER.encode(digest.as_ref());
         let fname = format!("{}.{}", &sha1[0..20], ext);
-        let location = format!("{}/{}", &CONFIG.upload_path, fname);
+        let location = format!("{}/{}", &CONFIG.upload_path.display(), fname);
 
         fs::write(location, &img_data).await.unwrap();
         let img_id = incr_id(&DB, "imgs_count")?;
