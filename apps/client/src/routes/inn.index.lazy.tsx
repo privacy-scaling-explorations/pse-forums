@@ -22,8 +22,8 @@ function InnsList() {
 
   return (
     <div
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: temp
       dangerouslySetInnerHTML={{ __html: htmlContent }}
-    >
-    </div>
+    />
   )
 }
