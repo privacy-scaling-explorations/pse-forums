@@ -35,14 +35,15 @@ jobs:
       - run: |
           bun install
           bun add -D concurrently
-      - name: Format, lint, typecheck
+      - name: Format, lint, typecheck, build
         run: |
           bun concurrently \
             -c auto \
             -n format,lint-jstx,typecheck \
             'bun dprint check' \
             'bun biome check --config-path=.biome.jsonc' \
-            'bun tsc -p apps/client/tsconfig.json'
+            'bun tsc -p apps/client/tsconfig.json' \
+            'cd apps/client && bun vite build'
 
   client:
     needs: _client
