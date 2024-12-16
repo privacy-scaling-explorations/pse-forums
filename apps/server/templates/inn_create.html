@@ -1,115 +1,178 @@
-{% extends "layout.html" %}
-
-{% block content %}
+{% extends "layout.html" %} {% block content %}
 <form class="box" id="inn" action="/mod/0" method="POST">
-    <fieldset>
-        <div class="field is-horizontal">
-            <div class="field-label is-normal">
-                <label class="label" for="inn_name">{{ "inn_name"|l10n(page_data.lang) }}</label>
-            </div>
-            <div class="field-body">
-                <div class="field">
-                    <div class="control">
-                        <input class="input" type="text" name="inn_name" pattern="^\D.*" required maxlength="64" />
-                    </div>
-                </div>
-            </div>
+  <fieldset>
+    <div class="field is-horizontal">
+      <div class="field-label is-normal">
+        <label class="label" for="inn_name"
+        >{{ "inn_name"|l10n(page_data.lang) }}</label>
+      </div>
+      <div class="field-body">
+        <div class="field">
+          <div class="control">
+            <input
+              class="input"
+              type="text"
+              name="inn_name"
+              pattern="^\D.*"
+              required
+              maxlength="64"
+            />
+          </div>
         </div>
+      </div>
+    </div>
 
-        <div class="field is-horizontal">
-            <div class="field-label is-normal">
-                <label class="label" for="about">{{ "about"|l10n(page_data.lang) }}</label>
-            </div>
-            <div class="field-body">
-                <div class="field">
-                    <div class="control">
-                        <input class="input" type="text" name="about" required maxlength="512" />
-                    </div>
-                </div>
-            </div>
+    <div class="field is-horizontal">
+      <div class="field-label is-normal">
+        <label class="label" for="about"
+        >{{ "about"|l10n(page_data.lang) }}</label>
+      </div>
+      <div class="field-body">
+        <div class="field">
+          <div class="control">
+            <input
+              class="input"
+              type="text"
+              name="about"
+              required
+              maxlength="512"
+            />
+          </div>
         </div>
+      </div>
+    </div>
 
-        <div class="field is-horizontal">
-            <div class="field-label is-normal">
-                <label class="label" for="description">{{ "description"|l10n(page_data.lang) }}</label>
-            </div>
-            <div class="field-body">
-                <div class="field">
-                    <div class="control">
-                        <textarea class="textarea" name="description" required maxlength="65535" minlength="1" placeholder="Long description, markdown supported" ></textarea>
-                    </div>
-                </div>
-            </div>
+    <div class="field is-horizontal">
+      <div class="field-label is-normal">
+        <label class="label" for="description"
+        >{{ "description"|l10n(page_data.lang) }}</label>
+      </div>
+      <div class="field-body">
+        <div class="field">
+          <div class="control">
+            <textarea
+              class="textarea"
+              name="description"
+              required
+              maxlength="65535"
+              minlength="1"
+              placeholder="Long description, markdown supported"
+            ></textarea>
+          </div>
         </div>
+      </div>
+    </div>
 
-        <div class="field is-horizontal">
-            <div class="field-label is-normal">
-                <label class="label" for="topics">{{ "topics"|l10n(page_data.lang) }}</label>
-            </div>
-            <div class="field-body">
-                <div class="field">
-                    <div class="control">
-                        <input class="input" type="text" name="topics" maxlength="128" required placeholder='{{ "topics_help"|l10n(page_data.lang) }}' />
-                    </div>
-                </div>
-            </div>
+    <div class="field is-horizontal">
+      <div class="field-label is-normal">
+        <label class="label" for="topics"
+        >{{ "topics"|l10n(page_data.lang) }}</label>
+      </div>
+      <div class="field-body">
+        <div class="field">
+          <div class="control">
+            <input
+              class="input"
+              type="text"
+              name="topics"
+              maxlength="128"
+              required
+              placeholder='{{ "topics_help"|l10n(page_data.lang) }}'
+            />
+          </div>
         </div>
+      </div>
+    </div>
 
-        <div class="field is-horizontal">
-            <div class="field-label is-normal">
-                <label class="label" for="inn_type">{{ "inn_type"|l10n(page_data.lang) }}</label>
-            </div>
-            <div class="field-body">
-                <div class="field">
-                    <div class="control">
-                        <label class="radio"><input type="radio" name="inn_type" value="0" required />{{ "public"|l10n(page_data.lang) }}</label>
-                        <label class="radio"><input type="radio" name="inn_type" value="5" /> {{ "apply"|l10n(page_data.lang) }}</label>
-                        <label class="radio"><input type="radio" name="inn_type" value="10" /> {{ "private"|l10n(page_data.lang) }}</label>
-                    </div>
-                    <p class="help">{{ "inn_type"|l10n(page_data.lang) }}</p>
-                </div>
-            </div>
+    <div class="field is-horizontal">
+      <div class="field-label is-normal">
+        <label class="label" for="inn_type"
+        >{{ "inn_type"|l10n(page_data.lang) }}</label>
+      </div>
+      <div class="field-body">
+        <div class="field">
+          <div class="control">
+            <label class="radio"><input
+                type="radio"
+                name="inn_type"
+                value="0"
+                required
+              />{{ "public"|l10n(page_data.lang) }}</label>
+            <label class="radio"><input
+                type="radio"
+                name="inn_type"
+                value="5"
+              /> {{ "apply"|l10n(page_data.lang) }}</label>
+            <label class="radio"><input
+                type="radio"
+                name="inn_type"
+                value="10"
+              /> {{ "private"|l10n(page_data.lang) }}</label>
+          </div>
+          <p class="help">{{ "inn_type"|l10n(page_data.lang) }}</p>
         </div>
+      </div>
+    </div>
 
-        <div class="field is-horizontal">
-            <div class="field-label is-normal">
-                <label class="label" for="early_birds">{{ "early_birds"|l10n(page_data.lang) }}</label>
-            </div>
-            <div class="field-body">
-                <div class="field">
-                    <div class="control">
-                        <input class="input" type="number" min="0" name="early_birds" required autocomplete="off" />
-                    </div>
-                    <p class="help">{{ "early_birds_help"|l10n(page_data.lang) }}</p>
-                </div>
-            </div>
+    <div class="field is-horizontal">
+      <div class="field-label is-normal">
+        <label class="label" for="early_birds"
+        >{{ "early_birds"|l10n(page_data.lang) }}</label>
+      </div>
+      <div class="field-body">
+        <div class="field">
+          <div class="control">
+            <input
+              class="input"
+              type="number"
+              min="0"
+              name="early_birds"
+              required
+              autocomplete="off"
+            />
+          </div>
+          <p class="help">{{ "early_birds_help"|l10n(page_data.lang) }}</p>
         </div>
+      </div>
+    </div>
 
-        <div class="field is-horizontal">
-            <div class="field-label is-normal">
-                <label class="label" for="limit_edit_seconds">{{ "limit_edit_seconds"|l10n(page_data.lang) }}</label>
-            </div>
-            <div class="field-body">
-                <div class="field">
-                    <div class="control">
-                        <input class="input" type="number" min="0" name="limit_edit_seconds" required autocomplete="off" />
-                    </div>
-                    <p class="help">{{ "limit_edit_seconds_help"|l10n(page_data.lang) }}</p>
-                </div>
-            </div>
+    <div class="field is-horizontal">
+      <div class="field-label is-normal">
+        <label class="label" for="limit_edit_seconds"
+        >{{ "limit_edit_seconds"|l10n(page_data.lang) }}</label>
+      </div>
+      <div class="field-body">
+        <div class="field">
+          <div class="control">
+            <input
+              class="input"
+              type="number"
+              min="0"
+              name="limit_edit_seconds"
+              required
+              autocomplete="off"
+            />
+          </div>
+          <p class="help">
+            {{ "limit_edit_seconds_help"|l10n(page_data.lang) }}
+          </p>
         </div>
+      </div>
+    </div>
 
-        <div class="field is-horizontal">
-            <div class="field-label"></div>
-            <div class="field-body">
-                <div class="field">
-                    <div class="control">
-                        <button type="submit" form="inn" class="button is-link">{{ "save"|l10n(page_data.lang) }}</button>
-                    </div>
-                </div>
-            </div>
+    <div class="field is-horizontal">
+      <div class="field-label"></div>
+      <div class="field-body">
+        <div class="field">
+          <div class="control">
+            <button type="submit" form="inn" class="button is-link">
+              {{ "save"|l10n(page_data.lang) }}
+            </button>
+          </div>
         </div>
-    </fieldset>
+      </div>
+    </div>
+  </fieldset>
 </form>
 
 <div class="divider"></div>

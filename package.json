@@ -1,9 +1,15 @@
 {
-    "engines": {
-        "node": ">=20"
-    },
-    "private": true,
-    "workspaces": [
-        "apps/client"
-    ]
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "dprint": "^0.47.6",
+    "lefthook": "^1.9.2",
+    "tsc-files": "^1.1.4"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "private": true,
+  "workspaces": [
+    "apps/client"
+  ]
 }

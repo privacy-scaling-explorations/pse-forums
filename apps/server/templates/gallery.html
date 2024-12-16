@@ -1,49 +1,57 @@
-{% extends "layout.html" %}
-
-{% block content %}
+{% extends "layout.html" %} {% block content %}
 <div class="box content">
-    <figure>
-        <p class="image is-32x32">
-            <a href="/gallery/{{uid}}"><img src="/static/avatars/{{uid}}.png"></a>
+  <figure>
+    <p class="image is-32x32">
+      <a href="/gallery/{{uid}}"><img src="/static/avatars/{{uid}}.png"></a>
+    </p>
+  </figure>
+  <div class="columns is-multiline">
+    {% for img in imgs %}
+    <div id="delete_{{img.0}}" class="overlay">
+      <div class="popup content">
+        <h3>{{ "delete_permanently"|l10n(page_data.lang) }}</h3>
+        <a class="close" href="#">&times;</a>
+        <p>{{ "delete_sure"|l10n(page_data.lang) }}</p>
+        <p>
+          <a href="/image/delete/{{uid}}/{{img.0}}" class="button is-danger"
+          >{{ "delete"|l10n(page_data.lang) }}</a>
         </p>
-    </figure>
-    <div class="columns is-multiline">
-        {% for img in imgs %}
-        <div id="delete_{{img.0}}" class="overlay">
-            <div class="popup content">
-                <h3>{{ "delete_permanently"|l10n(page_data.lang) }}</h3>
-                <a class="close" href="#">&times;</a>
-                <p>{{ "delete_sure"|l10n(page_data.lang) }}</p>
-                <p><a href="/image/delete/{{uid}}/{{img.0}}" class="button is-danger">{{ "delete"|l10n(page_data.lang) }}</a></p>
-                <img src="/static/upload/{{img.1}}">
-            </div>
-        </div>
-        <div class="column is-one-third">
-            <figure>
-                <a href="/static/upload/{{img.1}}" target="_blank"><img src="/static/upload/{{img.1}}"></a>
-                <a href="#delete_{{img.0}}" class="delete">{{ "delete"|l10n(page_data.lang) }}</a>
-                <figcaption>
-                    <code>![](/static/upload/{{img.1}})</code>
-                </figcaption>
-            </figure>
-        </div>
-        {% endfor %}
+        <img src="/static/upload/{{img.1}}">
+      </div>
     </div>
+    <div class="column is-one-third">
+      <figure>
+        <a href="/static/upload/{{img.1}}" target="_blank"><img
+            src="/static/upload/{{img.1}}"
+          ></a>
+        <a href="#delete_{{img.0}}" class="delete"
+        >{{ "delete"|l10n(page_data.lang) }}</a>
+        <figcaption>
+          <code>![](/static/upload/{{img.1}})</code>
+        </figcaption>
+      </figure>
+    </div>
+    {% endfor %}
+  </div>
 </div>
 
 <div class="divider"></div>
 
 <nav class="pagination">
-    {% if anchor < n %}
-        <a class="pagination-previous" disabled>{{ "prev"|l10n(page_data.lang) }}</a>
-    {% else %}
-        <a class="pagination-previous" href="/gallery/{{uid}}?anchor={{anchor - n}}&is_desc={{is_desc}}">{{ "prev"|l10n(page_data.lang) }}</a>
-    {% endif %}
-
-    {% if imgs.len() < n %}
-        <a class="pagination-next" disabled >{{ "next"|l10n(page_data.lang) }}</a>
-    {% else %}
-        <a class="pagination-next" href="/gallery/{{uid}}?anchor={{anchor + n}}&is_desc={{is_desc}}">{{ "next"|l10n(page_data.lang) }}</a>
-    {% endif %}
+  {% if anchor < n %}
+  <a class="pagination-previous" disabled>{{ "prev"|l10n(page_data.lang) }}</a>
+  {% else %}
+  <a
+    class="pagination-previous"
+    href="/gallery/{{uid}}?anchor={{anchor - n}}&is_desc={{is_desc}}"
+  >{{ "prev"|l10n(page_data.lang) }}</a>
+  {% endif %} {% if imgs.len() < n %}
+  <a class="pagination-next" disabled>{{ "next"|l10n(page_data.lang) }}</a>
+  {% else %}
+  <a
+    class="pagination-next"
+    href="/gallery/{{uid}}?anchor={{anchor + n}}&is_desc={{is_desc}}"
+  >{{ "next"|l10n(page_data.lang) }}</a>
+  {% endif %}
 </nav>
 {% endblock %}

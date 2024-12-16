@@ -1,28 +1,29 @@
-import { createLazyFileRoute } from '@tanstack/react-router'
-import { useEffect, useState } from "react";
+import { createLazyFileRoute } from "@tanstack/react-router"
+import { useEffect, useState } from "react"
 
-export const Route = createLazyFileRoute('/inn/')({
+export const Route = createLazyFileRoute("/inn/")({
   component: InnsList,
 })
 
 function InnsList() {
-  const [htmlContent, setHtmlContent] = useState<string | null>(null);
+  const [htmlContent, setHtmlContent] = useState<string | null>(null)
 
-useEffect(() => {
+  useEffect(() => {
     // Fetch raw HTML from the API
     fetch("http://localhost:3001/inn/0")
       .then((response) => response.text())
       .then((html) => setHtmlContent(html))
-      .catch((error) => console.error("Failed to fetch HTML:", error));
-  }, []);
+      .catch((error) => console.error("Failed to fetch HTML:", error))
+  }, [])
 
   if (!htmlContent) {
-    return <p>Loading...</p>;
+    return <p>Loading...</p>
   }
 
   return (
     <div
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: temp
       dangerouslySetInnerHTML={{ __html: htmlContent }}
-    ></div>
+    />
   )
 }

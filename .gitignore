@@ -11,6 +11,7 @@ certs
 target
 
 bun.lockb
+dist
 node_modules
 *.tsbuildinfo
 yarn.lock

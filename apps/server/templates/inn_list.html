@@ -1,115 +1,144 @@
-{% extends "layout.html" %} 
-
-{% block tabs %}
-    <li><a href="/inn/0">Inn</a></li>
-    <li><a href="/solo/user/0">Solo</a></li>
-{% endblock %}
-
-{% block content %}
+{% extends "layout.html" %} {% block tabs %}
+<li><a href="/inn/0">Inn</a></li>
+<li><a href="/solo/user/0">Solo</a></li>
+{% endblock %} {% block content %}
 <div class="level is-mobile px-3">
-    <div class="level-left">
-        <div class="tabs is-small is-toggle is-toggle-rounded">
-            <ul>
-                {% match topic %} {% when Some with (val) %}
-                    <li><a href="/inn/list">{{ "all"|l10n(page_data.lang) }}</a></li>
-                    {% if page_data.claim.is_some() %}
-                    <li><a href="/inn/list?filter=mod">⚙️ {{ "mod"|l10n(page_data.lang) }}</a></li>
-                    <li><a href="/inn/list?filter=joined">{{ "joined"|l10n(page_data.lang) }}</a></li>
-                    {% endif %}
-                    <li class="is-active"><a href="/inn/list?topic={{val}}">🏷️ {{val}}</a></li>
-                {% else %}
-                    {% match filter.as_deref() %} {% when Some with ("mod") %}
-                        <li><a href="/inn/list">{{ "all"|l10n(page_data.lang) }}</a></li>
-                        <li class="is-active"><a href="/inn/list?filter=mod">⚙️ {{ "mod"|l10n(page_data.lang) }}</a></li>
-                        <li><a href="/inn/list?filter=joined">{{ "joined"|l10n(page_data.lang) }}</a></li>
-                    {% when Some with ("joined") %}
-                        <li><a href="/inn/list">{{ "all"|l10n(page_data.lang) }}</a></li>
-                        <li><a href="/inn/list?filter=mod">⚙️ {{ "mod"|l10n(page_data.lang) }}</a></li>
-                        <li class="is-active"><a href="/inn/list?filter=joined">{{ "joined"|l10n(page_data.lang) }}</a></li>
-                    {% else %}
-                        <li class="is-active"><a href="/inn/list">{{ "all"|l10n(page_data.lang) }}</a></li>
-                        {% if page_data.claim.is_some() %}
-                        <li><a href="/inn/list?filter=mod">⚙️ {{ "mod"|l10n(page_data.lang) }}</a></li>
-                        <li><a href="/inn/list?filter=joined">{{ "joined"|l10n(page_data.lang) }}</a></li>
-                        {% endif %}
-                    {% endmatch %}
-                {% endmatch %}
-            </ul>
-        </div>
+  <div class="level-left">
+    <div class="tabs is-small is-toggle is-toggle-rounded">
+      <ul>
+        {% match topic %} {% when Some with (val) %}
+        <li><a href="/inn/list">{{ "all"|l10n(page_data.lang) }}</a></li>
+        {% if page_data.claim.is_some() %}
+        <li>
+          <a href="/inn/list?filter=mod">⚙️ {{ "mod"|l10n(page_data.lang) }}</a>
+        </li>
+        <li>
+          <a href="/inn/list?filter=joined"
+          >{{ "joined"|l10n(page_data.lang) }}</a>
+        </li>
+        {% endif %}
+        <li class="is-active">
+          <a href="/inn/list?topic={{val}}">🏷️ {{val}}</a>
+        </li>
+        {% else %} {% match filter.as_deref() %} {% when Some with ("mod") %}
+        <li><a href="/inn/list">{{ "all"|l10n(page_data.lang) }}</a></li>
+        <li class="is-active">
+          <a href="/inn/list?filter=mod">⚙️ {{ "mod"|l10n(page_data.lang) }}</a>
+        </li>
+        <li>
+          <a href="/inn/list?filter=joined"
+          >{{ "joined"|l10n(page_data.lang) }}</a>
+        </li>
+        {% when Some with ("joined") %}
+        <li><a href="/inn/list">{{ "all"|l10n(page_data.lang) }}</a></li>
+        <li>
+          <a href="/inn/list?filter=mod">⚙️ {{ "mod"|l10n(page_data.lang) }}</a>
+        </li>
+        <li class="is-active">
+          <a href="/inn/list?filter=joined"
+          >{{ "joined"|l10n(page_data.lang) }}</a>
+        </li>
+        {% else %}
+        <li class="is-active">
+          <a href="/inn/list">{{ "all"|l10n(page_data.lang) }}</a>
+        </li>
+        {% if page_data.claim.is_some() %}
+        <li>
+          <a href="/inn/list?filter=mod">⚙️ {{ "mod"|l10n(page_data.lang) }}</a>
+        </li>
+        <li>
+          <a href="/inn/list?filter=joined"
+          >{{ "joined"|l10n(page_data.lang) }}</a>
+        </li>
+        {% endif %} {% endmatch %} {% endmatch %}
+      </ul>
     </div>
-    <div class="level-right">
-        {% match page_data.claim %} {% when Some with (val) %}
-            {% if val.role >= 100 %}
-            <a href="/mod/0"><button class="button is-success is-small is-rounded">{{ "new"|l10n(page_data.lang) }} Inn</button></a>
-            {% endif %}
-        {% else %}{% endmatch %}
-    </div>
+  </div>
+  <div class="level-right">
+    {% match page_data.claim %} {% when Some with (val) %} {% if val.role >= 100
+    %}
+    <a href="/mod/0"><button class="button is-success is-small is-rounded">
+        {{ "new"|l10n(page_data.lang) }} Inn
+      </button></a>
+    {% endif %} {% else %}{% endmatch %}
+  </div>
 </div>
 
 <div class="list has-visible-pointer-controls has-overflow-ellipsis box">
-    {% for inn in inns %}
-    <div class="list-item">
-        <div class="list-item-image">
-            <figure class="image is-64x64">
-                <a href="/inn/{{inn.iid}}"><img class="is-rounded" src="/static/inn_icons/{{inn.iid}}.png"></a>
-            </figure>
-        </div>
-        <div class="list-item-content">
-            <div class="list-item-title"><a href="/inn/{{inn.iid}}">{{inn.inn_name}}</a></div>
-            <div class="list-item-description">{{inn.about}}</div>
-        </div>
-        
-        <div class="list-item-controls">
-            {% for topic in inn.topics %}
-                <a href="/inn/list?topic={{topic}}"><span class="tag is-info">{{topic}}</span></a>
-            {% endfor %}
-            
-            {% match filter.as_deref() %} {% when Some with ("mod") %}
-                <a href="/mod/{{inn.iid}}"><span class="tag is-success">Edit</span></a>
-            {% when Some with ("joined") %}
-                <a href="/inn/{{inn.iid}}/join"><span class="tag is-danger">{{ "exit"|l10n(page_data.lang) }}</span></a>
-            {% else %}{% endmatch %}
-        </div>
+  {% for inn in inns %}
+  <div class="list-item">
+    <div class="list-item-image">
+      <figure class="image is-64x64">
+        <a href="/inn/{{inn.iid}}"><img
+            class="is-rounded"
+            src="/static/inn_icons/{{inn.iid}}.png"
+          ></a>
+      </figure>
     </div>
-    {% endfor %}
+    <div class="list-item-content">
+      <div class="list-item-title">
+        <a href="/inn/{{inn.iid}}">{{inn.inn_name}}</a>
+      </div>
+      <div class="list-item-description">{{inn.about}}</div>
+    </div>
+
+    <div class="list-item-controls">
+      {% for topic in inn.topics %}
+      <a href="/inn/list?topic={{topic}}"><span class="tag is-info"
+        >{{topic}}</span></a>
+      {% endfor %} {% match filter.as_deref() %} {% when Some with ("mod") %}
+      <a href="/mod/{{inn.iid}}"><span class="tag is-success">Edit</span></a>
+      {% when Some with ("joined") %}
+      <a href="/inn/{{inn.iid}}/join"><span class="tag is-danger"
+        >{{ "exit"|l10n(page_data.lang) }}</span></a>
+      {% else %}{% endmatch %}
+    </div>
+  </div>
+  {% endfor %}
 </div>
 
 <nav class="pagination">
-    {% if anchor < n %}
-        <a class="pagination-previous" disabled>{{ "prev"|l10n(page_data.lang) }}</a>
-    {% else %}
-        {% match filter.as_deref() %} {% when Some with (val) %}
-            <a class="pagination-previous" href="/inn/list?anchor={{anchor - n}}&is_desc={{is_desc}}&filter={{val}}">{{ "prev"|l10n(page_data.lang) }}</a>
-        {% else %}
-            {% match topic.as_deref() %} {% when Some with (val) %}
-            <a class="pagination-previous" href="/inn/list?anchor={{anchor - n}}&is_desc={{is_desc}}&topic={{val}}">{{ "prev"|l10n(page_data.lang) }}</a>
-            {% else %}
-            <a class="pagination-previous" href="/inn/list?anchor={{anchor - n}}&is_desc={{is_desc}}">{{ "prev"|l10n(page_data.lang) }}</a>
-            {% endmatch %}
-        {% endmatch %}
-    {% endif %}
-
-    {% if inns.len() < n %}
-        <a class="pagination-next" disabled >{{ "next"|l10n(page_data.lang) }}</a>
-    {% else %}
-        {% match filter.as_deref() %} {% when Some with (val) %}
-            <a class="pagination-next" href="/inn/list?anchor={{anchor + n}}&is_desc={{is_desc}}&filter={{val}}">{{ "next"|l10n(page_data.lang) }}</a>
-        {% else %}
-            {% match topic.as_deref() %} {% when Some with (val) %}
-            <a class="pagination-next" href="/inn/list?anchor={{anchor + n}}&is_desc={{is_desc}}&topic={{val}}">{{ "next"|l10n(page_data.lang) }}</a>
-            {% else %}
-            <a class="pagination-next" href="/inn/list?anchor={{anchor + n}}&is_desc={{is_desc}}">{{ "next"|l10n(page_data.lang) }}</a>
-            {% endmatch %}
-        {% endmatch %}
-    {% endif %}
+  {% if anchor < n %}
+  <a class="pagination-previous" disabled>{{ "prev"|l10n(page_data.lang) }}</a>
+  {% else %} {% match filter.as_deref() %} {% when Some with (val) %}
+  <a
+    class="pagination-previous"
+    href="/inn/list?anchor={{anchor - n}}&is_desc={{is_desc}}&filter={{val}}"
+  >{{ "prev"|l10n(page_data.lang) }}</a>
+  {% else %} {% match topic.as_deref() %} {% when Some with (val) %}
+  <a
+    class="pagination-previous"
+    href="/inn/list?anchor={{anchor - n}}&is_desc={{is_desc}}&topic={{val}}"
+  >{{ "prev"|l10n(page_data.lang) }}</a>
+  {% else %}
+  <a
+    class="pagination-previous"
+    href="/inn/list?anchor={{anchor - n}}&is_desc={{is_desc}}"
+  >{{ "prev"|l10n(page_data.lang) }}</a>
+  {% endmatch %} {% endmatch %} {% endif %} {% if inns.len() < n %}
+  <a class="pagination-next" disabled>{{ "next"|l10n(page_data.lang) }}</a>
+  {% else %} {% match filter.as_deref() %} {% when Some with (val) %}
+  <a
+    class="pagination-next"
+    href="/inn/list?anchor={{anchor + n}}&is_desc={{is_desc}}&filter={{val}}"
+  >{{ "next"|l10n(page_data.lang) }}</a>
+  {% else %} {% match topic.as_deref() %} {% when Some with (val) %}
+  <a
+    class="pagination-next"
+    href="/inn/list?anchor={{anchor + n}}&is_desc={{is_desc}}&topic={{val}}"
+  >{{ "next"|l10n(page_data.lang) }}</a>
+  {% else %}
+  <a
+    class="pagination-next"
+    href="/inn/list?anchor={{anchor + n}}&is_desc={{is_desc}}"
+  >{{ "next"|l10n(page_data.lang) }}</a>
+  {% endmatch %} {% endmatch %} {% endif %}
 </nav>
 
-{% endblock %}
-
-{% block box %}
+{% endblock %} {% block box %}
 <div class="box">
-    <div class="content">
-        {{page_data.site_description}}
-    </div>
+  <div class="content">
+    {{page_data.site_description}}
+  </div>
 </div>
 {% endblock %}

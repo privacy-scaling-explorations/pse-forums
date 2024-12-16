@@ -8,46 +8,46 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router"
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root'
+import { Route as rootRoute } from "./routes/__root"
 
 // Create Virtual Routes
 
-const IndexLazyImport = createFileRoute('/')()
-const InnIndexLazyImport = createFileRoute('/inn/')()
+const IndexLazyImport = createFileRoute("/")()
+const InnIndexLazyImport = createFileRoute("/inn/")()
 
 // Create/Update Routes
 
 const IndexLazyRoute = IndexLazyImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+} as any).lazy(() => import("./routes/index.lazy").then((d) => d.Route))
 
 const InnIndexLazyRoute = InnIndexLazyImport.update({
-  id: '/inn/',
-  path: '/inn/',
+  id: "/inn/",
+  path: "/inn/",
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/inn.index.lazy').then((d) => d.Route))
+} as any).lazy(() => import("./routes/inn.index.lazy").then((d) => d.Route))
 
 // Populate the FileRoutesByPath interface
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
+    "/": {
+      id: "/"
+      path: "/"
+      fullPath: "/"
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
-    '/inn/': {
-      id: '/inn/'
-      path: '/inn'
-      fullPath: '/inn'
+    "/inn/": {
+      id: "/inn/"
+      path: "/inn"
+      fullPath: "/inn"
       preLoaderRoute: typeof InnIndexLazyImport
       parentRoute: typeof rootRoute
     }
@@ -57,27 +57,27 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexLazyRoute
-  '/inn': typeof InnIndexLazyRoute
+  "/": typeof IndexLazyRoute
+  "/inn": typeof InnIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexLazyRoute
-  '/inn': typeof InnIndexLazyRoute
+  "/": typeof IndexLazyRoute
+  "/inn": typeof InnIndexLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexLazyRoute
-  '/inn/': typeof InnIndexLazyRoute
+  "/": typeof IndexLazyRoute
+  "/inn/": typeof InnIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/inn'
+  fullPaths: "/" | "/inn"
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/inn'
-  id: '__root__' | '/' | '/inn/'
+  to: "/" | "/inn"
+  id: "__root__" | "/" | "/inn/"
   fileRoutesById: FileRoutesById
 }
 
