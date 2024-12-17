@@ -7,9 +7,11 @@ use std::time::SystemTime;
 use std::time::UNIX_EPOCH;
 use std::{fs, net::SocketAddr, path::PathBuf};
 
+use freedit::migrate_data_from_freedit;
 use freedit::{
     router, AppError, CONFIG, DB, VERSION, {clear_invalid, cron_feed, Tan},
 };
+
 use tokio::net::TcpListener;
 use tracing::{error, info, warn};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
@@ -85,6 +87,13 @@ async fn main() -> Result<(), AppError> {
             tan.commit().unwrap();
         }
     });
+
+    // Migrate data from another freedit instance
+    if CONFIG.migration_db.is_some() {
+        tokio::spawn(async move {
+            migrate_data_from_freedit(&DB, <Option<PathBuf> as Clone>::clone(&CONFIG.migration_db).unwrap()).unwrap();
+        });
+    }
 
     let app = router().await;
     let addr: SocketAddr = CONFIG.addr.parse().unwrap();

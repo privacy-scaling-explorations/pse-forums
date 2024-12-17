@@ -119,6 +119,7 @@ pub(super) mod feed;
 pub(super) mod meta_handler;
 pub(super) mod notification;
 pub(super) mod tantivy;
+pub(super) mod migration;
 
 pub(super) mod admin;
 pub(super) mod inn;

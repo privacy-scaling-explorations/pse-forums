@@ -11,6 +11,7 @@ pub static CONFIG: LazyLock<Config> = LazyLock::new(Config::load_config);
 #[derive(Serialize, Deserialize)]
 pub struct Config {
     pub db: PathBuf,
+    pub migration_db: Option<PathBuf>,
     pub snapshots_path: PathBuf,
     pub addr: String,
     pub rebuild_index: Option<bool>,
@@ -93,6 +94,7 @@ impl Default for Config {
     fn default() -> Self {
         Config {
             db: PathBuf::from("freedit.db"),
+            migration_db: None,
             snapshots_path: PathBuf::from("snapshots"),
             addr: "127.0.0.1:3001".into(),
             rebuild_index: None,
