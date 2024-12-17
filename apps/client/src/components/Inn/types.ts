@@ -2,7 +2,7 @@ export interface Claim {
   uid: number
   username: string
   last_write: number
-  sesssion_id: string
+  session_id: string
   role: number
   lang?: string
 }
