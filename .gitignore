@@ -5,6 +5,7 @@
 
 apps/server/freedit.db
 apps/server/config.toml
+apps/server/mock
 apps/server/static/imgs
 apps/server/snapshots
 apps/server/tantivy

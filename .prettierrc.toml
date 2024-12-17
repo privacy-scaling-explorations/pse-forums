@@ -1,0 +1,10 @@
+[[overrides]]
+files = ["*.js", "*.ts"]
+[overrides.options]
+semi = false
+
+[[overrides]]
+files = ["*.jsonc"]
+[overrides.options]
+parser = "json"
+trailingComma = "none"
