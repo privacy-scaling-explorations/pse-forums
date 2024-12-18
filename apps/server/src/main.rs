@@ -91,7 +91,12 @@ async fn main() -> Result<(), AppError> {
     // Migrate data from another freedit instance
     if CONFIG.migration_db.is_some() {
         tokio::spawn(async move {
-            migrate_data_from_freedit(&DB, <Option<PathBuf> as Clone>::clone(&CONFIG.migration_db).unwrap()).unwrap();
+            // TODO Is there a cleaner way to do this clone?
+            migrate_data_from_freedit(
+                &DB,
+                <Option<PathBuf> as Clone>::clone(&CONFIG.migration_db).unwrap(),
+            )
+            .unwrap();
         });
     }
 
