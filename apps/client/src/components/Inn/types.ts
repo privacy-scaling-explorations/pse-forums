@@ -59,7 +59,7 @@ export interface PageInn {
   username?: string
   inn_users_count: number
   is_mod: boolean
-  inns: InnListItem[]
+  inns: Array<[number, string, boolean]> // InnListItem[]
   recommend_users: RecommendUser[]
   counts: number
 }
