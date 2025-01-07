@@ -28,6 +28,12 @@
         "rules": { "correctness": { "useExhaustiveDependencies": "off" } },
       },
     },
+    {
+      "include": ["apps/client/src/components/ui/badge.tsx"],
+      "linter": {
+        "rules": { "style": { "useImportType": "off" } },
+      },
+    },
   ],
   "vcs": {
     "enabled": true,

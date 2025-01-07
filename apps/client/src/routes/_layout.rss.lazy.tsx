@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router"
 
-export const Route = createLazyFileRoute("/rss")({
+export const Route = createLazyFileRoute("/_layout/rss")({
   component: RouteComponent,
 })
 

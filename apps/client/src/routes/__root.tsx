@@ -5,13 +5,8 @@ import { SidebarProvider } from "p/SidebarProvider"
 export const Route = createRootRoute({
   component: () => (
     <>
-      <header>
-        <h1>Freedit</h1>
-      </header>
       <SidebarProvider>
-        <main>
-          <Outlet />
-        </main>
+        <Outlet />
       </SidebarProvider>
       <TanStackRouterDevtools />
     </>
