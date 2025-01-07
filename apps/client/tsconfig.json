@@ -7,9 +7,9 @@
   "compilerOptions": {
     "baseUrl": "src",
     "paths": {
-      "components": ["components/*"],
-      "hooks": ["hooks/*"],
-      "lib/*": ["lib/*"],
+      "c/*": ["components/*"],
+      "h/*": ["hooks/*"],
+      "l/*": ["lib/*"],
       "providers": ["providers"]
     }
   }
