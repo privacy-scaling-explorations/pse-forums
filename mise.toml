@@ -1,0 +1,22 @@
+#:schema https://gist.githubusercontent.com/sripwoud/144f811fbaafe2765f894d81cb1d986c/raw/7bb569892c31e9aa692c0fb3808af9134cfe9764/mise-task.json
+
+[env]
+VITE_SERVER_URL = "http://localhost:3000"
+
+[tools]
+bun = "latest"
+rust = "latest"
+
+[tasks]
+build-client = { alias = "bc", dir = "apps/client", run = "bun vite build", sources = ["apps/client/**/*", "!apps/client/dist/**", "!apps/client/node_modules/**"], outputs.auto = true }
+build-server = { alias = "bs", dir = "apps/server", run = "cargo build -r", sources = ["apps/server/**/*.rs"], outputs.auto = true }
+clean = { alias = "c", depends = ["clean-client", "clean-server"] }
+clean-client = { dir = "apps/client", hide = true, run = "rm -fr dist" }
+clean-server = { dir = "apps/server", hide = true, run = "rm -fr {config.toml,freedit.db,snapshots,static/imgs,tantivy,target}" }
+dev = { alias = "d", depends = ["dev-client", "dev-server"] }
+dev-client = { alias = "dc", dir = "apps/client", run = "bun vite dev" }
+dev-server = { alias = "ds", dir = "apps/server", run = "cargo run" }
+serve-mock = { alias = "sm", dir = "apps/server", run = "bun serve -C mock" }
+start = { alias = "s", depends = ["start-server", "start-client"] }
+start-client = { alias = "sc", depends = ["build-client"], dir = "apps/client", run = "bun vite preview", sources = ["apps/client/**/*", "!apps/client/dist/**", "!apps/client/node_modules/**"], outputs.auto = true }
+start-server = { alias = "ss", depends = ["build-server"], dir = "apps/server", run = "./target/release/freedit", sources = ["apps/server/**/*.rs"], outputs.auto = true }
