@@ -31,6 +31,9 @@ dev-client:
 dev-server:
     @cargo run
 
+serve-mock:
+    @bun serve -C apps/server/mock
+
 start:
   @just start-server & just start-client
 
