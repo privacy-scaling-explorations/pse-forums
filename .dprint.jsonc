@@ -1,6 +1,18 @@
 {
-  "exec": { "commands": [{ "command": "rustfmt", "exts": ["rs"] }] },
-  "excludes": ["apps/server/static"],
+  "exec": {
+    "commands": [
+      {
+        "command": "rustfmt",
+        "exts": [
+          "rs",
+        ],
+      },
+    ],
+  },
+  "excludes": [
+    "apps/server/static",
+    "mise.toml",
+  ],
   "typescript": {
     "quoteProps": "asNeeded",
     "semiColons": "asi",

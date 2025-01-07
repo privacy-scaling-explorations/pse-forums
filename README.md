@@ -6,7 +6,5 @@
 
 - [bun](https://bun.sh/docs/installation) (JS runtime)
 - [rust](https://www.rust-lang.org/tools/install)
-- [just](https://just.systems) (tasks runner)
 
-Then start both server and client with `just dev`.\
-Or select any available scripts with `just`.
+Or you can [install mise](https://mise.jdx.dev/installing-mise.html) first and have it install bun and rust for you.

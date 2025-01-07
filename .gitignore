@@ -1,6 +1,4 @@
 .DS_Store
-.envrc
-.tool-versions
 .zed
 
 apps/server/freedit.db
@@ -15,6 +13,5 @@ target
 bun.lockb
 dist
 node_modules
-mise.toml
 *.tsbuildinfo
 yarn.lock
