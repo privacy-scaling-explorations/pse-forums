@@ -10,7 +10,8 @@
       "c/*": ["components/*"],
       "h/*": ["hooks/*"],
       "l/*": ["lib/*"],
-      "p": ["providers"]
+      "p": ["providers"],
+      "p/*": ["providers/*"]
     },
 
     /* Bundler mode */

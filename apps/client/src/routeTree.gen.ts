@@ -17,10 +17,31 @@ import { Route as InnIidImport } from "./routes/inn/$iid"
 
 // Create Virtual Routes
 
+const SoloLazyImport = createFileRoute("/solo")()
+const RssLazyImport = createFileRoute("/rss")()
+const NotificationsLazyImport = createFileRoute("/notifications")()
 const IndexLazyImport = createFileRoute("/")()
 const InnIndexLazyImport = createFileRoute("/inn/")()
 
 // Create/Update Routes
+
+const SoloLazyRoute = SoloLazyImport.update({
+  id: "/solo",
+  path: "/solo",
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import("./routes/solo.lazy").then((d) => d.Route))
+
+const RssLazyRoute = RssLazyImport.update({
+  id: "/rss",
+  path: "/rss",
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import("./routes/rss.lazy").then((d) => d.Route))
+
+const NotificationsLazyRoute = NotificationsLazyImport.update({
+  id: "/notifications",
+  path: "/notifications",
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import("./routes/notifications.lazy").then((d) => d.Route))
 
 const IndexLazyRoute = IndexLazyImport.update({
   id: "/",
@@ -51,6 +72,27 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
+    "/notifications": {
+      id: "/notifications"
+      path: "/notifications"
+      fullPath: "/notifications"
+      preLoaderRoute: typeof NotificationsLazyImport
+      parentRoute: typeof rootRoute
+    }
+    "/rss": {
+      id: "/rss"
+      path: "/rss"
+      fullPath: "/rss"
+      preLoaderRoute: typeof RssLazyImport
+      parentRoute: typeof rootRoute
+    }
+    "/solo": {
+      id: "/solo"
+      path: "/solo"
+      fullPath: "/solo"
+      preLoaderRoute: typeof SoloLazyImport
+      parentRoute: typeof rootRoute
+    }
     "/inn/$iid": {
       id: "/inn/$iid"
       path: "/inn/$iid"
@@ -72,12 +114,18 @@ declare module "@tanstack/react-router" {
 
 export interface FileRoutesByFullPath {
   "/": typeof IndexLazyRoute
+  "/notifications": typeof NotificationsLazyRoute
+  "/rss": typeof RssLazyRoute
+  "/solo": typeof SoloLazyRoute
   "/inn/$iid": typeof InnIidRoute
   "/inn": typeof InnIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
   "/": typeof IndexLazyRoute
+  "/notifications": typeof NotificationsLazyRoute
+  "/rss": typeof RssLazyRoute
+  "/solo": typeof SoloLazyRoute
   "/inn/$iid": typeof InnIidRoute
   "/inn": typeof InnIndexLazyRoute
 }
@@ -85,27 +133,43 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   "/": typeof IndexLazyRoute
+  "/notifications": typeof NotificationsLazyRoute
+  "/rss": typeof RssLazyRoute
+  "/solo": typeof SoloLazyRoute
   "/inn/$iid": typeof InnIidRoute
   "/inn/": typeof InnIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: "/" | "/inn/$iid" | "/inn"
+  fullPaths: "/" | "/notifications" | "/rss" | "/solo" | "/inn/$iid" | "/inn"
   fileRoutesByTo: FileRoutesByTo
-  to: "/" | "/inn/$iid" | "/inn"
-  id: "__root__" | "/" | "/inn/$iid" | "/inn/"
+  to: "/" | "/notifications" | "/rss" | "/solo" | "/inn/$iid" | "/inn"
+  id:
+    | "__root__"
+    | "/"
+    | "/notifications"
+    | "/rss"
+    | "/solo"
+    | "/inn/$iid"
+    | "/inn/"
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
+  NotificationsLazyRoute: typeof NotificationsLazyRoute
+  RssLazyRoute: typeof RssLazyRoute
+  SoloLazyRoute: typeof SoloLazyRoute
   InnIidRoute: typeof InnIidRoute
   InnIndexLazyRoute: typeof InnIndexLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
+  NotificationsLazyRoute: NotificationsLazyRoute,
+  RssLazyRoute: RssLazyRoute,
+  SoloLazyRoute: SoloLazyRoute,
   InnIidRoute: InnIidRoute,
   InnIndexLazyRoute: InnIndexLazyRoute,
 }
@@ -121,12 +185,24 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/notifications",
+        "/rss",
+        "/solo",
         "/inn/$iid",
         "/inn/"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
+    },
+    "/notifications": {
+      "filePath": "notifications.lazy.tsx"
+    },
+    "/rss": {
+      "filePath": "rss.lazy.tsx"
+    },
+    "/solo": {
+      "filePath": "solo.lazy.tsx"
     },
     "/inn/$iid": {
       "filePath": "inn/$iid.tsx"

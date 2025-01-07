@@ -10,11 +10,7 @@ declare module "@tanstack/react-router" {
 }
 
 function App() {
-  return (
-    <Providers>
-      <h1>Freedit</h1>
-    </Providers>
-  )
+  return <Providers />
 }
 
 export default App
