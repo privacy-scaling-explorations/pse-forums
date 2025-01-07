@@ -1,23 +1,21 @@
+import { ModeToggle } from "components/ModeToggle"
+import { Button } from "components/ui/button"
+
 export const Header = () => (
   <header className="flex justify-between items-center mb-4">
     <div>
       <h1 className="text-2xl font-bold">Freedit</h1>
       <div className="mt-2">
-        <button type="button" className="mr-2 font-medium">
-          Inn
-        </button>
-        <button type="button" className="mr-2 font-medium">
+        <Button>Inn</Button>
+        <Button type="button" className="mr-2 font-medium">
           Solo
-        </button>
+        </Button>
       </div>
     </div>
     <div>
-      <button type="button" className="mr-2">
-        Sign In
-      </button>
-      <button type="button" className="btn-primary">
-        Sign Up
-      </button>
+      <Button>Sign In</Button>
+      <Button>Sign Up</Button>
+      <ModeToggle />
     </div>
   </header>
 )

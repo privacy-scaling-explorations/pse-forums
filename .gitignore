@@ -15,5 +15,6 @@ target
 bun.lockb
 dist
 node_modules
+mise.toml
 *.tsbuildinfo
 yarn.lock

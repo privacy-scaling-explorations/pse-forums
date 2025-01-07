@@ -1,5 +1,5 @@
 [[overrides]]
-files = ["*.js", "*.ts"]
+files = ["*.js", ".jsx", "*.ts", ".tsx"]
 [overrides.options]
 semi = false
 
