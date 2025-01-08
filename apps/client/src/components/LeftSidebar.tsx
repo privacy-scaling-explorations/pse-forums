@@ -18,7 +18,7 @@ const items = {
 
 export function LeftSidebar() {
   return (
-    <aside className="w-64 pr-4 bg-gray-50 flex flex-col h-screen">
+    <aside className="w-64 pr-4 bg-gray-50 flex flex-col">
       <nav aria-label="Sidebar Navigation" className="flex flex-col flex-grow">
         {/* Start Section */}
         <div className="space-y-2">

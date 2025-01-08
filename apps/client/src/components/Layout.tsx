@@ -9,19 +9,16 @@ export function Layout() {
   return (
     <div>
       <Header />
-
       <main>
         <div className="flex gap-4">
           <LeftSidebar />
-
           <div className="flex-1">
             <Outlet />
           </div>
-
           <RightSidebar />
         </div>
       </main>
-      {/* <TanStackRouterDevtools /> */}
+      <TanStackRouterDevtools position="bottom-right" />
     </div>
   )
 }
