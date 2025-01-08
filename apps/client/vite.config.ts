@@ -13,9 +13,22 @@ const devServerOptions: ServerOptions = {
     },
   },
 }
+
+const deployServerOptions: ServerOptions = {
+  open: false,
+  proxy: {
+    "/mock": {
+      target: "https://raw.githubusercontent.com",
+      changeOrigin: true,
+      rewrite: (path) =>
+        `/privacy-scaling-explorations/pse-forums/main/apps/server/mock/api/v1${path.replace(/^\/mock/, "")}`,
+    },
+  },
+}
 const plugins = [tsconfigPaths(), TanStackRouterVite(), react()]
 const defaultConfig: UserConfigExport = {
   plugins,
+  server: deployServerOptions,
 }
 
 export default defineConfig(({ mode }) => {
