@@ -11,7 +11,9 @@
       "h/*": ["hooks/*"],
       "l/*": ["lib/*"],
       "p": ["providers"],
-      "p/*": ["providers/*"]
+      "p/*": ["providers/*"],
+      "r/*": ["routes/*"],
+      "ui/*": ["components/ui/*"]
     },
 
     /* Bundler mode */

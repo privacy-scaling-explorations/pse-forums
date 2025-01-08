@@ -1,7 +1,7 @@
 import { createLazyFileRoute } from "@tanstack/react-router"
 import { PostCard } from "c/PostCard"
-import { Button } from "c/ui/button"
-import { Card } from "c/ui/card"
+import { Button } from "ui/button"
+import { Card } from "ui/card"
 
 export const Route = createLazyFileRoute("/")({
   component: Index,
