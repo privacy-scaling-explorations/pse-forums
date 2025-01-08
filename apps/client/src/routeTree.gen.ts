@@ -8,61 +8,145 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute } from '@tanstack/react-router'
 
 // Import Routes
 
-import { Route as rootRoute } from "./routes/__root"
-import { Route as InnIidImport } from "./routes/inn/$iid"
+import { Route as rootRoute } from './routes/__root'
+import { Route as SignupImport } from './routes/signup'
+import { Route as SigninImport } from './routes/signin'
+import { Route as UserUserIdImport } from './routes/user.$userId'
+import { Route as GroupIidImport } from './routes/group/$iid'
 
 // Create Virtual Routes
 
-const IndexLazyImport = createFileRoute("/")()
-const InnIndexLazyImport = createFileRoute("/inn/")()
+const SoloLazyImport = createFileRoute('/solo')()
+const RssLazyImport = createFileRoute('/rss')()
+const NotificationsLazyImport = createFileRoute('/notifications')()
+const IndexLazyImport = createFileRoute('/')()
+const GroupIndexLazyImport = createFileRoute('/group/')()
 
 // Create/Update Routes
 
+const SoloLazyRoute = SoloLazyImport.update({
+  id: '/solo',
+  path: '/solo',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/solo.lazy').then((d) => d.Route))
+
+const RssLazyRoute = RssLazyImport.update({
+  id: '/rss',
+  path: '/rss',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/rss.lazy').then((d) => d.Route))
+
+const NotificationsLazyRoute = NotificationsLazyImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/notifications.lazy').then((d) => d.Route))
+
+const SignupRoute = SignupImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SigninRoute = SigninImport.update({
+  id: '/signin',
+  path: '/signin',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexLazyRoute = IndexLazyImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import("./routes/index.lazy").then((d) => d.Route))
+} as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
-const InnIndexLazyRoute = InnIndexLazyImport.update({
-  id: "/inn/",
-  path: "/inn/",
+const GroupIndexLazyRoute = GroupIndexLazyImport.update({
+  id: '/group/',
+  path: '/group/',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import("./routes/inn/index.lazy").then((d) => d.Route))
+} as any).lazy(() => import('./routes/group/index.lazy').then((d) => d.Route))
 
-const InnIidRoute = InnIidImport.update({
-  id: "/inn/$iid",
-  path: "/inn/$iid",
+const UserUserIdRoute = UserUserIdImport.update({
+  id: '/user/$userId',
+  path: '/user/$userId',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const GroupIidRoute = GroupIidImport.update({
+  id: '/group/$iid',
+  path: '/group/$iid',
   getParentRoute: () => rootRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    "/": {
-      id: "/"
-      path: "/"
-      fullPath: "/"
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
-    "/inn/$iid": {
-      id: "/inn/$iid"
-      path: "/inn/$iid"
-      fullPath: "/inn/$iid"
-      preLoaderRoute: typeof InnIidImport
+    '/signin': {
+      id: '/signin'
+      path: '/signin'
+      fullPath: '/signin'
+      preLoaderRoute: typeof SigninImport
       parentRoute: typeof rootRoute
     }
-    "/inn/": {
-      id: "/inn/"
-      path: "/inn"
-      fullPath: "/inn"
-      preLoaderRoute: typeof InnIndexLazyImport
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupImport
+      parentRoute: typeof rootRoute
+    }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/rss': {
+      id: '/rss'
+      path: '/rss'
+      fullPath: '/rss'
+      preLoaderRoute: typeof RssLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/solo': {
+      id: '/solo'
+      path: '/solo'
+      fullPath: '/solo'
+      preLoaderRoute: typeof SoloLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/group/$iid': {
+      id: '/group/$iid'
+      path: '/group/$iid'
+      fullPath: '/group/$iid'
+      preLoaderRoute: typeof GroupIidImport
+      parentRoute: typeof rootRoute
+    }
+    '/user/$userId': {
+      id: '/user/$userId'
+      path: '/user/$userId'
+      fullPath: '/user/$userId'
+      preLoaderRoute: typeof UserUserIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/group/': {
+      id: '/group/'
+      path: '/group'
+      fullPath: '/group'
+      preLoaderRoute: typeof GroupIndexLazyImport
       parentRoute: typeof rootRoute
     }
   }
@@ -71,43 +155,101 @@ declare module "@tanstack/react-router" {
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  "/": typeof IndexLazyRoute
-  "/inn/$iid": typeof InnIidRoute
-  "/inn": typeof InnIndexLazyRoute
+  '/': typeof IndexLazyRoute
+  '/signin': typeof SigninRoute
+  '/signup': typeof SignupRoute
+  '/notifications': typeof NotificationsLazyRoute
+  '/rss': typeof RssLazyRoute
+  '/solo': typeof SoloLazyRoute
+  '/group/$iid': typeof GroupIidRoute
+  '/user/$userId': typeof UserUserIdRoute
+  '/group': typeof GroupIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
-  "/": typeof IndexLazyRoute
-  "/inn/$iid": typeof InnIidRoute
-  "/inn": typeof InnIndexLazyRoute
+  '/': typeof IndexLazyRoute
+  '/signin': typeof SigninRoute
+  '/signup': typeof SignupRoute
+  '/notifications': typeof NotificationsLazyRoute
+  '/rss': typeof RssLazyRoute
+  '/solo': typeof SoloLazyRoute
+  '/group/$iid': typeof GroupIidRoute
+  '/user/$userId': typeof UserUserIdRoute
+  '/group': typeof GroupIndexLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  "/": typeof IndexLazyRoute
-  "/inn/$iid": typeof InnIidRoute
-  "/inn/": typeof InnIndexLazyRoute
+  '/': typeof IndexLazyRoute
+  '/signin': typeof SigninRoute
+  '/signup': typeof SignupRoute
+  '/notifications': typeof NotificationsLazyRoute
+  '/rss': typeof RssLazyRoute
+  '/solo': typeof SoloLazyRoute
+  '/group/$iid': typeof GroupIidRoute
+  '/user/$userId': typeof UserUserIdRoute
+  '/group/': typeof GroupIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: "/" | "/inn/$iid" | "/inn"
+  fullPaths:
+    | '/'
+    | '/signin'
+    | '/signup'
+    | '/notifications'
+    | '/rss'
+    | '/solo'
+    | '/group/$iid'
+    | '/user/$userId'
+    | '/group'
   fileRoutesByTo: FileRoutesByTo
-  to: "/" | "/inn/$iid" | "/inn"
-  id: "__root__" | "/" | "/inn/$iid" | "/inn/"
+  to:
+    | '/'
+    | '/signin'
+    | '/signup'
+    | '/notifications'
+    | '/rss'
+    | '/solo'
+    | '/group/$iid'
+    | '/user/$userId'
+    | '/group'
+  id:
+    | '__root__'
+    | '/'
+    | '/signin'
+    | '/signup'
+    | '/notifications'
+    | '/rss'
+    | '/solo'
+    | '/group/$iid'
+    | '/user/$userId'
+    | '/group/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
-  InnIidRoute: typeof InnIidRoute
-  InnIndexLazyRoute: typeof InnIndexLazyRoute
+  SigninRoute: typeof SigninRoute
+  SignupRoute: typeof SignupRoute
+  NotificationsLazyRoute: typeof NotificationsLazyRoute
+  RssLazyRoute: typeof RssLazyRoute
+  SoloLazyRoute: typeof SoloLazyRoute
+  GroupIidRoute: typeof GroupIidRoute
+  UserUserIdRoute: typeof UserUserIdRoute
+  GroupIndexLazyRoute: typeof GroupIndexLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
-  InnIidRoute: InnIidRoute,
-  InnIndexLazyRoute: InnIndexLazyRoute,
+  SigninRoute: SigninRoute,
+  SignupRoute: SignupRoute,
+  NotificationsLazyRoute: NotificationsLazyRoute,
+  RssLazyRoute: RssLazyRoute,
+  SoloLazyRoute: SoloLazyRoute,
+  GroupIidRoute: GroupIidRoute,
+  UserUserIdRoute: UserUserIdRoute,
+  GroupIndexLazyRoute: GroupIndexLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -121,18 +263,42 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/inn/$iid",
-        "/inn/"
+        "/signin",
+        "/signup",
+        "/notifications",
+        "/rss",
+        "/solo",
+        "/group/$iid",
+        "/user/$userId",
+        "/group/"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
     },
-    "/inn/$iid": {
-      "filePath": "inn/$iid.tsx"
+    "/signin": {
+      "filePath": "signin.tsx"
     },
-    "/inn/": {
-      "filePath": "inn/index.lazy.tsx"
+    "/signup": {
+      "filePath": "signup.tsx"
+    },
+    "/notifications": {
+      "filePath": "notifications.lazy.tsx"
+    },
+    "/rss": {
+      "filePath": "rss.lazy.tsx"
+    },
+    "/solo": {
+      "filePath": "solo.lazy.tsx"
+    },
+    "/group/$iid": {
+      "filePath": "group/$iid.tsx"
+    },
+    "/user/$userId": {
+      "filePath": "user.$userId.tsx"
+    },
+    "/group/": {
+      "filePath": "group/index.lazy.tsx"
     }
   }
 }

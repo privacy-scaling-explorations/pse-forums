@@ -21,6 +21,20 @@
     // organize imports with dprint
     "enabled": false,
   },
+  "overrides": [
+    {
+      "include": ["apps/client/src/components/ui/sidebar.tsx"],
+      "linter": {
+        "rules": { "correctness": { "useExhaustiveDependencies": "off" } },
+      },
+    },
+    {
+      "include": ["apps/client/src/components/ui/badge.tsx"],
+      "linter": {
+        "rules": { "style": { "useImportType": "off" } },
+      },
+    },
+  ],
   "vcs": {
     "enabled": true,
     "clientKind": "git",

@@ -1,21 +1,28 @@
-import { ModeToggle } from "components/ModeToggle"
-import { Button } from "components/ui/button"
+import { Link } from "@tanstack/react-router"
+import { Button } from "c/ui/button"
+import { Input } from "c/ui/input"
+import { Separator } from "c/ui/separator"
 
-export const Header = () => (
-  <header className="flex justify-between items-center mb-4">
-    <div>
-      <h1 className="text-2xl font-bold">Freedit</h1>
-      <div className="mt-2">
-        <Button>Inn</Button>
-        <Button type="button" className="mr-2 font-medium">
-          Solo
-        </Button>
+export function Header() {
+  return (
+    <nav className="px-4 py-3">
+      <div className="flex items-center justify-between mb-2">
+        <h1 className="text-xl font-bold">PSE Forum</h1>
+
+        <div className="flex-1 max-w-xl mx-4">
+          <Input type="search" placeholder="Search..." className="w-full" />
+        </div>
+
+        <div className="flex gap-2">
+          <Link to="/signin">
+            <Button variant="outline">Sign In</Button>
+          </Link>
+          <Link to="/signup">
+            <Button>Sign Up</Button>
+          </Link>
+        </div>
       </div>
-    </div>
-    <div>
-      <Button>Sign In</Button>
-      <Button>Sign Up</Button>
-      <ModeToggle />
-    </div>
-  </header>
-)
+      <Separator />
+    </nav>
+  )
+}
