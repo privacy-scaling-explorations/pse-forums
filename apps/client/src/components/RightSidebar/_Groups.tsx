@@ -40,7 +40,7 @@ export const Groups: FC = () => (
                 </Button>
               </Link>
             </div>
-            {i < groups.length - 1 && <Separator />}
+            {i < groups.length - 1 && <Separator className="mt-2" />}
           </div>
         ))}
       </div>
