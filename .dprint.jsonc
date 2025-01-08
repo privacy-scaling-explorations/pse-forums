@@ -3,15 +3,14 @@
     "commands": [
       {
         "command": "rustfmt",
-        "exts": [
-          "rs",
-        ],
+        "exts": ["rs"],
       },
     ],
   },
   "excludes": [
     "apps/server/static",
     "mise.toml",
+    "apps/client/src/routeTree.gen.ts",
   ],
   "typescript": {
     "quoteProps": "asNeeded",

@@ -8,144 +8,144 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute } from '@tanstack/react-router'
 
 // Import Routes
 
-import { Route as rootRoute } from "./routes/__root"
-import { Route as GroupIidImport } from "./routes/group/$iid"
-import { Route as SigninImport } from "./routes/signin"
-import { Route as SignupImport } from "./routes/signup"
-import { Route as UserUserIdImport } from "./routes/user.$userId"
+import { Route as rootRoute } from './routes/__root'
+import { Route as SignupImport } from './routes/signup'
+import { Route as SigninImport } from './routes/signin'
+import { Route as UserUserIdImport } from './routes/user.$userId'
+import { Route as GroupIidImport } from './routes/group/$iid'
 
 // Create Virtual Routes
 
-const SoloLazyImport = createFileRoute("/solo")()
-const RssLazyImport = createFileRoute("/rss")()
-const NotificationsLazyImport = createFileRoute("/notifications")()
-const IndexLazyImport = createFileRoute("/")()
-const GroupIndexLazyImport = createFileRoute("/group/")()
+const SoloLazyImport = createFileRoute('/solo')()
+const RssLazyImport = createFileRoute('/rss')()
+const NotificationsLazyImport = createFileRoute('/notifications')()
+const IndexLazyImport = createFileRoute('/')()
+const GroupIndexLazyImport = createFileRoute('/group/')()
 
 // Create/Update Routes
 
 const SoloLazyRoute = SoloLazyImport.update({
-  id: "/solo",
-  path: "/solo",
+  id: '/solo',
+  path: '/solo',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import("./routes/solo.lazy").then((d) => d.Route))
+} as any).lazy(() => import('./routes/solo.lazy').then((d) => d.Route))
 
 const RssLazyRoute = RssLazyImport.update({
-  id: "/rss",
-  path: "/rss",
+  id: '/rss',
+  path: '/rss',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import("./routes/rss.lazy").then((d) => d.Route))
+} as any).lazy(() => import('./routes/rss.lazy').then((d) => d.Route))
 
 const NotificationsLazyRoute = NotificationsLazyImport.update({
-  id: "/notifications",
-  path: "/notifications",
+  id: '/notifications',
+  path: '/notifications',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import("./routes/notifications.lazy").then((d) => d.Route))
+} as any).lazy(() => import('./routes/notifications.lazy').then((d) => d.Route))
 
 const SignupRoute = SignupImport.update({
-  id: "/signup",
-  path: "/signup",
+  id: '/signup',
+  path: '/signup',
   getParentRoute: () => rootRoute,
 } as any)
 
 const SigninRoute = SigninImport.update({
-  id: "/signin",
-  path: "/signin",
+  id: '/signin',
+  path: '/signin',
   getParentRoute: () => rootRoute,
 } as any)
 
 const IndexLazyRoute = IndexLazyImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import("./routes/index.lazy").then((d) => d.Route))
+} as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
 const GroupIndexLazyRoute = GroupIndexLazyImport.update({
-  id: "/group/",
-  path: "/group/",
+  id: '/group/',
+  path: '/group/',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import("./routes/group/index.lazy").then((d) => d.Route))
+} as any).lazy(() => import('./routes/group/index.lazy').then((d) => d.Route))
 
 const UserUserIdRoute = UserUserIdImport.update({
-  id: "/user/$userId",
-  path: "/user/$userId",
+  id: '/user/$userId',
+  path: '/user/$userId',
   getParentRoute: () => rootRoute,
 } as any)
 
 const GroupIidRoute = GroupIidImport.update({
-  id: "/group/$iid",
-  path: "/group/$iid",
+  id: '/group/$iid',
+  path: '/group/$iid',
   getParentRoute: () => rootRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    "/": {
-      id: "/"
-      path: "/"
-      fullPath: "/"
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
-    "/signin": {
-      id: "/signin"
-      path: "/signin"
-      fullPath: "/signin"
+    '/signin': {
+      id: '/signin'
+      path: '/signin'
+      fullPath: '/signin'
       preLoaderRoute: typeof SigninImport
       parentRoute: typeof rootRoute
     }
-    "/signup": {
-      id: "/signup"
-      path: "/signup"
-      fullPath: "/signup"
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
       preLoaderRoute: typeof SignupImport
       parentRoute: typeof rootRoute
     }
-    "/notifications": {
-      id: "/notifications"
-      path: "/notifications"
-      fullPath: "/notifications"
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
       preLoaderRoute: typeof NotificationsLazyImport
       parentRoute: typeof rootRoute
     }
-    "/rss": {
-      id: "/rss"
-      path: "/rss"
-      fullPath: "/rss"
+    '/rss': {
+      id: '/rss'
+      path: '/rss'
+      fullPath: '/rss'
       preLoaderRoute: typeof RssLazyImport
       parentRoute: typeof rootRoute
     }
-    "/solo": {
-      id: "/solo"
-      path: "/solo"
-      fullPath: "/solo"
+    '/solo': {
+      id: '/solo'
+      path: '/solo'
+      fullPath: '/solo'
       preLoaderRoute: typeof SoloLazyImport
       parentRoute: typeof rootRoute
     }
-    "/group/$iid": {
-      id: "/group/$iid"
-      path: "/group/$iid"
-      fullPath: "/group/$iid"
+    '/group/$iid': {
+      id: '/group/$iid'
+      path: '/group/$iid'
+      fullPath: '/group/$iid'
       preLoaderRoute: typeof GroupIidImport
       parentRoute: typeof rootRoute
     }
-    "/user/$userId": {
-      id: "/user/$userId"
-      path: "/user/$userId"
-      fullPath: "/user/$userId"
+    '/user/$userId': {
+      id: '/user/$userId'
+      path: '/user/$userId'
+      fullPath: '/user/$userId'
       preLoaderRoute: typeof UserUserIdImport
       parentRoute: typeof rootRoute
     }
-    "/group/": {
-      id: "/group/"
-      path: "/group"
-      fullPath: "/group"
+    '/group/': {
+      id: '/group/'
+      path: '/group'
+      fullPath: '/group'
       preLoaderRoute: typeof GroupIndexLazyImport
       parentRoute: typeof rootRoute
     }
@@ -155,76 +155,76 @@ declare module "@tanstack/react-router" {
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  "/": typeof IndexLazyRoute
-  "/signin": typeof SigninRoute
-  "/signup": typeof SignupRoute
-  "/notifications": typeof NotificationsLazyRoute
-  "/rss": typeof RssLazyRoute
-  "/solo": typeof SoloLazyRoute
-  "/group/$iid": typeof GroupIidRoute
-  "/user/$userId": typeof UserUserIdRoute
-  "/group": typeof GroupIndexLazyRoute
+  '/': typeof IndexLazyRoute
+  '/signin': typeof SigninRoute
+  '/signup': typeof SignupRoute
+  '/notifications': typeof NotificationsLazyRoute
+  '/rss': typeof RssLazyRoute
+  '/solo': typeof SoloLazyRoute
+  '/group/$iid': typeof GroupIidRoute
+  '/user/$userId': typeof UserUserIdRoute
+  '/group': typeof GroupIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
-  "/": typeof IndexLazyRoute
-  "/signin": typeof SigninRoute
-  "/signup": typeof SignupRoute
-  "/notifications": typeof NotificationsLazyRoute
-  "/rss": typeof RssLazyRoute
-  "/solo": typeof SoloLazyRoute
-  "/group/$iid": typeof GroupIidRoute
-  "/user/$userId": typeof UserUserIdRoute
-  "/group": typeof GroupIndexLazyRoute
+  '/': typeof IndexLazyRoute
+  '/signin': typeof SigninRoute
+  '/signup': typeof SignupRoute
+  '/notifications': typeof NotificationsLazyRoute
+  '/rss': typeof RssLazyRoute
+  '/solo': typeof SoloLazyRoute
+  '/group/$iid': typeof GroupIidRoute
+  '/user/$userId': typeof UserUserIdRoute
+  '/group': typeof GroupIndexLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  "/": typeof IndexLazyRoute
-  "/signin": typeof SigninRoute
-  "/signup": typeof SignupRoute
-  "/notifications": typeof NotificationsLazyRoute
-  "/rss": typeof RssLazyRoute
-  "/solo": typeof SoloLazyRoute
-  "/group/$iid": typeof GroupIidRoute
-  "/user/$userId": typeof UserUserIdRoute
-  "/group/": typeof GroupIndexLazyRoute
+  '/': typeof IndexLazyRoute
+  '/signin': typeof SigninRoute
+  '/signup': typeof SignupRoute
+  '/notifications': typeof NotificationsLazyRoute
+  '/rss': typeof RssLazyRoute
+  '/solo': typeof SoloLazyRoute
+  '/group/$iid': typeof GroupIidRoute
+  '/user/$userId': typeof UserUserIdRoute
+  '/group/': typeof GroupIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | "/"
-    | "/signin"
-    | "/signup"
-    | "/notifications"
-    | "/rss"
-    | "/solo"
-    | "/group/$iid"
-    | "/user/$userId"
-    | "/group"
+    | '/'
+    | '/signin'
+    | '/signup'
+    | '/notifications'
+    | '/rss'
+    | '/solo'
+    | '/group/$iid'
+    | '/user/$userId'
+    | '/group'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | "/"
-    | "/signin"
-    | "/signup"
-    | "/notifications"
-    | "/rss"
-    | "/solo"
-    | "/group/$iid"
-    | "/user/$userId"
-    | "/group"
+    | '/'
+    | '/signin'
+    | '/signup'
+    | '/notifications'
+    | '/rss'
+    | '/solo'
+    | '/group/$iid'
+    | '/user/$userId'
+    | '/group'
   id:
-    | "__root__"
-    | "/"
-    | "/signin"
-    | "/signup"
-    | "/notifications"
-    | "/rss"
-    | "/solo"
-    | "/group/$iid"
-    | "/user/$userId"
-    | "/group/"
+    | '__root__'
+    | '/'
+    | '/signin'
+    | '/signup'
+    | '/notifications'
+    | '/rss'
+    | '/solo'
+    | '/group/$iid'
+    | '/user/$userId'
+    | '/group/'
   fileRoutesById: FileRoutesById
 }
 
