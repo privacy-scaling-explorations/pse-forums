@@ -7,7 +7,7 @@ import { RightSidebar } from "c/RightSidebar"
 
 export function Layout() {
   return (
-    <div className="min-h-screen">
+    <div>
       <Header />
 
       <main>

@@ -5,5 +5,5 @@ export const Route = createLazyFileRoute("/solo")({
 })
 
 function RouteComponent() {
-  return <div>Hello "/solo"!</div>
+  return <div>TODO: solo page</div>
 }

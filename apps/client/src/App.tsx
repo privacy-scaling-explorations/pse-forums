@@ -1,4 +1,3 @@
-import "App.css"
 import type { router } from "lib/router"
 import { Providers } from "providers"
 

@@ -5,5 +5,5 @@ export const Route = createLazyFileRoute("/notifications")({
 })
 
 function RouteComponent() {
-  return <div>Hello "/notifications"!</div>
+  return <div>TODO Notifications page</div>
 }

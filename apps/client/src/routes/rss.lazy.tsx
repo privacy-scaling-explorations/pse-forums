@@ -5,5 +5,5 @@ export const Route = createLazyFileRoute("/rss")({
 })
 
 function RouteComponent() {
-  return <div>Hello "/rss"!</div>
+  return <div>TODO: rss page</div>
 }

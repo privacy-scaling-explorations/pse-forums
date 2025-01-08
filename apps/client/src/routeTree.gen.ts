@@ -13,7 +13,10 @@ import { createFileRoute } from "@tanstack/react-router"
 // Import Routes
 
 import { Route as rootRoute } from "./routes/__root"
-import { Route as InnIidImport } from "./routes/inn/$iid"
+import { Route as GroupIidImport } from "./routes/group/$iid"
+import { Route as SigninImport } from "./routes/signin"
+import { Route as SignupImport } from "./routes/signup"
+import { Route as UserUserIdImport } from "./routes/user.$userId"
 
 // Create Virtual Routes
 
@@ -21,7 +24,7 @@ const SoloLazyImport = createFileRoute("/solo")()
 const RssLazyImport = createFileRoute("/rss")()
 const NotificationsLazyImport = createFileRoute("/notifications")()
 const IndexLazyImport = createFileRoute("/")()
-const InnIndexLazyImport = createFileRoute("/inn/")()
+const GroupIndexLazyImport = createFileRoute("/group/")()
 
 // Create/Update Routes
 
@@ -43,21 +46,39 @@ const NotificationsLazyRoute = NotificationsLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import("./routes/notifications.lazy").then((d) => d.Route))
 
+const SignupRoute = SignupImport.update({
+  id: "/signup",
+  path: "/signup",
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SigninRoute = SigninImport.update({
+  id: "/signin",
+  path: "/signin",
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexLazyRoute = IndexLazyImport.update({
   id: "/",
   path: "/",
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import("./routes/index.lazy").then((d) => d.Route))
 
-const InnIndexLazyRoute = InnIndexLazyImport.update({
-  id: "/inn/",
-  path: "/inn/",
+const GroupIndexLazyRoute = GroupIndexLazyImport.update({
+  id: "/group/",
+  path: "/group/",
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import("./routes/inn/index.lazy").then((d) => d.Route))
+} as any).lazy(() => import("./routes/group/index.lazy").then((d) => d.Route))
 
-const InnIidRoute = InnIidImport.update({
-  id: "/inn/$iid",
-  path: "/inn/$iid",
+const UserUserIdRoute = UserUserIdImport.update({
+  id: "/user/$userId",
+  path: "/user/$userId",
+  getParentRoute: () => rootRoute,
+} as any)
+
+const GroupIidRoute = GroupIidImport.update({
+  id: "/group/$iid",
+  path: "/group/$iid",
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -70,6 +91,20 @@ declare module "@tanstack/react-router" {
       path: "/"
       fullPath: "/"
       preLoaderRoute: typeof IndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    "/signin": {
+      id: "/signin"
+      path: "/signin"
+      fullPath: "/signin"
+      preLoaderRoute: typeof SigninImport
+      parentRoute: typeof rootRoute
+    }
+    "/signup": {
+      id: "/signup"
+      path: "/signup"
+      fullPath: "/signup"
+      preLoaderRoute: typeof SignupImport
       parentRoute: typeof rootRoute
     }
     "/notifications": {
@@ -93,18 +128,25 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof SoloLazyImport
       parentRoute: typeof rootRoute
     }
-    "/inn/$iid": {
-      id: "/inn/$iid"
-      path: "/inn/$iid"
-      fullPath: "/inn/$iid"
-      preLoaderRoute: typeof InnIidImport
+    "/group/$iid": {
+      id: "/group/$iid"
+      path: "/group/$iid"
+      fullPath: "/group/$iid"
+      preLoaderRoute: typeof GroupIidImport
       parentRoute: typeof rootRoute
     }
-    "/inn/": {
-      id: "/inn/"
-      path: "/inn"
-      fullPath: "/inn"
-      preLoaderRoute: typeof InnIndexLazyImport
+    "/user/$userId": {
+      id: "/user/$userId"
+      path: "/user/$userId"
+      fullPath: "/user/$userId"
+      preLoaderRoute: typeof UserUserIdImport
+      parentRoute: typeof rootRoute
+    }
+    "/group/": {
+      id: "/group/"
+      path: "/group"
+      fullPath: "/group"
+      preLoaderRoute: typeof GroupIndexLazyImport
       parentRoute: typeof rootRoute
     }
   }
@@ -114,64 +156,100 @@ declare module "@tanstack/react-router" {
 
 export interface FileRoutesByFullPath {
   "/": typeof IndexLazyRoute
+  "/signin": typeof SigninRoute
+  "/signup": typeof SignupRoute
   "/notifications": typeof NotificationsLazyRoute
   "/rss": typeof RssLazyRoute
   "/solo": typeof SoloLazyRoute
-  "/inn/$iid": typeof InnIidRoute
-  "/inn": typeof InnIndexLazyRoute
+  "/group/$iid": typeof GroupIidRoute
+  "/user/$userId": typeof UserUserIdRoute
+  "/group": typeof GroupIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
   "/": typeof IndexLazyRoute
+  "/signin": typeof SigninRoute
+  "/signup": typeof SignupRoute
   "/notifications": typeof NotificationsLazyRoute
   "/rss": typeof RssLazyRoute
   "/solo": typeof SoloLazyRoute
-  "/inn/$iid": typeof InnIidRoute
-  "/inn": typeof InnIndexLazyRoute
+  "/group/$iid": typeof GroupIidRoute
+  "/user/$userId": typeof UserUserIdRoute
+  "/group": typeof GroupIndexLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   "/": typeof IndexLazyRoute
+  "/signin": typeof SigninRoute
+  "/signup": typeof SignupRoute
   "/notifications": typeof NotificationsLazyRoute
   "/rss": typeof RssLazyRoute
   "/solo": typeof SoloLazyRoute
-  "/inn/$iid": typeof InnIidRoute
-  "/inn/": typeof InnIndexLazyRoute
+  "/group/$iid": typeof GroupIidRoute
+  "/user/$userId": typeof UserUserIdRoute
+  "/group/": typeof GroupIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: "/" | "/notifications" | "/rss" | "/solo" | "/inn/$iid" | "/inn"
-  fileRoutesByTo: FileRoutesByTo
-  to: "/" | "/notifications" | "/rss" | "/solo" | "/inn/$iid" | "/inn"
-  id:
-    | "__root__"
+  fullPaths:
     | "/"
+    | "/signin"
+    | "/signup"
     | "/notifications"
     | "/rss"
     | "/solo"
-    | "/inn/$iid"
-    | "/inn/"
+    | "/group/$iid"
+    | "/user/$userId"
+    | "/group"
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | "/"
+    | "/signin"
+    | "/signup"
+    | "/notifications"
+    | "/rss"
+    | "/solo"
+    | "/group/$iid"
+    | "/user/$userId"
+    | "/group"
+  id:
+    | "__root__"
+    | "/"
+    | "/signin"
+    | "/signup"
+    | "/notifications"
+    | "/rss"
+    | "/solo"
+    | "/group/$iid"
+    | "/user/$userId"
+    | "/group/"
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
+  SigninRoute: typeof SigninRoute
+  SignupRoute: typeof SignupRoute
   NotificationsLazyRoute: typeof NotificationsLazyRoute
   RssLazyRoute: typeof RssLazyRoute
   SoloLazyRoute: typeof SoloLazyRoute
-  InnIidRoute: typeof InnIidRoute
-  InnIndexLazyRoute: typeof InnIndexLazyRoute
+  GroupIidRoute: typeof GroupIidRoute
+  UserUserIdRoute: typeof UserUserIdRoute
+  GroupIndexLazyRoute: typeof GroupIndexLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
+  SigninRoute: SigninRoute,
+  SignupRoute: SignupRoute,
   NotificationsLazyRoute: NotificationsLazyRoute,
   RssLazyRoute: RssLazyRoute,
   SoloLazyRoute: SoloLazyRoute,
-  InnIidRoute: InnIidRoute,
-  InnIndexLazyRoute: InnIndexLazyRoute,
+  GroupIidRoute: GroupIidRoute,
+  UserUserIdRoute: UserUserIdRoute,
+  GroupIndexLazyRoute: GroupIndexLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -185,15 +263,24 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/signin",
+        "/signup",
         "/notifications",
         "/rss",
         "/solo",
-        "/inn/$iid",
-        "/inn/"
+        "/group/$iid",
+        "/user/$userId",
+        "/group/"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
+    },
+    "/signin": {
+      "filePath": "signin.tsx"
+    },
+    "/signup": {
+      "filePath": "signup.tsx"
     },
     "/notifications": {
       "filePath": "notifications.lazy.tsx"
@@ -204,11 +291,14 @@ export const routeTree = rootRoute
     "/solo": {
       "filePath": "solo.lazy.tsx"
     },
-    "/inn/$iid": {
-      "filePath": "inn/$iid.tsx"
+    "/group/$iid": {
+      "filePath": "group/$iid.tsx"
     },
-    "/inn/": {
-      "filePath": "inn/index.lazy.tsx"
+    "/user/$userId": {
+      "filePath": "user.$userId.tsx"
+    },
+    "/group/": {
+      "filePath": "group/index.lazy.tsx"
     }
   }
 }

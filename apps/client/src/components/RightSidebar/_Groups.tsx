@@ -1,10 +1,24 @@
+import { Link } from "@tanstack/react-router"
 import { Avatar } from "c/Avatar"
 import { Button } from "c/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "c/ui/card"
 import { Separator } from "c/ui/separator"
 import type { FC } from "react"
 
-const groups = ["Rust", "Dev", "PSE"]
+const groups = [
+  {
+    name: "Rust",
+    id: 0,
+  },
+  {
+    name: "Dev",
+    id: 1,
+  },
+  {
+    name: "PSE",
+    id: 2,
+  },
+]
 
 export const Groups: FC = () => (
   <Card className="bg-gray-50">
@@ -13,16 +27,18 @@ export const Groups: FC = () => (
     </CardHeader>
     <CardContent>
       <div className="space-y-2">
-        {groups.map((group, i) => (
+        {groups.map(({ name, id: iid }, i) => (
           <>
-            <div key={group} className="flex items-center justify-between">
+            <div key={iid} className="flex items-center justify-between">
               <div className="flex items-center gap-1">
                 <Avatar />
-                <span className="font-bold">{group}</span>
+                <span className="font-bold">{name}</span>
               </div>
-              <Button variant="outline" size="sm">
-                Join
-              </Button>
+              <Link to={`/group/${iid}`}>
+                <Button variant="outline" size="sm">
+                  Join
+                </Button>
+              </Link>
             </div>
             {i < groups.length - 1 && <Separator />}
           </>

@@ -3,6 +3,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "c/ui/
 import { Link as LinkIcon } from "lucide-react"
 import type { FC } from "react"
 
+const tools = [
+  { name: "GrapheneOS", url: "https://grapheneos.org/" },
+  { name: "Wireguard", url: "https://www.wireguard.com/" },
+  { name: "TOR", url: "https://www.torproject.org/" },
+]
+
 export const Tools: FC = () => (
   <Card className="bg-gray-50">
     <CardHeader>
@@ -13,11 +19,17 @@ export const Tools: FC = () => (
     </CardHeader>
     <CardContent>
       <div className="space-y-2">
-        {["Redlib", "Nitters", "BiblioReads"].map((tool) => (
-          <Link key={tool} to="/" className="flex items-center gap-2">
-            <LinkIcon />
-            {tool}
-          </Link>
+        {tools.map(({ name, url }) => (
+          <a
+            key={name}
+            href={url}
+            className="flex items-center gap-2"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            <LinkIcon size={16} />
+            {name}
+          </a>
         ))}
       </div>
     </CardContent>
