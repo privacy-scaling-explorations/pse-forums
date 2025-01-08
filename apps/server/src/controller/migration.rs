@@ -3,7 +3,7 @@ use std::{collections::HashMap, path::PathBuf};
 use bincode::{Decode, Encode};
 use serde::Serialize;
 use sled::Db;
-use tracing::info;
+use tracing::{info};
 
 use crate::{
     controller::{
@@ -25,10 +25,10 @@ struct Migration {
 /// Note that this migration is not atomic.
 ///
 /// Includes:
+/// - Default Inn
 /// - Users
-/// - Inns (TODO maybe adds to an existing inn)
 /// - Posts
-/// - Soloss
+/// - Solos (TODO May not need)
 /// - Comments
 ///
 pub fn migrate_data_from_freedit(db: &Db, migration_db: PathBuf) -> Result<bool, AppError> {
@@ -42,6 +42,17 @@ pub fn migrate_data_from_freedit(db: &Db, migration_db: PathBuf) -> Result<bool,
     if existing_migration.is_some() {
         info!("migration already completed");
         return Ok(true);
+    }
+
+    // Migrate Inn
+    let num_incoming_inns = get_count(&m_db, "default", "inns_count")?;
+    info!("processing {0} incoming Inns", num_incoming_inns);
+
+    let num_current_inns = get_count(&db, "default", "inns_count")?;
+    info!("{0} current Inns found", num_current_inns);
+
+    if num_incoming_inns != 1 || num_current_inns != 1 {
+        return Err(AppError::Custom("more than 1 incoming or current inn(s) found".to_string()));
     }
 
     // Migrate User
@@ -90,12 +101,6 @@ pub fn migrate_data_from_freedit(db: &Db, migration_db: PathBuf) -> Result<bool,
             username_tree.insert(i_u.username.clone(), u32_to_ivec(uid))?;
         }
     }
-
-    // Migrate Inn
-    let num_incoming_inns = get_count(&m_db, "default", "inns_count")?;
-    info!("processing {0} incoming Inns", num_incoming_inns);
-
-    // TODO If only one inn, just use that (aka merge posts in)
 
     // Migrate Post
     let num_incoming_posts = get_count(&m_db, "default", "posts_count")?;
