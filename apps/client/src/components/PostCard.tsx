@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback } from "c/ui/avatar"
+import { Avatar } from "c/Avatar"
 import { Card } from "c/ui/card"
 import type { FC } from "react"
 import type { OutPostList } from "./Inn/types"
@@ -9,10 +9,11 @@ export const PostCard: FC<
 > = ({ created_at, inn_name, title, username }) => (
   <Card>
     <div className="flex items-start bg-white p-3 rounded shadow">
-      <Avatar className="mr-2">
-        {/* Replace this with actual image when available */}
-        <AvatarFallback>{username[0].toLocaleUpperCase()}</AvatarFallback>
-      </Avatar>
+      {/* Replace this with actual image when available */}
+      <Avatar
+        src="https://avatars.githubusercontent.com/u/38692952?s=400&u=5c6e6add3e7fbdb1e23179b3cb3c93540a5a9f9e&v=4"
+        username={username}
+      />
 
       <div className="flex-grow flex flex-col items-start">
         <h3 className="font-bold text-lg mb-1">{title}</h3>

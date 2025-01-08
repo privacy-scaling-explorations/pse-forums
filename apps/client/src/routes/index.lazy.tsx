@@ -3,7 +3,7 @@ import { PostCard } from "c/PostCard"
 import { Button } from "c/ui/button"
 import { Card } from "c/ui/card"
 
-export const Route = createLazyFileRoute("/_layout/")({
+export const Route = createLazyFileRoute("/")({
   component: Index,
 })
 

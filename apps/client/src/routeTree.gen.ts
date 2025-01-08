@@ -13,55 +13,47 @@ import { createFileRoute } from "@tanstack/react-router"
 // Import Routes
 
 import { Route as rootRoute } from "./routes/__root"
-import { Route as LayoutImport } from "./routes/_layout"
 import { Route as InnIidImport } from "./routes/inn/$iid"
 
 // Create Virtual Routes
 
+const SoloLazyImport = createFileRoute("/solo")()
+const RssLazyImport = createFileRoute("/rss")()
+const NotificationsLazyImport = createFileRoute("/notifications")()
+const IndexLazyImport = createFileRoute("/")()
 const InnIndexLazyImport = createFileRoute("/inn/")()
-const LayoutIndexLazyImport = createFileRoute("/_layout/")()
-const LayoutSoloLazyImport = createFileRoute("/_layout/solo")()
-const LayoutRssLazyImport = createFileRoute("/_layout/rss")()
-const LayoutNotificationsLazyImport = createFileRoute(
-  "/_layout/notifications",
-)()
 
 // Create/Update Routes
 
-const LayoutRoute = LayoutImport.update({
-  id: "/_layout",
+const SoloLazyRoute = SoloLazyImport.update({
+  id: "/solo",
+  path: "/solo",
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() => import("./routes/solo.lazy").then((d) => d.Route))
+
+const RssLazyRoute = RssLazyImport.update({
+  id: "/rss",
+  path: "/rss",
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import("./routes/rss.lazy").then((d) => d.Route))
+
+const NotificationsLazyRoute = NotificationsLazyImport.update({
+  id: "/notifications",
+  path: "/notifications",
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import("./routes/notifications.lazy").then((d) => d.Route))
+
+const IndexLazyRoute = IndexLazyImport.update({
+  id: "/",
+  path: "/",
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import("./routes/index.lazy").then((d) => d.Route))
 
 const InnIndexLazyRoute = InnIndexLazyImport.update({
   id: "/inn/",
   path: "/inn/",
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import("./routes/inn/index.lazy").then((d) => d.Route))
-
-const LayoutIndexLazyRoute = LayoutIndexLazyImport.update({
-  id: "/",
-  path: "/",
-  getParentRoute: () => LayoutRoute,
-} as any).lazy(() => import("./routes/_layout.index.lazy").then((d) => d.Route))
-
-const LayoutSoloLazyRoute = LayoutSoloLazyImport.update({
-  id: "/solo",
-  path: "/solo",
-  getParentRoute: () => LayoutRoute,
-} as any).lazy(() => import("./routes/_layout.solo.lazy").then((d) => d.Route))
-
-const LayoutRssLazyRoute = LayoutRssLazyImport.update({
-  id: "/rss",
-  path: "/rss",
-  getParentRoute: () => LayoutRoute,
-} as any).lazy(() => import("./routes/_layout.rss.lazy").then((d) => d.Route))
-
-const LayoutNotificationsLazyRoute = LayoutNotificationsLazyImport.update({
-  id: "/notifications",
-  path: "/notifications",
-  getParentRoute: () => LayoutRoute,
-} as any).lazy(() => import("./routes/_layout.notifications.lazy").then((d) => d.Route))
 
 const InnIidRoute = InnIidImport.update({
   id: "/inn/$iid",
@@ -73,11 +65,32 @@ const InnIidRoute = InnIidImport.update({
 
 declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    "/_layout": {
-      id: "/_layout"
-      path: ""
-      fullPath: ""
-      preLoaderRoute: typeof LayoutImport
+    "/": {
+      id: "/"
+      path: "/"
+      fullPath: "/"
+      preLoaderRoute: typeof IndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    "/notifications": {
+      id: "/notifications"
+      path: "/notifications"
+      fullPath: "/notifications"
+      preLoaderRoute: typeof NotificationsLazyImport
+      parentRoute: typeof rootRoute
+    }
+    "/rss": {
+      id: "/rss"
+      path: "/rss"
+      fullPath: "/rss"
+      preLoaderRoute: typeof RssLazyImport
+      parentRoute: typeof rootRoute
+    }
+    "/solo": {
+      id: "/solo"
+      path: "/solo"
+      fullPath: "/solo"
+      preLoaderRoute: typeof SoloLazyImport
       parentRoute: typeof rootRoute
     }
     "/inn/$iid": {
@@ -86,34 +99,6 @@ declare module "@tanstack/react-router" {
       fullPath: "/inn/$iid"
       preLoaderRoute: typeof InnIidImport
       parentRoute: typeof rootRoute
-    }
-    "/_layout/notifications": {
-      id: "/_layout/notifications"
-      path: "/notifications"
-      fullPath: "/notifications"
-      preLoaderRoute: typeof LayoutNotificationsLazyImport
-      parentRoute: typeof LayoutImport
-    }
-    "/_layout/rss": {
-      id: "/_layout/rss"
-      path: "/rss"
-      fullPath: "/rss"
-      preLoaderRoute: typeof LayoutRssLazyImport
-      parentRoute: typeof LayoutImport
-    }
-    "/_layout/solo": {
-      id: "/_layout/solo"
-      path: "/solo"
-      fullPath: "/solo"
-      preLoaderRoute: typeof LayoutSoloLazyImport
-      parentRoute: typeof LayoutImport
-    }
-    "/_layout/": {
-      id: "/_layout/"
-      path: "/"
-      fullPath: "/"
-      preLoaderRoute: typeof LayoutIndexLazyImport
-      parentRoute: typeof LayoutImport
     }
     "/inn/": {
       id: "/inn/"
@@ -127,84 +112,64 @@ declare module "@tanstack/react-router" {
 
 // Create and export the route tree
 
-interface LayoutRouteChildren {
-  LayoutNotificationsLazyRoute: typeof LayoutNotificationsLazyRoute
-  LayoutRssLazyRoute: typeof LayoutRssLazyRoute
-  LayoutSoloLazyRoute: typeof LayoutSoloLazyRoute
-  LayoutIndexLazyRoute: typeof LayoutIndexLazyRoute
-}
-
-const LayoutRouteChildren: LayoutRouteChildren = {
-  LayoutNotificationsLazyRoute: LayoutNotificationsLazyRoute,
-  LayoutRssLazyRoute: LayoutRssLazyRoute,
-  LayoutSoloLazyRoute: LayoutSoloLazyRoute,
-  LayoutIndexLazyRoute: LayoutIndexLazyRoute,
-}
-
-const LayoutRouteWithChildren = LayoutRoute._addFileChildren(LayoutRouteChildren)
-
 export interface FileRoutesByFullPath {
-  "": typeof LayoutRouteWithChildren
+  "/": typeof IndexLazyRoute
+  "/notifications": typeof NotificationsLazyRoute
+  "/rss": typeof RssLazyRoute
+  "/solo": typeof SoloLazyRoute
   "/inn/$iid": typeof InnIidRoute
-  "/notifications": typeof LayoutNotificationsLazyRoute
-  "/rss": typeof LayoutRssLazyRoute
-  "/solo": typeof LayoutSoloLazyRoute
-  "/": typeof LayoutIndexLazyRoute
   "/inn": typeof InnIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
+  "/": typeof IndexLazyRoute
+  "/notifications": typeof NotificationsLazyRoute
+  "/rss": typeof RssLazyRoute
+  "/solo": typeof SoloLazyRoute
   "/inn/$iid": typeof InnIidRoute
-  "/notifications": typeof LayoutNotificationsLazyRoute
-  "/rss": typeof LayoutRssLazyRoute
-  "/solo": typeof LayoutSoloLazyRoute
-  "/": typeof LayoutIndexLazyRoute
   "/inn": typeof InnIndexLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  "/_layout": typeof LayoutRouteWithChildren
+  "/": typeof IndexLazyRoute
+  "/notifications": typeof NotificationsLazyRoute
+  "/rss": typeof RssLazyRoute
+  "/solo": typeof SoloLazyRoute
   "/inn/$iid": typeof InnIidRoute
-  "/_layout/notifications": typeof LayoutNotificationsLazyRoute
-  "/_layout/rss": typeof LayoutRssLazyRoute
-  "/_layout/solo": typeof LayoutSoloLazyRoute
-  "/_layout/": typeof LayoutIndexLazyRoute
   "/inn/": typeof InnIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | ""
-    | "/inn/$iid"
+  fullPaths: "/" | "/notifications" | "/rss" | "/solo" | "/inn/$iid" | "/inn"
+  fileRoutesByTo: FileRoutesByTo
+  to: "/" | "/notifications" | "/rss" | "/solo" | "/inn/$iid" | "/inn"
+  id:
+    | "__root__"
+    | "/"
     | "/notifications"
     | "/rss"
     | "/solo"
-    | "/"
-    | "/inn"
-  fileRoutesByTo: FileRoutesByTo
-  to: "/inn/$iid" | "/notifications" | "/rss" | "/solo" | "/" | "/inn"
-  id:
-    | "__root__"
-    | "/_layout"
     | "/inn/$iid"
-    | "/_layout/notifications"
-    | "/_layout/rss"
-    | "/_layout/solo"
-    | "/_layout/"
     | "/inn/"
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  LayoutRoute: typeof LayoutRouteWithChildren
+  IndexLazyRoute: typeof IndexLazyRoute
+  NotificationsLazyRoute: typeof NotificationsLazyRoute
+  RssLazyRoute: typeof RssLazyRoute
+  SoloLazyRoute: typeof SoloLazyRoute
   InnIidRoute: typeof InnIidRoute
   InnIndexLazyRoute: typeof InnIndexLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  LayoutRoute: LayoutRouteWithChildren,
+  IndexLazyRoute: IndexLazyRoute,
+  NotificationsLazyRoute: NotificationsLazyRoute,
+  RssLazyRoute: RssLazyRoute,
+  SoloLazyRoute: SoloLazyRoute,
   InnIidRoute: InnIidRoute,
   InnIndexLazyRoute: InnIndexLazyRoute,
 }
@@ -219,38 +184,28 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/_layout",
+        "/",
+        "/notifications",
+        "/rss",
+        "/solo",
         "/inn/$iid",
         "/inn/"
       ]
     },
-    "/_layout": {
-      "filePath": "_layout.tsx",
-      "children": [
-        "/_layout/notifications",
-        "/_layout/rss",
-        "/_layout/solo",
-        "/_layout/"
-      ]
+    "/": {
+      "filePath": "index.lazy.tsx"
+    },
+    "/notifications": {
+      "filePath": "notifications.lazy.tsx"
+    },
+    "/rss": {
+      "filePath": "rss.lazy.tsx"
+    },
+    "/solo": {
+      "filePath": "solo.lazy.tsx"
     },
     "/inn/$iid": {
       "filePath": "inn/$iid.tsx"
-    },
-    "/_layout/notifications": {
-      "filePath": "_layout.notifications.lazy.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/rss": {
-      "filePath": "_layout.rss.lazy.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/solo": {
-      "filePath": "_layout.solo.lazy.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/": {
-      "filePath": "_layout.index.lazy.tsx",
-      "parent": "/_layout"
     },
     "/inn/": {
       "filePath": "inn/index.lazy.tsx"
