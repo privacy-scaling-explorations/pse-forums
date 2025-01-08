@@ -28,7 +28,7 @@ export const Groups: FC = () => (
     <CardContent>
       <div className="space-y-2">
         {groups.map(({ name, id: iid }, i) => (
-          <>
+          <div key={iid}>
             <div key={iid} className="flex items-center justify-between">
               <div className="flex items-center gap-1">
                 <Avatar />
@@ -41,7 +41,7 @@ export const Groups: FC = () => (
               </Link>
             </div>
             {i < groups.length - 1 && <Separator />}
-          </>
+          </div>
         ))}
       </div>
     </CardContent>

@@ -1,7 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router"
 import { PostCard } from "c/PostCard"
 import { Button } from "ui/button"
-import { Card } from "ui/card"
 
 export const Route = createLazyFileRoute("/")({
   component: Index,
@@ -15,7 +14,7 @@ const posts = [
     username: "Username",
   },
   {
-    created_at: "2023-03-01",
+    created_at: "2023-03-02",
     inn_name: "Inn",
     title: "Title",
     username: "Username",
