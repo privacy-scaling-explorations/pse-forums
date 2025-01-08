@@ -3,6 +3,10 @@
     {
       "source": "/mock/:path*",
       "destination": "https://raw.githubusercontent.com/privacy-scaling-explorations/pse-forums/main/apps/server/mock/api/v1/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/"
     }
   ]
 }
