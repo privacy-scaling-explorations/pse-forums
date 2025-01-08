@@ -1,0 +1,59 @@
+{
+  "page_data": {
+    "title": "Dev",
+    "site_name": "Freedit",
+    "site_description": "<p>Welcome to Freedit, the best platform for inn enthusiasts.</p>",
+    "claim": null,
+    "has_unread": false,
+    "lang": "en"
+  },
+  "posts": [
+    {
+      "pid": 123,
+      "iid": 1,
+      "inn_name": "Science",
+      "uid": 456,
+      "username": "alice",
+      "title": "How to Conduct an Experiment",
+      "created_at": "2023-10-05T14:48:00Z",
+      "comment_count": 10,
+      "last_reply": [789, "bob"],
+      "is_pinned": true
+    },
+    {
+      "pid": 124,
+      "iid": 1,
+      "inn_name": "Science",
+      "uid": 457,
+      "username": "carol",
+      "title": "Theories of Everything",
+      "created_at": "2023-10-04T10:30:00Z",
+      "comment_count": 5,
+      "last_reply": null,
+      "is_pinned": false
+    }
+  ],
+  "iid": 1,
+  "inn_name": "Dev",
+  "about": "A place to discuss scientific topics.",
+  "description": "This inn focuses on various scientific disciplines and breakthroughs.",
+  "anchor": 0,
+  "n": 10,
+  "is_desc": true,
+  "inn_role": 3,
+  "filter": null,
+  "username": null,
+  "inn_users_count": 150,
+  "is_mod": false,
+  "inns": [
+    [2, "Technology", true],
+    [3, "Art", false],
+    [4, "Mathematics", true]
+  ],
+  "recommend_users": [
+    [501, "dave"],
+    [502, "eve"],
+    [503, "frank"]
+  ],
+  "counts": 20
+}

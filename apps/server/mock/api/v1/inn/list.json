@@ -1,0 +1,28 @@
+{
+  "inns": [
+    {
+      "iid": "inn123",
+      "inn_name": "Tech Enthusiasts",
+      "about": "A place for technology discussions.",
+      "topics": ["tech", "innovation", "gadgets"],
+      "is_moderator": false,
+      "is_joined": true,
+      "role": 5
+    },
+    {
+      "iid": "inn124",
+      "inn_name": "Science Hub",
+      "about": "A community for science lovers.",
+      "topics": ["science", "research"],
+      "is_moderator": true,
+      "is_joined": false,
+      "role": 0
+    }
+  ],
+  "pagination": {
+    "anchor": 0,
+    "limit": 20,
+    "total": 50,
+    "is_desc": false
+  }
+}
