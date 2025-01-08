@@ -1,9 +1,9 @@
 import { Link } from "@tanstack/react-router"
 import { Avatar } from "c/Avatar"
-import { Button } from "c/ui/button"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "c/ui/card"
-import { Separator } from "c/ui/separator"
 import type { FC } from "react"
+import { Button } from "ui/button"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "ui/card"
+import { Separator } from "ui/separator"
 
 const groups = [
   {

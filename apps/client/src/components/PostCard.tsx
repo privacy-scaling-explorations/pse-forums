@@ -1,6 +1,6 @@
 import { Avatar } from "c/Avatar"
-import { Card } from "c/ui/card"
 import type { FC } from "react"
+import { Card } from "ui/card"
 import type { OutPostList } from "./Inn/types"
 import { Badge } from "./ui/badge"
 

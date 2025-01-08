@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router"
+import { Bell, Home, PencilLine, Rss } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -7,8 +8,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "c/ui/sidebar"
-import { Bell, Home, PencilLine, Rss } from "lucide-react"
+} from "ui/sidebar"
 
 const items = [
   {

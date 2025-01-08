@@ -1,5 +1,5 @@
-import { Avatar as AvatarBase, AvatarFallback, AvatarImage } from "c/ui/avatar"
 import type { FC } from "react"
+import { Avatar as AvatarBase, AvatarFallback, AvatarImage } from "ui/avatar"
 
 interface AvatarProps {
   src?: string

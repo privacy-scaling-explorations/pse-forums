@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "c/ui/card"
 import { Link as LinkIcon } from "lucide-react"
 import type { FC } from "react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "ui/card"
 
 const tools = [
   { name: "GrapheneOS", url: "https://grapheneos.org/" },

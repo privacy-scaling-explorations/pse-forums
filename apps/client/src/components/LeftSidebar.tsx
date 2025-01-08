@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router"
-import { Button } from "c/ui/button"
 import { Bell, Home, PencilLine, Rss } from "lucide-react"
+import { Button } from "ui/button"
 
 const items = [
   {

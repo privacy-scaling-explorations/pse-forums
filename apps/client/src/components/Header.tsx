@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router"
-import { Button } from "c/ui/button"
-import { Input } from "c/ui/input"
-import { Separator } from "c/ui/separator"
+import { Button } from "ui/button"
+import { Input } from "ui/input"
+import { Separator } from "ui/separator"
 
 export function Header() {
   return (

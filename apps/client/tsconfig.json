@@ -11,7 +11,8 @@
       "h/*": ["hooks/*"],
       "l/*": ["lib/*"],
       "p/*": ["providers/*"],
-      "p": ["providers"]
+      "p": ["providers"],
+      "ui/*": ["components/ui/*"]
     }
   }
 }
