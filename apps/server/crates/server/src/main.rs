@@ -1,26 +1,27 @@
 #![deny(clippy::all)]
 #![forbid(unsafe_code)]
 
+use axum::serve;
 use std::{net::SocketAddr, sync::Arc};
-
-use hyper::Server;
+use tokio::net::TcpListener;
 use tracing::{error, info};
 use tracing_subscriber::EnvFilter;
 
 mod router;
 
-use api::AppState;
+use api::state::AppState;
 use domain::service::site_config::SiteConfigService;
 use domain::service::user::UserService;
 use router::create_app;
 
 #[tokio::main]
-async fn main() {
-    tracing_subscriber::fmt()
-        .with_env_filter(EnvFilter::new("info"))
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    tracing_subscriber::registry()
+        .with(EnvFilter::new("info"))
+        .with(tracing_subscriber::fmt::layer())
         .init();
 
-    // Initialize services (adjust initialization as needed)
+    // Initialize services with actual parameters as needed
     let site_config_s = Arc::new(SiteConfigService::new(/* ... */));
     let user_s = Arc::new(UserService::new(/* ... */));
 
@@ -30,10 +31,10 @@ async fn main() {
     };
     let app = create_app(state);
 
-    let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
-    info!("Server listening on {}", addr);
+    let addr: SocketAddr = "127.0.0.1:3000".parse()?;
+    let listener = TcpListener::bind(addr).await?;
+    info!("listening on http://{}", addr);
 
-    if let Err(e) = Server::bind(&addr).serve(app.into_make_service()).await {
-        error!("server error: {}", e);
-    }
+    serve(listener, app).await?;
+    Ok(())
 }

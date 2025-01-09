@@ -1,25 +1,22 @@
-use crate::dto::user::User;
-use crate::error::ApiError;
 use axum::{
     extract::{Path, State},
     Json,
 };
-use axum_extra::{headers::Cookie, TypedHeader};
-use domain::{
-    // model::session::Claim,
-    service::{site_config::SiteConfigService, user::UserService},
-};
-use std::sync::Arc;
+//use axum_extra::extract::cookie::Cookie;
+use axum_extra::TypedHeader;
 
-/// `GET /user/:uid`
+use crate::{dto::user::User, error::ApiError, state::AppState};
+
 pub async fn user(
-    State(site_config_s): State<Arc<SiteConfigService>>,
-    State(user_s): State<Arc<UserService>>,
-    cookie: Option<TypedHeader<Cookie>>,
+    State(state): State<AppState>,
     Path(username): Path<String>,
+    //cookie: Option<TypedHeader<Cookie>>,
 ) -> Result<Json<User>, ApiError> {
-    let site_config = site_config_s.get().await?;
-    // let claim = cookie.and_then(|cookie| Claim::get(&DB, &cookie, &site_config)); // TODO
-    let user = user_s.find(&username).await?.ok_or(ApiError::NotFound)?;
+    let _site_config = state.site_config_s.get().await?;
+    let user = state
+        .user_s
+        .find(&username)
+        .await?
+        .ok_or(ApiError::NotFound)?;
     Ok(Json(user.into()))
 }
