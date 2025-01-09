@@ -1,0 +1,16 @@
+[package]
+name = "infra"
+edition.workspace = true
+
+[dependencies]
+async-trait = "0.1.85"
+basic-toml = "*"
+bincode = "2.0.0-rc.3"
+data-encoding = "*"
+domain = { path = "../domain" }
+image = { version = "0.25.2", default-features = false, features = ["jpeg", "png", "gif"] }
+ring = { version = "0.17", default-features = false }
+sled = "0.34.7"
+tantivy = "0.22.0"
+thiserror = "2.0.10"
+tracing = { version = "0.1", features = ["release_max_level_info", "max_level_info"], default-features = false }

@@ -1,0 +1,35 @@
+[package]
+name = "server"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+api = { path = "../api" }
+axum = { version = "0.7.5", features = [
+    "http1",
+    "http2",
+    "form",
+    "query",
+    "multipart",
+    "tokio",
+    "json",
+], default-features = false }
+domain = { path = "../domain" }
+infra = { path = "../infra" }
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+tower = { version = "0.5.1", features = ["timeout"] }
+tower-http = { version = "0.6.1", features = [
+    "fs",
+    "compression-zstd",
+    "cors",
+    "trace",
+] }
+tracing = { version = "0.1", features = [
+    "release_max_level_info",
+    "max_level_info",
+], default-features = false }
+tracing-subscriber = { version = "0.3", features = [
+    "env-filter",
+    "fmt",
+    "smallvec",
+], default-features = false }

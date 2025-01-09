@@ -1,0 +1,10 @@
+[package]
+name = "domain"
+edition.workspace = true
+
+[dependencies]
+async-trait = "0.1.85"
+bincode = "2.0.0-rc.3"
+garde = { version = "0.20.0", features = ["derive"] }
+serde = { version = "1.0", features = ["derive"] }
+thiserror = "2.0.10"

@@ -1,10 +1,12 @@
 [workspace]
-members = ["apps/server"]
+members = [
+    "apps/server/crates/api",
+    "apps/server/crates/app",
+    "apps/server/crates/domain",
+    "apps/server/crates/infra", "apps/server/crates/server",
+]
+package = { edition = "2021" }
 resolver = "2"
-
-[workspace.package]
-edition = "2021"
-license = "MIT"
 
 [profile.release]
 lto = "fat"
