@@ -319,7 +319,7 @@ impl Display for PostStatus {
     }
 }
 
-#[derive(Encode, Decode, Serialize, Debug)]
+#[derive(Encode, Decode, Serialize, Debug, Clone)]
 pub(super) enum PostContent {
     Markdown(String),
     FeedItemId(u32),

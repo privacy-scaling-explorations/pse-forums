@@ -2,19 +2,21 @@ use std::{collections::HashMap, path::PathBuf};
 
 use bincode::{Decode, Encode};
 use serde::Serialize;
-use sled::Db;
-use tracing::{info};
+use sled::{Batch, Db};
+use tracing::info;
 
 use crate::{
     controller::{
         db_utils::{get_batch, get_count, incr_id, u32_to_ivec},
+        inn::inn_add_index,
         meta_handler::ParamsPage,
-        User,
+        Inn, Post, User,
     },
-    ivec_to_u32, set_one, AppError,
+    get_one, ivec_to_u32, set_one, AppError,
 };
 
-const MIGRATION_KEY: &[u8] = b"freedit_migration";
+const MIGRATION_TREE: &str = "migration";
+const MIGRATION_ID: u32 = 0;
 
 #[derive(Default, Encode, Decode, Serialize, Debug)]
 struct Migration {
@@ -38,13 +40,14 @@ pub fn migrate_data_from_freedit(db: &Db, migration_db: PathBuf) -> Result<bool,
     let m_db = config.open()?;
 
     // Check to see if we've already brought in incoming db
-    let existing_migration = m_db.get(MIGRATION_KEY)?;
-    if existing_migration.is_some() {
+    let existing_migration: Result<Migration, AppError> =
+        get_one(&m_db, MIGRATION_TREE, MIGRATION_ID);
+    if existing_migration.is_ok() {
         info!("migration already completed");
         return Ok(true);
     }
 
-    // Migrate Inn
+    // Migrate Inn (Use existing)
     let num_incoming_inns = get_count(&m_db, "default", "inns_count")?;
     info!("processing {0} incoming Inns", num_incoming_inns);
 
@@ -52,8 +55,13 @@ pub fn migrate_data_from_freedit(db: &Db, migration_db: PathBuf) -> Result<bool,
     info!("{0} current Inns found", num_current_inns);
 
     if num_incoming_inns != 1 || num_current_inns != 1 {
-        return Err(AppError::Custom("more than 1 incoming or current inn(s) found".to_string()));
+        return Err(AppError::Custom(
+            "more than 1 incoming or current inn(s) found".to_string(),
+        ));
     }
+    let iid = 0; // TODO Check this is correct defaul inn id
+    let iid_ivec = u32_to_ivec(iid);
+    let inn: Inn = get_one(db, "inns", iid)?;
 
     // Migrate User
     let num_incoming_users = get_count(&m_db, "default", "users_count")?;
@@ -106,6 +114,68 @@ pub fn migrate_data_from_freedit(db: &Db, migration_db: PathBuf) -> Result<bool,
     let num_incoming_posts = get_count(&m_db, "default", "posts_count")?;
     info!("processing {0} incoming Posts", num_incoming_posts);
 
+    let page_params = ParamsPage {
+        anchor: 0,
+        n: num_incoming_posts,
+        is_desc: false,
+    };
+    let incoming_posts: Vec<Post> =
+        get_batch(&m_db, "default", "posts_count", "posts", &page_params)?;
+
+    for i_p in incoming_posts.iter() {
+        let uid_opt = user_remapping.get(&i_p.uid);
+        if uid_opt.is_none() {
+            let msg = format!(
+                "uid {0} for incoming pid {1} is missing in user remapping",
+                i_p.uid, i_p.pid
+            );
+            return Err(AppError::Custom(msg));
+        }
+        let uid = uid_opt.unwrap().clone();
+
+        let pid = incr_id(db, "posts_count")?;
+        let pid_ivec = u32_to_ivec(pid);
+
+        info!("creating post. pid {0}, incoming pid {1}", pid, i_p.pid);
+
+        let new_post = Post {
+            pid: pid,
+            uid: uid,
+            iid: iid,
+            title: i_p.title.clone(),
+            tags: i_p.tags.clone(),
+            content: i_p.content.clone(),
+            created_at: i_p.created_at.clone(),
+            status: i_p.status.clone(),
+        };
+
+        set_one(db, "posts", i_p.pid, &new_post)?;
+
+        if inn.is_open_access() {
+            // Migrate tags
+            let mut batch = Batch::default();
+            for tag in new_post.tags {
+                let k = [tag.as_bytes(), &pid_ivec].concat();
+                batch.insert(k, &[]);
+            }
+            db.open_tree("tags")?.apply_batch(batch)?;
+
+            db.open_tree("tan")?.insert(format!("post{}", pid), &[])?;
+        }
+
+        // Update other indicies & stats
+        let k = [&iid_ivec, &pid_ivec].concat();
+        db.open_tree("inn_posts")?.insert(k, &[])?;
+
+        let k = [&u32_to_ivec(uid), &pid_ivec].concat();
+        let mut v = iid.to_be_bytes().to_vec();
+        v.push(inn.inn_type);
+        db.open_tree("user_posts")?.insert(k, v)?;
+
+        inn_add_index(db, iid, pid, new_post.created_at as u32, inn.inn_type)?;
+        User::update_stats(db, uid, "post")?;
+    }
+
     // Migrate Solo
     // This may be unnecessary to implement if there are no solo posts
     let num_incoming_solos = get_count(&m_db, "default", "solos_count")?;
@@ -117,6 +187,9 @@ pub fn migrate_data_from_freedit(db: &Db, migration_db: PathBuf) -> Result<bool,
     // info!("processing {0} incoming Comments", num_incoming_users);
 
     // Insert migration completion.
+    // Check to see if we've already brought in incoming db
+    let migration = Migration { complete: true };
+    set_one(&m_db, MIGRATION_TREE, MIGRATION_ID, &migration)?;
 
     info!("migration complete");
     Ok(true)
