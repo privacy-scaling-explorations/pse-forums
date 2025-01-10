@@ -1,0 +1,11 @@
+[package]
+name = "bin"
+edition.workspace = true
+
+[dependencies]
+api = { path = "../api" }
+axum = "0.8.1"
+dotenvy = "0.15.7"
+infra = { path = "../infra" }
+services = { path = "../services" }
+tokio = { version = "1.43.0", features = ["rt-multi-thread"] }

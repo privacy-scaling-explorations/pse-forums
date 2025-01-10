@@ -2,6 +2,7 @@
 
 [env]
 VITE_SERVER_URL = "http://localhost:3000"
+SUPABASE_URL = "http://127.0.0.1:54321/rest/v1"
 
 [tools]
 bun = "latest"

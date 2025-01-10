@@ -1,17 +1,10 @@
 [workspace]
-members = ["apps/server"]
+members = [
+  "apps/server/api",
+  "apps/server/bin",
+  "apps/server/domain",
+  "apps/server/infra",
+  "apps/server/services",
+]
+package = { edition = "2021" }
 resolver = "2"
-
-[workspace.package]
-edition = "2021"
-license = "MIT"
-
-[profile.release]
-lto = "fat"
-strip = true
-codegen-units = 1
-panic = "abort"
-rpath = false
-
-[profile.dev.package."*"]
-debug = false

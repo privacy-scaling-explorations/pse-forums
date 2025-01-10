@@ -1,0 +1,11 @@
+[package]
+name = "infra"
+edition.workspace = true
+
+[dependencies]
+anyhow = "1.0.95"
+async-trait = "0.1.85"
+domain = { path = "../domain" }
+postgrest = "1.6.0"
+reqwest = { version = "0.12.12", features = ["json"] }
+serde_json = "1.0.135"

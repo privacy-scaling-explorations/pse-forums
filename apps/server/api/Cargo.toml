@@ -1,0 +1,9 @@
+[package]
+name = "api"
+edition.workspace = true
+
+[dependencies]
+axum = { version = "0.8.1", features = ["json", "macros"] }
+infra = { path = "../infra" }
+serde = { version = "1.0.217", features = ["derive"] }
+services = { path = "../services" }
