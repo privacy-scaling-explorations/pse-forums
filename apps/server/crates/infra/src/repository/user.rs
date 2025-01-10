@@ -6,6 +6,11 @@ use async_trait::async_trait;
 use domain::{error::DomainError, model::user::*};
 
 pub struct SledUserRepository(sled::Db);
+impl SledUserRepository {
+    pub fn new(db: sled::Db) -> Self {
+        Self(db)
+    }
+}
 
 #[async_trait]
 impl UserRepository for SledUserRepository {

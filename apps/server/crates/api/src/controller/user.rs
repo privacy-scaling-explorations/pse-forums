@@ -1,12 +1,14 @@
 use axum::{
+    debug_handler,
     extract::{Path, State},
     Json,
 };
 //use axum_extra::extract::cookie::Cookie;
-use axum_extra::TypedHeader;
+//use axum_extra::TypedHeader;
 
 use crate::{dto::user::User, error::ApiError, state::AppState};
 
+#[debug_handler]
 pub async fn user(
     State(state): State<AppState>,
     Path(username): Path<String>,

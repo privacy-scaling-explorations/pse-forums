@@ -22,6 +22,7 @@ use crate::{
         },
     },
 };
+use api::{controller::user::user as get_user_json, state::AppState};
 use axum::{
     error_handling::HandleErrorLayer, extract::DefaultBodyLimit, handler::Handler,
     http::StatusCode, routing::get, BoxError, Router,
@@ -36,10 +37,9 @@ use tower_http::{
     trace::{DefaultMakeSpan, TraceLayer},
 };
 use tracing::Level;
-
 const UPLOAD_LIMIT: usize = 20 * 1024 * 1024;
 
-pub async fn router() -> Router {
+pub async fn router(state: AppState) -> Router {
     let cors = CorsLayer::new()
         .allow_origin(HeaderValue::from_static("http://localhost:5173"))
         .allow_methods(Any)
@@ -118,6 +118,8 @@ pub async fn router() -> Router {
         .route("/key", get(key).post(key_post))
         .route("/inbox/:mid", get(inbox));
 
+    let router_api = Router::<AppState>::new().route("/api/v1/user/:username", get(get_user_json));
+
     let router_static = Router::new()
         .route("/static/style.css", get(style))
         .route("/favicon.svg", get(favicon))
@@ -128,6 +130,10 @@ pub async fn router() -> Router {
         .nest_service("/static/inn_icons", ServeDir::new(&CONFIG.inn_icons_path))
         .nest_service("/static/upload", ServeDir::new(&CONFIG.upload_path));
 
-    let app = router_static.merge(router_db);
-    app.layer(middleware_stack).fallback(handler_404)
+    router_static
+        .merge(router_db.with_state(()))
+        .merge(router_api)
+        .with_state(state)
+        .layer(middleware_stack)
+        .fallback(handler_404)
 }

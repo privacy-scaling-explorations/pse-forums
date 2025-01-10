@@ -6,6 +6,11 @@ use sled::Db;
 use crate::error::InfraError;
 
 pub struct SledConfigRepository(Db);
+impl SledConfigRepository {
+    pub fn new(db: Db) -> Self {
+        Self(db)
+    }
+}
 
 #[async_trait]
 impl SiteConfigRepository for SledConfigRepository {
