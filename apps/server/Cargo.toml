@@ -6,8 +6,8 @@ edition = "2021"
 [dependencies]
 ammonia = "4.0.0"
 atom_syndication = { version = "0.12", default-features = false }
-axum = { version = "0.7.5", features = ["http1", "http2", "form", "query", "multipart", "tokio"], default-features = false }
-axum-extra = { version = "0.9", features = ["typed-header"] }
+axum = { version = "0.8.1", features = ["http1", "http2", "form", "query", "multipart", "tokio"], default-features = false }
+axum-extra = { version = "0.10.0", features = ["typed-header"] }
 axum_garde = { version = "0.20.0", default-features = false, features = ["form"] }
 basic-toml = "*"
 bincode = "2.0.0-rc.3"
@@ -22,7 +22,7 @@ image = { version = "0.25.2", default-features = false, features = ["jpeg", "png
 img-parts = "0.3.0"
 indexmap = "2"
 jieba-rs = { git = "https://github.com/messense/jieba-rs.git", rev = "b39957e" }
-jiff = { version = "0.1.13", default-features = false, features = ["std"] }
+jiff = { version = "0.1.19", default-features = false, features = ["std"] }
 latex2mathml = "0.2.3"
 mozjpeg = "0.10.10"
 nanoid = "0.4.0"
@@ -38,7 +38,7 @@ rust-stemmers = "1.2.0"
 serde = { version = "1.0", features = ["derive"] }
 sled = "0.34.7"
 snailquote = "0.3.1"
-stop-words = "0.8.0"
+stop-words = "0.8.1"
 syntect = { version = "5", features = ["regex-fancy", "default-syntaxes", "default-themes", "html"], default-features = false }
 tantivy = "0.22.0"
 thiserror = "2"
@@ -48,6 +48,7 @@ tower-http = { version = "0.6.1", features = ["fs", "compression-zstd", "cors", 
 tracing = { version = "0.1", features = ["release_max_level_info", "max_level_info"], default-features = false }
 tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt", "smallvec"], default-features = false }
 unicode-segmentation = "1"
+validator = { version = "0.19.0", features = ["derive"] }
 whichlang = "0.1.0"
 
 [target.'cfg(not(target_os = "windows"))'.dependencies]
