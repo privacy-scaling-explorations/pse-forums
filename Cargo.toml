@@ -1,10 +1,11 @@
 [workspace]
 members = [
-  "apps/server/api",
-  "apps/server/bin",
-  "apps/server/domain",
-  "apps/server/infra",
-  "apps/server/services",
+    "apps/server/api",
+    "apps/server/bin",
+    "apps/server/domain",
+    "apps/server/infra",
+    "apps/server/services",
+    "prisma",
 ]
 package = { edition = "2021" }
 resolver = "2"
