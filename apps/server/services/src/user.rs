@@ -1,41 +1,26 @@
-use domain::users::model::User;
-use infra::users::repository::UserRepository;
-use infra::users::traits::{Create, Delete, Read, Update};
+use crate::ServiceError;
+
+use super::Result;
+use async_trait::async_trait;
+use derive_more::Constructor;
+use domain::User;
+use domain::{Create, Read};
+use infra::UserRepository;
 use std::sync::Arc;
 
-#[derive(Clone)]
+#[derive(Clone, Constructor)]
 pub struct UserService(Arc<UserRepository>);
 
-impl UserService {
-    pub fn new(repo: Arc<UserRepository>) -> Self {
-        Self(repo)
+#[async_trait]
+impl Create<User, Result<User>> for UserService {
+    async fn create(&self, user: User) -> Result<User> {
+        self.0.create(user).await.map_err(ServiceError::from)
     }
+}
 
-    pub async fn get_user(&self, user_id: i32) -> Result<User, String> {
-        self.0
-            .read(user_id)
-            .await
-            .map_err(|_| "User not found".into())
+#[async_trait]
+impl Read<i32, Result<User>> for UserService {
+    async fn read(&self, user_id: i32) -> Result<User> {
+        self.0.read(user_id).await.map_err(ServiceError::from)
     }
-
-    pub async fn create_user(&self, user: User) -> Result<User, String> {
-        self.0
-            .create(user)
-            .await
-            .map_err(|_| "Failed to create user".into())
-    }
-
-    // pub async fn update_user(&self, user: User) -> Result<User, String> {
-    //     self.repo
-    //         .update(user)
-    //         .await
-    //         .map_err(|_| "Failed to update user".into())
-    // }
-
-    // pub async fn delete_user(&self, user_id: i32) -> Result<(), String> {
-    //     self.repo
-    //         .delete(user_id)
-    //         .await
-    //         .map_err(|_| "Failed to delete user".into())
-    // }
 }

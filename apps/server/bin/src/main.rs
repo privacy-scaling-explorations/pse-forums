@@ -1,19 +1,29 @@
+use api::{mount, Context};
 use axum::{routing::get, Router};
 use dotenvy::dotenv;
-use infra::users::repository::UserRepository;
-use services::user::UserService;
+use infra::UserRepository;
+use prisma::init_prisma;
+use services::UserService;
 use std::env;
 use std::sync::Arc;
+use tokio::net::TcpListener;
 
 #[tokio::main]
 async fn main() {
     dotenv().ok();
-    let base_url = env::var("SUPABASE_URL").expect("SUPABASE_URL must be set");
-    let user_service = Arc::new(UserService::new(Arc::new(UserRepository::new(&base_url))));
+    let prisma = init_prisma().await.unwrap();
+    let user_service = Arc::new(UserService::new(Arc::new(UserRepository::new(prisma))));
+    let router = mount();
+    let app = Router::new()
+        .route("/", get(|| async { "Hello rspc!" }))
+        .nest(
+            "/rspc",
+            rspc_axum::endpoint(router, move || Context {
+                user_service: user_service.clone(),
+            }),
+        );
+    let listener = TcpListener::bind("0.0.0.0:3000").await.unwrap();
 
-    let app = Router::new().merge(api::users::handlers::routes(user_service));
-
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
-    println!("Listening on http://0.0.0.0:3000");
+    println!("Server running on 0.0.0.0:3000");
     axum::serve(listener, app).await.unwrap();
 }

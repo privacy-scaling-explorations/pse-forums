@@ -4,8 +4,10 @@ edition.workspace = true
 
 [dependencies]
 api = { path = "../api" }
-axum = "0.8.1"
+axum = "0.7.9"
 dotenvy = "0.15.7"
 infra = { path = "../infra" }
+prisma = { path = "../../../prisma" }
+rspc-axum = "0.2.1"
 services = { path = "../services" }
 tokio = { version = "1.43.0", features = ["rt-multi-thread"] }

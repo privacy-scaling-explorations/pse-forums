@@ -3,5 +3,10 @@ name = "prisma"
 edition.workspace = true
 
 [dependencies]
-prisma-client-rust-cli = { git = "https://github.com/Brendonovich/prisma-client-rust", tag = "0.6.11" }
+prisma-client-rust = { git = "https://github.com/Brendonovich/prisma-client-rust", features = [
+    "postgresql",
+], tag = "0.6.11" }
+prisma-client-rust-cli = { git = "https://github.com/Brendonovich/prisma-client-rust", features = [
+    "postgresql",
+], tag = "0.6.11" }
 serde = "1.0.217"

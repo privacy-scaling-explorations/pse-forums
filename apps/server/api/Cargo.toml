@@ -3,7 +3,10 @@ name = "api"
 edition.workspace = true
 
 [dependencies]
-axum = { version = "0.8.1", features = ["json", "macros"] }
-infra = { path = "../infra" }
+axum = { version = "0.7.9", features = ["json", "macros"] }
+derive_more = { version = "1.0.0", features = ["constructor"] }
+domain = { path = "../domain" }
+rspc = "0.3.1"
 serde = { version = "1.0.217", features = ["derive"] }
 services = { path = "../services" }
+specta = "1.0.5"

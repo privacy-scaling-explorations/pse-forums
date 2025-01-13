@@ -6,10 +6,10 @@ import tsconfigPaths from "vite-tsconfig-paths"
 const devServerOptions: ServerOptions = {
   open: true,
   proxy: {
-    "/mock": {
+    "/api": {
       target: "http://localhost:3000",
       changeOrigin: true,
-      rewrite: (path) => path.replace(/^\/mock/, "/api/v1"),
+      rewrite: (path) => path.replace(/^\/api/, "/rspc"),
     },
   },
 }

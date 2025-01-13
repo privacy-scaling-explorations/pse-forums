@@ -1,16 +1,12 @@
+.env*
 .DS_Store
 .zed
 
-apps/server/freedit.db
-apps/server/config.toml
-apps/server/static/imgs
-apps/server/snapshots
-apps/server/tantivy
-certs
-target
-
+# cannot be transferred between devices/OSes, needs to be regenerated
+apps/server/infra/prisma.rs
 bun.lockb
 dist
 node_modules
+target
 *.tsbuildinfo
 yarn.lock
