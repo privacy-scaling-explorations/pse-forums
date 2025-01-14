@@ -1,12 +1,12 @@
 generator client {
-  output   = "./src/generated.rs"
+  output   = env("PRISMA_GEN_RS_CLIENT_REL_PATH")
   provider = "mise prisma"
 }
 
 datasource db {
   provider = "postgresql"
   // FIXME
-  url      = env("DIRECT_URL")
+  url      = env("DATABASE_URL")
 }
 
 model User {

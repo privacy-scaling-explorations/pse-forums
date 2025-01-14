@@ -1,6 +1,8 @@
 #:schema https://gist.githubusercontent.com/sripwoud/144f811fbaafe2765f894d81cb1d986c/raw/7bb569892c31e9aa692c0fb3808af9134cfe9764/mise-task.json
 
 [env]
+PRISMA_GEN_RS_CLIENT_REL_PATH = "src/generated.rs"
+PRISMA_GEN_TS_BINDINGS_ABS_PATH = "/home/sripwoud/code/pse-forum/apps/client/src/lib/bindings.ts"
 VITE_SERVER_URL = "http://localhost:3000"
 
 [tools]
@@ -9,6 +11,7 @@ rust = "latest"
 
 [tasks]
 add-shadcn-component = { alias = "ac", dir = "apps/client", run = 'bunx --bun shadcn@latest add {{arg(name="component")}}' }
+bindings = { description = "Generate ts bindings for @rspc/react-query", run = "cargo run --bin bindings" }
 build-client = { alias = "bc", dir = "apps/client", run = "bun vite build", sources = [
     "apps/client/**/*",
     "!apps/client/dist/**",

@@ -10,6 +10,7 @@
   "excludes": [
     "apps/server/static",
     "mise.toml",
+    "apps/client/src/lib/bindings.ts",
     "apps/client/src/routeTree.gen.ts",
   ],
   "typescript": {

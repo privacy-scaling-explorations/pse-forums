@@ -2,6 +2,14 @@
 name = "api"
 edition.workspace = true
 
+[[bin]]
+name = "api"
+path = "src/bin/api.rs"
+
+[[bin]]
+name = "bindings"
+path = "src/bin/bindings.rs"
+
 [dependencies]
 axum.workspace = true
 derive_more.workspace = true
