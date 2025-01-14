@@ -11,3 +11,4 @@ prisma = { path = "../../../prisma" }
 rspc-axum = "0.2.1"
 services = { path = "../services" }
 tokio = { version = "1.43.0", features = ["rt-multi-thread"] }
+tower-http = { version = "0.6.2", features = ["cors"] }
