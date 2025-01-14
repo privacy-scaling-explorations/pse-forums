@@ -1,6 +1,6 @@
 generator client {
   output   = env("PRISMA_GEN_RS_CLIENT_PATH")
-  provider = "mise prisma"
+  provider = "cargo run --bin prisma --"
 }
 
 datasource db {
