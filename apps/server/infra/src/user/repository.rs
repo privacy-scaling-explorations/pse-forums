@@ -3,7 +3,7 @@ use crate::error::{InfraError, Result};
 use async_trait::async_trait;
 use derive_more::Constructor;
 use domain::User;
-use domain::{Create, Delete, Read, Update};
+use domain::{Create, Read};
 use prisma::{user, PrismaClient};
 
 #[derive(Constructor)]

@@ -1,5 +1,5 @@
 generator client {
-  output   = env("PRISMA_GEN_RS_CLIENT_REL_PATH")
+  output   = env("PRISMA_GEN_RS_CLIENT_PATH")
   provider = "mise prisma"
 }
 
