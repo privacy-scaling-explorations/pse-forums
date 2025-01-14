@@ -22,7 +22,7 @@ clean-client = { dir = "apps/client", hide = true, run = "rm -fr dist" }
 clean-server = { dir = "apps/server", hide = true, run = "rm -fr {config.toml,freedit.db,snapshots,static/imgs,tantivy,target}" }
 dev = { alias = "d", depends = ["dev-client", "dev-server", "serve-mock"] }
 dev-client = { alias = "dc", dir = "apps/client", run = "bun vite dev" }
-dev-server = { alias = "ds", run = "cargo run --bin bin" }
+dev-server = { alias = "ds", run = "cargo run --bin api" }
 prisma = { alias = "p", run = "cargo run --bin prisma --" }
 serve-mock = { alias = "sm", dir = "apps/server", run = "bun serve -C mock" }
 start = { alias = "s", depends = ["start-server", "start-client"] }

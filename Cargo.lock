@@ -93,11 +93,16 @@ dependencies = [
  "axum",
  "derive_more 1.0.0",
  "domain",
+ "dotenvy",
+ "infra",
  "prisma",
  "rspc 0.3.1",
+ "rspc-axum",
  "serde",
  "services",
  "specta 2.0.0-rc.20",
+ "tokio",
+ "tower-http",
 ]
 
 [[package]]
@@ -295,21 +300,6 @@ dependencies = [
  "num-integer",
  "num-traits",
  "serde",
-]
-
-[[package]]
-name = "bin"
-version = "0.0.0"
-dependencies = [
- "api",
- "axum",
- "dotenvy",
- "infra",
- "prisma",
- "rspc-axum",
- "services",
- "tokio",
- "tower-http",
 ]
 
 [[package]]
