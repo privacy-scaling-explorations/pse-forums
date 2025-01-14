@@ -3,11 +3,10 @@ name = "infra"
 edition.workspace = true
 
 [dependencies]
-async-trait = "0.1.85"
-derive_more = { version = "1.0.0", features = ["constructor"] }
+async-trait.workspace = true
+derive_more.workspace = true
 domain = { path = "../domain" }
 prisma = { path = "../../../prisma" }
-prisma-client-rust = { git = "https://github.com/Brendonovich/prisma-client-rust", features = ["postgresql"], tag = "0.6.11" }
-serde = { version = "1.0.217", features = ["derive"] }
-specta = "1.0.5"
-thiserror = "2.0.11"
+serde.workspace = true
+specta.workspace = true
+thiserror.workspace = true

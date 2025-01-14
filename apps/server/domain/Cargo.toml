@@ -3,7 +3,7 @@ name = "domain"
 edition.workspace = true
 
 [dependencies]
-async-trait = "0.1.85"
+async-trait.workspace = true
 prisma = { path = "../../../prisma" }
-serde = { version = "1.0.217", features = ["derive"] }
-specta = "1.0.5"
+serde.workspace = true
+specta.workspace = true

@@ -955,7 +955,7 @@ dependencies = [
  "async-trait",
  "prisma",
  "serde",
- "specta 1.0.5",
+ "specta 2.0.0-rc.20",
 ]
 
 [[package]]
@@ -1877,9 +1877,8 @@ dependencies = [
  "derive_more 1.0.0",
  "domain",
  "prisma",
- "prisma-client-rust",
  "serde",
- "specta 1.0.5",
+ "specta 2.0.0-rc.20",
  "thiserror 2.0.11",
 ]
 
@@ -4206,7 +4205,7 @@ dependencies = [
  "infra",
  "rspc 0.3.1",
  "serde",
- "specta 1.0.5",
+ "specta 2.0.0-rc.20",
  "thiserror 2.0.11",
 ]
 
