@@ -6,3 +6,4 @@ edition.workspace = true
 async-trait = "0.1.85"
 prisma = { path = "../../../prisma" }
 serde = { version = "1.0.217", features = ["derive"] }
+specta = "1.0.5"

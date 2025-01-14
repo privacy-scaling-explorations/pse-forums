@@ -1,7 +1,11 @@
 use domain::User;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
+use specta::Type;
 
-#[derive(Serialize)]
+#[derive(Type, Serialize)]
+pub struct MyStruct {}
+
+#[derive(Type, Deserialize, Serialize)]
 pub struct UserResponseDto {
     pub id: i32,
     pub email: String,

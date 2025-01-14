@@ -1,6 +1,8 @@
+use serde::Serialize;
+use specta::Type;
 use thiserror::Error;
 
-#[derive(Error, Debug)]
+#[derive(Error, Debug, Serialize, Type)]
 pub enum InfraError {
     #[error("DB error: {0}")]
     Db(String),

@@ -6,7 +6,8 @@ edition.workspace = true
 axum = { version = "0.7.9", features = ["json", "macros"] }
 derive_more = { version = "1.0.0", features = ["constructor"] }
 domain = { path = "../domain" }
+prisma = { path = "../../../prisma" }
 rspc = "0.3.1"
 serde = { version = "1.0.217", features = ["derive"] }
 services = { path = "../services" }
-specta = "1.0.5"
+specta = "=2.0.0-rc.20"

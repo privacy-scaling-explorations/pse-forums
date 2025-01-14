@@ -1,7 +1,8 @@
 use prisma::user;
 use serde::{Deserialize, Serialize};
+use specta::Type;
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, Type)]
 pub struct User {
     pub id: i32,
     pub username: String,
