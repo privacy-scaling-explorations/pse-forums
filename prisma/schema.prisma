@@ -5,7 +5,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  // FIXME
   url      = env("DATABASE_URL")
 }
 
