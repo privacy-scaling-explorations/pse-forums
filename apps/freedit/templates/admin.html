@@ -1,0 +1,269 @@
+{% extends "layout.html" %} 
+
+{% block content %}
+<form  class="box" id="admin" action="/admin" method="POST">
+    <fieldset>
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label" for="site_name">{{ "site_name"|l10n(page_data.lang) }}</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <input class="input" type="text" name="site_name" required maxlength="64" value="{{ site_config.site_name|trim }}" placeholder="Sitename" autocomplete="off" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label" for="domain">{{ "domain"|l10n(page_data.lang) }}</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <input class="input" type="text" name="domain" required maxlength="64" value="{{ site_config.domain }}" placeholder="domain" autocomplete="off" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label" for="description">{{ "description"|l10n(page_data.lang) }}</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <textarea name="description" class="textarea" maxlength="2048" placeholder="{{site_config.description}}">{{site_config.description}}</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label" for="read_only">{{ "read_only"|l10n(page_data.lang) }}</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <label class="radio"><input type="radio" name="read_only" value="true" {% if site_config.read_only %} checked {% endif %} autocomplete="off" /> True</label>
+                        <label class="radio"><input type="radio" name="read_only" value="false" {% if !site_config.read_only %} checked {% endif %} autocomplete="off" /> False</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label" for="inn_mod_max">{{ "inn_mod_max"|l10n(page_data.lang) }}</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <input class="input" type="number" min="0" max="32" name="inn_mod_max" value="{{ site_config.inn_mod_max }}" autocomplete="off" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label" for="title_max_length">{{ "title_max_length"|l10n(page_data.lang) }}</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <input class="input" type="number" min="0" max="256" name="title_max_length" value="{{ site_config.title_max_length }}" autocomplete="off" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label" for="article_max_length">{{ "article_max_length"|l10n(page_data.lang) }}</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <input class="input" type="number" min="0" max="65535" name="article_max_length" value="{{ site_config.article_max_length }}" autocomplete="off" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label" for="comment_max_length">{{ "comment_max_length"|l10n(page_data.lang) }}</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <input class="input" type="number" min="0" max="65535" name="comment_max_length" value="{{ site_config.comment_max_length }}" autocomplete="off" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label" for="solo_interval">{{ "solo_interval"|l10n(page_data.lang) }}</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <input class="input" type="number" min="0" max="3600" name="solo_interval" value="{{ site_config.solo_interval }}" autocomplete="off" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label" for="post_interval">{{ "post_interval"|l10n(page_data.lang) }}</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <input class="input" type="number" min="0" max="3600" name="post_interval" value="{{ site_config.post_interval }}" autocomplete="off" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label" for="comment_interval">{{ "comment_interval"|l10n(page_data.lang) }}</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <input class="input" type="number" min="0" max="3600" name="comment_interval" value="{{ site_config.comment_interval }}" autocomplete="off" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label" for="per_page">{{ "per_page"|l10n(page_data.lang) }}</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <input class="input" type="number" min="0" max="100" name="per_page" value="{{ site_config.per_page }}" autocomplete="off" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label" for="captcha_difficulty">{{ "captcha_difficulty"|l10n(page_data.lang) }}</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <p class="help">{{"about"|l10n(page_data.lang)}} <a href="https://docs.rs/captcha/0.0.9/captcha/fn.by_name.html" target="_blank">{{ "captcha"|l10n(page_data.lang) }}</a></p>
+                    <div class="control">
+                        <label class="radio"><input type="radio" name="captcha_difficulty" value="Easy" {% if site_config.captcha_difficulty.as_str() == "Easy" %} checked {% endif %} autocomplete="off" /> {{ "easy"|l10n(page_data.lang) }}</label>
+                        <label class="radio"><input type="radio" name="captcha_difficulty" value="Medium" {% if site_config.captcha_difficulty.as_str() == "Medium" %} checked {% endif %} autocomplete="off" /> {{ "medium"|l10n(page_data.lang) }}</label>
+                        <label class="radio"><input type="radio" name="captcha_difficulty" value="Hard" {% if site_config.captcha_difficulty.as_str() == "Hard" %} checked {% endif %} autocomplete="off" /> {{ "hard"|l10n(page_data.lang) }} </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label" for="captcha_name">{{ "captcha_name"|l10n(page_data.lang) }}</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <label class="radio"><input type="radio" name="captcha_name" value="Amelia" {% if site_config.captcha_name.as_str() == "Amelia" %} checked {% endif %} autocomplete="off" /> Amelia</label>
+                        <label class="radio"><input type="radio" name="captcha_name" value="Lucy" {% if site_config.captcha_name.as_str() == "Lucy" %} checked {% endif %} autocomplete="off" /> Lucy</label>
+                        <label class="radio"><input type="radio" name="captcha_name" value="Mila" {% if site_config.captcha_name.as_str() == "Mila" %} checked {% endif %} autocomplete="off" /> Mila</label>
+                        <label class="radio"><input type="radio" name="captcha_name" value="Digits" {% if site_config.captcha_name.as_str() == "Digits" %} checked {% endif %} autocomplete="off" /> Digits</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label" for="home_page">{{ "home_page"|l10n(page_data.lang) }}</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <div class="select">
+                            <select name="home_page" required>
+                                <option {% if site_config.home_page ==0 %} selected {% endif %} value="0">Inn/{{ "all"|l10n(page_data.lang) }}</option>
+                                <option {% if site_config.home_page ==2 %} selected {% endif %} value="2">Inn/{{ "joined"|l10n(page_data.lang) }}</option>
+                                <option {% if site_config.home_page ==3 %} selected {% endif %} value="3">Inn/{{ "following"|l10n(page_data.lang) }}</option>
+                                <option {% if site_config.home_page ==4 %} selected {% endif %} value="4">Solo/{{ "all"|l10n(page_data.lang) }}</option>
+                                <option {% if site_config.home_page ==5 %} selected {% endif %} value="5">Solo/{{ "following"|l10n(page_data.lang) }}</option>
+                                <option {% if site_config.home_page ==6 %} selected {% endif %} value="6">Inn/{{ "list"|l10n(page_data.lang)}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label" for="spam_regex">{{ "spam_regex"|l10n(page_data.lang) }}</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        {% match site_config.spam_regex %}
+                        {% when Some(spam_regex) %}
+                        <textarea name="spam_regex" class="textarea" maxlength="2048" placeholder="{{spam_regex}}">{{spam_regex}}</textarea>
+                        {% else %}
+                        <textarea name="spam_regex" class="textarea" maxlength="2048"></textarea>
+                        {% endmatch %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label" for="lang">{{ "lang"|l10n(page_data.lang) }}</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <div class="select">
+                            <select name="lang" required>
+                                <option {% if site_config.lang == "en" %} selected {% endif %} value="en">English</option>
+                                <option {% if site_config.lang == "fr" %} selected {% endif %} value="fr">Français</option>
+                                <option {% if site_config.lang == "ja" %} selected {% endif %} value="ja">日本語</option>
+                                <option {% if site_config.lang == "zh_cn" %} selected {% endif %} value="zh_cn">中文</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label"></div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <button type="submit" form="admin" class="button is-link">{{ "save"|l10n(page_data.lang) }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+<div class="divider"></div>
+{% endblock %}

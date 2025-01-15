@@ -1,5 +1,6 @@
 [workspace]
 members = [
+  "apps/freedit",
   "apps/server/api",
   "apps/server/domain",
   "apps/server/infra",

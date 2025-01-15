@@ -1,0 +1,232 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<form id="user_avatar" class="box" action="/user/avatar?page_type=user" method="POST" enctype="multipart/form-data">
+    <fieldset>
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label">
+                    <figure class="image is-128x128 ml-0">
+                        <img src="/static/avatars/{{uid}}.png">
+                    </figure>
+                </label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <input class="input" type="file" name="upload" required accept=".jpg, .jpeg, .png, .gif" placeholder="Upload image" />
+                    </div>
+                    <p class="help">{{ "avatar_help"|l10n(page_data.lang) }}</p>
+                    <div class="control">
+                        <button type="submit" form="user_avatar" class="button is-link">{{ "upload"|l10n(page_data.lang) }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+<form id="user_setting" class="box" action="/user/setting" method="POST">
+    <fieldset>
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label">{{ "user_name"|l10n(page_data.lang) }}</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                    <input name="username" class="input" type="text" pattern="^\D.*" required maxlength="32" value="{{username}}" placeholder='{{ "user_name_help"|l10n(page_data.lang) }}'>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label">Url</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <input name="url" class="input" type="url" maxlength="256" value="{{url}}" placeholder="https://">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label">{{ "about"|l10n(page_data.lang) }}</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                    <textarea name="about" class="textarea" maxlength="1024" >{{about}}</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label">{{ "home_page"|l10n(page_data.lang) }}</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <div class="select">
+                            <select name="home_page" required>
+                                <option value="0">Default</option>
+                                <option {% if home_page ==0 %} selected {% endif %} value="0">Inn/{{ "all"|l10n(page_data.lang) }}</option>
+                                <option {% if home_page ==1 %} selected {% endif %} value="1">Feed</option>
+                                <option {% if home_page ==2 %} selected {% endif %} value="2">Inn/{{ "joined"|l10n(page_data.lang) }}</option>
+                                <option {% if home_page ==3 %} selected {% endif %} value="3">Inn/{{ "following"|l10n(page_data.lang) }}</option>
+                                <option {% if home_page ==4 %} selected {% endif %} value="4">Solo/{{ "all"|l10n(page_data.lang) }}</option>
+                                <option {% if home_page ==5 %} selected {% endif %} value="5">Solo/{{ "following"|l10n(page_data.lang) }}</option>
+                                <option {% if home_page ==6 %} selected {% endif %} value="6">Inn/{{ "list"|l10n(page_data.lang)}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label">{{ "lang"|l10n(page_data.lang) }}</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <div class="select">
+                            <select name="lang" required>
+                                <option {% if page_data.lang == "en" %} selected {% endif %} value="en">English</option>
+                                <option {% if page_data.lang == "zh_cn" %} selected {% endif %} value="zh_cn">中文</option>
+                                <option {% if page_data.lang == "ja" %} selected {% endif %} value="ja">日本語</option>
+                                <option {% if page_data.lang == "fr" %} selected {% endif %} value="fr">Français</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label"></div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <button type="submit" form="user_setting" class="button is-link">{{ "save"|l10n(page_data.lang) }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+<form id="password" class="box" action="/user/password" method="post">
+    <fieldset>
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label">{{ "old_password"|l10n(page_data.lang) }}</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <input name="old_password" class="input" type="password" required minlength="7">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label">{{ "new_password"|l10n(page_data.lang) }}</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <input name="password" class="input" type="password" required minlength="7">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label">{{ "re_enter_password"|l10n(page_data.lang) }}</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <input name="password2" class="input" type="password" required minlength="7">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label"></div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <button type="submit" form="password" class="button is-link">{{ "submit"|l10n(page_data.lang) }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+
+<form id="recovery" class="box" action="/user/recovery" method="post">
+    <fieldset>
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label">{{ "password"|l10n(page_data.lang) }}</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <input name="password" class="input" type="password" required minlength="7">
+                    </div>
+                    <p class="help">{{ "recovery_help"|l10n(page_data.lang) }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label"></div>
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <button type="submit" form="recovery" class="button is-link">{{ "recovery_generate"|l10n(page_data.lang) }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+<div class="box">
+    <div class="content">
+        <h3>{{ "sessions"|l10n(page_data.lang) }}</h3>
+        <ul>
+            {% match page_data.claim %}
+            {% when Some(val) %}
+                {% for i in sessions %}
+                    {% if val.session_id.as_str() == i %}
+                    <li>{{i}}: current(<a href="/signout">{{ "sign_out"|l10n(page_data.lang) }}</a>)</li>
+                    {% else %}
+                    <li>{{i}}: <a href="/user/remove/{{i}}">{{ "remove"|l10n(page_data.lang) }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+            {% endmatch %}
+        </ul>
+    </div>
+</div>
+
+<div class="divider"></div>
+
+{% endblock %}

@@ -27,6 +27,7 @@ clean-server = { dir = "apps/server", hide = true, run = "rm -fr {config.toml,fr
 dev = { alias = "d", depends = ["dev-client", "dev-server"] }
 dev-client = { alias = "dc", dir = "apps/client", run = "bun vite dev" }
 dev-server = { alias = "ds", run = "cargo run --bin api" }
+freedit = { dir = "apps/freedit", run = "cargo run -r --bin freedit" }
 post-gen-rs = { hide = true, run = "sed -i \"1s/^/#![allow(clippy::all)]\\n#![allow(unused_imports)]\\n/\" \"$PRISMA_GEN_RS_CLIENT_PATH\"" }
 gen-rs = { description = "Generate Rust bindings for @rspc/react-query", run = "cargo run --bin prisma -- generate", depends_post = [
     "post-gen-rs",

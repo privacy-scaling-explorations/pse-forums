@@ -1,0 +1,80 @@
+{% extends "layout.html" %} {% block section %}
+<section class="my-5 has-background-light">
+  <div id="sign" class="container py-5">
+    <form id="signin" class="box" action="/signin" method="post">
+      <fieldset>
+        <div class="content">
+          <center><h1>{{ "sign_in"|l10n(page_data.lang) }}</h1></center>
+        </div>
+        <div class="field">
+          <div class="control has-icons-left">
+            <input
+              name="username"
+              class="input"
+              type="text"
+              title='{{ "uname_or_id"|l10n(page_data.lang) }}'
+              required
+              placeholder='{{ "uname_or_id"|l10n(page_data.lang) }}'
+            >
+            <span class="icon is-left">👤</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="control has-icons-left">
+            <input
+              name="password"
+              class="input"
+              type="password"
+              required
+              placeholder='{{ "password"|l10n(page_data.lang) }}'
+            >
+            <span class="icon is-left">🔑</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="remember" class="label"
+          >{{ "stay_logged_in"|l10n(page_data.lang) }}</label>
+          <div class="control">
+            <div class="select">
+              <select name="remember" required>
+                <option>30m</option>
+                <option>1h</option>
+                <option>2h</option>
+                <option selected>4h</option>
+                <option>8h</option>
+                <option>12h</option>
+                <option>1day</option>
+                <option>2days</option>
+                <option>3days</option>
+                <option>4days</option>
+                <option>5days</option>
+                <option>1week</option>
+                <option>2weeks</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <center>
+          <div class="field">
+            <div class="control">
+              <button type="submit" form="signin" class="button is-link">
+                {{ "submit"|l10n(page_data.lang) }}
+              </button>
+            </div>
+          </div>
+          <p class="has-text-centered">
+            <a href="/signup">{{ "sign_up"|l10n(page_data.lang) }}</a>
+          </p>
+          <p class="has-text-centered">
+            <a href="/user/reset"
+            >{{ "password_reset"|l10n(page_data.lang) }}</a>
+          </p>
+        </center>
+      </fieldset>
+    </form>
+  </div>
+</section>
+{% endblock %}

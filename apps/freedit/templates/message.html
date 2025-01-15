@@ -1,0 +1,222 @@
+{% extends "layout.html" %} {% block csp %}
+<meta
+  http-equiv="Content-Security-Policy"
+  content="default-src 'self';
+    img-src 'self';script-src 'self' 'unsafe-inline'; style-src 'self'; object-src 'none';
+    font-src 'none'; form-action 'self'; frame-src 'none'; media-src 'none'; manifest-src 'none'; worker-src 'none';"
+>
+{% endblock %} {% block content %}
+<div class="box">
+  <div class="content">
+    {% match pub_key %} {% when Some(key) %}
+    <p class="title">
+      Sending e2ee message to <a href="/user/{{receiver_id}}"
+      >{{receiver_name}}</a>
+    </p>
+    <article class="message is-info">
+      <div class="message-header">
+        <p>Info</p>
+      </div>
+      <div class="message-body">
+        <p>
+          Your keys and data are kept confidential by running cryptography
+          operations in your browser using
+          <a href="https://www.w3.org/TR/WebCryptoAPI/" target="Web Crypto API"
+          >Web Crypto API</a> and JavaScript is left unminified so you can
+          verify page source.
+        </p>
+        <p>
+          The code is copied from: <a
+            href="https://github.com/galehouse5/rsa-webcrypto-tool"
+          >https://github.com/galehouse5/rsa-webcrypto-tool</a>
+        </p>
+      </div>
+    </article>
+
+    <div class="field is-hidden">
+      <textarea id="public-key" readonly>{{key}}</textarea>
+    </div>
+
+    <div class="box">
+      <fieldset>
+        <div class="field">
+          <div class="is-normal">
+            <label class="label" for="text-to-encrypt"
+            >Message to Encrypt</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <textarea
+                  id="text-to-encrypt"
+                  rows="5"
+                  class="textarea"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <button id="button" class="button is-link">Encrypt Message</button>
+    <div class="divider"></div>
+    <div id="message"></div>
+
+    <form
+      id="result"
+      class="box"
+      action="/message/{{receiver_id}}"
+      method="post"
+    >
+      <fieldset>
+        <div class="field">
+          <div class="is-normal">
+            <label class="label" for="encrypted-text">Encrypted Message</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <textarea
+                  id="encrypted-text"
+                  name="message"
+                  rows="10"
+                  class="textarea"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-label"></div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <button type="submit" form="result" class="button is-link">
+                  Send
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+
+    {% else %}
+    <p class="title">
+      Sending message to <a href="/user/{{receiver_id}}">{{receiver_name}}</a>
+    </p>
+    <article class="message is-warning">
+      <div class="message-header">
+        <p>Warning</p>
+      </div>
+      <div class="message-body">
+        {{receiver_name}} does not have a public key so you can't send an end to
+        end encrypted message. It's safe to transmit the message but site
+        administrators can read it.
+      </div>
+    </article>
+
+    <form
+      id="result"
+      class="box"
+      action="/message/{{receiver_id}}"
+      method="post"
+    >
+      <fieldset>
+        <div class="field">
+          <div class="is-normal">
+            <label class="label" for="encrypted-text">Message</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <textarea
+                  id="encrypted-text"
+                  name="message"
+                  rows="10"
+                  class="textarea"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-label"></div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <button type="submit" form="result" class="button is-link">
+                  Send
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+    {% endmatch %}
+  </div>
+</div>
+
+<div class="divider"></div>
+{% endblock %} {% block extra %}
+<script src="/static/js/encoding-helper.js"></script>
+<script src="/static/js/encryption-helper.js"></script>
+<script>
+;(function() {
+  var publicKey = document.getElementById("public-key")
+  var textToEncrypt = document.getElementById("text-to-encrypt")
+  var button = document.getElementById("button")
+  var message = document.getElementById("message")
+  var encryptedText = document.getElementById("encrypted-text")
+  var result = document.getElementById("result")
+
+  var success = function(data) {
+    encryptedText.value = arrayBufferToPem(data, "RSA TEXT")
+    result.style.display = "block"
+    message.innerText = null
+    button.disabled = false
+  }
+
+  var error = function(error) {
+    message.innerText = error
+    button.disabled = false
+  }
+
+  var process = function() {
+    message.innerText = "Processing..."
+    button.disabled = true
+
+    if (publicKey.value.trim() === "") {
+      return error("Public key must be specified.")
+    }
+
+    var publicKeyArrayBuffer = null
+    try {
+      publicKeyArrayBuffer = pemToArrayBuffer(publicKey.value.trim())
+    } catch (_) {
+      return error("Public key is invalid.")
+    }
+
+    if (textToEncrypt.value.trim() === "") {
+      return error("Text to encrypt must be specified.")
+    }
+
+    var data = new TextEncoder().encode(textToEncrypt.value)
+
+    rsaEncrypt(data, publicKeyArrayBuffer).then(success, error)
+  }
+
+  button.addEventListener("click", process)
+})()
+</script>
+{% endblock %} {% block aside %}
+<div class="box">
+  <a href="/key">
+    <span class="tag is-info">Generate key pairs</span>
+  </a>
+</div>
+{% endblock %}

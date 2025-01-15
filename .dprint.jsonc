@@ -8,7 +8,7 @@
     ],
   },
   "excludes": [
-    "apps/server/static",
+    "apps/freedit/static",
     "mise.toml",
     "apps/client/src/lib/bindings.ts",
     "apps/client/src/routeTree.gen.ts",

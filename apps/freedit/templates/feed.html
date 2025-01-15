@@ -1,0 +1,162 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="level is-mobile px-3">
+    <div class="level-left">
+        <div class="tabs is-small is-toggle is-toggle-rounded">
+            <ul>
+                {% match username %}{% when Some with (val) %}
+                    <li class="is-active"><a href="/feed/{{uid}}">{{val}}'s feeds</a></li>
+                {% else %}
+                    {% match filter.as_deref() %}{% when Some with ("star") %}
+                    <li><a href="/feed/{{uid}}">{{ "all"|l10n(page_data.lang) }}</a></li>
+                    <li class="is-active"><a href="/feed/{{uid}}?filter=star">{{ "star"|l10n(page_data.lang) }}</a></li>
+                    <li><a href="/feed/{{uid}}?filter=unread">{{ "unread"|l10n(page_data.lang) }}</a></li>
+                    {% when Some with ("unread") %}
+                    <li><a href="/feed/{{uid}}">{{ "all"|l10n(page_data.lang) }}</a></li>
+                    <li><a href="/feed/{{uid}}?filter=star">{{ "star"|l10n(page_data.lang) }}</a></li>
+                    <li class="is-active"><a href="/feed/{{uid}}?filter=unread">{{ "unread"|l10n(page_data.lang) }}</a></li>
+                    {% else %}
+                    <li class="is-active"><a href="/feed/{{uid}}">{{ "all"|l10n(page_data.lang) }}</a></li>
+                    <li><a href="/feed/{{uid}}?filter=star">{{ "star"|l10n(page_data.lang) }}</a></li>
+                    <li><a href="/feed/{{uid}}?filter=unread">{{ "unread"|l10n(page_data.lang) }}</a></li>
+                    {% endmatch %}
+                {% endmatch %}
+            </ul>
+        </div>
+    </div>
+    <div class="level-right">
+        {% if active_feed != 0 %}
+            <a href="/feed/subscribe/{{uid}}/{{active_feed}}">
+                {% if username.is_some() %}
+                <button class="button is-success is-small is-rounded">{{ "subscribe"|l10n(page_data.lang) }}</button>
+                {% else %}
+                <button class="button is-small is-rounded is-danger">{{ "unsubscribe"|l10n(page_data.lang) }}</button>
+                {% endif %}
+            </a>
+        {% else %}
+            <a href="/feed/add"><button class="button is-success is-small is-rounded">{{ "add"|l10n(page_data.lang) }} Feed</button></a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="list has-visible-pointer-controls has-overflow-ellipsis box">
+    {% for item in items %}
+    <div class="list-item
+        {% if !item.is_read %}
+        has-background-success-light
+        {% endif %} ">
+        <div class="list-item-content">
+            <div class="list-item-title">
+                <strong><a href="/feed/read/{{item.item_id}}">{{item.title}}</a></strong>
+            </div>
+            <div class="list-item-description">
+                <span class="tag">{{item.updated}}</span>
+                <span class="tag"><a href="/feed/{{uid}}?active_folder={{item.folder}}">{{item.folder}}</a></span>
+                <span class="tag"><a href="/feed/{{uid}}?active_feed={{item.feed_id}}">{{item.feed_title}}</a></span>
+            </div>
+        </div>
+        <div class="list-item-controls">
+            <a href="/feed/star/{{item.item_id}}">
+                {% include "icons/star.svg" %}
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<nav class="pagination">
+    {% if anchor < n %}
+        <a class="pagination-previous" disabled>{{ "prev"|l10n(page_data.lang) }}</a>
+    {% else %}
+        {% match filter %} {% when Some with (val) %}
+            <a class="pagination-previous" href="/feed/{{uid}}?anchor={{anchor - n}}&is_desc={{is_desc}}&filter={{val}}&active_folder={{active_folder}}&active_feed={{active_feed}}">{{ "prev"|l10n(page_data.lang) }}</a>
+        {% else %}
+            <a class="pagination-previous" href="/feed/{{uid}}?anchor={{anchor - n}}&is_desc={{is_desc}}&active_folder={{active_folder}}&active_feed={{active_feed}}">{{ "prev"|l10n(page_data.lang) }}</a>
+        {% endmatch %}
+    {% endif %}
+
+    {% if items.len() < n %}
+        <a class="pagination-next" disabled>{{ "next"|l10n(page_data.lang) }}</a>
+    {% else %}
+        {% match filter %} {% when Some with (val) %}
+            <a class="pagination-next" href="/feed/{{uid}}?anchor={{anchor + n}}&is_desc={{is_desc}}&filter={{val}}&active_folder={{active_folder}}&active_feed={{active_feed}}">{{ "next"|l10n(page_data.lang) }}</a>
+        {% else %}
+            <a class="pagination-next" href="/feed/{{uid}}?anchor={{anchor + n}}&is_desc={{is_desc}}&active_folder={{active_folder}}&active_feed={{active_feed}}">{{ "next"|l10n(page_data.lang) }}</a>
+        {% endmatch %}
+    {% endif %}
+</nav>
+
+{% endblock %}
+        
+
+{% block aside %}
+
+<div class="box">
+    <form id="search" action="/search" method="get">
+        <fieldset>
+            <div class="field has-addons">
+                <div class="control">
+                    <input class="input" name="search" type="text" placeholder="Search">
+                </div>
+                <div class="control">
+                    <button type="submit" form="search" class="button">🔍</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+{% match username %} {% when None %}
+<div class="box">
+    <a href="/feed/update">
+        <span class="tag is-success">{{ "refresh"|l10n(page_data.lang) }} Feeds</span>
+    </a>
+</div>
+{% else %}{% endmatch %}
+
+<div class="box">
+    {% for folder in folders %}
+    <details {% if folder.0 == active_folder.as_str() %} open {% endif %}>
+        {% match filter.as_deref() %} {% when Some(val) %}
+            <summary><a href="/feed/{{uid}}?filter={{val}}&active_folder={{folder.0}}">{{folder.0}}</a></summary>
+        {% else %}
+            <summary><a href="/feed/{{uid}}?&active_folder={{folder.0}}">{{folder.0}}</a></summary>
+        {% endmatch %}
+
+        <ul>
+            {% for feed in folder.1 %}
+            <li>
+                <div class="py-1">
+                    {% match filter.as_deref() %} {% when Some(val) %}
+                        <a href="/feed/{{uid}}?filter={{val}}&active_folder={{folder.0}}&active_feed={{feed.feed_id}}">
+                    {% else %}
+                        <a href="/feed/{{uid}}?&active_folder={{folder.0}}&active_feed={{feed.feed_id}}">
+                    {% endmatch %}
+
+                    {% match feed.err %}{% when Some(e) %}
+                        <span class="tag is-danger" title="{{e}}">
+                    {% else %}
+                        {% if feed.feed_id == active_feed %}
+                        <span class="tag is-success">  
+                        {% else %}
+                        <span class="tag is-info">
+                        {% endif %}
+                    {% endmatch %}
+
+                    {% if !feed.is_public %}
+                        <span class="icon">{% include "icons/lock.svg" %}</span>&nbsp
+                    {% endif %}
+
+                    {{feed.title}}
+                    </span>
+                    </a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </details>
+    {% endfor %}
+</div>
+
+{% endblock %}
