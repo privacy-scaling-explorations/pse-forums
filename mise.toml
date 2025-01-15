@@ -8,6 +8,7 @@ DATABASE_URL = "postgresql://postgres.yyinkxpbywhlhnttguty:lcsiLwjhvxvdylFK@aws-
 
 [tools]
 bun = "latest"
+"cargo:cargo-nextest" = "latest"
 rust = "latest"
 
 [tasks]
@@ -45,3 +46,4 @@ start-server = { alias = "ss", depends = [
 ], dir = "apps/server", run = "./target/release/freedit", sources = [
     "apps/server/**/*.rs",
 ], outputs.auto = true }
+test = { alias = "t", run = "cargo nextest run" }

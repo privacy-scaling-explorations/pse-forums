@@ -14,6 +14,8 @@ async-trait = "0.1.85"
 axum = { version = "0.7.9", features = ["json", "macros"] }
 derive_more = { version = "1.0.0", features = ["constructor"] }
 hex = "0.4.3"
+prisma-client-rust = { git = "https://github.com/Brendonovich/prisma-client-rust", features = ["mocking", "postgresql", "rspc"], tag = "0.6.11" }
+prisma-client-rust-cli = { git = "https://github.com/Brendonovich/prisma-client-rust", features = ["mocking", "postgresql", "rspc"], tag = "0.6.11" }
 ring = "0.17.8"
 rspc = "0.3.1"
 rspc-axum = "0.2.1"

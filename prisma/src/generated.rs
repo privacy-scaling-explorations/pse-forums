@@ -847,6 +847,12 @@ pub mod _prisma {
         pub fn _builder() -> PrismaClientBuilder {
             PrismaClientBuilder::new()
         }
+        pub fn _mock() -> (Self, ::prisma_client_rust::MockStore) {
+            let (internals, store) = ::prisma_client_rust::PrismaClientInternals::new_mock(
+                ::prisma_client_rust::ActionNotifier::new(),
+            );
+            (Self(internals), store)
+        }
         pub fn _query_raw<T: ::prisma_client_rust::Data>(
             &self,
             query: ::prisma_client_rust::Raw,
