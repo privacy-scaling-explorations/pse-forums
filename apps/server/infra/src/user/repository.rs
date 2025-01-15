@@ -1,12 +1,10 @@
-use std::sync::Arc;
-
 use crate::error::{InfraError, Result};
-
 use async_trait::async_trait;
 use derive_more::Constructor;
 use domain::User;
 use domain::{Create, Read};
 use prisma::{user, PrismaClient};
+use std::sync::Arc;
 
 pub struct CreateUser {
     pub email: String,

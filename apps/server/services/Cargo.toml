@@ -13,3 +13,8 @@ rspc.workspace = true
 serde.workspace = true
 specta.workspace = true
 thiserror.workspace = true
+
+[dev-dependencies]
+prisma = { path = "../../../prisma" }
+prisma-client-rust.workspace = true
+tokio.workspace = true
