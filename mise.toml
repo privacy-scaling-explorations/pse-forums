@@ -23,7 +23,7 @@ build-server = { alias = "bs", dir = "apps/server", run = "cargo build -r", sour
 clean = { alias = "c", depends = ["clean-client", "clean-server"] }
 clean-client = { dir = "apps/client", hide = true, run = "rm -fr dist" }
 clean-server = { dir = "apps/server", hide = true, run = "rm -fr {config.toml,freedit.db,snapshots,static/imgs,tantivy,target}" }
-dev = { alias = "d", depends = ["dev-client", "dev-server", "serve-mock"] }
+dev = { alias = "d", depends = ["dev-client", "dev-server"] }
 dev-client = { alias = "dc", dir = "apps/client", run = "bun vite dev" }
 dev-server = { alias = "ds", run = "cargo run --bin api" }
 post-gen-rs = { hide = true, run = "sed -i \"1s/^/#![allow(clippy::all)]\\n#![allow(unused_imports)]\\n/\" \"$PRISMA_GEN_RS_CLIENT_PATH\"" }
