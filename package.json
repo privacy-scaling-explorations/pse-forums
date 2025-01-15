@@ -2,7 +2,7 @@
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@jdxcode/mise": "^2025.1.1",
-    "dprint": "^0.47.6",
+    "dprint": "^0.48.0",
     "lefthook": "^1.9.2",
     "tsc-files": "^1.1.4"
   },
