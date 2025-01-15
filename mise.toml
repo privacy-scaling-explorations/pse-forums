@@ -4,7 +4,7 @@
 PRISMA_GEN_RS_CLIENT_PATH = "{{config_root}}/prisma/src/generated.rs"
 PRISMA_GEN_TS_BINDINGS_PATH = "{{config_root}}/apps/client/src/lib/bindings.ts"
 VITE_SERVER_URL = "http://localhost:3000"
-DATABASE_URL = "postgresql://postgres.yyinkxpbywhlhnttguty:lcsiLwjhvxvdylFK@aws-0-eu-central-1.pooler.supabase.com:5432/postgres"
+_ = { file = ".env.yaml" }
 
 [tools]
 bun = "latest"
@@ -29,11 +29,12 @@ dev-client = { alias = "dc", dir = "apps/client", run = "bun vite dev" }
 dev-server = { alias = "ds", run = "cargo run --bin api" }
 freedit = { dir = "apps/freedit", run = "cargo run -r --bin freedit" }
 post-gen-rs = { hide = true, run = "sed -i \"1s/^/#![allow(clippy::all)]\\n#![allow(unused_imports)]\\n/\" \"$PRISMA_GEN_RS_CLIENT_PATH\"" }
-gen-rs = { description = "Generate Rust bindings for @rspc/react-query", run = "cargo run --bin prisma -- generate", depends_post = [
+gen-rs = { description = "Generate Prisma Rust Client", run = "cargo run --bin prisma -- generate", depends_post = [
     "post-gen-rs",
 ] }
-gen-ts = { description = "Generate ts bindings for @rspc/react-query", run = "cargo run --bin bindings", hide = true }
-prisma = { alias = "p", run = "cargo run --bin prisma --" }
+gen-ts = { run = "cargo run --bin bindings", hide = true }
+direct-prisma = { alias = "dp", description = "Run prisma CLI by connecting DIRECTLY (no pgbouncer, required for migrations) to the DB", run = "cargo run --bin prisma --", env = { DATABASE_URL = "{{env.DIRECT_URL}}" } }
+prisma = { alias = "p", description = "Run prisma CLI by connecting to the DB with pgbouncer", run = "cargo run --bin prisma --" }
 start = { alias = "s", depends = ["start-server", "start-client"] }
 start-client = { alias = "sc", depends = [
     "build-client",
