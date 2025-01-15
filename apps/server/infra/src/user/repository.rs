@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use crate::error::{InfraError, Result};
 
 use async_trait::async_trait;
@@ -6,15 +8,22 @@ use domain::User;
 use domain::{Create, Read};
 use prisma::{user, PrismaClient};
 
+pub struct CreateUser {
+    pub email: String,
+    pub pwd: String,
+    pub salt: String,
+    pub username: String,
+}
+
 #[derive(Constructor)]
-pub struct UserRepository(PrismaClient);
+pub struct UserRepository(Arc<PrismaClient>);
 
 #[async_trait]
-impl Create<User, Result<User>> for UserRepository {
-    async fn create(&self, user: User) -> Result<User> {
+impl Create<CreateUser, Result<User>> for UserRepository {
+    async fn create(&self, user: CreateUser) -> Result<User> {
         self.0
             .user()
-            .create(user.username, user.email, vec![])
+            .create(user.email, user.pwd, user.salt, user.username, vec![])
             .exec()
             .await
             .map_err(|e| InfraError::Db(e.to_string()))
@@ -23,11 +32,11 @@ impl Create<User, Result<User>> for UserRepository {
 }
 
 #[async_trait]
-impl Read<i32, Result<User>> for UserRepository {
-    async fn read(&self, user_id: i32) -> Result<User> {
+impl Read<String, Result<User>> for UserRepository {
+    async fn read(&self, email: String) -> Result<User> {
         self.0
             .user()
-            .find_unique(user::id::equals(user_id))
+            .find_unique(user::email::equals(email))
             .exec()
             .await
             .map_err(|e| InfraError::Db(e.to_string()))?

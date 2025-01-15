@@ -11,6 +11,8 @@ datasource db {
 
 model User {
   id       Int    @id @default(autoincrement())
-  username String @unique
   email    String @unique
+  pwd      String // hashed
+  salt     String // hex encoded salt
+  username String @unique
 }

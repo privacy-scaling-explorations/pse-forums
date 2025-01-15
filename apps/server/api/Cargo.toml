@@ -14,7 +14,6 @@ path = "src/bin/bindings.rs"
 axum.workspace = true
 derive_more.workspace = true
 domain = { path = "../domain" }
-dotenvy.workspace = true
 infra = { path = "../infra" }
 prisma = { path = "../../../prisma" }
 rspc.workspace = true

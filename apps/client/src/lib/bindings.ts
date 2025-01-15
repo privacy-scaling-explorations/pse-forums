@@ -2,9 +2,17 @@
 
 export type Procedures = {
     queries: 
-        { key: "users.read", input: number, result: UserResponseDto },
-    mutations: never,
+        { key: "auth.signin", input: SigninRequestDto, result: null } | 
+        { key: "users.read", input: string, result: UserResponseDto },
+    mutations: 
+        { key: "auth.signup", input: SignupRequestDto, result: User },
     subscriptions: never
 };
+
+export type SigninRequestDto = { email: string; password: string }
+
+export type SignupRequestDto = { email: string; password: string; username: string }
+
+export type User = { id: number; email: string; pwd: string; salt: string; username: string }
 
 export type UserResponseDto = { id: number; email: string; username: string }

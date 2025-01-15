@@ -1,4 +1,4 @@
 mod error;
 pub use error::InfraError;
 mod user;
-pub use user::repository::UserRepository;
+pub use user::repository::*;

@@ -6,7 +6,9 @@ edition.workspace = true
 async-trait.workspace = true
 derive_more.workspace = true
 domain = { path = "../domain" }
+hex.workspace = true
 infra = { path = "../infra" }
+ring.workspace = true
 rspc.workspace = true
 serde.workspace = true
 specta.workspace = true
