@@ -93,7 +93,6 @@ dependencies = [
  "axum",
  "derive_more 1.0.0",
  "domain",
- "dotenvy",
  "infra",
  "prisma",
  "rspc 0.3.1",
@@ -953,12 +952,6 @@ name = "dotenv"
 version = "0.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "77c90badedccf4105eca100756a0b1289e191f6fcbdadd3cee1d2f614f97da8f"
-
-[[package]]
-name = "dotenvy"
-version = "0.15.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1aaf95b3e5c8f23aa320147307562d361db0ae0d51242340f558153b4eb2439b"
 
 [[package]]
 name = "either"
@@ -3197,6 +3190,7 @@ dependencies = [
  "serde_json",
  "specta 1.0.5",
  "thiserror 1.0.69",
+ "tokio",
  "user-facing-errors",
  "uuid",
 ]
@@ -4192,11 +4186,16 @@ dependencies = [
  "async-trait",
  "derive_more 1.0.0",
  "domain",
+ "hex",
  "infra",
+ "prisma",
+ "prisma-client-rust",
+ "ring",
  "rspc 0.3.1",
  "serde",
  "specta 2.0.0-rc.20",
  "thiserror 2.0.11",
+ "tokio",
 ]
 
 [[package]]

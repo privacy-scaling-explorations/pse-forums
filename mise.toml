@@ -1,12 +1,14 @@
 #:schema https://gist.githubusercontent.com/sripwoud/144f811fbaafe2765f894d81cb1d986c/raw/7bb569892c31e9aa692c0fb3808af9134cfe9764/mise-task.json
 
 [env]
-PRISMA_GEN_RS_CLIENT_PATH = "/home/sripwoud/code/pse-forum/prisma/src/generated.rs"
-PRISMA_GEN_TS_BINDINGS_PATH = "/home/sripwoud/code/pse-forum/apps/client/src/lib/bindings.ts"
+PRISMA_GEN_RS_CLIENT_PATH = "{{config_root}}/prisma/src/generated.rs"
+PRISMA_GEN_TS_BINDINGS_PATH = "{{config_root}}/apps/client/src/lib/bindings.ts"
 VITE_SERVER_URL = "http://localhost:3000"
+DATABASE_URL = "postgresql://postgres.yyinkxpbywhlhnttguty:lcsiLwjhvxvdylFK@aws-0-eu-central-1.pooler.supabase.com:5432/postgres"
 
 [tools]
 bun = "latest"
+"cargo:cargo-nextest" = "latest"
 rust = "latest"
 
 [tasks]
@@ -22,16 +24,15 @@ build-server = { alias = "bs", dir = "apps/server", run = "cargo build -r", sour
 clean = { alias = "c", depends = ["clean-client", "clean-server"] }
 clean-client = { dir = "apps/client", hide = true, run = "rm -fr dist" }
 clean-server = { dir = "apps/server", hide = true, run = "rm -fr {config.toml,freedit.db,snapshots,static/imgs,tantivy,target}" }
-dev = { alias = "d", depends = ["dev-client", "dev-server", "serve-mock"] }
+dev = { alias = "d", depends = ["dev-client", "dev-server"] }
 dev-client = { alias = "dc", dir = "apps/client", run = "bun vite dev" }
 dev-server = { alias = "ds", run = "cargo run --bin api" }
 post-gen-rs = { hide = true, run = "sed -i \"1s/^/#![allow(clippy::all)]\\n#![allow(unused_imports)]\\n/\" \"$PRISMA_GEN_RS_CLIENT_PATH\"" }
 gen-rs = { description = "Generate Rust bindings for @rspc/react-query", run = "cargo run --bin prisma -- generate", depends_post = [
     "post-gen-rs",
 ] }
-gen-ts = { description = "Generate ts bindings for @rspc/react-query", run = "cargo run --bin bindings" }
+gen-ts = { description = "Generate ts bindings for @rspc/react-query", run = "cargo run --bin bindings", hide = true }
 prisma = { alias = "p", run = "cargo run --bin prisma --" }
-serve-mock = { alias = "sm", dir = "apps/server", run = "bun serve -C mock" }
 start = { alias = "s", depends = ["start-server", "start-client"] }
 start-client = { alias = "sc", depends = [
     "build-client",
@@ -45,3 +46,4 @@ start-server = { alias = "ss", depends = [
 ], dir = "apps/server", run = "./target/release/freedit", sources = [
     "apps/server/**/*.rs",
 ], outputs.auto = true }
+test = { alias = "t", run = "cargo nextest run" }
