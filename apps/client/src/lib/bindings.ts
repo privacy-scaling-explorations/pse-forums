@@ -13,6 +13,14 @@ export type SigninRequestDto = { email: string; password: string }
 
 export type SignupRequestDto = { email: string; password: string; username: string }
 
-export type User = { id: number; email: string; pwd: string; salt: string; username: string }
+export type User = { id: number; email: string; 
+/**
+ * hex encoded hash
+ */
+pwd: string; 
+/**
+ * hex encoded
+ */
+salt: string; username: string }
 
 export type UserResponseDto = { id: number; email: string; username: string }

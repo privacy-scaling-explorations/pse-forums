@@ -19,7 +19,9 @@ build-client = { alias = "bc", dir = "apps/client", run = "bun vite build", sour
     "apps/client/**/*",
     "!apps/client/dist/**",
     "!apps/client/node_modules/**",
-], outputs.auto = true }
+], outputs.auto = true, depends = [
+    "gen-ts",
+] }
 build-server = { alias = "bs", dir = "apps/server", run = "cargo build -r", sources = [
     "apps/server/**/*.rs",
 ], outputs.auto = true }
@@ -27,12 +29,15 @@ db-start = { alias = "dbs", description = "Run local postgres instance (with sup
 dev = { alias = "d", depends = ["dev-client", "dev-server"] }
 dev-client = { alias = "dc", dir = "apps/client", run = "bun vite dev", depends = [
     "install-node-modules",
+    "gen-ts",
 ] }
-dev-server = { alias = "ds", run = "cargo run --bin api" }
+dev-server = { alias = "ds", run = "cargo run --bin api", depends = ["gen-rs"] }
 freedit = { dir = "apps/freedit", run = "cargo run -r --bin freedit" }
 gen-rs = { description = "Generate Prisma Rust Client", run = "cargo run --bin prisma -- generate", depends_post = [
     "maybe-post-gen-rs",
-] }
+], sources = [
+    "db/prisma/schema.prisma",
+], outputs = "db/prisma/src/generated.rs" }
 install-node-modules = { hide = true, run = "bun i", sources = [
     "package.json",
     "apps/client/package.json",
@@ -54,7 +59,9 @@ start-client = { alias = "sc", depends = [
 ], outputs.auto = true }
 start-server = { alias = "ss", dir = "apps/server", run = "cargo run -r --bin api", sources = [
     "apps/server/**/*.rs",
-], outputs.auto = true }
+], outputs.auto = true, depends = [
+    "gen-rs",
+] }
 test = { alias = "t", run = "cargo nextest run" }
 
 [tasks.clean]

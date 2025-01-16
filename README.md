@@ -2,9 +2,19 @@
 
 ## Develop
 
-### Requirements
+### TLDR
 
-- [bun](https://bun.sh/docs/installation) (JS runtime)
-- [rust](https://www.rust-lang.org/tools/install)
+```commandline
+curl https://mise.run | sh
+mise activate
+mise d
+```
 
-Or you can [install mise](https://mise.jdx.dev/installing-mise.html) first and have it install bun and rust for you.
+This will:
+
+- install necessary runtimes (bun, rust)
+- install necessary packages (node_modules, cargo deps)
+- spin up a postgres database and run the migrations against it
+- generate prisma client and corresponding TS types
+- start the api server in dev mode
+- start the frontend client in dev mode
