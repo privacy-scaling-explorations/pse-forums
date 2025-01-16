@@ -20,6 +20,7 @@ pub fn auth_router() -> RouterBuilder<Context> {
                     .signin(signin_request.into())
                     .await
                     .map_err(|e| {
+                        println!("{e}");
                         rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
                     })
             })

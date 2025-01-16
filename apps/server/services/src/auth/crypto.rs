@@ -1,4 +1,4 @@
-use hex::encode;
+use hex::{decode, encode};
 use ring::error::Unspecified;
 // https://rust-lang-nursery.github.io/rust-cookbook/cryptography/encryption.html
 use ring::pbkdf2::{self, PBKDF2_HMAC_SHA512};
@@ -30,13 +30,20 @@ pub fn hash_pwd(password: &str) -> Result<(String, String), String> {
     Ok((encode(salt), encode(hashed_password)))
 }
 
-pub fn verify_pwd(pwd: &str, salt: &[u8], stored_pwd_hash: &[u8]) -> Result<(), Unspecified> {
+pub fn verify_pwd(
+    pwd: &str,
+    salt_hex: &str,
+    expected_pwd_hash_hex: &str,
+) -> Result<(), Unspecified> {
+    let salt = decode(salt_hex).map_err(|_| Unspecified)?;
+    let expected_pwd_hash = decode(expected_pwd_hash_hex).map_err(|_| Unspecified)?;
+
     pbkdf2::verify(
         PBKDF2_HMAC_SHA512,
         PBKDF2_ITERATIONS,
-        salt,
+        &salt,
         pwd.as_bytes(),
-        stored_pwd_hash,
+        &expected_pwd_hash,
     )
 }
 
@@ -108,10 +115,8 @@ mod tests {
     fn test_verify_pwd_success() {
         let password = "SecurePassword!@#";
         let (salt_hex, hash_hex) = hash_pwd(password).expect("Failed to hash password");
-        let salt = decode(salt_hex).expect("Failed to decode salt");
-        let stored_hash = decode(hash_hex).expect("Failed to decode hash");
 
-        let verify_result = verify_pwd(password, &salt, &stored_hash);
+        let verify_result = verify_pwd(password, &salt_hex, &hash_hex);
         assert!(
             verify_result.is_ok(),
             "Password verification should succeed with correct password"
@@ -123,10 +128,8 @@ mod tests {
         let password = "SecurePassword!@#";
         let wrong_password = "WrongPassword!!!";
         let (salt_hex, hash_hex) = hash_pwd(password).expect("Failed to hash password");
-        let salt = decode(salt_hex).expect("Failed to decode salt");
-        let stored_hash = decode(hash_hex).expect("Failed to decode hash");
 
-        let verify_result = verify_pwd(wrong_password, &salt, &stored_hash);
+        let verify_result = verify_pwd(wrong_password, &salt_hex, &hash_hex);
         assert!(
             verify_result.is_err(),
             "Password verification should fail with incorrect password"
@@ -136,11 +139,10 @@ mod tests {
     #[test]
     fn test_verify_pwd_failure_wrong_salt() {
         let password = "SecurePassword!@#";
-        let wrong_salt = generate_salt().expect("Failed to generate wrong salt");
+        let wrong_salt = encode(generate_salt().expect("Failed to generate wrong salt"));
         let (_, hash_hex) = hash_pwd(password).expect("Failed to hash password");
-        let stored_hash = decode(hash_hex).expect("Failed to decode hash");
 
-        let verify_result = verify_pwd(password, &wrong_salt, &stored_hash);
+        let verify_result = verify_pwd(password, &wrong_salt, &hash_hex);
         assert!(
             verify_result.is_err(),
             "Password verification should fail with incorrect salt"

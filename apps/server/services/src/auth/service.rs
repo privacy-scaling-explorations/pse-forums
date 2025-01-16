@@ -21,6 +21,7 @@ pub struct SignupData {
     pub username: String,
 }
 
+#[derive(Clone, Debug)]
 pub struct SigninData {
     pub email: String,
     pub pwd: String,
@@ -51,14 +52,15 @@ impl AuthService {
     }
 
     pub async fn signin(&self, payload: SigninData) -> Result<(), AuthError> {
-        let user = self
-            .0
-            .read(payload.email)
-            .await
-            .map_err(|_| AuthError::InvalidCredentials)?;
+        let user = self.0.read(payload.email.clone()).await.map_err(|e| {
+            println!("{:?}", e);
+            AuthError::InvalidCredentials
+        })?;
 
-        verify_pwd(&payload.pwd, &user.salt.as_bytes(), &user.pwd.as_bytes())
-            .map_err(|_| AuthError::InvalidCredentials)?;
+        verify_pwd(&payload.pwd, &user.salt, &user.pwd).map_err(|e| {
+            println!("{:?}", e);
+            AuthError::InvalidCredentials
+        })?;
 
         Ok(())
     }
