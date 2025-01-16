@@ -15,7 +15,7 @@ axum.workspace = true
 derive_more.workspace = true
 domain = { path = "../domain" }
 infra = { path = "../infra" }
-prisma = { path = "../../../prisma" }
+prisma = { path = "../../../db/prisma" }
 rspc.workspace = true
 rspc-axum.workspace = true
 serde.workspace = true

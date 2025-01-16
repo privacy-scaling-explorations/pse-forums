@@ -6,7 +6,7 @@ edition.workspace = true
 async-trait.workspace = true
 derive_more.workspace = true
 domain = { path = "../domain" }
-prisma = { path = "../../../prisma" }
+prisma = { path = "../../../db/prisma" }
 serde.workspace = true
 specta.workspace = true
 thiserror.workspace = true

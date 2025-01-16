@@ -1,3 +1,5 @@
+.branches
+.temp
 .env*
 .DS_Store
 .zed

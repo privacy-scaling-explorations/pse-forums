@@ -5,7 +5,7 @@ members = [
   "apps/server/domain",
   "apps/server/infra",
   "apps/server/services",
-  "prisma",
+  "db/prisma",
 ]
 package = { edition = "2021" }
 resolver = "2"

@@ -1,14 +1,16 @@
 #:schema https://gist.githubusercontent.com/sripwoud/144f811fbaafe2765f894d81cb1d986c/raw/7bb569892c31e9aa692c0fb3808af9134cfe9764/mise-task.json
 
 [env]
-PRISMA_GEN_RS_CLIENT_PATH = "{{config_root}}/prisma/src/generated.rs"
+PRISMA_GEN_RS_CLIENT_PATH = "{{config_root}}/db/prisma/src/generated.rs"
 PRISMA_GEN_TS_BINDINGS_PATH = "{{config_root}}/apps/client/src/lib/bindings.ts"
 VITE_SERVER_URL = "http://localhost:3000"
-_ = { file = ".env.yaml" }
+SUPABASE_WORKDIR = "db"
+DATABASE_URL = "postgresql://postgres:postgres@127.0.0.1:54322/postgres"
 
 [tools]
 bun = "latest"
 "cargo:cargo-nextest" = "latest"
+lefthook = "latest"
 rust = "latest"
 
 [tasks]
@@ -21,20 +23,29 @@ build-client = { alias = "bc", dir = "apps/client", run = "bun vite build", sour
 build-server = { alias = "bs", dir = "apps/server", run = "cargo build -r", sources = [
     "apps/server/**/*.rs",
 ], outputs.auto = true }
-clean = { alias = "c", run = "rm -fr {,apps/client/}node_modules apps/client/dist  target apps/freedit/{config.toml,freedit.db,snapshots,static/imgs,tantivy,target}" }
+db-start = { alias = "dbs", description = "Run local postgres instance (with supabase docker container)", run = "bun supabase start" }
 dev = { alias = "d", depends = ["dev-client", "dev-server"] }
-dev-client = { alias = "dc", dir = "apps/client", run = "bun vite dev" }
+dev-client = { alias = "dc", dir = "apps/client", run = "bun vite dev", depends = [
+    "install-node-modules",
+] }
 dev-server = { alias = "ds", run = "cargo run --bin api" }
 freedit = { dir = "apps/freedit", run = "cargo run -r --bin freedit" }
-post-gen-rs = { hide = true, run = "sed -i \"1s/^/#![allow(clippy::all)]\\n#![allow(unused_imports)]\\n/\" \"$PRISMA_GEN_RS_CLIENT_PATH\"" }
 gen-rs = { description = "Generate Prisma Rust Client", run = "cargo run --bin prisma -- generate", depends_post = [
-    "post-gen-rs",
+    "maybe-post-gen-rs",
+] }
+install-node-modules = { hide = true, run = "bun i", sources = [
+    "package.json",
+    "apps/client/package.json",
+], outputs = [
+    "bun.lockb",
 ] }
 gen-ts = { run = "cargo run --bin bindings", hide = true }
-direct-prisma = { alias = "dp", description = "Run prisma CLI by connecting DIRECTLY (no pgbouncer, required for migrations) to the DB", run = "cargo run --bin prisma --", env = { DATABASE_URL = "{{env.DIRECT_URL}}" } }
-prisma = { alias = "p", description = "Run prisma CLI by connecting to the DB with pgbouncer", run = "cargo run --bin prisma --" }
-start = { alias = "s", depends = ["start-server", "start-client"] }
+prisma = { alias = "p", description = "Run prisma CLI by connecting to the DB with pgbouncer", run = "cargo run --bin prisma --", depends_post = [
+    "maybe-post-gen-rs",
+] }
+start = { alias = "s", depends = ["db-start", "start-server", "start-client"] }
 start-client = { alias = "sc", depends = [
+    "install-node-modules",
     "build-client",
 ], dir = "apps/client", run = "bun vite preview", sources = [
     "apps/client/**/*",
@@ -45,3 +56,48 @@ start-server = { alias = "ss", dir = "apps/server", run = "cargo run -r --bin ap
     "apps/server/**/*.rs",
 ], outputs.auto = true }
 test = { alias = "t", run = "cargo nextest run" }
+
+[tasks.clean]
+alias = "c"
+quiet = true
+run = """
+#!/usr/bin/env bash
+
+BASE_DIRS=(
+  "node_modules"
+  "bun.lockb"
+  "apps/client/node_modules"
+  "apps/client/dist"
+  "target"
+  "apps/freedit/config.toml"
+  "apps/freedit/freedit.db"
+  "apps/freedit/snapshots"
+  "apps/freedit/static/imgs"
+  "apps/freedit/tantivy"
+  "apps/freedit/target"
+)
+
+for dir in "${BASE_DIRS[@]}"; do
+  find "$dir" -type f -exec rm -f {} +  2>/dev/null || true
+  find "$dir" -type d -exec rm -rf {} + 2>/dev/null || true
+done
+"""
+
+[tasks.maybe-post-gen-rs]
+hide = true
+quiet = true
+run = """
+#!/usr/bin/env bash
+
+ALLOW_CLIPPY_ALL='#![allow(clippy::all)]'
+ALLOW_UNUSED_IMPORTS='#![allow(unused_imports)]'
+EXPECTED=$(printf '%s\n%s' "$ALLOW_CLIPPY_ALL" "$ALLOW_UNUSED_IMPORTS")
+ACTUAL="$(head -n2 "$PRISMA_GEN_RS_CLIENT_PATH")"
+
+if [[ "$ACTUAL" != "$EXPECTED" ]]; then
+    TMP_FILE=$(mktemp)
+    printf "%s\\n%s\\n" "#![allow(clippy::all)]" "#![allow(unused_imports)]" > "$TMP_FILE"
+    cat "$PRISMA_GEN_RS_CLIENT_PATH" >> "$TMP_FILE"
+    mv "$TMP_FILE" "$PRISMA_GEN_RS_CLIENT_PATH"
+fi
+"""

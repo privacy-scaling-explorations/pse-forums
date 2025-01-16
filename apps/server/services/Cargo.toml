@@ -15,6 +15,6 @@ specta.workspace = true
 thiserror.workspace = true
 
 [dev-dependencies]
-prisma = { path = "../../../prisma" }
+prisma = { path = "../../../db/prisma" }
 prisma-client-rust.workspace = true
 tokio.workspace = true
