@@ -799,16 +799,6 @@ pub mod user {
         pub fn count(self, _where: Vec<WhereParam>) -> Count<'a> {
             Count::new(self.client, _where)
         }
-        pub fn find_raw<T: ::prisma_client_rust::Data>(
-            self,
-        ) -> ::prisma_client_rust::FindRaw<'a, Types, T> {
-            ::prisma_client_rust::FindRaw::new(self.client)
-        }
-        pub fn aggregate_raw<T: ::prisma_client_rust::Data>(
-            self,
-        ) -> ::prisma_client_rust::AggregateRaw<'a, Types, T> {
-            ::prisma_client_rust::AggregateRaw::new(self.client)
-        }
     }
 }
 pub mod _prisma {

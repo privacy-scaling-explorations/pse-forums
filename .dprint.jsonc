@@ -9,9 +9,10 @@
   },
   "excludes": [
     "apps/freedit/static",
-    "mise.toml",
     "apps/client/src/lib/bindings.ts",
     "apps/client/src/routeTree.gen.ts",
+    "db/prisma/src/generated.rs",
+    "mise.toml",
   ],
   "typescript": {
     "quoteProps": "asNeeded",
