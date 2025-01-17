@@ -6,3 +6,7 @@ edition.workspace = true
 prisma-client-rust.workspace = true
 prisma-client-rust-cli.workspace = true
 serde.workspace = true
+
+[features]
+bin = []
+default = []

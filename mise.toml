@@ -45,7 +45,7 @@ install-node-modules = { hide = true, run = "bun i", sources = [
     "bun.lockb",
 ] }
 gen-ts = { run = "cargo run --bin bindings", hide = true }
-prisma = { alias = "p", dir = "db/prisma", description = "Run prisma CLI by connecting to the DB with pgbouncer", run = "cargo run --", depends_post = [
+prisma = { alias = "p", dir = "db/prisma", description = "Run prisma CLI by connecting to the DB with pgbouncer", run = "cargo run -F bin --", depends_post = [
     "maybe-post-gen-rs",
 ] }
 start = { alias = "s", depends = ["db-start", "start-server", "start-client"] }
