@@ -6,7 +6,7 @@ enabled = false
 port = 54327
 
 [api]
-enabled = false
+enabled = true
 extra_search_path = ['public', 'extensions']
 max_rows = 1000
 port = 54321
@@ -21,7 +21,7 @@ enable_anonymous_sign_ins = false
 enable_manual_linking = false
 enable_refresh_token_rotation = true
 enable_signup = true
-enabled = false
+enabled = true
 jwt_expiry = 3600
 minimum_password_length = 6
 password_requirements = ''
@@ -31,7 +31,7 @@ site_url = 'http://127.0.0.1:3000'
 [auth.email]
 double_confirm_changes = true
 enable_confirmations = false
-enable_signup = false
+enable_signup = true
 max_frequency = '1s'
 otp_expiry = 3600
 otp_length = 6
@@ -111,7 +111,7 @@ s3_region = 'env(S3_REGION)'
 s3_secret_key = 'env(S3_SECRET_KEY)'
 
 [inbucket]
-enabled = false
+enabled = true
 port = 54324
 
 [realtime]

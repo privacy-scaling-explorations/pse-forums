@@ -1,12 +1,14 @@
 #:schema https://gist.githubusercontent.com/sripwoud/144f811fbaafe2765f894d81cb1d986c/raw/7bb569892c31e9aa692c0fb3808af9134cfe9764/mise-task.json
 
 [env]
-PROJECT_ROOT = "{{config_root}}"
+DATABASE_URL = "postgresql://postgres:postgres@127.0.0.1:54322/postgres"
 PRISMA_GEN_RS_CLIENT_PATH = "{{config_root}}/db/prisma/src/generated.rs"
 PRISMA_GEN_TS_BINDINGS_PATH = "{{config_root}}/apps/client/src/lib/bindings.ts"
-VITE_SERVER_URL = "http://localhost:3000"
+SUPABASE_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0"
+SUPABASE_JWT_SECRET = "super-secret-jwt-token-with-at-least-32-characters-long"
+SUPABASE_URL = "http://127.0.0.1:54321"
 SUPABASE_WORKDIR = "db"
-DATABASE_URL = "postgresql://postgres:postgres@127.0.0.1:54322/postgres"
+VITE_SERVER_URL = "http://localhost:3000"
 
 [tools]
 bun = "latest"
@@ -32,7 +34,7 @@ dev-client = { alias = "dc", dir = "apps/client", run = "bun vite dev", depends 
     "install-node-modules",
     "gen-ts",
 ] }
-dev-server = { alias = "ds", run = "cargo run --bin api", depends = ["gen-rs"] }
+dev-server = { alias = "ds", run = "cargo run --bin api" }
 freedit = { dir = "apps/freedit", run = "cargo run -r --bin freedit" }
 install-node-modules = { hide = true, run = "bun i", sources = [
     "package.json",
