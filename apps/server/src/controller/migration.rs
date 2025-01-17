@@ -107,16 +107,16 @@ pub fn migrate_data_from_freedit(db: &Db, migration_db: PathBuf) -> Result<bool,
     let mut user_remapping: HashMap<u32, u32> = HashMap::new();
 
     for i_u in incoming_users.iter() {
+        let uid: u32;
+
         if let Some(v) = username_tree.get(i_u.username.clone())? {
-            let uid = ivec_to_u32(&v);
-            user_remapping.insert(i_u.uid, uid);
+            uid = ivec_to_u32(&v);
             info!(
                 "remapped existing User {0} uid {1} to {2}",
                 i_u.username, i_u.uid, uid
             );
         } else {
-            let uid = incr_id(db, "users_count")?;
-            user_remapping.insert(i_u.uid, uid);
+            uid = incr_id(db, "users_count")?;
             info!(
                 "remapped new User {0} uid {1} to {2}",
                 i_u.username, i_u.uid, uid
@@ -135,6 +135,41 @@ pub fn migrate_data_from_freedit(db: &Db, migration_db: PathBuf) -> Result<bool,
 
             set_one(db, "users", uid, &new_user)?;
             username_tree.insert(i_u.username.clone(), u32_to_ivec(uid))?;
+        }
+        let uid_ivec = u32_to_ivec(uid);
+
+        user_remapping.insert(i_u.uid, uid);
+
+        /////////////////////
+        // Migrate InnRole //
+        /////////////////////
+        let incoming_inn_role = InnRole::get(&m_db, iid, uid)?;
+        let inn_role: InnRole;
+        if incoming_inn_role.is_some() {
+            inn_role = incoming_inn_role.unwrap();
+        } else {
+            // If role not found, default to Fellow
+            inn_role = InnRole::Fellow;
+        }
+        let inn_role_val: u8 = inn_role.into();
+
+        info!("inn role {0}, uid {1}", inn_role_val, uid);
+
+        let inn_users_k = [&iid_ivec, &uid_ivec].concat();
+        db.open_tree("inn_users")?
+            .insert(&inn_users_k, &[inn_role_val])?;
+
+        let user_inns_k = [&uid_ivec, &iid_ivec].concat();
+        if inn_role_val >= 3 {
+            db.open_tree("user_inns")?.insert(&user_inns_k, &[])?;
+        } else {
+            db.open_tree("user_inns")?.remove(&user_inns_k)?;
+        }
+
+        if inn_role_val >= 7 {
+            db.open_tree("mod_inns")?.insert(&user_inns_k, &[])?;
+        } else {
+            db.open_tree("mod_inns")?.remove(&user_inns_k)?;
         }
     }
 
