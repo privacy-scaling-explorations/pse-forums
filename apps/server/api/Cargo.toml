@@ -21,5 +21,6 @@ rspc-axum.workspace = true
 serde.workspace = true
 services = { path = "../services" }
 specta.workspace = true
+supabase-auth.workspace = true
 tokio.workspace = true
 tower-http.workspace = true

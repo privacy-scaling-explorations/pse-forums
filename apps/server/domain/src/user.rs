@@ -4,22 +4,14 @@ use specta::Type;
 
 #[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize, Type)]
 pub struct User {
-    pub id: i32,
-    pub email: String,
-    /// hex encoded hash
-    pub pwd: String,
-    /// hex encoded
-    pub salt: String,
+    pub id: String,
     pub username: String,
 }
 
 impl From<user::Data> for User {
     fn from(data: user::Data) -> Self {
         Self {
-            id: data.id,
-            email: data.email,
-            pwd: data.pwd,
-            salt: data.salt,
+            id: "1".to_string(),
             username: data.username,
         }
     }

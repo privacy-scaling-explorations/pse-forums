@@ -1,5 +1,6 @@
 use super::dtos::UserResponseDto;
 use crate::Context;
+use domain::Read;
 use rspc::{Router, RouterBuilder};
 
 pub fn user_router() -> RouterBuilder<Context> {

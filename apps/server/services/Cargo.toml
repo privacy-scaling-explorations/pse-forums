@@ -12,6 +12,7 @@ ring.workspace = true
 rspc.workspace = true
 serde.workspace = true
 specta.workspace = true
+supabase-auth.workspace = true
 thiserror.workspace = true
 
 [dev-dependencies]

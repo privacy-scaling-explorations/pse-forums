@@ -1,2 +1,2 @@
-mod dtos;
+pub mod dtos;
 pub mod router;
