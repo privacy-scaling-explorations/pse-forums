@@ -57,7 +57,7 @@ CREATE TABLE "auth"."identities" (
     "last_sign_in_at" TIMESTAMPTZ(6),
     "created_at" TIMESTAMPTZ(6),
     "updated_at" TIMESTAMPTZ(6),
-    "email" TEXT DEFAULT lower((identity_data ->> 'email'::text)),
+    "email" TEXT GENERATED ALWAYS AS (lower((identity_data->>'email'::text))) STORED,
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
 
     CONSTRAINT "identities_pkey" PRIMARY KEY ("id")
@@ -246,7 +246,7 @@ CREATE TABLE "auth"."users" (
     "phone_change" TEXT DEFAULT '',
     "phone_change_token" VARCHAR(255) DEFAULT '',
     "phone_change_sent_at" TIMESTAMPTZ(6),
-    "confirmed_at" TIMESTAMPTZ(6) DEFAULT LEAST(email_confirmed_at, phone_confirmed_at),
+    "confirmed_at" TIMESTAMPTZ(6) GENERATED ALWAYS AS (LEAST(email_confirmed_at, phone_confirmed_at)) STORED,
     "email_change_token_current" VARCHAR(255) DEFAULT '',
     "email_change_confirm_status" SMALLINT DEFAULT 0,
     "banned_until" TIMESTAMPTZ(6),
@@ -393,4 +393,3 @@ ALTER TABLE "auth"."sessions" ADD CONSTRAINT "sessions_user_id_fkey" FOREIGN KEY
 
 -- AddForeignKey
 ALTER TABLE "auth"."sso_domains" ADD CONSTRAINT "sso_domains_sso_provider_id_fkey" FOREIGN KEY ("sso_provider_id") REFERENCES "auth"."sso_providers"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
-
