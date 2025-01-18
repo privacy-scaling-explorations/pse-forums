@@ -1,9 +1,11 @@
 generator client {
-  output   = env("PRISMA_GEN_RS_CLIENT_PATH")
-  provider = "mise prisma"
+  previewFeatures = ["multiSchema"]
+  provider        = "mise prisma"
+  output          = env("PRISMA_GEN_RS_CLIENT_PATH")
 }
 
 datasource db {
   provider = "postgresql"
+  schemas  = ["auth", "public"]
   url      = env("DATABASE_URL")
 }
