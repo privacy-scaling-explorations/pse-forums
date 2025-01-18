@@ -13,7 +13,7 @@ datasource db {
 model audit_log_entries {
   instance_id String?   @db.Uuid
   id          String    @id @db.Uuid
-  payload     Json?     @db.Json
+  payload     Json      @default("{}") @db.Json
   created_at  DateTime? @db.Timestamptz(6)
   ip_address  String    @default("") @db.VarChar(64)
 
@@ -89,7 +89,7 @@ model mfa_challenges {
   verified_at            DateTime?   @db.Timestamptz(6)
   ip_address             String      @db.Inet
   otp_code               String?
-  web_authn_session_data Json?
+  web_authn_session_data Json        @default("{}")
   mfa_factors            mfa_factors @relation(fields: [factor_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "mfa_challenges_auth_factor_id_fkey")
 
   @@index([created_at(sort: Desc)], map: "mfa_challenge_created_at_idx")
@@ -107,7 +107,7 @@ model mfa_factors {
   secret               String?
   phone                String?
   last_challenged_at   DateTime?        @unique @db.Timestamptz(6)
-  web_authn_credential Json?
+  web_authn_credential Json             @default("{}")
   web_authn_aaguid     String?          @db.Uuid
   mfa_challenges       mfa_challenges[]
   users                users            @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
@@ -160,7 +160,7 @@ model saml_providers {
   entity_id         String        @unique
   metadata_xml      String
   metadata_url      String?
-  attribute_mapping Json?
+  attribute_mapping Json          @default("{}")
   created_at        DateTime?     @db.Timestamptz(6)
   updated_at        DateTime?     @db.Timestamptz(6)
   name_id_format    String?
@@ -257,8 +257,8 @@ model users {
   email_change                String?           @db.VarChar(255)
   email_change_sent_at        DateTime?         @db.Timestamptz(6)
   last_sign_in_at             DateTime?         @db.Timestamptz(6)
-  raw_app_meta_data           Json?
-  raw_user_meta_data          Json?
+  raw_app_meta_data           Json              @default("{}")
+  raw_user_meta_data          Json              @default("{}")
   is_super_admin              Boolean?
   created_at                  DateTime?         @db.Timestamptz(6)
   updated_at                  DateTime?         @db.Timestamptz(6)
