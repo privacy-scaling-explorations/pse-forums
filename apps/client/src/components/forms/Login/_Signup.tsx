@@ -25,8 +25,8 @@ export function Signup() {
       password: "",
       username: "",
     } as SignupSchema,
-    onSubmit: async ({ value }) => {
-      await rspc.mutation(["auth.signup", value])
+    onSubmit: async ({ value: { email, password, username } }) => {
+      await rspc.mutation(["auth.signup", { email, password, username }])
     },
     validators: { onChange: signupSchema },
   })

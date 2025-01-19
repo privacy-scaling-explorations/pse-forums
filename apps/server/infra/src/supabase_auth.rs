@@ -85,19 +85,25 @@ impl From<supabase_auth::models::User> for User {
 
 #[derive(Serialize, Deserialize, Type)]
 pub struct UserMetadata {
+    pub name: Option<String>,
+    pub full_name: Option<String>,
     pub email: Option<String>,
     pub email_verified: Option<bool>,
     pub phone_verified: Option<bool>,
-    pub sub: Option<String>,
+    pub picture: Option<String>,
+    pub avatar_url: Option<String>,
 }
 
 impl From<supabase_auth::models::UserMetadata> for UserMetadata {
     fn from(data: supabase_auth::models::UserMetadata) -> Self {
         Self {
+            name: data.name,
+            full_name: data.full_name,
             email: data.email,
             email_verified: data.email_verified,
             phone_verified: data.phone_verified,
-            sub: data.sub,
+            picture: data.picture,
+            avatar_url: data.avatar_url,
         }
     }
 }

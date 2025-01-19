@@ -2,7 +2,7 @@
 
 export type Procedures = {
     queries: 
-        { key: "users.read", input: string, result: UserResponseDto },
+        { key: "users.read", input: string, result: string },
     mutations: 
         { key: "auth.signup", input: SignupRequestDto, result: SessionDto },
     subscriptions: never
@@ -26,6 +26,4 @@ export type SignupRequestDto = { email: string; password: string; username: stri
  */
 export type User = { id: string; aud: string; role: string; email: string; invited_at: string | null; confirmation_sent_at: string | null; email_confirmed_at: string | null; phone: string; phone_confirmed_at: string | null; confirmed_at: string | null; recovery_sent_at: string | null; last_sign_in_at: string | null; app_metadata: AppMetadata; user_metadata: UserMetadata; identities: Identity[]; created_at: string; updated_at: string; is_anonymous: boolean }
 
-export type UserMetadata = { email: string | null; email_verified: boolean | null; phone_verified: boolean | null; sub: string | null }
-
-export type UserResponseDto = { id: string; username: string }
+export type UserMetadata = { name: string | null; full_name: string | null; email: string | null; email_verified: boolean | null; phone_verified: boolean | null; picture: string | null; avatar_url: string | null }

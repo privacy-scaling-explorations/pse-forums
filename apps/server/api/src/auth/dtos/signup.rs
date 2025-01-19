@@ -14,6 +14,7 @@ impl From<SignupRequestDto> for SignupData {
         Self {
             email: dto.email,
             password: dto.password,
+            username: dto.username,
         }
     }
 }
