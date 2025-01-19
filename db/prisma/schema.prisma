@@ -10,6 +10,21 @@ datasource db {
   schemas  = ["auth", "public"]
 }
 
+model Profile {
+  id       String @id @db.Uuid
+  username String @unique
+  user     users  @relation(fields: [id], references: [id], onDelete: Cascade)
+
+  @@map("profiles")
+  @@schema("public")
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// PULLED FROM INITIAL SUPABASE DB
+/// AND TO BE BASELINED/MARKED AS APPLIED EVERY TIME STARTING FROM A NEW/RESET SUPABASE DB
+/// mise p migrate resolve --applied 0_init
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 model audit_log_entries {
   instance_id String?   @db.Uuid
   id          String    @id @db.Uuid
@@ -280,6 +295,7 @@ model users {
   mfa_factors                 mfa_factors[]
   one_time_tokens             one_time_tokens[]
   sessions                    sessions[]
+  Profile                     Profile[]
 
   @@index([instance_id])
   @@index([is_anonymous])

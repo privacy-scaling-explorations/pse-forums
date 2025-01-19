@@ -8,6 +8,7 @@ derive_more.workspace = true
 domain = { path = "../domain" }
 hex.workspace = true
 infra = { path = "../infra" }
+prisma = { path = "../../../db/prisma" }
 ring.workspace = true
 rspc.workspace = true
 serde.workspace = true

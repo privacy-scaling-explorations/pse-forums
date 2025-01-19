@@ -2,3 +2,5 @@ mod supabase_auth;
 pub use supabase_auth::*;
 mod error;
 pub use error::InfraError;
+mod profile;
+pub use profile::ProfileRepository;
