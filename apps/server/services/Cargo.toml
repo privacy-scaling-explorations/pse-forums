@@ -1,0 +1,24 @@
+[package]
+name = "services"
+edition.workspace = true
+
+[dependencies]
+async-trait.workspace = true
+derive_more.workspace = true
+domain = { path = "../domain" }
+hex.workspace = true
+infra = { path = "../infra" }
+prisma = { path = "../../../db/prisma" }
+reqwest.workspace = true
+ring.workspace = true
+rspc.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+specta.workspace = true
+supabase-auth.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+prisma = { path = "../../../db/prisma" }
+prisma-client-rust.workspace = true
+tokio.workspace = true

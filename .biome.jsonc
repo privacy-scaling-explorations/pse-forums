@@ -12,8 +12,12 @@
   },
   "linter": {
     "enabled": true,
-    "ignore": ["apps/server/static/js", "apps/client/src/routeTree.gen.ts"],
+    "ignore": ["apps/freedit/static/js", "apps/client/src/routeTree.gen.ts"],
     "rules": {
+      "correctness": {
+        // tanstack form fields use children prop
+        "noChildrenProp": "off",
+      },
       "recommended": true,
     },
   },
