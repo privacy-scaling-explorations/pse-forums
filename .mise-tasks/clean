@@ -1,0 +1,23 @@
+#MISE alias="c"
+#MISE quiet=true
+
+#!/usr/bin/env bash
+
+BASE_DIRS=(
+  "node_modules"
+  "bun.lockb"
+  "apps/client/node_modules"
+  "apps/client/dist"
+  "target"
+  "apps/freedit/config.toml"
+  "apps/freedit/freedit.db"
+  "apps/freedit/snapshots"
+  "apps/freedit/static/imgs"
+  "apps/freedit/tantivy"
+  "apps/freedit/target"
+)
+
+for dir in "${BASE_DIRS[@]}"; do
+  find "$dir" -type f -exec rm -f {} + 2>/dev/null || true
+  find "$dir" -type d -exec rm -rf {} + 2>/dev/null || true
+done

@@ -1,10 +1,12 @@
-use infra::InfraError;
+use infra::{AuthError, InfraError};
 use serde::Serialize;
 use specta::Type;
 use thiserror::Error;
 
 #[derive(Error, Debug, Serialize, Type)]
 pub enum ServiceError {
+    #[error("Auth error: {0}")]
+    Auth(#[from] AuthError),
     #[error("Infra error: {0}")]
     Infra(#[from] crate::error::InfraError),
 }

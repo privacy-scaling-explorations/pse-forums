@@ -20,3 +20,7 @@ This will:
 - generate prisma client and corresponding TS types
 - start the api server in dev mode
 - start the frontend client in dev mode
+
+### Inbucket
+
+During local development, magic links mails can be read with the local [inbucket server](http://127.0.0.1:54324/).

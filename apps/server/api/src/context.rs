@@ -1,24 +1,24 @@
-use infra::UserRepository;
+use infra::ProfileRepository;
 use prisma::PrismaClient;
-use services::{AuthService, UserService};
+use services::{AuthService, ProfileService};
 use std::sync::Arc;
+use supabase_auth::models::AuthClient;
 
 #[derive(Clone)]
 pub struct Context {
     pub auth_service: Arc<AuthService>,
-    pub user_service: Arc<UserService>,
+    pub profile_service: Arc<ProfileService>,
 }
 
 impl Context {
-    pub fn new(prisma: Arc<PrismaClient>) -> Self {
-        let user_service = Arc::new(UserService::new(Arc::new(UserRepository::new(
+    pub fn new(prisma: Arc<PrismaClient>, auth_client: Arc<AuthClient>) -> Self {
+        let auth_service = Arc::new(AuthService::new(auth_client.clone()));
+        let profile_service = Arc::new(ProfileService::new(Arc::new(ProfileRepository::new(
             prisma.clone(),
         ))));
-        let auth_service = Arc::new(AuthService::new(user_service.clone()));
-
         Self {
             auth_service,
-            user_service,
+            profile_service,
         }
     }
 }
