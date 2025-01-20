@@ -7,17 +7,9 @@ use reqwest::{
 };
 use serde_json::json;
 use std::sync::Arc;
-use supabase_auth::models::{
-    AuthClient, OtpType, SignUpWithPasswordOptions, VerifyOtpParams, VerifyTokenHashParams,
-};
+use supabase_auth::models::{AuthClient, OtpType, VerifyOtpParams, VerifyTokenHashParams};
 
-pub struct SignupData {
-    pub email: String,
-    pub password: String,
-    pub username: String,
-}
-
-pub struct SigninWithMagiclinkData {
+pub struct SigninData {
     pub email: String,
     pub username: String,
 }
@@ -26,33 +18,9 @@ pub struct SigninWithMagiclinkData {
 pub struct AuthService(Arc<AuthClient>);
 
 impl AuthService {
-    pub async fn signup(
-        &self,
-        SignupData {
-            email,
-            password,
-            username,
-        }: SignupData,
-    ) -> Result<Session> {
-        self.0
-            .sign_up_with_email_and_password(
-                &email,
-                &password,
-                Some(SignUpWithPasswordOptions {
-                    captcha_token: None,
-                    data: Some(json!({"username": username})),
-                    email_redirect_to: Some("http://localhost:3000/signup/confirm".to_string()),
-                }),
-            )
-            .await
-            .map(Session::from)
-            .map_err(|e| ServiceError::Auth(e.into())) // rust doesn't chain From conversions, need to inline error mapping
-    }
-
-    pub async fn signin_with_magiclink(
-        &self,
-        SigninWithMagiclinkData { email, username }: SigninWithMagiclinkData,
-    ) -> Result<()> {
+    /// Passwordless (magic link) sign in
+    /// If the user does not exist yet, it will be created
+    pub async fn signin(&self, SigninData { email, username }: SigninData) -> Result<()> {
         let mut headers = header::HeaderMap::new();
         headers.insert(
             CONTENT_TYPE,

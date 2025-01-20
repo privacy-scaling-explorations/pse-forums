@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use super::dtos::{SessionDto, SigninWithMagiclinkRequestDto, SignupRequestDto};
+use super::dtos::SigninRequestDto;
 use crate::Context;
 use axum::{
     extract::{Query, State},
@@ -13,31 +13,14 @@ use serde::Deserialize;
 use services::AuthService;
 
 pub fn rspc_auth_router() -> RouterBuilder<Context> {
-    Router::<Context>::new()
-        .mutation("signup", |t| {
-            t(|ctx, signup_request: SignupRequestDto| async move {
-                ctx.auth_service
-                    .signup(signup_request.into())
-                    .await
-                    .map(SessionDto::from)
-                    .map_err(|e| {
-                        println!("{}", e.to_string());
-                        rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
-                    })
-            })
+    Router::<Context>::new().mutation("signin", |t| {
+        t(|ctx, signin_dto: SigninRequestDto| async move {
+            ctx.auth_service
+                .signin(signin_dto.into())
+                .await
+                .map_err(|e| rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string()))
         })
-        .mutation("signin_with_magiclink", |t| {
-            t(
-                |ctx, signin_with_magiclink_dto: SigninWithMagiclinkRequestDto| async move {
-                    ctx.auth_service
-                        .signin_with_magiclink(signin_with_magiclink_dto.into())
-                        .await
-                        .map_err(|e| {
-                            rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
-                        })
-                },
-            )
-        })
+    })
 }
 
 #[derive(Deserialize)]
