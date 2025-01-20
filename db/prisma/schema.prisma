@@ -11,9 +11,12 @@ datasource db {
 }
 
 model Profile {
-  id       String @id @db.Uuid
-  username String @unique
-  user     users  @relation(fields: [id], references: [id], onDelete: Cascade)
+  id         String   @id @db.Uuid
+  about      String
+  created_at DateTime @default(now())
+  username   String   @unique
+  url        String
+  user       users    @relation(fields: [id], references: [id], onDelete: Cascade)
 
   @@map("profiles")
   @@schema("public")
