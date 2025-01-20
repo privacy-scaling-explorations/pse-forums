@@ -1,15 +1,15 @@
 use serde::Deserialize;
-use services::SigninData;
+use services::SignupData;
 use specta::Type;
 
 #[derive(Deserialize, Type)]
-pub struct SigninRequestDto {
+pub struct SignupRequestDto {
     pub email: String,
     pub username: String,
 }
 
-impl From<SigninRequestDto> for SigninData {
-    fn from(dto: SigninRequestDto) -> Self {
+impl From<SignupRequestDto> for SignupData {
+    fn from(dto: SignupRequestDto) -> Self {
         Self {
             email: dto.email,
             username: dto.username,

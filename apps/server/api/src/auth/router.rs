@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use super::dtos::SigninRequestDto;
+use super::dtos::SignupRequestDto;
 use crate::Context;
 use axum::{
     extract::{Query, State},
@@ -13,10 +13,10 @@ use serde::Deserialize;
 use services::AuthService;
 
 pub fn rspc_auth_router() -> RouterBuilder<Context> {
-    Router::<Context>::new().mutation("signin", |t| {
-        t(|ctx, signin_dto: SigninRequestDto| async move {
+    Router::<Context>::new().mutation("signup", |t| {
+        t(|ctx, signup_dto: SignupRequestDto| async move {
             ctx.auth_service
-                .signin(signin_dto.into())
+                .signup(signup_dto.into())
                 .await
                 .map_err(|e| rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string()))
         })

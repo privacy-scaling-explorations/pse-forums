@@ -9,7 +9,7 @@ use serde_json::json;
 use std::sync::Arc;
 use supabase_auth::models::{AuthClient, OtpType, VerifyOtpParams, VerifyTokenHashParams};
 
-pub struct SigninData {
+pub struct SignupData {
     pub email: String,
     pub username: String,
 }
@@ -20,7 +20,7 @@ pub struct AuthService(Arc<AuthClient>);
 impl AuthService {
     /// Passwordless (magic link) sign in
     /// If the user does not exist yet, it will be created
-    pub async fn signin(&self, SigninData { email, username }: SigninData) -> Result<()> {
+    pub async fn signup(&self, SignupData { email, username }: SignupData) -> Result<()> {
         let mut headers = header::HeaderMap::new();
         headers.insert(
             CONTENT_TYPE,
