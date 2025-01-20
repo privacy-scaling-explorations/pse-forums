@@ -30,12 +30,14 @@ build-server = { alias = "bs", dir = "apps/server", run = "cargo build -r", sour
 ], outputs.auto = true }
 db-reset = { alias = "dbr", run = "bun supabase db reset && mise p migrate resolve --applied 0_init && mise p migrate deploy" }
 db-start = { alias = "dbs", description = "Run local postgres instance (with supabase docker container)", run = "bun supabase start" }
-dev = { alias = "d", depends = ["db-start", "dev-client", "dev-server"] }
+dev = { alias = "d", depends = ["dev-client", "dev-server"] }
 dev-client = { alias = "dc", dir = "apps/client", run = "bun vite dev", depends = [
     "install-node-modules",
     "gen-ts",
+], wait_for = [
+    "db-start",
 ] }
-dev-server = { alias = "ds", run = "cargo run --bin api" }
+dev-server = { alias = "ds", run = ["mise r db-start", "cargo run --bin api"] }
 freedit = { dir = "apps/freedit", run = "cargo run -r --bin freedit" }
 install-node-modules = { hide = true, run = "bun i", sources = [
     "package.json",
