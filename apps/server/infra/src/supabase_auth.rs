@@ -1,4 +1,4 @@
-use derive_more::derive::Display;
+use derive_more::derive::{Display, From};
 /*
   This is just wrapping all the models that are part of rspc responses.
   Indeed we must derive specta::Type for them, so we need to bypass the orphan rule.
@@ -8,7 +8,7 @@ use specta::Type;
 use thiserror::Error;
 
 /// <https://supabase.com/docs/guides/auth/sessions>
-#[derive(Serialize, Deserialize, Type)]
+#[derive(Serialize, Deserialize, Type, Debug)]
 pub struct Session {
     pub provider_token: Option<String>,
     pub provider_refresh_token: Option<String>,
@@ -36,7 +36,7 @@ impl From<supabase_auth::models::Session> for Session {
 }
 
 /// <https://supabase.com/docs/guides/auth/users>
-#[derive(Serialize, Deserialize, Type)]
+#[derive(Serialize, Deserialize, Type, Debug)]
 pub struct User {
     pub id: String,
     pub aud: String,
@@ -83,7 +83,7 @@ impl From<supabase_auth::models::User> for User {
     }
 }
 
-#[derive(Serialize, Deserialize, Type)]
+#[derive(Serialize, Deserialize, Type, Debug)]
 pub struct UserMetadata {
     pub name: Option<String>,
     pub full_name: Option<String>,
@@ -108,7 +108,7 @@ impl From<supabase_auth::models::UserMetadata> for UserMetadata {
     }
 }
 
-#[derive(Serialize, Deserialize, Type)]
+#[derive(Serialize, Deserialize, Type, Debug)]
 pub struct AppMetadata {
     pub provider: Option<String>,
     pub providers: Option<Vec<String>>,
@@ -124,7 +124,7 @@ impl From<supabase_auth::models::AppMetadata> for AppMetadata {
 }
 
 /// <https://supabase.com/docs/guides/auth/identities>
-#[derive(Serialize, Deserialize, Type)]
+#[derive(Serialize, Deserialize, Type, Debug)]
 pub struct Identity {
     pub identity_id: String,
     pub id: String,
@@ -153,7 +153,7 @@ impl From<supabase_auth::models::Identity> for Identity {
     }
 }
 
-#[derive(Serialize, Deserialize, Type)]
+#[derive(Serialize, Deserialize, Type, Debug)]
 pub struct IdentityData {
     pub email: Option<String>,
     pub email_verified: bool,
@@ -172,7 +172,7 @@ impl From<supabase_auth::models::IdentityData> for IdentityData {
     }
 }
 
-#[derive(Serialize, Deserialize, Type, Error, Debug, Display)]
+#[derive(Serialize, Deserialize, Type, Error, Debug, Display, From)]
 pub struct AuthError(pub String);
 
 impl From<supabase_auth::error::Error> for AuthError {

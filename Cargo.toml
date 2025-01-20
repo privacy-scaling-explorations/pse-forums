@@ -13,11 +13,12 @@ resolver = "2"
 [workspace.dependencies]
 async-trait = "0.1.85"
 axum = { version = "0.7.9", features = ["json", "macros"] }
-derive_more = { version = "1.0.0", features = ["constructor", "display"] }
+axum-extra = { version = "0.9.6", features = ["cookie"] }
+derive_more = { version = "1.0.0", features = ["constructor", "display", "from"] }
 hex = "0.4.3"
 prisma-client-rust = { default-features = false, git = "https://github.com/Brendonovich/prisma-client-rust", features = ["mocking", "postgresql", "rspc"], tag = "0.6.11" }
 prisma-client-rust-cli = { default-features = false, git = "https://github.com/Brendonovich/prisma-client-rust", features = ["mocking", "postgresql", "rspc"], tag = "0.6.11" }
-reqwest = "0.12.12"
+reqwest = { version = "0.12.12", features = ["json"] }
 ring = "0.17.8"
 rspc = "0.3.1"
 rspc-axum = "0.2.1"

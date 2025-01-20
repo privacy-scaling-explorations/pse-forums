@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use services::SignupData;
+use services::{SigninWithMagiclinkData, SignupData};
 use specta::Type;
 
 #[derive(Debug, Clone, Deserialize, Serialize, Type)]
@@ -14,6 +14,21 @@ impl From<SignupRequestDto> for SignupData {
         Self {
             email: dto.email,
             password: dto.password,
+            username: dto.username,
+        }
+    }
+}
+
+#[derive(Deserialize, Type)]
+pub struct SigninWithMagiclinkRequestDto {
+    pub email: String,
+    pub username: String,
+}
+
+impl From<SigninWithMagiclinkRequestDto> for SigninWithMagiclinkData {
+    fn from(dto: SigninWithMagiclinkRequestDto) -> Self {
+        Self {
+            email: dto.email,
             username: dto.username,
         }
     }
