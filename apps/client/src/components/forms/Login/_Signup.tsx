@@ -11,9 +11,9 @@ import { z } from "zod"
 
 // TODO: restrict schema
 const signupSchema = z.object({
-  confirm: z.string().min(8),
+  // confirm: z.string().min(8),
   email: z.string().email(), // let html do the validation
-  password: z.string().min(8),
+  // password: z.string().min(8),
   username: z.string().min(3).max(20),
 })
 type SignupSchema = z.infer<typeof signupSchema>
@@ -22,11 +22,10 @@ export function Signup() {
   const signupForm = useForm({
     defaultValues: {
       email: "",
-      password: "",
       username: "",
     } as SignupSchema,
-    onSubmit: async ({ value: { email, password, username } }) => {
-      await rspc.mutation(["auth.signup", { email, password, username }])
+    onSubmit: async ({ value }) => {
+      await rspc.mutation(["auth.signup", value])
     },
     validators: { onChange: signupSchema },
   })
@@ -66,44 +65,6 @@ export function Signup() {
               onChange={(e) => field.handleChange(e.target.value)}
               placeholder="anon@mail.xyz"
               type="email"
-              required
-            />
-            <FieldInfo field={field} />
-          </div>
-        )}
-      />
-      <signupForm.Field
-        name="password"
-        children={(field) => (
-          <div className="space-y-2">
-            <Label htmlFor={field.name}>{capitalize(field.name)}</Label>
-            <Input
-              id={field.name}
-              name={field.name}
-              onChange={(e) => field.handleChange(e.target.value)}
-              type="password"
-              required
-            />
-            <FieldInfo field={field} />
-          </div>
-        )}
-      />
-      <signupForm.Field
-        name="confirm"
-        validators={{
-          onChange: ({ value }) =>
-            value !== signupForm.state.values.password
-              ? "Passwords do not match"
-              : undefined,
-        }}
-        children={(field) => (
-          <div className="space-y-2">
-            <Label htmlFor={field.name}>Confirm Password</Label>
-            <Input
-              id={field.name}
-              name={field.name}
-              onChange={(e) => field.handleChange(e.target.value)}
-              type="password"
               required
             />
             <FieldInfo field={field} />

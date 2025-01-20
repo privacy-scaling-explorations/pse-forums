@@ -17,7 +17,8 @@ export function Signin() {
   const signinForm = useForm<SigninSchema>({
     defaultValues: { email: "", password: "" } as SigninSchema,
     onSubmit: async ({ value }) => {
-      await rspc.query(["auth.signin", value])
+      // TODO
+      // await rspc.mutation(["auth.signin", value]);
     },
     validators: { onChange: signinSchema },
   })
