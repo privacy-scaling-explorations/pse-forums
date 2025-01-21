@@ -12,10 +12,10 @@ datasource db {
 
 model Profile {
   id         String   @id @db.Uuid
-  about      String
-  created_at DateTime @default(now())
+  about      String?
+  created_at DateTime @default(now()) @db.Timestamptz(6)
   username   String   @unique
-  url        String
+  url        String?
   user       users    @relation(fields: [id], references: [id], onDelete: Cascade)
 
   @@map("profiles")

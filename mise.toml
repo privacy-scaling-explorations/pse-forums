@@ -28,7 +28,7 @@ build-client = { alias = "bc", dir = "apps/client", run = "bun vite build", sour
 build-server = { alias = "bs", dir = "apps/server", run = "cargo build -r", sources = [
     "apps/server/**/*.rs",
 ], outputs.auto = true }
-db-reset = { alias = "dbr", run = "bun supabase db reset && mise p migrate resolve --applied 0_init && mise p migrate deploy" }
+db-reset = { alias = "dbr", run = "bun supabase db reset && mise r p migrate resolve --applied 0_init && mise r p migrate deploy" }
 db-start = { alias = "dbs", description = "Run local postgres instance (with supabase docker container)", run = "bun supabase start" }
 dev = { alias = "d", depends = ["dev-client", "dev-server"] }
 dev-client = { alias = "dc", dir = "apps/client", run = "bun vite dev", depends = [

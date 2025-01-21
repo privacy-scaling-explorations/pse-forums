@@ -1,12 +1,15 @@
-create table public.profiles (
-  id uuid not null references auth.users on delete cascade,
-  username text,
+CREATE TABLE "public"."profiles" (
+    id uuid not null references auth.users on delete cascade,
+    "about" TEXT,
+    "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "username" TEXT NOT NULL,
+    "url" TEXT,
+    -- role ??
 
-  primary key (id)
+    primary key (id)
 );
 
-create unique index "profiles_username_key" on public.profiles("username");
-
+CREATE UNIQUE INDEX "profiles_username_key" ON "public"."profiles"("username");
 
 create function public.handle_new_user()
 returns trigger
