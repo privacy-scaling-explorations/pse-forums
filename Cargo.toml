@@ -12,7 +12,7 @@ resolver = "2"
 
 [workspace.dependencies]
 async-trait = "0.1.85"
-axum = { version = "0.7.9", features = ["json", "macros"] }
+axum = "0.7.9"
 derive_more = { version = "1.0.0", features = ["constructor", "display", "from"] }
 hex = "0.4.3"
 prisma-client-rust = { default-features = false, git = "https://github.com/Brendonovich/prisma-client-rust", features = ["mocking", "postgresql", "rspc"], tag = "0.6.11" }
@@ -26,4 +26,5 @@ specta = "=2.0.0-rc.20"
 supabase-auth = { git = "https://github.com/supabase-community/supabase-auth-rs", branch = "main" }
 thiserror = "2.0.11"
 tokio = { version = "1.43.0", features = ["rt-multi-thread"] }
+tower-cookies = { version = "0.10.0", features = ["axum-core"] }
 tower-http = { version = "0.6.2", features = ["cors"] }

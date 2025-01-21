@@ -8,6 +8,6 @@ async fn main() {
     // TODO: read port from env
     let listener = TcpListener::bind("localhost:3000").await.unwrap();
 
-    println!("Server running on 0.0.0.0:3000");
+    println!("Server running on localhost:3000");
     axum::serve(listener, app).await.unwrap();
 }

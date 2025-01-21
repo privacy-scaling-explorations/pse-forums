@@ -1,11 +1,14 @@
 mod auth;
 pub use auth::router::auth_router;
 mod context;
+mod cookie;
 use axum::{routing::get, Router};
 pub use context::Context;
+pub use cookie::*;
 use prisma::init_prisma;
 use std::sync::Arc;
 use supabase_auth::models::AuthClient;
+use tower_cookies::{CookieManagerLayer, Cookies};
 mod rspc;
 pub use rspc::mount;
 mod profile;
@@ -20,8 +23,9 @@ pub async fn app() -> Router {
         .route("/", get(|| async { "Hello rspc!" }))
         .nest(
             "/rspc",
-            rspc_axum::endpoint(router, move || {
-                Context::new(prisma.clone(), auth_client.clone())
+            rspc_axum::endpoint(router, move |cookies: Cookies| {
+                Context::new(prisma.clone(), auth_client.clone(), cookies)
             }),
         )
+        .layer(CookieManagerLayer::new())
 }
