@@ -2,7 +2,7 @@ use infra::{Session, User};
 use serde::Serialize;
 use specta::Type;
 
-#[derive(Serialize, Type)]
+#[derive(Debug, Serialize, Type)]
 pub struct SessionDto {
     pub provider_token: Option<String>,
     pub provider_refresh_token: Option<String>,
