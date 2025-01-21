@@ -11,6 +11,11 @@ pub struct SignupData {
     pub username: String,
 }
 
+pub struct SigninData {
+    pub email: String,
+    pub password: String,
+}
+
 #[derive(Constructor)]
 pub struct AuthService(Arc<AuthClient>);
 
@@ -33,6 +38,14 @@ impl AuthService {
                     captcha_token: None,
                 }),
             )
+            .await
+            .map(Session::from)
+            .map_err(|e| ServiceError::Auth(e.into())) // rust doesn't chain From conversions, need to inline mapping
+    }
+
+    pub async fn signin(&self, SigninData { email, password }: SigninData) -> Result<Session> {
+        self.0
+            .login_with_email(&email, &password)
             .await
             .map(Session::from)
             .map_err(|e| ServiceError::Auth(e.into())) // rust doesn't chain From conversions, need to inline mapping
