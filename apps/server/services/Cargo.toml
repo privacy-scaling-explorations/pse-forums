@@ -9,7 +9,6 @@ domain = { path = "../domain" }
 hex.workspace = true
 infra = { path = "../infra" }
 prisma = { path = "../../../db/prisma" }
-reqwest.workspace = true
 ring.workspace = true
 rspc.workspace = true
 serde.workspace = true
