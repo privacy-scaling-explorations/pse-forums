@@ -11,13 +11,29 @@ datasource db {
 }
 
 model Profile {
-  id       String @id @db.Uuid
-  username String @unique
-  user     users  @relation(fields: [id], references: [id], onDelete: Cascade)
+  id       String  @id @db.Uuid
+  about String?
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  username String  @unique
+  url String?
+  // cross schema reference not allowed by prisma so workaround is to edit migration manually copy auth.users in the public schema with triggers
+  // https://github.com/prisma/prisma/issues/1175#issuecomment-846136927
+  //user     users  @relation(fields: [id], references: [id], onDelete: Cascade)
 
   @@map("profiles")
   @@schema("public")
 }
+
+//model Commitment {
+//  id             String @id @db.Uuid
+//  commitment     String @unique
+//  encrypted_pkey String @unique
+//  // cross schema reference not allowed by prisma so workaround is to copy auth.users in the public schema with triggers
+//  //user           users  @relation(fields: [id], references: [id], onDelete: Cascade)
+//
+//  @@map("commitments")
+//  @@schema("public")
+//}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /// PULLED FROM INITIAL SUPABASE DB
@@ -295,7 +311,6 @@ model users {
   mfa_factors                 mfa_factors[]
   one_time_tokens             one_time_tokens[]
   sessions                    sessions[]
-  Profile                     Profile[]
 
   @@index([instance_id])
   @@index([is_anonymous])
