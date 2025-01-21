@@ -2,6 +2,7 @@
 
 export type Procedures = {
     queries: 
+        { key: "auth.signin", input: SigninRequestDto, result: SessionDto } | 
         { key: "profile.read", input: string, result: ProfileDto },
     mutations: 
         { key: "auth.signup", input: SignupRequestDto, result: SessionDto },
@@ -20,6 +21,8 @@ export type IdentityData = { email: string | null; email_verified: boolean; phon
 export type ProfileDto = { id: string; username: string }
 
 export type SessionDto = { provider_token: string | null; provider_refresh_token: string | null; access_token: string; token_type: string; expires_in: string; expires_at: string; refresh_token: string; user: User }
+
+export type SigninRequestDto = { email: string; password: string }
 
 export type SignupRequestDto = { email: string; password: string; username: string }
 
