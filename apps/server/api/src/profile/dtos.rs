@@ -4,10 +4,10 @@ use specta::Type;
 #[derive(Serialize, Type)]
 pub struct ProfileDto {
     pub id: i32,
-    pub about: String,
+    pub about: Option<String>,
     pub created_at: String,
     pub username: String,
-    pub url: String,
+    pub url: Option<String>,
 }
 
 impl From<domain::Profile> for ProfileDto {

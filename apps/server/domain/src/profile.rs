@@ -4,10 +4,10 @@ use specta::Type;
 #[derive(Deserialize, Serialize, Type)]
 pub struct Profile {
     pub id: i32,
-    pub about: String,
+    pub about: Option<String>,
     pub created_at: String,
     pub username: String,
-    pub url: String,
+    pub url: Option<String>,
 }
 
 impl From<prisma::profile::Data> for Profile {

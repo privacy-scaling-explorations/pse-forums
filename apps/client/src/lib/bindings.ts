@@ -3,14 +3,21 @@
 export type Procedures = {
     queries: 
         { key: "auth.signin", input: SigninRequestDto, result: null } | 
+        { key: "post.read", input: number, result: PostDto } | 
         { key: "profile.read", input: string, result: ProfileDto } | 
         { key: "user.read", input: string, result: UserDto },
     mutations: 
-        { key: "auth.signup", input: SignupRequestDto, result: null },
+        { key: "auth.signup", input: SignupRequestDto, result: null } | 
+        { key: "post.create", input: CreatePostDto, result: PostDto } | 
+        { key: "post.delete", input: number, result: PostDto },
     subscriptions: never
 };
 
-export type ProfileDto = { id: number; about: string; created_at: string; username: string; url: string }
+export type CreatePostDto = { content: string; tags: string[] | null; title: string }
+
+export type PostDto = { id: number; content: string; tags: string[]; title: string }
+
+export type ProfileDto = { id: number; about: string | null; created_at: string; username: string; url: string | null }
 
 export type SigninRequestDto = { username: string; password: string }
 

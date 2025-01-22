@@ -1,3 +1,5 @@
+mod post;
+pub use post::Post;
 mod profile;
 pub use profile::Profile;
 mod user;
