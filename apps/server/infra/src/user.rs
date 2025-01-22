@@ -12,11 +12,11 @@ use std::sync::Arc;
 pub struct UserRepository(Arc<PrismaClient>);
 
 #[async_trait]
-impl Read<i32, Result<user::Data>> for UserRepository {
-    async fn read(&self, id: i32) -> Result<user::Data> {
+impl Read<String, Result<user::Data>> for UserRepository {
+    async fn read(&self, username: String) -> Result<user::Data> {
         self.0
             .user()
-            .find_unique(user::id::equals(id))
+            .find_unique(user::username::equals(username))
             .exec()
             .await
             .map_err(|e| InfraError::Db(e.to_string()))?

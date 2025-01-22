@@ -1,2 +1,3 @@
 pub mod dtos;
-pub mod router;
+mod router;
+pub use router::user_router;

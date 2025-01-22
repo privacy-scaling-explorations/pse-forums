@@ -5,9 +5,9 @@ use rspc::{Router, RouterBuilder};
 
 pub fn user_router() -> RouterBuilder<Context> {
     Router::<Context>::new().query("read", |t| {
-        t(|ctx, id: i32| async move {
+        t(|ctx, username: String| async move {
             ctx.user_service
-                .read(id)
+                .read(username)
                 .await
                 .map(UserDto::from)
                 // TODO: better error handling

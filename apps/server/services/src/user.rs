@@ -9,9 +9,13 @@ use std::sync::Arc;
 pub struct UserService(Arc<UserRepository>);
 
 #[async_trait]
-impl Read<i32, Result<User>> for UserService {
-    async fn read(&self, id: i32) -> Result<User> {
-        self.0.read(id).await.map(User::from).map_err(|e| e.into())
+impl Read<String, Result<User>> for UserService {
+    async fn read(&self, username: String) -> Result<User> {
+        self.0
+            .read(username)
+            .await
+            .map(User::from)
+            .map_err(|e| e.into())
     }
 }
 

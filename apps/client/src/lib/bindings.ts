@@ -2,12 +2,18 @@
 
 export type Procedures = {
     queries: 
+        { key: "auth.signin", input: SigninRequestDto, result: null } | 
         { key: "profile.read", input: string, result: ProfileDto } | 
-        { key: "user.read", input: number, result: UserDto },
-    mutations: never,
+        { key: "user.read", input: string, result: UserDto },
+    mutations: 
+        { key: "auth.signup", input: SignupRequestDto, result: null },
     subscriptions: never
 };
 
 export type ProfileDto = { id: number; about: string; created_at: string; username: string; url: string }
+
+export type SigninRequestDto = { username: string; password: string }
+
+export type SignupRequestDto = { email: string; password: string; username: string }
 
 export type UserDto = { id: number; created_at: string; email: string; encrypted_password: string; salt: string; username: string }

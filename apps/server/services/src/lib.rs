@@ -1,5 +1,5 @@
-//mod auth;
-//pub use auth::*;
+mod auth;
+pub use auth::service::*;
 mod error;
 pub use error::*;
 mod profile;
