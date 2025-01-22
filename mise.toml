@@ -28,7 +28,7 @@ build-client = { alias = "bc", dir = "apps/client", run = "bun vite build", sour
 build-server = { alias = "bs", dir = "apps/server", run = "cargo build -r", sources = [
     "apps/server/**/*.rs",
 ], outputs.auto = true }
-db-reset = { alias = "dbr", run = "bun supabase db reset && mise r p migrate deploy" }
+db-reset = { alias = "dbr", run = "bun supabase db reset && mise r p migrate deploy && mise r seed" }
 db-start = { alias = "dbs", description = "Run local postgres instance (with supabase docker container)", run = "bun supabase start" }
 dev = { alias = "d", depends = ["dev-client", "dev-server"] }
 dev-client = { alias = "dc", dir = "apps/client", run = "bun vite dev", depends = [
@@ -46,9 +46,10 @@ install-node-modules = { hide = true, run = "bun i", sources = [
     "bun.lockb",
 ] }
 gen-ts = { run = "cargo run --bin bindings", hide = true }
-prisma = { alias = "p", dir = "db/prisma", description = "Run prisma CLI by connecting to the DB with pgbouncer", run = "cargo run -F bin --", depends_post = [
+prisma = { alias = "p", dir = "db/prisma", description = "Run prisma CLI by connecting to the DB with pgbouncer", run = "cargo run -F bin --bin prisma --", depends_post = [
     "post-gen-rs",
 ] }
+seed = { run = "cargo run --bin seed" }
 start = { alias = "s", depends = ["db-start", "start-server", "start-client"] }
 start-client = { alias = "sc", depends = [
     "install-node-modules",

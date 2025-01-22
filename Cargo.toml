@@ -2,6 +2,7 @@
 members = [
   "apps/freedit",
   "apps/server/api",
+  "apps/server/crypto",
   "apps/server/domain",
   "apps/server/infra",
   "apps/server/services",

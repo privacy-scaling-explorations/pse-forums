@@ -36,10 +36,10 @@ model Profile {
 model Post {
   id         Int      @id @default(autoincrement())
   uid        Int?     @unique // Optional user ID; null for anonymous posts
-  title      String
-  tags       String[] @default([])
   content    String
   created_at DateTime @default(now()) @db.Timestamptz(6)
+  title      String
+  tags       String[] @default([])
 
   // TODO: groupId          Int             // Assuming posts belong to a group
   // TODO? feedItemId       Int?

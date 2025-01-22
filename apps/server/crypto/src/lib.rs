@@ -1,10 +1,12 @@
 use hex::{decode, encode};
-use ring::error::Unspecified;
-// https://rust-lang-nursery.github.io/rust-cookbook/cryptography/encryption.html
-use ring::pbkdf2::{self, PBKDF2_HMAC_SHA512};
-use ring::rand::{SecureRandom, SystemRandom};
+use ring::{
+    error::Unspecified,
+    pbkdf2::{self, PBKDF2_HMAC_SHA512},
+    rand::{SecureRandom, SystemRandom},
+};
 use std::num::NonZeroU32;
 
+// https://rust-lang-nursery.github.io/rust-cookbook/cryptography/encryption.html
 pub static PBKDF2_ITERATIONS: NonZeroU32 = unsafe { NonZeroU32::new_unchecked(100_000) };
 pub const SALT_LEN: usize = 64;
 pub const HASH_LEN: usize = 64;

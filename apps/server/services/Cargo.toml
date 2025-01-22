@@ -4,12 +4,11 @@ edition.workspace = true
 
 [dependencies]
 async-trait.workspace = true
+crypto = { path = "../crypto" }
 derive_more.workspace = true
 domain = { path = "../domain" }
-hex.workspace = true
 infra = { path = "../infra" }
 prisma = { path = "../../../db/prisma" }
-ring.workspace = true
 rspc.workspace = true
 serde.workspace = true
 serde_json.workspace = true
