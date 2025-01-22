@@ -7,7 +7,6 @@
 ```commandline
 curl https://mise.run | sh
 mise activate
-mise p migrate reset
 mise d
 ```
 
