@@ -1,5 +1,5 @@
 mod auth;
-pub use auth::service::*;
+pub use auth::*;
 mod comment;
 pub use comment::*;
 mod error;

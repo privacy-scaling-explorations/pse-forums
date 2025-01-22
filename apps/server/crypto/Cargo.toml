@@ -1,0 +1,7 @@
+[package]
+name = "crypto"
+edition.workspace = true
+
+[dependencies]
+hex.workspace = true
+ring.workspace = true

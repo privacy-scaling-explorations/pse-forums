@@ -755,6 +755,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7a81dae078cea95a014a339291cec439d2f232ebe854a9d672b796c6afafa9b7"
 
 [[package]]
+name = "crypto"
+version = "0.0.0"
+dependencies = [
+ "hex",
+ "ring",
+]
+
+[[package]]
 name = "crypto-common"
 version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3262,9 +3270,11 @@ checksum = "925383efa346730478fb4838dbe9137d2a47675ad789c546d150a6e1dd4ab31c"
 name = "prisma"
 version = "0.0.0"
 dependencies = [
+ "crypto",
  "prisma-client-rust",
  "prisma-client-rust-cli",
  "serde",
+ "tokio",
 ]
 
 [[package]]
@@ -4341,13 +4351,12 @@ name = "services"
 version = "0.0.0"
 dependencies = [
  "async-trait",
+ "crypto",
  "derive_more",
  "domain",
- "hex",
  "infra",
  "prisma",
  "prisma-client-rust",
- "ring",
  "rspc 0.3.1",
  "serde",
  "serde_json",
