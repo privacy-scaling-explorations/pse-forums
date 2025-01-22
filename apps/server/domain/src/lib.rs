@@ -1,3 +1,5 @@
+mod comment;
+pub use comment::Comment;
 mod post;
 pub use post::Post;
 mod profile;

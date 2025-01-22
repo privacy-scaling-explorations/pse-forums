@@ -3,18 +3,25 @@
 export type Procedures = {
     queries: 
         { key: "auth.signin", input: SigninRequestDto, result: null } | 
+        { key: "comment.read", input: number, result: CommentDto } | 
         { key: "post.read", input: number, result: PostDto } | 
         { key: "profile.read", input: string, result: ProfileDto } | 
         { key: "user.read", input: string, result: UserDto },
     mutations: 
         { key: "auth.signup", input: SignupRequestDto, result: null } | 
+        { key: "comment.create", input: CreateCommentDto, result: CommentDto } | 
+        { key: "comment.delete", input: number, result: string } | 
         { key: "post.create", input: CreatePostDto, result: PostDto } | 
-        { key: "post.delete", input: number, result: PostDto } | 
+        { key: "post.delete", input: number, result: string } | 
         { key: "user.delete", input: string, result: string },
     subscriptions: never
 };
 
-export type CreatePostDto = { content: string; tags: string[] | null; title: string }
+export type CommentDto = { id: number; content: string; pid: number; rid: number | null; uid: number | null; created_at: string }
+
+export type CreateCommentDto = { content: string; pid: number; rid: number | null; uid: number | null }
+
+export type CreatePostDto = { content: string; tags: string[] | null; title: string; uid: number | null }
 
 export type PostDto = { id: number; content: string; tags: string[]; title: string }
 
