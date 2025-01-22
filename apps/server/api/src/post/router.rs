@@ -1,6 +1,6 @@
 use super::dtos::{CreatePostDto, PostDto};
 use crate::Context;
-use domain::{Create, Delete, Read};
+use domain::{Create, Read};
 use rspc::{Router, RouterBuilder};
 
 pub fn post_router() -> RouterBuilder<Context> {
@@ -30,15 +30,16 @@ pub fn post_router() -> RouterBuilder<Context> {
             })
         })
         .mutation("delete", |t| {
-            t(|ctx, idta: i32| async move {
-                ctx.post_service
-                    .delete(idta)
-                    .await
-                    .map(PostDto::from)
-                    // TODO: better error handling
-                    .map_err(|e| {
-                        rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
-                    })
+            t(|_ctx, _id: i32| async move {
+                "Disabled, implement authn first"
+                // ctx.post_service
+                //     .delete(id)
+                //     .await
+                //     .map(PostDto::from)
+                //     // TODO: better error handling
+                //     .map_err(|e| {
+                //         rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
+                //     })
             })
         })
 }

@@ -34,7 +34,7 @@ model Profile {
 
 model Post {
   id         Int      @id @default(autoincrement())
-  uid        Int? // Optional user ID; null for anonymous posts
+  uid        Int?     @unique // Optional user ID; null for anonymous posts
   title      String
   tags       String[] @default([])
   content    String

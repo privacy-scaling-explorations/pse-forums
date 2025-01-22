@@ -1,7 +1,7 @@
 use crate::error::Result;
 use async_trait::async_trait;
 use derive_more::Constructor;
-use domain::{Create, Delete, Post, Read, Update};
+use domain::{Create, Delete, Post, Read};
 use infra::{CreatePost, PostRepository};
 use std::sync::Arc;
 
@@ -12,6 +12,7 @@ pub struct CreatePostData {
     pub content: String,
     pub tags: Option<Vec<String>>,
     pub title: String,
+    pub uid: Option<i32>,
 }
 
 impl From<CreatePostData> for CreatePost {
@@ -20,6 +21,7 @@ impl From<CreatePostData> for CreatePost {
             content: data.content,
             tags: data.tags,
             title: data.title,
+            uid: data.uid,
         }
     }
 }

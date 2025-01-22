@@ -2,7 +2,7 @@ use crate::error::Result;
 use crate::InfraError;
 use async_trait::async_trait;
 use derive_more::derive::Constructor;
-use domain::{Create, Delete, Read, Update};
+use domain::{Create, Delete, Read};
 use prisma::post;
 use prisma::PrismaClient;
 use std::sync::Arc;
@@ -14,6 +14,7 @@ pub struct CreatePost {
     pub content: String,
     pub tags: Option<Vec<String>>,
     pub title: String,
+    pub uid: Option<i32>,
 }
 
 #[async_trait]
@@ -24,9 +25,15 @@ impl Create<CreatePost, Result<post::Data>> for PostRepository {
             content,
             title,
             tags,
+            uid,
         }: CreatePost,
     ) -> Result<post::Data> {
-        let extra = tags.map_or_else(|| vec![], |tags| vec![post::tags::set(tags)]);
+        let extra: Vec<post::SetParam> = vec![]
+            .into_iter()
+            .chain(tags.map(|t| post::tags::set(t)))
+            .chain(uid.map(|id| post::uid::set(Some(id))))
+            .collect();
+
         self.0
             .post()
             .create(title, content, extra)
