@@ -10,7 +10,7 @@ export type Procedures = {
     subscriptions: never
 };
 
-export type ProfileDto = { id: number; about: string; created_at: string; username: string; url: string }
+export type ProfileDto = { id: number; about: string | null; created_at: string; username: string; url: string | null }
 
 export type SigninRequestDto = { username: string; password: string }
 
