@@ -3,40 +3,42 @@ use crate::InfraError;
 use async_trait::async_trait;
 use derive_more::derive::Constructor;
 use domain::{Create, Delete, Read};
+use prisma::comment;
 use prisma::post;
 use prisma::PrismaClient;
 use std::sync::Arc;
 
 #[derive(Constructor)]
-pub struct PostRepository(Arc<PrismaClient>);
+pub struct CommentRepository(Arc<PrismaClient>);
 
-pub struct CreatePost {
+pub struct CreateComment {
     pub content: String,
-    pub tags: Option<Vec<String>>,
-    pub title: String,
+    pub pid: i32,
+    pub rid: Option<i32>,
     pub uid: Option<i32>,
 }
 
 #[async_trait]
-impl Create<CreatePost, Result<post::Data>> for PostRepository {
+impl Create<CreateComment, Result<comment::Data>> for CommentRepository {
     async fn create(
         &self,
-        CreatePost {
+        CreateComment {
             content,
-            title,
-            tags,
+            pid,
+            rid,
             uid,
-        }: CreatePost,
-    ) -> Result<post::Data> {
-        let extra: Vec<post::SetParam> = vec![]
+        }: CreateComment,
+    ) -> Result<comment::Data> {
+        // TODO: write a helper or macro to generate this
+        let extra: Vec<comment::SetParam> = vec![]
             .into_iter()
-            .chain(tags.map(|t| post::tags::set(t)))
-            .chain(uid.map(|id| post::uid::set(Some(id))))
+            .chain(rid.map(|id| comment::rid::set(Some(id))))
+            .chain(uid.map(|id| comment::uid::set(Some(id))))
             .collect();
 
         self.0
-            .post()
-            .create(title, content, extra)
+            .comment()
+            .create(content, post::id::equals(pid), extra)
             .exec()
             .await
             .map_err(|e| InfraError::Db(e.to_string()))
@@ -56,11 +58,11 @@ impl Create<CreatePost, Result<post::Data>> for PostRepository {
 // }
 
 #[async_trait]
-impl Read<i32, Result<post::Data>> for PostRepository {
-    async fn read(&self, id: i32) -> Result<post::Data> {
+impl Read<i32, Result<comment::Data>> for CommentRepository {
+    async fn read(&self, id: i32) -> Result<comment::Data> {
         self.0
-            .post()
-            .find_unique(post::id::equals(id))
+            .comment()
+            .find_unique(comment::id::equals(id))
             .exec()
             .await
             .map_err(|e| InfraError::Db(e.to_string()))?
@@ -69,11 +71,11 @@ impl Read<i32, Result<post::Data>> for PostRepository {
 }
 
 #[async_trait]
-impl Delete<i32, Result<post::Data>> for PostRepository {
-    async fn delete(&self, id: i32) -> Result<post::Data> {
+impl Delete<i32, Result<comment::Data>> for CommentRepository {
+    async fn delete(&self, id: i32) -> Result<comment::Data> {
         self.0
-            .post()
-            .delete(post::id::equals(id))
+            .comment()
+            .delete(comment::id::equals(id))
             .exec()
             .await
             .map_err(|e| InfraError::Db(e.to_string()))

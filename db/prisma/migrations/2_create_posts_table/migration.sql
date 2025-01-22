@@ -1,4 +1,3 @@
--- CreateTable
 CREATE TABLE "post" (
     "id" SERIAL NOT NULL,
     "uid" INTEGER,
@@ -11,7 +10,8 @@ CREATE TABLE "post" (
     CONSTRAINT "content_min_length" CHECK (char_length(content) >= 10)
 );
 
--- AddForeignKey
+CREATE UNIQUE INDEX "post_uid_key" ON "post"("uid");
+
 ALTER TABLE "post" ADD CONSTRAINT "post_uid_fkey" FOREIGN KEY ("uid") REFERENCES "user"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 comment on column post.uid is 'Optional user ID; null for anonymous posts';

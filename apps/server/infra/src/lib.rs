@@ -1,3 +1,5 @@
+mod comment;
+pub use comment::*;
 mod error;
 pub use error::InfraError;
 mod post;

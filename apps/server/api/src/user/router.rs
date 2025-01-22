@@ -1,6 +1,6 @@
 use super::dtos::UserDto;
 use crate::Context;
-use domain::{Delete, Read};
+use domain::Read;
 use rspc::{Router, RouterBuilder};
 
 pub fn user_router() -> RouterBuilder<Context> {
@@ -18,7 +18,7 @@ pub fn user_router() -> RouterBuilder<Context> {
             })
         })
         .mutation("delete", |t| {
-            t(|ctx, username: String| async move {
+            t(|_ctx, _username: String| async move {
                 "Disabled, implement authn first"
                 // TODO: protect behind authn
                 // ctx.user_service

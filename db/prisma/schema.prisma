@@ -17,6 +17,7 @@ model User {
   username          String    @unique
   Profile           Profile[]
   Post              Post[]
+  Comment           Comment[]
 
   @@map("user")
 }
@@ -34,7 +35,7 @@ model Profile {
 
 model Post {
   id         Int      @id @default(autoincrement())
-  uid        Int? // Optional user ID; null for anonymous posts
+  uid        Int?     @unique // Optional user ID; null for anonymous posts
   title      String
   tags       String[] @default([])
   content    String
@@ -49,7 +50,25 @@ model Post {
   // pid Int?         // TODO: define a policy table: eg 1 | require member of bandada group 1, 2|require mail of domain anon.xyz| ...
   // publicProofData String?         // TODO: any data we want to store and have a public for public verification
 
-  user User? @relation(fields: [uid], references: [id]) // TODO: Add cascade delete ??
+  user    User?     @relation(fields: [uid], references: [id]) // TODO: Add cascade delete ??
+  Comment Comment[]
 
   @@map("post")
+}
+
+model Comment {
+  id         Int      @id @default(autoincrement())
+  rid        Int?     @unique // Optional reply ID
+  pid        Int      @unique
+  uid        Int?     @unique // Optional user ID; null for anonymous comments
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  content    String
+  // isHidden   Boolean  @default(false) // TODO: was in freedit schema, what is this for?
+
+  parent  Comment?  @relation("CommentReplies", fields: [rid], references: [id])
+  replies Comment[] @relation("CommentReplies")
+  post    Post      @relation(fields: [pid], references: [id], onDelete: Cascade)
+  user    User?     @relation(fields: [uid], references: [id]) // TODO: Add cascade delete ??
+
+  @@map("comment")
 }

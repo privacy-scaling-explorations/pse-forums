@@ -6,6 +6,7 @@ pub struct CreatePostDto {
     pub content: String,
     pub tags: Option<Vec<String>>,
     pub title: String,
+    pub uid: Option<i32>,
 }
 
 impl From<CreatePostDto> for services::CreatePostData {
@@ -14,6 +15,7 @@ impl From<CreatePostDto> for services::CreatePostData {
             content: data.content,
             tags: data.tags,
             title: data.title,
+            uid: data.uid,
         }
     }
 }

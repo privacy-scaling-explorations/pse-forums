@@ -1,4 +1,5 @@
 mod auth;
+mod comment;
 mod context;
 use axum::{routing::get, Router};
 use context::Context;

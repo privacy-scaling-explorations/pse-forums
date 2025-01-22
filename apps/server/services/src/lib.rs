@@ -1,5 +1,7 @@
 mod auth;
 pub use auth::service::*;
+mod comment;
+pub use comment::*;
 mod error;
 pub use error::*;
 mod post;
