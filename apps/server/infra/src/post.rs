@@ -2,7 +2,6 @@ use crate::error::Result;
 use crate::InfraError;
 use async_trait::async_trait;
 use derive_more::derive::Constructor;
-use domain::Post;
 use domain::{Create, Delete, Read, Update};
 use prisma::post;
 use prisma::PrismaClient;
@@ -18,7 +17,7 @@ pub struct CreatePost {
 }
 
 #[async_trait]
-impl Create<CreatePost, Result<Post>> for PostRepository {
+impl Create<CreatePost, Result<post::Data>> for PostRepository {
     async fn create(
         &self,
         CreatePost {
@@ -26,14 +25,13 @@ impl Create<CreatePost, Result<Post>> for PostRepository {
             title,
             tags,
         }: CreatePost,
-    ) -> Result<Post> {
+    ) -> Result<post::Data> {
         let extra = tags.map_or_else(|| vec![], |tags| vec![post::tags::set(tags)]);
         self.0
             .post()
             .create(title, content, extra)
             .exec()
             .await
-            .map(Post::from)
             .map_err(|e| InfraError::Db(e.to_string()))
     }
 }
@@ -64,14 +62,13 @@ impl Read<i32, Result<post::Data>> for PostRepository {
 }
 
 #[async_trait]
-impl Delete<i32, Result<Post>> for PostRepository {
-    async fn delete(&self, id: i32) -> Result<Post> {
+impl Delete<i32, Result<post::Data>> for PostRepository {
+    async fn delete(&self, id: i32) -> Result<post::Data> {
         self.0
             .post()
             .delete(post::id::equals(id))
             .exec()
             .await
-            .map(Post::from)
             .map_err(|e| InfraError::Db(e.to_string()))
     }
 }

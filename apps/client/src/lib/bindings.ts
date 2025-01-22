@@ -9,7 +9,8 @@ export type Procedures = {
     mutations: 
         { key: "auth.signup", input: SignupRequestDto, result: null } | 
         { key: "post.create", input: CreatePostDto, result: PostDto } | 
-        { key: "post.delete", input: number, result: PostDto },
+        { key: "post.delete", input: number, result: PostDto } | 
+        { key: "user.delete", input: string, result: string },
     subscriptions: never
 };
 

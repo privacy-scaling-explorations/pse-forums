@@ -2,8 +2,7 @@ use crate::error::Result;
 use crate::InfraError;
 use async_trait::async_trait;
 use derive_more::derive::Constructor;
-use domain::Create;
-use domain::Read;
+use domain::{Create, Delete, Read};
 use prisma::user;
 use prisma::PrismaClient;
 use std::sync::Arc;
@@ -45,6 +44,18 @@ impl Create<CreateUser, Result<user::Data>> for UserRepository {
         self.0
             .user()
             .create(email, encrypted_password, salt, username, vec![])
+            .exec()
+            .await
+            .map_err(|e| InfraError::Db(e.to_string()))
+    }
+}
+
+#[async_trait]
+impl Delete<String, Result<user::Data>> for UserRepository {
+    async fn delete(&self, username: String) -> Result<user::Data> {
+        self.0
+            .user()
+            .delete(user::username::equals(username))
             .exec()
             .await
             .map_err(|e| InfraError::Db(e.to_string()))

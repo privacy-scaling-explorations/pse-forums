@@ -1,7 +1,7 @@
 use crate::error::Result;
 use async_trait::async_trait;
 use derive_more::Constructor;
-use domain::{Create, Read, User};
+use domain::{Create, Delete, Read, User};
 use infra::{CreateUser, UserRepository};
 use std::sync::Arc;
 
@@ -42,6 +42,17 @@ impl Create<CreateUserData, Result<User>> for UserService {
     async fn create(&self, data: CreateUserData) -> Result<User> {
         self.0
             .create(data.into())
+            .await
+            .map(User::from)
+            .map_err(|e| e.into())
+    }
+}
+
+#[async_trait]
+impl Delete<String, Result<User>> for UserService {
+    async fn delete(&self, username: String) -> Result<User> {
+        self.0
+            .delete(username)
             .await
             .map(User::from)
             .map_err(|e| e.into())
