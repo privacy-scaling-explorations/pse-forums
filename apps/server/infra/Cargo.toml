@@ -1,0 +1,13 @@
+[package]
+name = "infra"
+edition.workspace = true
+
+[dependencies]
+async-trait.workspace = true
+derive_more.workspace = true
+domain = { path = "../domain" }
+prisma = { path = "../../../db/prisma" }
+serde.workspace = true
+specta.workspace = true
+supabase-auth.workspace = true
+thiserror.workspace = true

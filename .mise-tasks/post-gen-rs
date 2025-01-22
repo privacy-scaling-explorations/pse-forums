@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+#MISE hide=true
+#MISE quiet=true
+set -u
+
+# this is a bug with prisma-rust-client-cli
+fix_one_time_token_type() {
+sed -i 's|crate::prisma::OneTimeTokenType|crate::generated::OneTimeTokenType|g' "$PRISMA_GEN_RS_CLIENT_PATH"
+sed -i 's|crate :: prisma :: OneTimeTokenType|crate::generated::OneTimeTokenType|g' "$PRISMA_GEN_RS_CLIENT_PATH"
+}
+
+disable_warnings() {
+  DIRECTIVES="#![allow(warnings, unused, clippy::all)]"
+  grep -q "^$DIRECTIVES" "$PRISMA_GEN_RS_CLIENT_PATH" || sed -i "1s/^/$DIRECTIVES\n/" "$PRISMA_GEN_RS_CLIENT_PATH"
+}
+
+main() {
+  fix_one_time_token_type
+  disable_warnings
+}
+
+main

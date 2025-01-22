@@ -1,0 +1,32 @@
+generator client {
+  provider = "mise prisma"
+  output   = env("PRISMA_GEN_RS_CLIENT_PATH")
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                Int       @id @default(autoincrement())
+  created_at        DateTime  @default(now()) @db.Timestamptz(6)
+  email             String    @unique
+  encryptedPassword String    @map("encrypted_password")
+  salt              String
+  username          String    @unique
+  Profile           Profile[]
+
+  @@map("user")
+}
+
+model Profile {
+  id         Int      @id
+  about      String?
+  created_at DateTime @db.Timestamptz(6)
+  user       User     @relation(fields: [id], references: [id], onDelete: Cascade)
+  username   String   @unique
+  url        String?
+
+  @@map("profile")
+}

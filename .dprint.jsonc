@@ -8,9 +8,11 @@
     ],
   },
   "excludes": [
-    "apps/server/static",
-    "mise.toml",
+    "apps/freedit/static",
+    "apps/client/src/lib/bindings.ts",
     "apps/client/src/routeTree.gen.ts",
+    "db/prisma/src/generated.rs",
+    "mise.toml",
   ],
   "typescript": {
     "quoteProps": "asNeeded",
