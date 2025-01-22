@@ -1,0 +1,9 @@
+[package]
+name = "domain"
+edition.workspace = true
+
+[dependencies]
+async-trait.workspace = true
+prisma = { path = "../../../db/prisma" }
+serde.workspace = true
+specta.workspace = true

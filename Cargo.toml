@@ -1,17 +1,29 @@
 [workspace]
-members = ["apps/server"]
+members = [
+  "apps/freedit",
+  "apps/server/api",
+  "apps/server/domain",
+  "apps/server/infra",
+  "apps/server/services",
+  "db/prisma",
+]
+package = { edition = "2021" }
 resolver = "2"
 
-[workspace.package]
-edition = "2021"
-license = "MIT"
-
-[profile.release]
-lto = "fat"
-strip = true
-codegen-units = 1
-panic = "abort"
-rpath = false
-
-[profile.dev.package."*"]
-debug = false
+[workspace.dependencies]
+async-trait = "0.1.85"
+axum = "0.7.9"
+derive_more = { version = "1.0.0", features = ["constructor", "display", "from"] }
+hex = "0.4.3"
+prisma-client-rust = { default-features = false, git = "https://github.com/Brendonovich/prisma-client-rust", features = ["mocking", "postgresql", "rspc"], tag = "0.6.11" }
+prisma-client-rust-cli = { default-features = false, git = "https://github.com/Brendonovich/prisma-client-rust", features = ["mocking", "postgresql", "rspc"], tag = "0.6.11" }
+ring = "0.17.8"
+rspc = "0.3.1"
+rspc-axum = "0.2.1"
+serde = { version = "1.0.217", features = ["derive"] }
+serde_json = "1.0.135"
+specta = "=2.0.0-rc.20"
+supabase-auth = { git = "https://github.com/supabase-community/supabase-auth-rs", branch = "main" }
+thiserror = "2.0.11"
+tokio = { version = "1.43.0", features = ["rt-multi-thread"] }
+tower-http = { version = "0.6.2", features = ["cors"] }

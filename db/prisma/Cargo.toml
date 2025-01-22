@@ -1,0 +1,12 @@
+[package]
+name = "prisma"
+edition.workspace = true
+
+[dependencies]
+prisma-client-rust.workspace = true
+prisma-client-rust-cli.workspace = true
+serde.workspace = true
+
+[features]
+bin = []
+default = []

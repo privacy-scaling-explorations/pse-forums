@@ -17,7 +17,7 @@ import { Route as SettingsImport } from './routes/settings'
 import { Route as LogoutImport } from './routes/logout'
 import { Route as LoginImport } from './routes/login'
 import { Route as GroupsImport } from './routes/groups'
-import { Route as UserUserIdImport } from './routes/user.$userId'
+import { Route as UserUsernameImport } from './routes/user.$username'
 import { Route as GroupIidImport } from './routes/group/$iid'
 
 // Create Virtual Routes
@@ -84,9 +84,9 @@ const GroupIndexLazyRoute = GroupIndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/group/index.lazy').then((d) => d.Route))
 
-const UserUserIdRoute = UserUserIdImport.update({
-  id: '/user/$userId',
-  path: '/user/$userId',
+const UserUsernameRoute = UserUsernameImport.update({
+  id: '/user/$username',
+  path: '/user/$username',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -163,11 +163,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GroupIidImport
       parentRoute: typeof rootRoute
     }
-    '/user/$userId': {
-      id: '/user/$userId'
-      path: '/user/$userId'
-      fullPath: '/user/$userId'
-      preLoaderRoute: typeof UserUserIdImport
+    '/user/$username': {
+      id: '/user/$username'
+      path: '/user/$username'
+      fullPath: '/user/$username'
+      preLoaderRoute: typeof UserUsernameImport
       parentRoute: typeof rootRoute
     }
     '/group/': {
@@ -192,7 +192,7 @@ export interface FileRoutesByFullPath {
   '/rss': typeof RssLazyRoute
   '/solo': typeof SoloLazyRoute
   '/group/$iid': typeof GroupIidRoute
-  '/user/$userId': typeof UserUserIdRoute
+  '/user/$username': typeof UserUsernameRoute
   '/group': typeof GroupIndexLazyRoute
 }
 
@@ -206,7 +206,7 @@ export interface FileRoutesByTo {
   '/rss': typeof RssLazyRoute
   '/solo': typeof SoloLazyRoute
   '/group/$iid': typeof GroupIidRoute
-  '/user/$userId': typeof UserUserIdRoute
+  '/user/$username': typeof UserUsernameRoute
   '/group': typeof GroupIndexLazyRoute
 }
 
@@ -221,7 +221,7 @@ export interface FileRoutesById {
   '/rss': typeof RssLazyRoute
   '/solo': typeof SoloLazyRoute
   '/group/$iid': typeof GroupIidRoute
-  '/user/$userId': typeof UserUserIdRoute
+  '/user/$username': typeof UserUsernameRoute
   '/group/': typeof GroupIndexLazyRoute
 }
 
@@ -237,7 +237,7 @@ export interface FileRouteTypes {
     | '/rss'
     | '/solo'
     | '/group/$iid'
-    | '/user/$userId'
+    | '/user/$username'
     | '/group'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -250,7 +250,7 @@ export interface FileRouteTypes {
     | '/rss'
     | '/solo'
     | '/group/$iid'
-    | '/user/$userId'
+    | '/user/$username'
     | '/group'
   id:
     | '__root__'
@@ -263,7 +263,7 @@ export interface FileRouteTypes {
     | '/rss'
     | '/solo'
     | '/group/$iid'
-    | '/user/$userId'
+    | '/user/$username'
     | '/group/'
   fileRoutesById: FileRoutesById
 }
@@ -278,7 +278,7 @@ export interface RootRouteChildren {
   RssLazyRoute: typeof RssLazyRoute
   SoloLazyRoute: typeof SoloLazyRoute
   GroupIidRoute: typeof GroupIidRoute
-  UserUserIdRoute: typeof UserUserIdRoute
+  UserUsernameRoute: typeof UserUsernameRoute
   GroupIndexLazyRoute: typeof GroupIndexLazyRoute
 }
 
@@ -292,7 +292,7 @@ const rootRouteChildren: RootRouteChildren = {
   RssLazyRoute: RssLazyRoute,
   SoloLazyRoute: SoloLazyRoute,
   GroupIidRoute: GroupIidRoute,
-  UserUserIdRoute: UserUserIdRoute,
+  UserUsernameRoute: UserUsernameRoute,
   GroupIndexLazyRoute: GroupIndexLazyRoute,
 }
 
@@ -315,7 +315,7 @@ export const routeTree = rootRoute
         "/rss",
         "/solo",
         "/group/$iid",
-        "/user/$userId",
+        "/user/$username",
         "/group/"
       ]
     },
@@ -346,8 +346,8 @@ export const routeTree = rootRoute
     "/group/$iid": {
       "filePath": "group/$iid.tsx"
     },
-    "/user/$userId": {
-      "filePath": "user.$userId.tsx"
+    "/user/$username": {
+      "filePath": "user.$username.tsx"
     },
     "/group/": {
       "filePath": "group/index.lazy.tsx"
