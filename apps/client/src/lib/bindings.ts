@@ -29,11 +29,11 @@ export type CreateCommentDto = { content: string; pid: number; rid: number | nul
 
 export type CreateGroupDto = { name: string; description: string; tags: string[] | null }
 
-export type CreatePostDto = { content: string; tags: string[] | null; title: string; uid: number | null }
+export type CreatePostDto = { content: string; gid: number | null; tags: string[] | null; title: string; uid: number | null }
 
 export type GroupDto = { id: number; name: string; description: string; tags: string[] }
 
-export type PostDto = { id: number; content: string; tags: string[]; title: string }
+export type PostDto = { id: number; gid: number | null; content: string; tags: string[]; title: string }
 
 export type ProfileDto = { id: number; about: string | null; created_at: string; username: string; url: string | null }
 
