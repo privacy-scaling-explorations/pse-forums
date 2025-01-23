@@ -58,9 +58,9 @@ model Post {
 
 model Comment {
   id         Int      @id @default(autoincrement())
-  rid        Int?     @unique // Optional reply ID
-  pid        Int      @unique
-  uid        Int?     @unique // Optional user ID; null for anonymous comments
+  rid        Int? // Optional reply ID
+  pid        Int
+  uid        Int? // Optional user ID; null for anonymous comments
   created_at DateTime @default(now()) @db.Timestamptz(6)
   content    String
   // isHidden   Boolean  @default(false) // TODO: was in freedit schema, what is this for?

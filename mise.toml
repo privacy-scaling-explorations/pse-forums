@@ -35,7 +35,9 @@ dev-client = { alias = "dc", dir = "apps/client", run = "bun vite dev", depends 
     "install-node-modules",
     "gen-ts",
 ], wait_for = "dev-server" }
-dev-server = { alias = "ds", run = ["mise r db-start && mise r migrate deploy && mise r seed; cargo run --bin api"] }
+dev-server = { alias = "ds", run = [
+    "mise r db-start && mise r p migrate deploy && mise r seed; cargo run --bin api",
+] }
 freedit = { dir = "apps/freedit", run = "cargo run -r --bin freedit" }
 install-node-modules = { hide = true, run = "bun i", sources = [
     "package.json",
