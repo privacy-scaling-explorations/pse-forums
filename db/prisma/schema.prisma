@@ -1,0 +1,74 @@
+generator client {
+  provider = "mise prisma"
+  output   = env("PRISMA_GEN_RS_CLIENT_PATH")
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                Int       @id @default(autoincrement())
+  created_at        DateTime  @default(now()) @db.Timestamptz(6)
+  email             String    @unique
+  encryptedPassword String    @map("encrypted_password")
+  salt              String
+  username          String    @unique
+  Profile           Profile[]
+  Post              Post[]
+  Comment           Comment[]
+
+  @@map("user")
+}
+
+model Profile {
+  id         Int      @id
+  about      String?
+  created_at DateTime @db.Timestamptz(6)
+  user       User     @relation(fields: [id], references: [id], onDelete: Cascade)
+  username   String   @unique
+  url        String?
+
+  @@map("profile")
+}
+
+model Post {
+  id         Int      @id @default(autoincrement())
+  uid        Int?     @unique // Optional user ID; null for anonymous posts
+  content    String
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  title      String
+  tags       String[] @default([])
+
+  // TODO: groupId          Int             // Assuming posts belong to a group
+  // TODO? feedItemId       Int?
+  // Making status optional or defaulting if status handling is simplified
+  // TODO? status           PostStatus      @default(Normal)
+
+  // Fields for anonymous posts
+  // pid Int?         // TODO: define a policy table: eg 1 | require member of bandada group 1, 2|require mail of domain anon.xyz| ...
+  // publicProofData String?         // TODO: any data we want to store and have a public for public verification
+
+  user    User?     @relation(fields: [uid], references: [id]) // TODO: Add cascade delete ??
+  Comment Comment[]
+
+  @@map("post")
+}
+
+model Comment {
+  id         Int      @id @default(autoincrement())
+  rid        Int? // Optional reply ID
+  pid        Int
+  uid        Int? // Optional user ID; null for anonymous comments
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  content    String
+  // isHidden   Boolean  @default(false) // TODO: was in freedit schema, what is this for?
+
+  parent  Comment?  @relation("CommentReplies", fields: [rid], references: [id])
+  replies Comment[] @relation("CommentReplies")
+  post    Post      @relation(fields: [pid], references: [id], onDelete: Cascade)
+  user    User?     @relation(fields: [uid], references: [id]) // TODO: Add cascade delete ??
+
+  @@map("comment")
+}

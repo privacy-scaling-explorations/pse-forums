@@ -1,6 +1,19 @@
 {
-  "exec": { "commands": [{ "command": "rustfmt", "exts": ["rs"] }] },
-  "excludes": ["apps/server/static"],
+  "exec": {
+    "commands": [
+      {
+        "command": "rustfmt",
+        "exts": ["rs"],
+      },
+    ],
+  },
+  "excludes": [
+    "apps/freedit/static",
+    "apps/client/src/lib/bindings.ts",
+    "apps/client/src/routeTree.gen.ts",
+    "db/prisma/src/generated.rs",
+    "mise.toml",
+  ],
   "typescript": {
     "quoteProps": "asNeeded",
     "semiColons": "asi",

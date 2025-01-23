@@ -8,47 +8,173 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute } from '@tanstack/react-router'
 
 // Import Routes
 
-import { Route as rootRoute } from "./routes/__root"
+import { Route as rootRoute } from './routes/__root'
+import { Route as SettingsImport } from './routes/settings'
+import { Route as LogoutImport } from './routes/logout'
+import { Route as LoginImport } from './routes/login'
+import { Route as GroupsImport } from './routes/groups'
+import { Route as UserUsernameImport } from './routes/user.$username'
+import { Route as GroupIidImport } from './routes/group/$iid'
 
 // Create Virtual Routes
 
-const IndexLazyImport = createFileRoute("/")()
-const InnIndexLazyImport = createFileRoute("/inn/")()
+const SoloLazyImport = createFileRoute('/solo')()
+const RssLazyImport = createFileRoute('/rss')()
+const NotificationsLazyImport = createFileRoute('/notifications')()
+const IndexLazyImport = createFileRoute('/')()
+const GroupIndexLazyImport = createFileRoute('/group/')()
 
 // Create/Update Routes
 
-const IndexLazyRoute = IndexLazyImport.update({
-  id: "/",
-  path: "/",
+const SoloLazyRoute = SoloLazyImport.update({
+  id: '/solo',
+  path: '/solo',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import("./routes/index.lazy").then((d) => d.Route))
+} as any).lazy(() => import('./routes/solo.lazy').then((d) => d.Route))
 
-const InnIndexLazyRoute = InnIndexLazyImport.update({
-  id: "/inn/",
-  path: "/inn/",
+const RssLazyRoute = RssLazyImport.update({
+  id: '/rss',
+  path: '/rss',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import("./routes/inn.index.lazy").then((d) => d.Route))
+} as any).lazy(() => import('./routes/rss.lazy').then((d) => d.Route))
+
+const NotificationsLazyRoute = NotificationsLazyImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/notifications.lazy').then((d) => d.Route))
+
+const SettingsRoute = SettingsImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LogoutRoute = LogoutImport.update({
+  id: '/logout',
+  path: '/logout',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LoginRoute = LoginImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const GroupsRoute = GroupsImport.update({
+  id: '/groups',
+  path: '/groups',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const IndexLazyRoute = IndexLazyImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const GroupIndexLazyRoute = GroupIndexLazyImport.update({
+  id: '/group/',
+  path: '/group/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/group/index.lazy').then((d) => d.Route))
+
+const UserUsernameRoute = UserUsernameImport.update({
+  id: '/user/$username',
+  path: '/user/$username',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const GroupIidRoute = GroupIidImport.update({
+  id: '/group/$iid',
+  path: '/group/$iid',
+  getParentRoute: () => rootRoute,
+} as any)
 
 // Populate the FileRoutesByPath interface
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    "/": {
-      id: "/"
-      path: "/"
-      fullPath: "/"
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
-    "/inn/": {
-      id: "/inn/"
-      path: "/inn"
-      fullPath: "/inn"
-      preLoaderRoute: typeof InnIndexLazyImport
+    '/groups': {
+      id: '/groups'
+      path: '/groups'
+      fullPath: '/groups'
+      preLoaderRoute: typeof GroupsImport
+      parentRoute: typeof rootRoute
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/logout': {
+      id: '/logout'
+      path: '/logout'
+      fullPath: '/logout'
+      preLoaderRoute: typeof LogoutImport
+      parentRoute: typeof rootRoute
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsImport
+      parentRoute: typeof rootRoute
+    }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/rss': {
+      id: '/rss'
+      path: '/rss'
+      fullPath: '/rss'
+      preLoaderRoute: typeof RssLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/solo': {
+      id: '/solo'
+      path: '/solo'
+      fullPath: '/solo'
+      preLoaderRoute: typeof SoloLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/group/$iid': {
+      id: '/group/$iid'
+      path: '/group/$iid'
+      fullPath: '/group/$iid'
+      preLoaderRoute: typeof GroupIidImport
+      parentRoute: typeof rootRoute
+    }
+    '/user/$username': {
+      id: '/user/$username'
+      path: '/user/$username'
+      fullPath: '/user/$username'
+      preLoaderRoute: typeof UserUsernameImport
+      parentRoute: typeof rootRoute
+    }
+    '/group/': {
+      id: '/group/'
+      path: '/group'
+      fullPath: '/group'
+      preLoaderRoute: typeof GroupIndexLazyImport
       parentRoute: typeof rootRoute
     }
   }
@@ -57,38 +183,117 @@ declare module "@tanstack/react-router" {
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  "/": typeof IndexLazyRoute
-  "/inn": typeof InnIndexLazyRoute
+  '/': typeof IndexLazyRoute
+  '/groups': typeof GroupsRoute
+  '/login': typeof LoginRoute
+  '/logout': typeof LogoutRoute
+  '/settings': typeof SettingsRoute
+  '/notifications': typeof NotificationsLazyRoute
+  '/rss': typeof RssLazyRoute
+  '/solo': typeof SoloLazyRoute
+  '/group/$iid': typeof GroupIidRoute
+  '/user/$username': typeof UserUsernameRoute
+  '/group': typeof GroupIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
-  "/": typeof IndexLazyRoute
-  "/inn": typeof InnIndexLazyRoute
+  '/': typeof IndexLazyRoute
+  '/groups': typeof GroupsRoute
+  '/login': typeof LoginRoute
+  '/logout': typeof LogoutRoute
+  '/settings': typeof SettingsRoute
+  '/notifications': typeof NotificationsLazyRoute
+  '/rss': typeof RssLazyRoute
+  '/solo': typeof SoloLazyRoute
+  '/group/$iid': typeof GroupIidRoute
+  '/user/$username': typeof UserUsernameRoute
+  '/group': typeof GroupIndexLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  "/": typeof IndexLazyRoute
-  "/inn/": typeof InnIndexLazyRoute
+  '/': typeof IndexLazyRoute
+  '/groups': typeof GroupsRoute
+  '/login': typeof LoginRoute
+  '/logout': typeof LogoutRoute
+  '/settings': typeof SettingsRoute
+  '/notifications': typeof NotificationsLazyRoute
+  '/rss': typeof RssLazyRoute
+  '/solo': typeof SoloLazyRoute
+  '/group/$iid': typeof GroupIidRoute
+  '/user/$username': typeof UserUsernameRoute
+  '/group/': typeof GroupIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: "/" | "/inn"
+  fullPaths:
+    | '/'
+    | '/groups'
+    | '/login'
+    | '/logout'
+    | '/settings'
+    | '/notifications'
+    | '/rss'
+    | '/solo'
+    | '/group/$iid'
+    | '/user/$username'
+    | '/group'
   fileRoutesByTo: FileRoutesByTo
-  to: "/" | "/inn"
-  id: "__root__" | "/" | "/inn/"
+  to:
+    | '/'
+    | '/groups'
+    | '/login'
+    | '/logout'
+    | '/settings'
+    | '/notifications'
+    | '/rss'
+    | '/solo'
+    | '/group/$iid'
+    | '/user/$username'
+    | '/group'
+  id:
+    | '__root__'
+    | '/'
+    | '/groups'
+    | '/login'
+    | '/logout'
+    | '/settings'
+    | '/notifications'
+    | '/rss'
+    | '/solo'
+    | '/group/$iid'
+    | '/user/$username'
+    | '/group/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
-  InnIndexLazyRoute: typeof InnIndexLazyRoute
+  GroupsRoute: typeof GroupsRoute
+  LoginRoute: typeof LoginRoute
+  LogoutRoute: typeof LogoutRoute
+  SettingsRoute: typeof SettingsRoute
+  NotificationsLazyRoute: typeof NotificationsLazyRoute
+  RssLazyRoute: typeof RssLazyRoute
+  SoloLazyRoute: typeof SoloLazyRoute
+  GroupIidRoute: typeof GroupIidRoute
+  UserUsernameRoute: typeof UserUsernameRoute
+  GroupIndexLazyRoute: typeof GroupIndexLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
-  InnIndexLazyRoute: InnIndexLazyRoute,
+  GroupsRoute: GroupsRoute,
+  LoginRoute: LoginRoute,
+  LogoutRoute: LogoutRoute,
+  SettingsRoute: SettingsRoute,
+  NotificationsLazyRoute: NotificationsLazyRoute,
+  RssLazyRoute: RssLazyRoute,
+  SoloLazyRoute: SoloLazyRoute,
+  GroupIidRoute: GroupIidRoute,
+  UserUsernameRoute: UserUsernameRoute,
+  GroupIndexLazyRoute: GroupIndexLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -102,14 +307,50 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/inn/"
+        "/groups",
+        "/login",
+        "/logout",
+        "/settings",
+        "/notifications",
+        "/rss",
+        "/solo",
+        "/group/$iid",
+        "/user/$username",
+        "/group/"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
     },
-    "/inn/": {
-      "filePath": "inn.index.lazy.tsx"
+    "/groups": {
+      "filePath": "groups.tsx"
+    },
+    "/login": {
+      "filePath": "login.tsx"
+    },
+    "/logout": {
+      "filePath": "logout.tsx"
+    },
+    "/settings": {
+      "filePath": "settings.tsx"
+    },
+    "/notifications": {
+      "filePath": "notifications.lazy.tsx"
+    },
+    "/rss": {
+      "filePath": "rss.lazy.tsx"
+    },
+    "/solo": {
+      "filePath": "solo.lazy.tsx"
+    },
+    "/group/$iid": {
+      "filePath": "group/$iid.tsx"
+    },
+    "/user/$username": {
+      "filePath": "user.$username.tsx"
+    },
+    "/group/": {
+      "filePath": "group/index.lazy.tsx"
     }
   }
 }

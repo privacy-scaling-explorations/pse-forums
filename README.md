@@ -2,11 +2,24 @@
 
 ## Develop
 
-### Requirements
+### TLDR
 
-- [bun](https://bun.sh/docs/installation) (JS runtime)
-- [rust](https://www.rust-lang.org/tools/install)
-- [just](https://just.systems) (tasks runner)
+```commandline
+curl https://mise.run | sh
+mise activate
+mise d
+```
 
-Then start both server and client with `just dev`.\
-Or select any available scripts with `just`.
+This will:
+
+- install [`mise`](https://mise.jdx.dev)
+- install necessary runtimes (bun, rust)
+- install necessary packages (node_modules, cargo deps)
+- spin up a postgres database and run the migrations against it
+- generate prisma client and corresponding TS types
+- start the api server in dev mode
+- start the frontend client in dev mode
+
+### Inbucket
+
+During local development, magic links mails can be read with the local [inbucket server](http://127.0.0.1:54324/).

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#MISE hide=true
+#MISE quiet=true
+set -u
+
+disable_warnings() {
+  DIRECTIVES="#![allow(warnings, unused, clippy::all)]"
+  grep -q "^$DIRECTIVES" "$PRISMA_GEN_RS_CLIENT_PATH" || sed -i "1s/^/$DIRECTIVES\n/" "$PRISMA_GEN_RS_CLIENT_PATH"
+}
+
+main() {
+  disable_warnings
+}
+
+main

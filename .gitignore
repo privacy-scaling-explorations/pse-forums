@@ -1,17 +1,19 @@
+.branches
+.temp
+.env*
 .DS_Store
-.envrc
-.tool-versions
+.zed
 
-apps/server/freedit.db
-apps/server/config.toml
-apps/server/static/imgs
-apps/server/snapshots
-apps/server/tantivy
-certs
-target
-
+apps/freedit/config.toml
+apps/freedit/freedit.db
+apps/freedit/tantivy
+apps/freedit/snapshots
+apps/freedit/static/imgs
+# cannot be transferred between devices/OSes, needs to be regenerated
+apps/server/infra/prisma.rs
 bun.lockb
 dist
 node_modules
+target
 *.tsbuildinfo
 yarn.lock

@@ -1,8 +1,9 @@
 {
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "dprint": "^0.47.6",
-    "lefthook": "^1.9.2",
+    "@jdxcode/mise": "^2025.1.1",
+    "dprint": "^0.48.0",
+    "supabase": "^2.6.8",
     "tsc-files": "^1.1.4"
   },
   "engines": {

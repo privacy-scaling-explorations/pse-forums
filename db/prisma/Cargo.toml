@@ -1,0 +1,23 @@
+[package]
+name = "prisma"
+edition.workspace = true
+
+[[bin]]
+name = "prisma"
+path = "src/bin/prisma.rs"
+required-features = ["bin"]
+
+[[bin]]
+name = "seed"
+path = "src/bin/seed.rs"
+
+[dependencies]
+crypto = { path = "../../apps/server/crypto" }
+prisma-client-rust.workspace = true
+prisma-client-rust-cli.workspace = true
+serde.workspace = true
+tokio.workspace = true
+
+[features]
+bin = []
+default = []
