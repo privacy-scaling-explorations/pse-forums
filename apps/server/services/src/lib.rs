@@ -4,6 +4,8 @@ mod comment;
 pub use comment::*;
 mod error;
 pub use error::*;
+mod group;
+pub use group::*;
 mod post;
 pub use post::*;
 mod profile;
