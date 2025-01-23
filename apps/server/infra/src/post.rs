@@ -69,6 +69,18 @@ impl Read<i32, Result<post::Data>> for PostRepository {
 }
 
 #[async_trait]
+impl Read<(), Result<Vec<post::Data>>> for PostRepository {
+    async fn read(&self, _: ()) -> Result<Vec<post::Data>> {
+        self.0
+            .post()
+            .find_many(vec![])
+            .exec()
+            .await
+            .map_err(|e| InfraError::Db(e.to_string()))
+    }
+}
+
+#[async_trait]
 impl Delete<i32, Result<post::Data>> for PostRepository {
     async fn delete(&self, id: i32) -> Result<post::Data> {
         self.0
