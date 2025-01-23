@@ -22,3 +22,15 @@ impl Read<String, Result<profile::Data>> for ProfileRepository {
             .ok_or(InfraError::NotFound)
     }
 }
+
+#[async_trait]
+impl Read<(), Result<Vec<profile::Data>>> for ProfileRepository {
+    async fn read(&self, _: ()) -> Result<Vec<profile::Data>> {
+        self.0
+            .profile()
+            .find_many(vec![])
+            .exec()
+            .await
+            .map_err(|e| InfraError::Db(e.to_string()))
+    }
+}
