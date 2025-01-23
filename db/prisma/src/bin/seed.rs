@@ -15,7 +15,6 @@ macro_rules! User {
             )
             .exec()
             .await
-            .unwrap()
     }};
 }
 
@@ -32,91 +31,108 @@ macro_rules! Profile {
             )
             .exec()
             .await
-            .unwrap()
     };
 }
 
 macro_rules! Post {
-    ($client:expr, $user_id:expr, $title:expr, $content:expr, ($($tag:expr),*)) => {
+    ($client:expr, $uid:expr, $title:expr, $content:expr, ($($tag:expr),*)) => {
         $client
             .post()
             .create(
                 $title.to_string(),
                 $content.to_string(),
-                vec![post::uid::set(Some($user_id)), post::tags::set(vec![$($tag.to_string()),*])],
+                vec![post::uid::set(Some($uid)), post::tags::set(vec![$($tag.to_string()),*])],
             )
             .exec()
-            .await.unwrap()
+            .await
     };
 }
 
 macro_rules! Comment {
-    ($client:expr, $pid:expr, $uid:expr, $content:expr) => {
+    ($client:expr, $content:expr, $pid:expr, $uid:expr) => {
         $client
             .comment()
-            .create(
+            .create_unchecked(
+                $pid,
                 $content.to_string(),
-                post::id::equals($pid),
-                vec![comment::uid::set(Some($uid))],
+                vec![comment::UncheckedSetParam::Uid(Some($uid))],
             )
             .exec()
             .await
-            .unwrap()
     };
 }
 
+// type Ok<T> = Result<T, prisma_client_rust::QueryError>;
+
+async fn seed_database(client: &PrismaClient) -> Result<(), prisma_client_rust::QueryError> {
+    let (user1, user2) = client
+        ._transaction()
+        .run(|client| async move {
+            let user1 = User!(client, "user1@example.com", "11111111", "user1")?;
+            let user2 = User!(client, "user2@example.com", "22222222", "user2")?;
+
+            Ok((user1, user2))
+        })
+        .await?;
+
+    let (user1, user2) = client
+        ._transaction()
+        .run(|client| async move {
+            Profile!(
+                client,
+                user1.id,
+                "User1's profile",
+                "https://user1profile.example.com"
+            )?;
+            Profile!(
+                client,
+                user2.id,
+                "User2's profile",
+                "https://user2profile.example.com"
+            )?;
+
+            Ok((user1, user2))
+        })
+        .await?;
+
+    let (post1, post2, user1, user2) = client
+        ._transaction()
+        .run(|client| async move {
+            let post1 = Post!(
+                client,
+                user1.id,
+                "Post Title 1",
+                "This is the content of post 1",
+                ("tag1", "tag2")
+            )?;
+            let post2 = Post!(
+                client,
+                user2.id,
+                "Post Title 2",
+                "This is the content of post 2",
+                ("tag3")
+            )?;
+
+            Ok((post1, post2, user1, user2))
+        })
+        .await?;
+
+    // todo: fix Comment! macro
+    Comment!(client, "Comment by user 1 on post 1", post1.id, user1.id)?;
+    Comment!(client, "Comment by user 2 on post 2", post2.id, user2.id)?;
+    Comment!(client, "Comment by user 2 on post 1", post1.id, user2.id)?;
+
+    Ok(())
+}
+
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = init_prisma().await.unwrap();
-    let user1 = User!(client, "user1@example.com", "11111111", "user1");
-    let user2 = User!(client, "user2@example.com", "22222222", "user2");
 
-    Profile!(
-        client,
-        user1.id,
-        "User1's profile",
-        "https://user1profile.example.com"
-    );
-    Profile!(
-        client,
-        user2.id,
-        "User2's profile",
-        "https://user2profile.example.com"
-    );
+    match seed_database(&client).await {
+        Ok(_) => println!("Database seeded successfully"),
+        Err(e) => eprintln!("Error seeding the database: {:#?}", e),
+    }
 
-    let post1 = Post!(
-        client,
-        user1.id,
-        "Post Title 1",
-        "This is the content of post 1",
-        ("tag1", "tag2")
-    );
-    let post2 = Post!(
-        client,
-        user2.id,
-        "Post Title 2",
-        "This is the content of post 2",
-        ("tag3")
-    );
-
-    // Comment!(
-    //     client,
-    //     post1.id,
-    //     user1.id,
-    //     "This is a comment on Post 1 by User 1"
-    // );
-    // Comment!(
-    //     client,
-    //     post1.id,
-    //     user2.id,
-    //     "This is another comment on Post 1 by User 2"
-    // );
-    // Comment!(
-    //     client,
-    //     post2.id,
-    //     user1.id,
-    //     "This is a comment on Post 2 by User 1"
-    // );
-
-    println!("Database seeded successfully!");
+    Ok(())
 }
