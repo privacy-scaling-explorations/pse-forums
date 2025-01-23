@@ -18,3 +18,14 @@ impl Read<String, Result<Profile>> for ProfileService {
             .map_err(|e| e.into())
     }
 }
+
+#[async_trait]
+impl Read<(), Result<Vec<Profile>>> for ProfileService {
+    async fn read(&self, _: ()) -> Result<Vec<Profile>> {
+        self.0
+            .read(())
+            .await
+            .map(|profiles| profiles.into_iter().map(Profile::from).collect())
+            .map_err(|e| e.into())
+    }
+}

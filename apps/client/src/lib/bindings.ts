@@ -5,6 +5,7 @@ export type Procedures = {
         { key: "auth.signin", input: SigninRequestDto, result: null } | 
         { key: "comment.read", input: number, result: CommentDto } | 
         { key: "post.read", input: number, result: PostDto } | 
+        { key: "profile.list", input: never, result: ProfileDto[] } | 
         { key: "profile.read", input: string, result: ProfileDto } | 
         { key: "user.read", input: string, result: UserDto },
     mutations: 
