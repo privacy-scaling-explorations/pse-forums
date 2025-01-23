@@ -1,27 +1,32 @@
+import { Link } from '@tanstack/react-router';
 import { Avatar } from "c/Avatar"
-import type { FC } from "react"
+import { type FC } from "react"
 import { Card } from "ui/card"
-import type { OutPostList } from "./Inn/types"
 import { Badge } from "./ui/badge"
+import { PostDto } from 'l/bindings';
 
 export const PostCard: FC<
-  Pick<OutPostList, "created_at" | "inn_name" | "title" | "username">
-> = ({ created_at, inn_name, title, username }) => (
-  <Card>
-    <div className="flex items-start bg-white p-3 rounded shadow">
-      {/* Replace this with actual image when available */}
-      <Avatar
-        src="https://avatars.githubusercontent.com/u/38692952?s=400&u=5c6e6add3e7fbdb1e23179b3cb3c93540a5a9f9e&v=4"
-        username={username}
-      />
+  Pick<PostDto, "id" | "title">
+> = ({ id, title }) => {
+  return (
+    <Card>
+      <Link to="/post/$pid" params={{ pid: `${id}` }}>
+        <div className="flex items-start bg-white p-3 rounded shadow">
+          {/* Replace this with actual image when available */}
+          <Avatar
+            src="https://avatars.githubusercontent.com/u/38692952?s=400&u=5c6e6add3e7fbdb1e23179b3cb3c93540a5a9f9e&v=4"
+            username={"usr"}
+          />
 
-      <div className="flex-grow flex flex-col items-start">
-        <h3 className="font-bold text-lg mb-1">{title}</h3>
-        <div className="flex space-x-2">
-          <Badge variant="secondary">{inn_name}</Badge>
-          <span className="text-sm text-gray-600">{created_at}</span>
+          <div className="flex-grow flex flex-col items-start">
+            <h3 className="font-bold text-lg mb-1">{title}</h3>
+            <div className="flex space-x-2">
+              <Badge variant="secondary">{"Innnnnn"}</Badge>
+              <span className="text-sm text-gray-600">{"00/00/0000"}</span>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </Card>
-)
+      </Link>
+    </Card>
+  )
+}
