@@ -17,6 +17,23 @@ pub fn post_router() -> RouterBuilder<Context> {
                     })
             })
         })
+        .query("list", |t| {
+            t(|ctx, _: ()| async move {
+                ctx.post_service
+                    .read(())
+                    .await
+                    .map(|posts| {
+                        posts
+                            .into_iter()
+                            .map(PostDto::from)
+                            .collect::<Vec<PostDto>>()
+                    })
+                    // TODO: better error handling
+                    .map_err(|e| {
+                        rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
+                    })
+            })
+        })
         .mutation("create", |t| {
             t(|ctx, data: CreatePostDto| async move {
                 ctx.post_service

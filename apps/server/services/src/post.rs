@@ -45,6 +45,17 @@ impl Read<i32, Result<Post>> for PostService {
 }
 
 #[async_trait]
+impl Read<(), Result<Vec<Post>>> for PostService {
+    async fn read(&self, _: ()) -> Result<Vec<Post>> {
+        self.0
+            .read(())
+            .await
+            .map(|posts| posts.into_iter().map(Post::from).collect())
+            .map_err(|e| e.into())
+    }
+}
+
+#[async_trait]
 impl Delete<i32, Result<Post>> for PostService {
     async fn delete(&self, id: i32) -> Result<Post> {
         self.0
