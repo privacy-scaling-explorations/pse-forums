@@ -1,7 +1,7 @@
+use db::PrismaClient;
 use infra::{
     CommentRepository, GroupRepository, PostRepository, ProfileRepository, UserRepository,
 };
-use prisma::PrismaClient;
 use services::{
     AuthService, CommentService, GroupService, PostService, ProfileService, UserService,
 };

@@ -1,10 +1,9 @@
 use crate::error::Result;
 use crate::InfraError;
 use async_trait::async_trait;
+use db::{group, PrismaClient};
 use derive_more::derive::Constructor;
 use domain::{Create, Delete, Read};
-use prisma::group;
-use prisma::PrismaClient;
 use std::sync::Arc;
 
 #[derive(Constructor)]

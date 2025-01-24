@@ -10,8 +10,8 @@ pub struct Profile {
     pub url: Option<String>,
 }
 
-impl From<prisma::profile::Data> for Profile {
-    fn from(data: prisma::profile::Data) -> Self {
+impl From<db::profile::Data> for Profile {
+    fn from(data: db::profile::Data) -> Self {
         Self {
             id: data.id,
             about: data.about,

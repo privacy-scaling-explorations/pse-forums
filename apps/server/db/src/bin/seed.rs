@@ -1,5 +1,5 @@
 use crypto::hash_pwd;
-use prisma::*;
+use db::*;
 
 macro_rules! User {
     ($client:expr, $email:expr, $password:expr, $username:expr) => {{

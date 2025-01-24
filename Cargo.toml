@@ -3,10 +3,10 @@ members = [
   "apps/freedit",
   "apps/server/api",
   "apps/server/crypto",
+  "apps/server/db",
   "apps/server/domain",
   "apps/server/infra",
   "apps/server/services",
-  "db/prisma",
 ]
 package = { edition = "2021" }
 resolver = "2"

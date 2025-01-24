@@ -9,8 +9,8 @@ pub struct Group {
     pub tags: Vec<String>,
 }
 
-impl From<prisma::group::Data> for Group {
-    fn from(data: prisma::group::Data) -> Self {
+impl From<db::group::Data> for Group {
+    fn from(data: db::group::Data) -> Self {
         Self {
             id: data.id,
             name: data.name,

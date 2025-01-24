@@ -4,6 +4,6 @@ edition.workspace = true
 
 [dependencies]
 async-trait.workspace = true
-prisma = { path = "../../../db/prisma" }
+db = { path = "../db" }
 serde.workspace = true
 specta.workspace = true
