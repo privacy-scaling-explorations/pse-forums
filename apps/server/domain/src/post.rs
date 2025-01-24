@@ -12,8 +12,8 @@ pub struct Post {
     pub tags: Vec<String>,
 }
 
-impl From<prisma::post::Data> for Post {
-    fn from(data: prisma::post::Data) -> Self {
+impl From<db::post::Data> for Post {
+    fn from(data: db::post::Data) -> Self {
         Self {
             id: data.id,
             created_at: data.created_at.to_string(), // TODO: or keep using chrono::DateTime?

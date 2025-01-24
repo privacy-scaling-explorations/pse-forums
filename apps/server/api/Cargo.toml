@@ -12,10 +12,10 @@ path = "src/bin/bindings.rs"
 
 [dependencies]
 axum.workspace = true
+db = { path = "../db" }
 derive_more.workspace = true
 domain = { path = "../domain" }
 infra = { path = "../infra" }
-prisma = { path = "../../../db/prisma" }
 rspc.workspace = true
 rspc-axum.workspace = true
 serde.workspace = true

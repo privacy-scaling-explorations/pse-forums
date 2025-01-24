@@ -109,10 +109,10 @@ name = "api"
 version = "0.0.0"
 dependencies = [
  "axum",
+ "db",
  "derive_more",
  "domain",
  "infra",
- "prisma",
  "rspc 0.3.1",
  "rspc-axum",
  "serde",
@@ -861,6 +861,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "db"
+version = "0.0.0"
+dependencies = [
+ "crypto",
+ "prisma-client-rust",
+ "prisma-client-rust-cli",
+ "serde",
+ "tokio",
+]
+
+[[package]]
 name = "deranged"
 version = "0.3.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1008,7 +1019,7 @@ name = "domain"
 version = "0.0.0"
 dependencies = [
  "async-trait",
- "prisma",
+ "db",
  "serde",
  "specta 2.0.0-rc.20",
 ]
@@ -2070,9 +2081,9 @@ name = "infra"
 version = "0.0.0"
 dependencies = [
  "async-trait",
+ "db",
  "derive_more",
  "domain",
- "prisma",
  "serde",
  "specta 2.0.0-rc.20",
  "supabase-auth",
@@ -3267,17 +3278,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "925383efa346730478fb4838dbe9137d2a47675ad789c546d150a6e1dd4ab31c"
 
 [[package]]
-name = "prisma"
-version = "0.0.0"
-dependencies = [
- "crypto",
- "prisma-client-rust",
- "prisma-client-rust-cli",
- "serde",
- "tokio",
-]
-
-[[package]]
 name = "prisma-client-rust"
 version = "0.6.11"
 source = "git+https://github.com/Brendonovich/prisma-client-rust?tag=0.6.11#3ac68d0052533d3ae0332d93a56a8ad169c2ee18"
@@ -4352,10 +4352,10 @@ version = "0.0.0"
 dependencies = [
  "async-trait",
  "crypto",
+ "db",
  "derive_more",
  "domain",
  "infra",
- "prisma",
  "prisma-client-rust",
  "rspc 0.3.1",
  "serde",

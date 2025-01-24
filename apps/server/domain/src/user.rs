@@ -11,8 +11,8 @@ pub struct User {
     pub username: String,
 }
 
-impl From<prisma::user::Data> for User {
-    fn from(data: prisma::user::Data) -> Self {
+impl From<db::user::Data> for User {
+    fn from(data: db::user::Data) -> Self {
         Self {
             id: data.id,
             created_at: data.created_at.to_string(), // or keep using chrono::DateTime?

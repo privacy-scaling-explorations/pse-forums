@@ -2,12 +2,11 @@
 
 [env]
 DATABASE_URL = "postgresql://postgres:postgres@127.0.0.1:54322/postgres"
-PRISMA_GEN_RS_CLIENT_PATH = "{{config_root}}/db/prisma/src/generated.rs"
+PRISMA_GEN_RS_CLIENT_PATH = "{{config_root}}/apps/server/db/src/generated.rs"
 PRISMA_GEN_TS_BINDINGS_PATH = "{{config_root}}/apps/client/src/lib/bindings.ts"
 SUPABASE_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0"
 SUPABASE_JWT_SECRET = "super-secret-jwt-token-with-at-least-32-characters-long"
 SUPABASE_URL = "http://127.0.0.1:54321"
-SUPABASE_WORKDIR = "db"
 VITE_SERVER_URL = "http://localhost:3000"
 
 [tools]
@@ -46,7 +45,7 @@ install-node-modules = { hide = true, run = "bun i", sources = [
     "bun.lockb",
 ] }
 gen-ts = { run = "cargo run --bin bindings", hide = true }
-prisma = { alias = "p", dir = "db/prisma", description = "Run prisma CLI by connecting to the DB with pgbouncer", run = "cargo run -F bin --bin prisma --", depends_post = [
+prisma = { alias = "p", dir = "apps/server/db", description = "Run prisma CLI by connecting to the DB with pgbouncer", run = "cargo run -F bin --bin prisma --", depends_post = [
     "post-gen-rs",
 ] }
 seed = { run = "cargo run --bin seed" }

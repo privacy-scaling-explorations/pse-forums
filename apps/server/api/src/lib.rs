@@ -4,7 +4,7 @@ mod context;
 use axum::{routing::get, Router};
 use context::Context;
 mod group;
-use prisma::init_prisma;
+use db::init_prisma;
 use std::sync::Arc;
 mod post;
 mod profile;

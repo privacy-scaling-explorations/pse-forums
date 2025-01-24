@@ -5,10 +5,10 @@ edition.workspace = true
 [dependencies]
 async-trait.workspace = true
 crypto = { path = "../crypto" }
+db = { path = "../db" }
 derive_more.workspace = true
 domain = { path = "../domain" }
 infra = { path = "../infra" }
-prisma = { path = "../../../db/prisma" }
 rspc.workspace = true
 serde.workspace = true
 serde_json.workspace = true
@@ -17,6 +17,6 @@ supabase-auth.workspace = true
 thiserror.workspace = true
 
 [dev-dependencies]
-prisma = { path = "../../../db/prisma" }
+db = { path = "../db" }
 prisma-client-rust.workspace = true
 tokio.workspace = true

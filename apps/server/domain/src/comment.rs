@@ -11,8 +11,8 @@ pub struct Comment {
     pub content: String,
 }
 
-impl From<prisma::comment::Data> for Comment {
-    fn from(data: prisma::comment::Data) -> Self {
+impl From<db::comment::Data> for Comment {
+    fn from(data: db::comment::Data) -> Self {
         Self {
             id: data.id,
             rid: data.rid,
