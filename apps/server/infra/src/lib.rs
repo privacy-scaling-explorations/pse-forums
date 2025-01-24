@@ -2,6 +2,8 @@ mod comment;
 pub use comment::*;
 mod error;
 pub use error::InfraError;
+mod group;
+pub use group::*;
 mod post;
 pub use post::*;
 mod user;

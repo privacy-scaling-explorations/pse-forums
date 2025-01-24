@@ -12,6 +12,7 @@ pub struct PostRepository(Arc<PrismaClient>);
 
 pub struct CreatePost {
     pub content: String,
+    pub gid: Option<i32>,
     pub tags: Option<Vec<String>>,
     pub title: String,
     pub uid: Option<i32>,
@@ -23,6 +24,7 @@ impl Create<CreatePost, Result<post::Data>> for PostRepository {
         &self,
         CreatePost {
             content,
+            gid,
             title,
             tags,
             uid,
@@ -30,6 +32,7 @@ impl Create<CreatePost, Result<post::Data>> for PostRepository {
     ) -> Result<post::Data> {
         let extra: Vec<post::SetParam> = vec![]
             .into_iter()
+            .chain(gid.map(|gid| post::gid::set(Some(gid))))
             .chain(tags.map(|t| post::tags::set(t)))
             .chain(uid.map(|id| post::uid::set(Some(id))))
             .collect();

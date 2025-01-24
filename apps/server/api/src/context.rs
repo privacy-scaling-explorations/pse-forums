@@ -1,12 +1,17 @@
-use infra::{CommentRepository, PostRepository, ProfileRepository, UserRepository};
+use infra::{
+    CommentRepository, GroupRepository, PostRepository, ProfileRepository, UserRepository,
+};
 use prisma::PrismaClient;
-use services::{AuthService, CommentService, PostService, ProfileService, UserService};
+use services::{
+    AuthService, CommentService, GroupService, PostService, ProfileService, UserService,
+};
 use std::sync::Arc;
 
 #[derive(Clone)]
 pub struct Context {
     pub auth_service: Arc<AuthService>,
     pub comment_service: Arc<CommentService>,
+    pub group_service: Arc<GroupService>,
     pub post_service: Arc<PostService>,
     pub profile_service: Arc<ProfileService>,
     pub user_service: Arc<UserService>,
@@ -15,6 +20,9 @@ pub struct Context {
 impl Context {
     pub fn new(prisma: Arc<PrismaClient>) -> Self {
         let comment_service = Arc::new(CommentService::new(Arc::new(CommentRepository::new(
+            prisma.clone(),
+        ))));
+        let group_service = Arc::new(GroupService::new(Arc::new(GroupRepository::new(
             prisma.clone(),
         ))));
         let post_service = Arc::new(PostService::new(Arc::new(PostRepository::new(
@@ -31,6 +39,7 @@ impl Context {
         Self {
             auth_service,
             comment_service,
+            group_service,
             post_service,
             profile_service,
             user_service,

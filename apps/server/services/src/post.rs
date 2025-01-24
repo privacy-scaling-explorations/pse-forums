@@ -10,6 +10,7 @@ pub struct PostService(Arc<PostRepository>);
 
 pub struct CreatePostData {
     pub content: String,
+    pub gid: Option<i32>,
     pub tags: Option<Vec<String>>,
     pub title: String,
     pub uid: Option<i32>,
@@ -19,6 +20,7 @@ impl From<CreatePostData> for CreatePost {
     fn from(data: CreatePostData) -> Self {
         Self {
             content: data.content,
+            gid: data.gid,
             tags: data.tags,
             title: data.title,
             uid: data.uid,
