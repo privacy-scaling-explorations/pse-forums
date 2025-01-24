@@ -53,8 +53,8 @@ macro_rules! Post {
         $client
             .post()
             .create(
-                $title.to_string(),
                 $content.to_string(),
+                $title.to_string(),
                 vec![post::uid::set(Some($uid)), post::gid::set(Some($gid)),post::tags::set(vec![$($tag.to_string()),*])],
             )
             .exec()
