@@ -1,6 +1,6 @@
 generator client {
   provider = "mise prisma"
-  output   = env("PRISMA_GEN_RS_CLIENT_PATH")
+  output   = "./src/generated.rs"
 }
 
 datasource db {

@@ -1,0 +1,13 @@
+# :schema https://json.schemastore.org/fly.json
+app = 'forum-server-dev'
+
+[http_service]
+auto_start_machines = true
+auto_stop_machines = "suspend"
+force_https = true
+internal_port = 3000
+processes = ["app"]
+
+[[vm]]
+memory = '256mb'
+size = 'shared-cpu-1x'
