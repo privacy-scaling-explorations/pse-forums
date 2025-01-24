@@ -12,6 +12,7 @@ VITE_SERVER_URL = "http://localhost:3000"
 [tools]
 bun = "latest"
 "cargo:cargo-nextest" = "latest"
+hurl = "latest"
 lefthook = "latest"
 rust = "latest"
 
@@ -64,3 +65,4 @@ start-server = { alias = "ss", dir = "apps/server", run = "cargo run -r --bin ap
     "gen-rs",
 ] }
 test = { alias = "t", run = "cargo nextest run" }
+test-hurl = { alias = "th", dir = "apps/server/api/test/integration", run = "hurl --test *" }
