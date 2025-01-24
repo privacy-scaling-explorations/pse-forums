@@ -24,21 +24,23 @@ impl From<CreatePostDto> for services::CreatePostData {
 
 #[derive(Serialize, Type)]
 pub struct PostDto {
-    pub id: i32,
-    pub gid: Option<i32>,
     pub content: String,
+    pub gid: Option<i32>,
+    pub id: i32,
     pub tags: Vec<String>,
     pub title: String,
+    pub uid: Option<i32>,
 }
 
 impl From<domain::Post> for PostDto {
     fn from(post: domain::Post) -> Self {
         Self {
-            id: post.id,
-            gid: post.gid,
             content: post.content,
+            gid: post.gid,
+            id: post.id,
             tags: post.tags,
             title: post.title,
+            uid: post.uid,
         }
     }
 }

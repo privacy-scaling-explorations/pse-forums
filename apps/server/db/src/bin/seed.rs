@@ -49,7 +49,7 @@ macro_rules! Group {
 }
 
 macro_rules! Post {
-    ($client:expr, $uid:expr, $title:expr, $content:expr, $gid:expr, ($($tag:expr),*)) => {
+    ($client:expr, $title:expr, $content:expr, $uid:expr, $gid:expr, ($($tag:expr),*)) => {
         $client
             .post()
             .create(
@@ -123,17 +123,17 @@ async fn seed_database(client: &PrismaClient) -> Result<(), prisma_client_rust::
         .run(|client| async move {
             let post1 = Post!(
                 client,
-                user1.id,
                 "Post Title 1",
                 "This is the content of post 1",
+                user1.id,
                 group1.id,
                 ("tag1", "tag2")
             )?;
             let post2 = Post!(
                 client,
-                user2.id,
                 "Post Title 2",
                 "This is the content of post 2",
+                user2.id,
                 group2.id,
                 ("tag3")
             )?;
