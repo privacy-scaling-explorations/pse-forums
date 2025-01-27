@@ -13,6 +13,7 @@ rspc.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 specta.workspace = true
+struct-convert.workspace = true
 thiserror.workspace = true
 
 [dev-dependencies]

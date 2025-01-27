@@ -1,23 +1,15 @@
+use domain::Profile;
 use serde::Serialize;
 use specta::Type;
+use struct_convert::Convert;
 
-#[derive(Serialize, Type)]
+#[derive(Convert, Serialize, Type)]
+#[convert(from = "Profile")]
 pub struct ProfileDto {
     pub id: i32,
     pub about: Option<String>,
+    #[convert_field(to_string)]
     pub created_at: String,
     pub username: String,
     pub url: Option<String>,
-}
-
-impl From<domain::Profile> for ProfileDto {
-    fn from(data: domain::Profile) -> Self {
-        Self {
-            id: data.id,
-            about: data.about,
-            created_at: data.created_at.to_string(),
-            username: data.username,
-            url: data.url,
-        }
-    }
 }

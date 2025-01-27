@@ -1,25 +1,16 @@
+use domain::User;
 use serde::Serialize;
 use specta::Type;
+use struct_convert::Convert;
 
-#[derive(Serialize, Type)]
+#[derive(Convert, Serialize, Type)]
+#[convert(from = "User")]
 pub struct UserDto {
-    pub id: i32,
+    #[convert_field(to_string)]
     pub created_at: String,
+    pub id: i32,
     pub email: String,
     pub encrypted_password: String,
     pub salt: String,
     pub username: String,
-}
-
-impl From<domain::User> for UserDto {
-    fn from(data: domain::User) -> Self {
-        Self {
-            id: data.id,
-            created_at: data.created_at.to_string(),
-            email: data.email,
-            encrypted_password: data.encrypted_password,
-            salt: data.salt,
-            username: data.username,
-        }
-    }
 }

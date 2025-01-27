@@ -1,38 +1,22 @@
+use domain::Group;
 use serde::{Deserialize, Serialize};
+use services::CreateGroupData;
 use specta::Type;
+use struct_convert::Convert;
 
-#[derive(Deserialize, Type)]
+#[derive(Convert, Deserialize, Type)]
+#[convert(into = "CreateGroupData")]
 pub struct CreateGroupDto {
     pub name: String,
     pub description: String,
     pub tags: Option<Vec<String>>,
 }
 
-impl From<CreateGroupDto> for services::CreateGroupData {
-    fn from(dto: CreateGroupDto) -> Self {
-        Self {
-            name: dto.name,
-            description: dto.description,
-            tags: dto.tags,
-        }
-    }
-}
-
-#[derive(Serialize, Type)]
+#[derive(Convert, Serialize, Type)]
+#[convert(from = "Group")]
 pub struct GroupDto {
     pub id: i32,
     pub name: String,
     pub description: String,
     pub tags: Vec<String>,
-}
-
-impl From<domain::Group> for GroupDto {
-    fn from(dto: domain::Group) -> Self {
-        Self {
-            id: dto.id,
-            name: dto.name,
-            description: dto.description,
-            tags: dto.tags,
-        }
-    }
 }
