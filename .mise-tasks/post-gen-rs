@@ -3,9 +3,14 @@
 #MISE quiet=true
 set -u
 
+GENERATED_PATH="$MISE_PROJECT_ROOT/apps/server/db/src/generated.rs"
+
 disable_warnings() {
   DIRECTIVES="#![allow(warnings, unused, clippy::all)]"
-  grep -q "^$DIRECTIVES" "$PRISMA_GEN_RS_CLIENT_PATH" || sed -i "1s/^/$DIRECTIVES\n/" "$PRISMA_GEN_RS_CLIENT_PATH"
+
+  if ! head -n 1 "$GENERATED_PATH" | grep -qF "$DIRECTIVES"; then
+    sed -i "1s/^/$DIRECTIVES\n/" "$GENERATED_PATH"
+  fi
 }
 
 main() {
