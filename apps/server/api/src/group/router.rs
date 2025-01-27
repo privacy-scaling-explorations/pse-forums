@@ -1,13 +1,14 @@
 use super::dtos::{CreateGroupDto, GroupDto};
 use crate::Context;
-use domain::{Create, Read};
+use domain::{Create, Delete, Read};
 use rspc::{Router, RouterBuilder};
 
 pub fn group_router() -> RouterBuilder<Context> {
     Router::<Context>::new()
         .query("read", |t| {
             t(|ctx, id: i32| async move {
-                ctx.group_service
+                ctx.services
+                    .group
                     .read(id)
                     .await
                     .map(GroupDto::from)
@@ -19,7 +20,8 @@ pub fn group_router() -> RouterBuilder<Context> {
         })
         .query("list", |t| {
             t(|ctx, _: ()| async move {
-                ctx.group_service
+                ctx.services
+                    .group
                     .read(())
                     .await
                     .map(|groups| {
@@ -36,7 +38,8 @@ pub fn group_router() -> RouterBuilder<Context> {
         })
         .mutation("create", |t| {
             t(|ctx, data: CreateGroupDto| async move {
-                ctx.group_service
+                ctx.services
+                    .group
                     .create(data.into())
                     .await
                     .map(GroupDto::from)
@@ -47,16 +50,17 @@ pub fn group_router() -> RouterBuilder<Context> {
             })
         })
         .mutation("delete", |t| {
-            t(|_ctx, _id: i32| async move {
-                "Disabled, implement authn first"
-                // ctx.group_service
-                //     .delete(id)
-                //     .await
-                //     .map(GroupDto::from)
-                //     // TODO: better error handling
-                //     .map_err(|e| {
-                //         rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
-                //     })
+            t(|ctx, id: i32| async move {
+                // TODO: protect behind authn/authz
+                ctx.services
+                    .group
+                    .delete(id)
+                    .await
+                    .map(GroupDto::from)
+                    // TODO: better error handling
+                    .map_err(|e| {
+                        rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
+                    })
             })
         })
 }

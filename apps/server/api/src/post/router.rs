@@ -1,13 +1,14 @@
 use super::dtos::{CreatePostDto, PostDto};
 use crate::Context;
-use domain::{Create, Read};
+use domain::{Create, Delete, Read};
 use rspc::{Router, RouterBuilder};
 
 pub fn post_router() -> RouterBuilder<Context> {
     Router::<Context>::new()
         .query("read", |t| {
             t(|ctx, id: i32| async move {
-                ctx.post_service
+                ctx.services
+                    .post
                     .read(id)
                     .await
                     .map(PostDto::from)
@@ -19,7 +20,8 @@ pub fn post_router() -> RouterBuilder<Context> {
         })
         .query("list", |t| {
             t(|ctx, _: ()| async move {
-                ctx.post_service
+                ctx.services
+                    .post
                     .read(())
                     .await
                     .map(|posts| {
@@ -36,7 +38,8 @@ pub fn post_router() -> RouterBuilder<Context> {
         })
         .mutation("create", |t| {
             t(|ctx, data: CreatePostDto| async move {
-                ctx.post_service
+                ctx.services
+                    .post
                     .create(data.into())
                     .await
                     .map(PostDto::from)
@@ -47,16 +50,17 @@ pub fn post_router() -> RouterBuilder<Context> {
             })
         })
         .mutation("delete", |t| {
-            t(|_ctx, _id: i32| async move {
-                "Disabled, implement authn first"
-                // ctx.post_service
-                //     .delete(id)
-                //     .await
-                //     .map(PostDto::from)
-                //     // TODO: better error handling
-                //     .map_err(|e| {
-                //         rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
-                //     })
+            t(|ctx, id: i32| async move {
+                // TODO: protect behind authn/authz
+                ctx.services
+                    .post
+                    .delete(id)
+                    .await
+                    .map(PostDto::from)
+                    // TODO: better error handling
+                    .map_err(|e| {
+                        rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
+                    })
             })
         })
 }

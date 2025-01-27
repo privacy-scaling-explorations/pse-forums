@@ -7,7 +7,8 @@ pub fn profile_router() -> RouterBuilder<Context> {
     Router::<Context>::new()
         .query("read", |t| {
             t(|ctx, username: String| async move {
-                ctx.profile_service
+                ctx.services
+                    .profile
                     .read(username)
                     .await
                     .map(ProfileDto::from)
@@ -19,7 +20,8 @@ pub fn profile_router() -> RouterBuilder<Context> {
         })
         .query("list", |t| {
             t(|ctx, _: ()| async move {
-                ctx.profile_service
+                ctx.services
+                    .profile
                     .read(())
                     .await
                     .map(|profiles| {
