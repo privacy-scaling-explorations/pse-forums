@@ -6,7 +6,8 @@ pub fn auth_router() -> RouterBuilder<Context> {
     Router::<Context>::new()
         .mutation("signup", |t| {
             t(|ctx, signup_dto: SignupRequestDto| async move {
-                ctx.auth_service
+                ctx.services
+                    .auth
                     .signup(signup_dto.into())
                     .await
                     .map(UserDto::from)
@@ -18,7 +19,8 @@ pub fn auth_router() -> RouterBuilder<Context> {
         })
         .query("signin", |t| {
             t(|ctx, signin_dto: SigninRequestDto| async move {
-                ctx.auth_service
+                ctx.services
+                    .auth
                     .signin(signin_dto.into())
                     .await
                     .map(UserDto::from)
