@@ -1,20 +1,12 @@
 use serde::Deserialize;
 use services::SignupData;
 use specta::Type;
+use struct_convert::Convert;
 
-#[derive(Deserialize, Type)]
+#[derive(Convert, Deserialize, Type)]
+#[convert(into = "SignupData")]
 pub struct SignupRequestDto {
     pub email: String,
     pub password: String,
     pub username: String,
-}
-
-impl From<SignupRequestDto> for SignupData {
-    fn from(dto: SignupRequestDto) -> Self {
-        Self {
-            email: dto.email,
-            password: dto.password,
-            username: dto.username,
-        }
-    }
 }

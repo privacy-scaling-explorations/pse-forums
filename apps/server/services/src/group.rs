@@ -4,24 +4,17 @@ use derive_more::Constructor;
 use domain::{Create, Delete, Group, Read};
 use infra::{CreateGroup, GroupRepository};
 use std::sync::Arc;
+use struct_convert::Convert;
 
 #[derive(Constructor)]
 pub struct GroupService(Arc<GroupRepository>);
 
+#[derive(Convert)]
+#[convert(into = "CreateGroup")]
 pub struct CreateGroupData {
     pub description: String,
     pub name: String,
     pub tags: Option<Vec<String>>,
-}
-
-impl From<CreateGroupData> for CreateGroup {
-    fn from(data: CreateGroupData) -> Self {
-        Self {
-            description: data.description,
-            name: data.name,
-            tags: data.tags,
-        }
-    }
 }
 
 #[async_trait]

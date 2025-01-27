@@ -1,23 +1,12 @@
-use serde::{Deserialize, Serialize};
-use specta::Type;
+use chrono::{DateTime, FixedOffset};
+use struct_convert::Convert;
 
-#[derive(Deserialize, Serialize, Type)]
+#[derive(Convert)]
+#[convert(from = "db::profile::Data")]
 pub struct Profile {
     pub id: i32,
     pub about: Option<String>,
-    pub created_at: String,
+    pub created_at: DateTime<FixedOffset>,
     pub username: String,
     pub url: Option<String>,
-}
-
-impl From<db::profile::Data> for Profile {
-    fn from(data: db::profile::Data) -> Self {
-        Self {
-            id: data.id,
-            about: data.about,
-            created_at: data.created_at.to_string(), // or keep using chrono::DateTime?
-            username: data.username,
-            url: data.url,
-        }
-    }
 }

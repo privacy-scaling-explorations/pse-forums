@@ -1,27 +1,14 @@
-use serde::Deserialize;
-use specta::Type;
+use chrono::{DateTime, FixedOffset};
+use struct_convert::Convert;
 
-#[derive(Deserialize, Type)]
+#[derive(Convert)]
+#[convert(from = "db::post::Data")]
 pub struct Post {
     pub id: i32,
     pub content: String,
-    pub created_at: String,
+    pub created_at: DateTime<FixedOffset>,
     pub gid: Option<i32>,
     pub uid: Option<i32>,
     pub title: String,
     pub tags: Vec<String>,
-}
-
-impl From<db::post::Data> for Post {
-    fn from(data: db::post::Data) -> Self {
-        Self {
-            id: data.id,
-            created_at: data.created_at.to_string(), // TODO: or keep using chrono::DateTime?
-            content: data.content,
-            gid: data.gid,
-            uid: data.uid,
-            title: data.title,
-            tags: data.tags,
-        }
-    }
 }
