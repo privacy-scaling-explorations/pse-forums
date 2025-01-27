@@ -10,10 +10,6 @@ CREATE TABLE "comment" (
     CONSTRAINT "comment_pkey" PRIMARY KEY ("id")
 );
 
-CREATE UNIQUE INDEX "comment_rid_key" ON "comment"("rid");
-CREATE UNIQUE INDEX "comment_pid_key" ON "comment"("pid");
-CREATE UNIQUE INDEX "comment_uid_key" ON "comment"("uid");
-
 ALTER TABLE "comment" ADD CONSTRAINT "comment_rid_fkey" FOREIGN KEY ("rid") REFERENCES "comment"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 ALTER TABLE "comment" ADD CONSTRAINT "comment_pid_fkey" FOREIGN KEY ("pid") REFERENCES "post"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "comment" ADD CONSTRAINT "comment_uid_fkey" FOREIGN KEY ("uid") REFERENCES "user"("id") ON DELETE SET NULL ON UPDATE CASCADE;

@@ -1,11 +1,9 @@
 use crate::error::Result;
 use crate::InfraError;
 use async_trait::async_trait;
+use db::{comment, PrismaClient};
 use derive_more::derive::Constructor;
 use domain::{Create, Delete, Read};
-use prisma::comment;
-use prisma::post;
-use prisma::PrismaClient;
 use std::sync::Arc;
 
 #[derive(Constructor)]
@@ -29,16 +27,18 @@ impl Create<CreateComment, Result<comment::Data>> for CommentRepository {
             uid,
         }: CreateComment,
     ) -> Result<comment::Data> {
-        // TODO: write a helper or macro to generate this
-        let extra: Vec<comment::SetParam> = vec![]
+        // TODO: write a macro to generate this
+        let extra: Vec<comment::UncheckedSetParam> = vec![]
             .into_iter()
-            .chain(rid.map(|id| comment::rid::set(Some(id))))
-            .chain(uid.map(|id| comment::uid::set(Some(id))))
+            .chain(rid.map(|_| comment::UncheckedSetParam::Rid(rid)))
+            .chain(uid.map(|_| comment::UncheckedSetParam::Uid(uid)))
             .collect();
 
+        // FIXME: make it work with create instead of unchecked?
+        // https://prisma.brendonovich.dev/writing-data/create
         self.0
             .comment()
-            .create(content, post::id::equals(pid), extra)
+            .create_unchecked(pid, content, extra)
             .exec()
             .await
             .map_err(|e| InfraError::Db(e.to_string()))

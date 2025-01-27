@@ -4,13 +4,19 @@ export type Procedures = {
     queries: 
         { key: "auth.signin", input: SigninRequestDto, result: null } | 
         { key: "comment.read", input: number, result: CommentDto } | 
+        { key: "group.list", input: never, result: GroupDto[] } | 
+        { key: "group.read", input: number, result: GroupDto } | 
+        { key: "post.list", input: never, result: PostDto[] } | 
         { key: "post.read", input: number, result: PostDto } | 
+        { key: "profile.list", input: never, result: ProfileDto[] } | 
         { key: "profile.read", input: string, result: ProfileDto } | 
         { key: "user.read", input: string, result: UserDto },
     mutations: 
         { key: "auth.signup", input: SignupRequestDto, result: null } | 
         { key: "comment.create", input: CreateCommentDto, result: CommentDto } | 
         { key: "comment.delete", input: number, result: string } | 
+        { key: "group.create", input: CreateGroupDto, result: GroupDto } | 
+        { key: "group.delete", input: number, result: string } | 
         { key: "post.create", input: CreatePostDto, result: PostDto } | 
         { key: "post.delete", input: number, result: string } | 
         { key: "user.delete", input: string, result: string },
@@ -21,9 +27,13 @@ export type CommentDto = { id: number; content: string; pid: number; rid: number
 
 export type CreateCommentDto = { content: string; pid: number; rid: number | null; uid: number | null }
 
-export type CreatePostDto = { content: string; tags: string[] | null; title: string; uid: number | null }
+export type CreateGroupDto = { name: string; description: string; tags: string[] | null }
 
-export type PostDto = { id: number; content: string; tags: string[]; title: string }
+export type CreatePostDto = { content: string; gid: number | null; tags: string[] | null; title: string; uid: number | null }
+
+export type GroupDto = { id: number; name: string; description: string; tags: string[] }
+
+export type PostDto = { id: number; gid: number | null; content: string; tags: string[]; title: string }
 
 export type ProfileDto = { id: number; about: string | null; created_at: string; username: string; url: string | null }
 
