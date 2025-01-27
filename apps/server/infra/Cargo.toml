@@ -9,5 +9,4 @@ derive_more.workspace = true
 domain = { path = "../domain" }
 serde.workspace = true
 specta.workspace = true
-supabase-auth.workspace = true
 thiserror.workspace = true

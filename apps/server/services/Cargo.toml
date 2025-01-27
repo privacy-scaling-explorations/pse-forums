@@ -13,7 +13,6 @@ rspc.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 specta.workspace = true
-supabase-auth.workspace = true
 thiserror.workspace = true
 
 [dev-dependencies]
