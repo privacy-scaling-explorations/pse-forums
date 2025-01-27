@@ -2,6 +2,7 @@
 .temp
 .env*
 .DS_Store
+.tasks.md
 .zed
 
 apps/freedit/config.toml
