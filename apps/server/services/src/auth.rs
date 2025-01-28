@@ -3,7 +3,7 @@ use chrono::{Duration, FixedOffset, Utc};
 use crypto::{hash_pwd, verify_pwd};
 use derive_more::derive::Constructor;
 use domain::{Claim, Create, Read, User};
-use jsonwebtoken::{encode, EncodingKey, Header};
+use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
 use std::sync::Arc;
 use thiserror::Error;
 
@@ -98,5 +98,17 @@ impl AuthService {
         let jwt = self.issue_jwt(&user)?;
 
         Ok((user, jwt))
+    }
+
+    pub fn validate_jwt(&self, token: &str) -> Result<Claim, AuthError> {
+        let validation = Validation::new(jsonwebtoken::Algorithm::HS256);
+
+        decode::<Claim>(
+            token,
+            &DecodingKey::from_secret(self.jwt_secret.as_ref()),
+            &validation,
+        )
+        .map(|data| data.claims)
+        .map_err(|err| AuthError::JwtError(err.to_string()))
     }
 }

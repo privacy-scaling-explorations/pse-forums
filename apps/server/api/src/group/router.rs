@@ -3,7 +3,7 @@ use crate::Context;
 use domain::{Create, Delete, Read};
 use rspc::{Router, RouterBuilder};
 
-pub fn group_router() -> RouterBuilder<Context> {
+pub fn public_group_router() -> RouterBuilder<Context> {
     Router::<Context>::new()
         .query("read", |t| {
             t(|ctx, id: i32| async move {
@@ -36,6 +36,10 @@ pub fn group_router() -> RouterBuilder<Context> {
                     })
             })
         })
+}
+
+pub fn protected_group_router() -> RouterBuilder<Context> {
+    Router::<Context>::new()
         .mutation("create", |t| {
             t(|ctx, data: CreateGroupDto| async move {
                 ctx.services

@@ -15,6 +15,7 @@ pub use profile::*;
 mod user;
 pub use user::*;
 
+#[derive(Clone)]
 pub struct Services {
     pub auth: Arc<AuthService>,
     pub comment: Arc<CommentService>,

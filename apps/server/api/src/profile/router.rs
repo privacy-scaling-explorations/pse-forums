@@ -3,7 +3,7 @@ use crate::Context;
 use domain::Read;
 use rspc::{Router, RouterBuilder};
 
-pub fn profile_router() -> RouterBuilder<Context> {
+pub fn public_profile_router() -> RouterBuilder<Context> {
     Router::<Context>::new()
         .query("read", |t| {
             t(|ctx, username: String| async move {
