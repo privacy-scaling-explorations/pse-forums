@@ -2,8 +2,6 @@
 
 export type Procedures = {
     queries: 
-        { key: "auth.signin", input: SigninRequestDto, result: null } | 
-        { key: "comment.list", input: never, result: CommentDto[] } | 
         { key: "comment.read", input: number, result: CommentDto } | 
         { key: "group.list", input: never, result: GroupDto[] } | 
         { key: "group.read", input: number, result: GroupDto } | 
@@ -13,7 +11,8 @@ export type Procedures = {
         { key: "profile.read", input: string, result: ProfileDto } | 
         { key: "user.read", input: string, result: UserDto },
     mutations: 
-        { key: "auth.signup", input: SignupRequestDto, result: null } | 
+        { key: "auth.signin", input: SigninRequestDto, result: AuthResponseDto } | 
+        { key: "auth.signup", input: SignupRequestDto, result: AuthResponseDto } | 
         { key: "comment.create", input: CreateCommentDto, result: CommentDto } | 
         { key: "comment.delete", input: number, result: CommentDto } | 
         { key: "group.create", input: CreateGroupDto, result: GroupDto } | 
@@ -23,6 +22,8 @@ export type Procedures = {
         { key: "user.delete", input: string, result: UserDto },
     subscriptions: never
 };
+
+export type AuthResponseDto = { user: UserDto; token: string }
 
 export type CommentDto = { created_at: string; content: string; id: number; pid: number; rid: number | null; uid: number | null }
 

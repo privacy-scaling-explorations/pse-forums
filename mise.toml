@@ -5,6 +5,7 @@ DATABASE_URL = "postgresql://postgres:postgres@127.0.0.1:54322/postgres"
 PRISMA_GEN_TS_BINDINGS_PATH = "{{config_root}}/apps/client/src/lib/bindings.ts"
 VITE_SERVER_URL = "http://localhost:3000"
 _ = { file = ".env.yaml" }
+JWT_SECRET = "very-strong-secret"
 
 [tools]
 bun = "latest"

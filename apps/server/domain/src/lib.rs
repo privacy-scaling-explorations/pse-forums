@@ -1,3 +1,5 @@
+mod claim;
+pub use claim::Claim;
 mod comment;
 pub use comment::Comment;
 mod group;

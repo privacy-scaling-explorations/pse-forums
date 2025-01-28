@@ -1,9 +1,9 @@
 use domain::User;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use specta::Type;
 use struct_convert::Convert;
 
-#[derive(Convert, Serialize, Type)]
+#[derive(Convert, Deserialize, Serialize, Type)]
 #[convert(from = "User")]
 pub struct UserDto {
     #[convert_field(to_string)]
