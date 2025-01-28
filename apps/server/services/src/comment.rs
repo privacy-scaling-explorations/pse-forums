@@ -4,26 +4,18 @@ use derive_more::Constructor;
 use domain::{Comment, Create, Delete, Read};
 use infra::{CommentRepository, CreateComment};
 use std::sync::Arc;
+use struct_convert::Convert;
 
 #[derive(Constructor)]
 pub struct CommentService(Arc<CommentRepository>);
 
+#[derive(Convert)]
+#[convert(into = "CreateComment")]
 pub struct CreateCommentData {
     pub content: String,
     pub rid: Option<i32>,
     pub pid: i32,
     pub uid: Option<i32>,
-}
-
-impl From<CreateCommentData> for CreateComment {
-    fn from(data: CreateCommentData) -> Self {
-        Self {
-            content: data.content,
-            rid: data.rid,
-            pid: data.pid,
-            uid: data.uid,
-        }
-    }
 }
 
 #[async_trait]

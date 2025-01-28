@@ -1,25 +1,13 @@
-use serde::Deserialize;
-use specta::Type;
+use chrono::{DateTime, FixedOffset};
+use struct_convert::Convert;
 
-#[derive(Deserialize, Type)]
+#[derive(Convert)]
+#[convert(from = "db::comment::Data")]
 pub struct Comment {
     pub id: i32,
     pub rid: Option<i32>,
     pub pid: i32,
     pub uid: Option<i32>,
-    pub created_at: String,
+    pub created_at: DateTime<FixedOffset>,
     pub content: String,
-}
-
-impl From<prisma::comment::Data> for Comment {
-    fn from(data: prisma::comment::Data) -> Self {
-        Self {
-            id: data.id,
-            rid: data.rid,
-            pid: data.pid,
-            uid: data.uid,
-            created_at: data.created_at.to_string(),
-            content: data.content,
-        }
-    }
 }

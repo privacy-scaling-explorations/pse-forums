@@ -1,0 +1,23 @@
+name: Deploy
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["Cargo.toml", "apps/server/**", ".github/workflows/deploy.yml"]
+
+jobs:
+  deploy-server:
+    runs-on: ubuntu-latest
+    environment:
+      name: server-dev
+    steps:
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - name: Deploy
+        run: |
+          flyctl deploy \
+            --config apps/server/fly.dev.toml \
+            --dockerfile apps/server/Dockerfile \
+            --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

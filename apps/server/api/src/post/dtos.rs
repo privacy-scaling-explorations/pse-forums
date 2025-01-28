@@ -1,40 +1,27 @@
 use serde::{Deserialize, Serialize};
+use services::CreatePostData;
 use specta::Type;
+use struct_convert::Convert;
 
-#[derive(Deserialize, Type)]
+#[derive(Convert, Deserialize, Type)]
+#[convert(into = "CreatePostData")]
 pub struct CreatePostDto {
     pub content: String,
+    pub gid: Option<i32>,
     pub tags: Option<Vec<String>>,
     pub title: String,
     pub uid: Option<i32>,
 }
 
-impl From<CreatePostDto> for services::CreatePostData {
-    fn from(data: CreatePostDto) -> Self {
-        Self {
-            content: data.content,
-            tags: data.tags,
-            title: data.title,
-            uid: data.uid,
-        }
-    }
-}
-
-#[derive(Serialize, Type)]
+#[derive(Convert, Serialize, Type)]
+#[convert(from = "domain::Post")]
 pub struct PostDto {
-    pub id: i32,
+    #[convert_field(to_string)]
+    pub created_at: String,
     pub content: String,
+    pub gid: Option<i32>,
+    pub id: i32,
     pub tags: Vec<String>,
     pub title: String,
-}
-
-impl From<domain::Post> for PostDto {
-    fn from(post: domain::Post) -> Self {
-        Self {
-            id: post.id,
-            content: post.content,
-            tags: post.tags,
-            title: post.title,
-        }
-    }
+    pub uid: Option<i32>,
 }

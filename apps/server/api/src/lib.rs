@@ -1,9 +1,10 @@
 mod auth;
 mod comment;
 mod context;
-use axum::{routing::get, Router};
+use axum::{http::request::Parts, routing::get, Router};
 use context::Context;
-use prisma::init_prisma;
+mod group;
+use db::init_prisma;
 use std::sync::Arc;
 mod post;
 mod profile;
@@ -19,6 +20,13 @@ pub async fn app() -> Router {
         .route("/", get(|| async { "Hello rspc!" }))
         .nest(
             "/rspc",
-            rspc_axum::endpoint(router, move || Context::new(prisma.clone())),
+            rspc_axum::endpoint(router, move |parts: Parts| {
+                let jwt = parts
+                    .headers
+                    .get("Authorization")
+                    .and_then(|v| v.to_str().ok())
+                    .and_then(|v| v.strip_prefix("Bearer ").map(String::from));
+                Context::new(prisma.clone(), jwt)
+            }),
         )
 }

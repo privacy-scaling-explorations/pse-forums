@@ -12,15 +12,16 @@ path = "src/bin/bindings.rs"
 
 [dependencies]
 axum.workspace = true
+db = { path = "../db" }
 derive_more.workspace = true
 domain = { path = "../domain" }
 infra = { path = "../infra" }
-prisma = { path = "../../../db/prisma" }
+jsonwebtoken.workspace = true
 rspc.workspace = true
 rspc-axum.workspace = true
 serde.workspace = true
 services = { path = "../services" }
 specta.workspace = true
-supabase-auth.workspace = true
+struct-convert.workspace = true
 tokio.workspace = true
 tower-http.workspace = true

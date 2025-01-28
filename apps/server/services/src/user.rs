@@ -4,6 +4,7 @@ use derive_more::Constructor;
 use domain::{Create, Delete, Read, User};
 use infra::{CreateUser, UserRepository};
 use std::sync::Arc;
+use struct_convert::Convert;
 
 #[derive(Constructor)]
 pub struct UserService(Arc<UserRepository>);
@@ -19,22 +20,13 @@ impl Read<String, Result<User>> for UserService {
     }
 }
 
+#[derive(Convert)]
+#[convert(into = "CreateUser")]
 pub struct CreateUserData {
     pub email: String,
     pub encrypted_password: String,
     pub salt: String,
     pub username: String,
-}
-
-impl From<CreateUserData> for CreateUser {
-    fn from(data: CreateUserData) -> Self {
-        Self {
-            email: data.email,
-            encrypted_password: data.encrypted_password,
-            salt: data.salt,
-            username: data.username,
-        }
-    }
 }
 
 #[async_trait]

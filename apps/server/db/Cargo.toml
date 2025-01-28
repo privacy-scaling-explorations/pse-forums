@@ -1,5 +1,5 @@
 [package]
-name = "prisma"
+name = "db"
 edition.workspace = true
 
 [[bin]]
@@ -12,7 +12,7 @@ name = "seed"
 path = "src/bin/seed.rs"
 
 [dependencies]
-crypto = { path = "../../apps/server/crypto" }
+crypto = { path = "../crypto" }
 prisma-client-rust.workspace = true
 prisma-client-rust-cli.workspace = true
 serde.workspace = true

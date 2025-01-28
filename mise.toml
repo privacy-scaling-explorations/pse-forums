@@ -2,17 +2,16 @@
 
 [env]
 DATABASE_URL = "postgresql://postgres:postgres@127.0.0.1:54322/postgres"
-PRISMA_GEN_RS_CLIENT_PATH = "{{config_root}}/db/prisma/src/generated.rs"
 PRISMA_GEN_TS_BINDINGS_PATH = "{{config_root}}/apps/client/src/lib/bindings.ts"
-SUPABASE_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0"
-SUPABASE_JWT_SECRET = "super-secret-jwt-token-with-at-least-32-characters-long"
-SUPABASE_URL = "http://127.0.0.1:54321"
-SUPABASE_WORKDIR = "db"
 VITE_SERVER_URL = "http://localhost:3000"
+_ = { file = ".env.yaml" }
+JWT_SECRET = "very-strong-secret"
 
 [tools]
 bun = "latest"
 "cargo:cargo-nextest" = "latest"
+flyctl = "latest"
+hurl = "latest"
 lefthook = "latest"
 rust = "latest"
 
@@ -29,6 +28,7 @@ build-server = { alias = "bs", dir = "apps/server", run = "cargo build -r", sour
     "apps/server/**/*.rs",
 ], outputs.auto = true }
 db-reset = { alias = "dbr", run = "bun supabase db reset && mise r p migrate deploy && mise r seed" }
+db-migrate-prod = { dir = "apps/server/db", run = "DATABASE_URL=$DATABASE_URL_PROD cargo run --bin prisma -F bin -- migrate deploy", description = "Run migrations on hosted DB" }
 db-start = { alias = "dbs", description = "Run local postgres instance (with supabase docker container)", run = "bun supabase start" }
 dev = { alias = "d", depends = ["dev-client", "dev-server"] }
 dev-client = { alias = "dc", dir = "apps/client", run = "bun vite dev", depends = [
@@ -38,6 +38,8 @@ dev-client = { alias = "dc", dir = "apps/client", run = "bun vite dev", depends 
 dev-server = { alias = "ds", run = [
     "mise r db-start && mise r p migrate deploy && mise r seed; cargo run --bin api",
 ] }
+docker-build-server = { alias = "dbs", description = "Build docker image for server", run = "docker build -f apps/server/Dockerfile . -t pse-forum-server" }
+docker-run-server = { alias = "drs", description = "Run dockerized server", run = "docker run -p 3000:3000 pse-forum-server" }
 freedit = { dir = "apps/freedit", run = "cargo run -r --bin freedit" }
 install-node-modules = { hide = true, run = "bun i", sources = [
     "package.json",
@@ -46,7 +48,7 @@ install-node-modules = { hide = true, run = "bun i", sources = [
     "bun.lockb",
 ] }
 gen-ts = { run = "cargo run --bin bindings", hide = true }
-prisma = { alias = "p", dir = "db/prisma", description = "Run prisma CLI by connecting to the DB with pgbouncer", run = "cargo run -F bin --bin prisma --", depends_post = [
+prisma = { alias = "p", dir = "apps/server/db", description = "Run prisma CLI by connecting to the DB with pgbouncer", run = "cargo run -F bin --bin prisma --", depends_post = [
     "post-gen-rs",
 ] }
 seed = { run = "cargo run --bin seed" }
@@ -65,3 +67,4 @@ start-server = { alias = "ss", dir = "apps/server", run = "cargo run -r --bin ap
     "gen-rs",
 ] }
 test = { alias = "t", run = "cargo nextest run" }
+test-hurl = { alias = "th", dir = "apps/server/api/test/integration", run = "hurl --test *" }

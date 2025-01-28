@@ -1,5 +1,5 @@
 use crypto::hash_pwd;
-use prisma::*;
+use db::*;
 
 macro_rules! User {
     ($client:expr, $email:expr, $password:expr, $username:expr) => {{
@@ -34,14 +34,28 @@ macro_rules! Profile {
     };
 }
 
+macro_rules! Group {
+    ($client:expr, $description:expr, $name:expr, ($($tag:expr),*)) => {
+        $client
+            .group()
+            .create(
+                $description.to_string(),
+                $name.to_string(),
+                vec![ group::tags::set(vec![$($tag.to_string()),*])]
+            )
+            .exec()
+            .await
+    };
+}
+
 macro_rules! Post {
-    ($client:expr, $uid:expr, $title:expr, $content:expr, ($($tag:expr),*)) => {
+    ($client:expr, $title:expr, $content:expr, $uid:expr, $gid:expr, ($($tag:expr),*)) => {
         $client
             .post()
             .create(
-                $title.to_string(),
                 $content.to_string(),
-                vec![post::uid::set(Some($uid)), post::tags::set(vec![$($tag.to_string()),*])],
+                $title.to_string(),
+                vec![post::uid::set(Some($uid)), post::gid::set(Some($gid)),post::tags::set(vec![$($tag.to_string()),*])],
             )
             .exec()
             .await
@@ -95,21 +109,32 @@ async fn seed_database(client: &PrismaClient) -> Result<(), prisma_client_rust::
         })
         .await?;
 
+    let (group1, group2) = client
+        ._transaction()
+        .run(|client| async move {
+            let group1 = Group!(client, "This is group 1", "group1", ("tag1", "tag2"))?;
+            let group2 = Group!(client, "This is group 2", "group2", ("tag3"))?;
+            Ok((group1, group2))
+        })
+        .await?;
+
     let (post1, post2, user1, user2) = client
         ._transaction()
         .run(|client| async move {
             let post1 = Post!(
                 client,
-                user1.id,
                 "Post Title 1",
                 "This is the content of post 1",
+                user1.id,
+                group1.id,
                 ("tag1", "tag2")
             )?;
             let post2 = Post!(
                 client,
-                user2.id,
                 "Post Title 2",
                 "This is the content of post 2",
+                user2.id,
+                group2.id,
                 ("tag3")
             )?;
 
@@ -117,7 +142,6 @@ async fn seed_database(client: &PrismaClient) -> Result<(), prisma_client_rust::
         })
         .await?;
 
-    // todo: fix Comment! macro
     Comment!(client, "Comment by user 1 on post 1", post1.id, user1.id)?;
     Comment!(client, "Comment by user 2 on post 2", post2.id, user2.id)?;
     Comment!(client, "Comment by user 2 on post 1", post1.id, user2.id)?;

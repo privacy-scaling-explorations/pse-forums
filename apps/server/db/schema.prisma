@@ -1,6 +1,6 @@
 generator client {
-  provider = "mise prisma"
-  output   = env("PRISMA_GEN_RS_CLIENT_PATH")
+  provider = "cargo run -F bin --bin prisma --"
+  output   = "./src/generated.rs"
 }
 
 datasource db {
@@ -52,6 +52,8 @@ model Post {
 
   user    User?     @relation(fields: [uid], references: [id]) // TODO: Add cascade delete ??
   Comment Comment[]
+  group   Group?    @relation("GroupPosts", fields: [gid], references: [id])
+  gid     Int? // Optional group ID; null for posts that are not part of a group
 
   @@map("post")
 }
@@ -71,4 +73,16 @@ model Comment {
   user    User?     @relation(fields: [uid], references: [id]) // TODO: Add cascade delete ??
 
   @@map("comment")
+}
+
+model Group {
+  id          Int      @id @default(autoincrement())
+  description String
+  name        String
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+  tags        String[] // TODO: add tags table?
+  posts       Post[]   @relation("GroupPosts")
+
+  // moderators User[] // TODO: add moderators table, or extend user table?
+  @@map("group")
 }
