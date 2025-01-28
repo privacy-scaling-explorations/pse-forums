@@ -18,6 +18,24 @@ pub fn comment_router() -> RouterBuilder<Context> {
                     })
             })
         })
+        .query("list", |t| {
+            t(|ctx, _: ()| async move {
+                ctx.services
+                    .comment
+                    .read(())
+                    .await
+                    .map(|comments| {
+                        comments
+                            .into_iter()
+                            .map(CommentDto::from)
+                            .collect::<Vec<CommentDto>>()
+                    })
+                    // TODO: better error handling
+                    .map_err(|e| {
+                        rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
+                    })
+            })
+        })
         .mutation("create", |t| {
             t(|ctx, data: CreateCommentDto| async move {
                 ctx.services

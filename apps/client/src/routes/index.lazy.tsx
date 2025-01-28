@@ -37,6 +37,7 @@ function Index() {
   const error = postError ?? groupErr;
   const isLoading = postIsLoading || groupsIsLoading;
 
+  // TODO Error state
   if (error) {
     console.error(error.message)
     return <div>{error.message}</div>
