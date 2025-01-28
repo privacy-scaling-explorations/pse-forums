@@ -16,6 +16,7 @@ db = { path = "../db" }
 derive_more.workspace = true
 domain = { path = "../domain" }
 infra = { path = "../infra" }
+jsonwebtoken.workspace = true
 rspc.workspace = true
 rspc-axum.workspace = true
 serde.workspace = true

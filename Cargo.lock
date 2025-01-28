@@ -82,6 +82,7 @@ dependencies = [
  "derive_more",
  "domain",
  "infra",
+ "jsonwebtoken",
  "rspc 0.3.1",
  "rspc-axum",
  "serde",

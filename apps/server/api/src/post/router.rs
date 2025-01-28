@@ -3,7 +3,7 @@ use crate::Context;
 use domain::{Create, Delete, Read};
 use rspc::{Router, RouterBuilder};
 
-pub fn post_router() -> RouterBuilder<Context> {
+pub fn public_post_router() -> RouterBuilder<Context, ()> {
     Router::<Context>::new()
         .query("read", |t| {
             t(|ctx, id: i32| async move {
@@ -36,6 +36,10 @@ pub fn post_router() -> RouterBuilder<Context> {
                     })
             })
         })
+}
+
+pub fn protected_post_router() -> RouterBuilder<Context, ()> {
+    Router::<Context>::new()
         .mutation("create", |t| {
             t(|ctx, data: CreatePostDto| async move {
                 ctx.services
@@ -51,7 +55,6 @@ pub fn post_router() -> RouterBuilder<Context> {
         })
         .mutation("delete", |t| {
             t(|ctx, id: i32| async move {
-                // TODO: protect behind authn/authz
                 ctx.services
                     .post
                     .delete(id)

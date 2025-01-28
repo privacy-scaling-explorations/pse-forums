@@ -1,7 +1,7 @@
 use chrono::{DateTime, FixedOffset};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(Serialize)]
+#[derive(Deserialize, Serialize)]
 pub struct Claim {
     pub uid: String,
     #[serde(with = "custom_datetime")]
