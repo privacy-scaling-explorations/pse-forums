@@ -1,6 +1,6 @@
-import { createLazyFileRoute } from '@tanstack/react-router'
+import { createLazyFileRoute } from "@tanstack/react-router"
 
-export const Route = createLazyFileRoute('/post/')({
+export const Route = createLazyFileRoute("/post/")({
   component: PostIndex,
 })
 

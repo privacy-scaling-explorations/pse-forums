@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router"
 import { PostCard } from "c/PostCard"
-import { GroupDto } from "l/bindings"
+import type { GroupDto } from "l/bindings"
 import { useQuery } from "l/rspc"
 import { useCallback, useMemo } from "react"
 import { Button } from "ui/button"
@@ -14,28 +14,28 @@ function Index() {
   // TODO Is there a way we can use the post group ids in the list to only get what we need?
   const { data: groups, isLoading: groupsIsLoading, error: groupErr } = useQuery(["group.list"])
 
-  const idToGroup = useMemo(() => groups?.reduce((prev, cur) => ({
-    ...prev,
-    [cur.id]: cur,
-  }), {} as Record<number, GroupDto>), [groups]);
+  const idToGroup = useMemo(() =>
+    groups?.reduce((prev, cur) => {
+      prev[cur.id] = cur
+      return prev
+    }, {} as Record<number, GroupDto>), [groups])
 
   const getGroupName = useCallback((gid: number | null): string => {
     if (!gid || !idToGroup[gid]) {
-      return "Unkown"
+      return "Unknown"
     }
 
     return idToGroup[gid].name
-  }, [idToGroup]);
+  }, [idToGroup])
 
   const postsWithGroup = useMemo(() =>
     posts?.map((p) => ({
       ...p,
-      group_name: getGroupName(p.gid)
-    })),
-  [posts, idToGroup])
+      group_name: getGroupName(p.gid),
+    })), [posts, getGroupName])
 
-  const error = postError ?? groupErr;
-  const isLoading = postIsLoading || groupsIsLoading;
+  const error = postError ?? groupErr
+  const isLoading = postIsLoading || groupsIsLoading
 
   // TODO Error state
   if (error) {

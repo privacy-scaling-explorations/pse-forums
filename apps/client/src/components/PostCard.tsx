@@ -1,9 +1,9 @@
-import { Link } from '@tanstack/react-router';
+import { Link } from "@tanstack/react-router"
 import { Avatar } from "c/Avatar"
-import { type FC } from "react"
+import type { PostDto } from "l/bindings"
+import type { FC } from "react"
 import { Card } from "ui/card"
 import { Badge } from "./ui/badge"
-import { PostDto } from 'l/bindings';
 
 export const PostCard: FC<
   PostDto & { group_name: string }

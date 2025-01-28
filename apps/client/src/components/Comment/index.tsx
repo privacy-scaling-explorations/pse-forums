@@ -1,5 +1,5 @@
-import { Card } from "ui/card"
 import { useQuery } from "l/rspc"
+import { Card } from "ui/card"
 import { Comment } from "./_Comment"
 
 export function CommentList({ pid }: { pid: number }) {

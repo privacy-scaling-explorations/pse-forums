@@ -1,5 +1,5 @@
-import { Button } from "c/ui/button";
-import { Smile } from "lucide-react";
+import { Button } from "c/ui/button"
+import { Smile } from "lucide-react"
 
 export function EmojiReact() {
   return (

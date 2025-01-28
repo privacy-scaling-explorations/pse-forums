@@ -1,15 +1,15 @@
 import { Avatar } from "c/Avatar"
+import { CommentList } from "c/Comment"
+import { Badge } from "c/ui/badge"
 import { Label } from "c/ui/label"
-import { PostDto } from "l/bindings"
+import type { PostDto } from "l/bindings"
+import { Eye } from "lucide-react"
 import { Route } from "r/post/$pid"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "ui/card"
 import { Downvote } from "../ui/downvote"
-import { Upvote } from "../ui/upvote"
 import { EmojiReact } from "../ui/emoji-react"
+import { Upvote } from "../ui/upvote"
 import { CommentCounter } from "./_CommentCounter"
-import { Badge } from "c/ui/badge"
-import { Eye } from "lucide-react"
-import { CommentList } from "c/Comment"
 
 export function Post() {
   const { id, title, created_at, content, tags }: PostDto = Route.useLoaderData()
@@ -35,7 +35,7 @@ export function Post() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-            {content}
+          {content}
         </CardContent>
         <CardFooter className="space-x-2">
           <Upvote />
@@ -44,7 +44,7 @@ export function Post() {
           <CommentCounter />
         </CardFooter>
       </Card>
-      <CommentList pid={id}/>
+      <CommentList pid={id} />
     </div>
   )
 }

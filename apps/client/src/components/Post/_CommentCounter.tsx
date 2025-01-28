@@ -1,5 +1,5 @@
-import { Button } from "c/ui/button";
-import { MessageSquare } from "lucide-react";
+import { Button } from "c/ui/button"
+import { MessageSquare } from "lucide-react"
 
 export function CommentCounter() {
   return (
