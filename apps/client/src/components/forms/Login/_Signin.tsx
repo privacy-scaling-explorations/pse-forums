@@ -3,21 +3,21 @@ import { useForm } from "@tanstack/react-form"
 import { FieldInfo } from "c/FieldInfo"
 import { Button } from "c/ui/button"
 import { Input } from "c/ui/input"
+import { SigninRequestDto } from "l/bindings"
 import { rspc } from "l/rspc"
 import type { FormEvent } from "react"
 import { z } from "zod"
 
 const signinSchema = z.object({
-  email: z.string().email(),
+  username: z.string(),
   password: z.string(),
 })
-type SigninSchema = z.infer<typeof signinSchema>
 
 export function Signin() {
-  const signinForm = useForm<SigninSchema>({
-    defaultValues: { email: "", password: "" } as SigninSchema,
+  const signinForm = useForm<SigninRequestDto>({
+    defaultValues: { username: "", password: "" },
     onSubmit: async ({ value }) => {
-      await rspc.query(["auth.signin", value])
+      await rspc.mutation(["auth.signin", value])
     },
     validators: { onChange: signinSchema },
   })
@@ -31,16 +31,16 @@ export function Signin() {
   return (
     <form className="space-y-4" onSubmit={(e) => handleSubmit(e)}>
       <signinForm.Field
-        name="email"
+        name="username"
         children={(field) => (
           <div className="space-y-2">
-            <Label htmlFor={field.name}>Email</Label>
+            <Label htmlFor={field.name}>Username</Label>
             <Input
               id={field.name}
               name={field.name}
-              placeholder="anon@email.xyz"
+              placeholder="anon"
               onChange={(e) => field.handleChange(e.target.value)}
-              type="email"
+              type="text"
               required
             />
             <FieldInfo field={field} />
