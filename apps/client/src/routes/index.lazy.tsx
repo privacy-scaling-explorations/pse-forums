@@ -21,7 +21,7 @@ function Index() {
     }, {} as Record<number, GroupDto>), [groups])
 
   const getGroupName = useCallback((gid: number | null): string => {
-    if (!gid || !idToGroup[gid]) {
+    if (!gid || !idToGroup || !idToGroup[gid]) {
       return "Unknown"
     }
 

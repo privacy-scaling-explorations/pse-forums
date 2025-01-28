@@ -2,6 +2,7 @@ import { Avatar } from "c/Avatar"
 import { CommentList } from "c/Comment"
 import { Badge } from "c/ui/badge"
 import { Label } from "c/ui/label"
+import { TimeSince } from "c/ui/time-since"
 import type { PostDto } from "l/bindings"
 import { Eye } from "lucide-react"
 import { Route } from "r/post/$pid"
@@ -22,7 +23,7 @@ export function Post() {
             <Avatar username={"usr"} />
             <Label>Username</Label>
             <Badge>PSE</Badge>
-            <Label className="italic">{created_at}</Label>
+            <TimeSince isoDateTime={created_at} />
             {/* TODO Align this left, maybe split to another component */}
             <div className="flex items-center">
               <Eye />

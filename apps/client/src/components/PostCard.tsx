@@ -4,6 +4,7 @@ import type { PostDto } from "l/bindings"
 import type { FC } from "react"
 import { Card } from "ui/card"
 import { Badge } from "./ui/badge"
+import { TimeSince } from "./ui/time-since"
 
 export const PostCard: FC<
   PostDto & { group_name: string }
@@ -22,7 +23,7 @@ export const PostCard: FC<
             <h3 className="font-bold text-lg mb-1">{title}</h3>
             <div className="flex space-x-2">
               <Badge variant="secondary">{group_name}</Badge>
-              <span className="text-sm text-gray-600">{created_at}</span>
+              <TimeSince className="text-sm text-gray-600" isoDateTime={created_at} />
             </div>
           </div>
         </div>
