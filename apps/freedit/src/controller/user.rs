@@ -275,6 +275,20 @@ impl From<u8> for InnRole {
     }
 }
 
+impl Into<u8> for InnRole {
+    fn into(self) -> u8 {
+        match self {
+            InnRole::Pending => 1,
+            InnRole::Rejected => 2,
+            InnRole::Limited => 3,
+            InnRole::Intern => 4,
+            InnRole::Fellow => 5,
+            InnRole::Mod => 7,
+            InnRole::Super => 10,
+        }
+    }
+}
+
 impl Display for InnRole {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{:?}", self)
