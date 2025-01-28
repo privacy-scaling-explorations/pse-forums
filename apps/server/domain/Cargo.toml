@@ -6,4 +6,5 @@ edition.workspace = true
 async-trait.workspace = true
 chrono.workspace = true
 db = { path = "../db" }
+serde.workspace = true
 struct-convert.workspace = true

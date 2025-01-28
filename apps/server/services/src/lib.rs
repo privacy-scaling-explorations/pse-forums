@@ -1,6 +1,5 @@
-mod auth;
 use std::sync::Arc;
-
+mod auth;
 pub use auth::*;
 mod comment;
 pub use comment::*;
@@ -29,7 +28,10 @@ impl Services {
     pub fn new(repositories: Repositories) -> Self {
         let user_service = Arc::new(UserService::new(repositories.user));
         Self {
-            auth: Arc::new(AuthService::new(user_service.clone())),
+            auth: Arc::new(AuthService::new(
+                user_service.clone(),
+                std::env::var("JWT_SECRET").expect("JWT_SECRET is not set"),
+            )),
             comment: Arc::new(CommentService::new(repositories.comment)),
             group: Arc::new(GroupService::new(repositories.group)),
             post: Arc::new(PostService::new(repositories.post)),

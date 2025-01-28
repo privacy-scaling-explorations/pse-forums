@@ -1,5 +1,5 @@
-use super::dtos::{SigninRequestDto, SignupRequestDto};
-use crate::{user::dtos::UserDto, Context};
+use super::dtos::{AuthResponseDto, SigninRequestDto, SignupRequestDto};
+use crate::Context;
 use rspc::{Router, RouterBuilder};
 
 pub fn auth_router() -> RouterBuilder<Context> {
@@ -10,24 +10,28 @@ pub fn auth_router() -> RouterBuilder<Context> {
                     .auth
                     .signup(signup_dto.into())
                     .await
-                    .map(UserDto::from)
-                    .map_err(|e| {
-                        rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string());
+                    .map(|(user, token)| AuthResponseDto {
+                        user: user.into(),
+                        token,
                     })
-                    .unwrap();
+                    .map_err(|e| {
+                        rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
+                    })
             })
         })
-        .query("signin", |t| {
+        .mutation("signin", |t| {
             t(|ctx, signin_dto: SigninRequestDto| async move {
                 ctx.services
                     .auth
                     .signin(signin_dto.into())
                     .await
-                    .map(UserDto::from)
+                    .map(|(user, token)| AuthResponseDto {
+                        user: user.into(),
+                        token,
+                    })
                     .map_err(|e| {
                         rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
                     })
-                    .unwrap();
             })
         })
 }

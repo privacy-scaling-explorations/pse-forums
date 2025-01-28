@@ -16,6 +16,7 @@ axum = "0.7.9"
 chrono = { version = "0.4.39", features = ["serde"] }
 derive_more = { version = "1.0.0", features = ["constructor", "display", "from"] }
 hex = "0.4.3"
+jsonwebtoken = "9.3.0"
 prisma-client-rust = { default-features = false, git = "https://github.com/Brendonovich/prisma-client-rust", features = ["mocking", "postgresql", "rspc"], tag = "0.6.11" }
 prisma-client-rust-cli = { default-features = false, git = "https://github.com/Brendonovich/prisma-client-rust", features = ["mocking", "postgresql", "rspc"], tag = "0.6.11" }
 ring = "0.17.8"
