@@ -19,7 +19,7 @@ export function Comment({ content, created_at }: CommentDto) {
       <CardContent className="ml-14">
         {content}
       </CardContent>
-      <CardFooter className="ml-14">
+      <CardFooter className="space-x-2 ml-14">
         <Upvote />
         <Downvote />
         <EmojiReact />
