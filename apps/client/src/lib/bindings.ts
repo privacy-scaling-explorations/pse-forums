@@ -14,16 +14,16 @@ export type Procedures = {
     mutations: 
         { key: "auth.signup", input: SignupRequestDto, result: null } | 
         { key: "comment.create", input: CreateCommentDto, result: CommentDto } | 
-        { key: "comment.delete", input: number, result: string } | 
+        { key: "comment.delete", input: number, result: CommentDto } | 
         { key: "group.create", input: CreateGroupDto, result: GroupDto } | 
-        { key: "group.delete", input: number, result: string } | 
+        { key: "group.delete", input: number, result: GroupDto } | 
         { key: "post.create", input: CreatePostDto, result: PostDto } | 
-        { key: "post.delete", input: number, result: string } | 
-        { key: "user.delete", input: string, result: string },
+        { key: "post.delete", input: number, result: PostDto } | 
+        { key: "user.delete", input: string, result: UserDto },
     subscriptions: never
 };
 
-export type CommentDto = { id: number; content: string; pid: number; rid: number | null; uid: number | null; created_at: string }
+export type CommentDto = { created_at: string; content: string; id: number; pid: number; rid: number | null; uid: number | null }
 
 export type CreateCommentDto = { content: string; pid: number; rid: number | null; uid: number | null }
 
@@ -33,7 +33,7 @@ export type CreatePostDto = { content: string; gid: number | null; tags: string[
 
 export type GroupDto = { id: number; name: string; description: string; tags: string[] }
 
-export type PostDto = { id: number; gid: number | null; content: string; tags: string[]; title: string }
+export type PostDto = { created_at: string; content: string; gid: number | null; id: number; tags: string[]; title: string; uid: number | null }
 
 export type ProfileDto = { id: number; about: string | null; created_at: string; username: string; url: string | null }
 
@@ -41,4 +41,4 @@ export type SigninRequestDto = { username: string; password: string }
 
 export type SignupRequestDto = { email: string; password: string; username: string }
 
-export type UserDto = { id: number; created_at: string; email: string; encrypted_password: string; salt: string; username: string }
+export type UserDto = { created_at: string; id: number; email: string; encrypted_password: string; salt: string; username: string }
