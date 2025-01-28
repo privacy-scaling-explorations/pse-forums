@@ -6,8 +6,8 @@ import { Badge } from "./ui/badge"
 import { PostDto } from 'l/bindings';
 
 export const PostCard: FC<
-  Pick<PostDto, "id" | "title">
-> = ({ id, title }) => {
+  PostDto & { group_name: string }
+> = ({ id, title, created_at, group_name }) => {
   return (
     <Card>
       <Link to="/post/$pid" params={{ pid: `${id}` }}>
@@ -21,8 +21,8 @@ export const PostCard: FC<
           <div className="flex-grow flex flex-col items-start">
             <h3 className="font-bold text-lg mb-1">{title}</h3>
             <div className="flex space-x-2">
-              <Badge variant="secondary">{"Innnnnn"}</Badge>
-              <span className="text-sm text-gray-600">{"00/00/0000"}</span>
+              <Badge variant="secondary">{group_name}</Badge>
+              <span className="text-sm text-gray-600">{created_at}</span>
             </div>
           </div>
         </div>
