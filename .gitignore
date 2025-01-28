@@ -5,6 +5,7 @@
 .tasks.md
 .zed
 
+apps/server/db/src/generated.rs
 apps/freedit/config.toml
 apps/freedit/freedit.db
 apps/freedit/tantivy
