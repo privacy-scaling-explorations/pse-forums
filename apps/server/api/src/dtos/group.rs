@@ -4,12 +4,23 @@ use services::CreateGroupData;
 use specta::Type;
 use struct_convert::Convert;
 
-#[derive(Convert, Deserialize, Type)]
-#[convert(into = "CreateGroupData")]
+#[derive(Deserialize, Type)]
 pub struct CreateGroupDto {
     pub name: String,
     pub description: String,
     pub tags: Option<Vec<String>>,
+}
+
+impl TryFrom<CreateGroupDto> for CreateGroupData {
+    type Error = domain::ValidationError;
+
+    fn try_from(dto: CreateGroupDto) -> Result<Self, Self::Error> {
+        Ok(Self {
+            name: dto.name.try_into()?,
+            description: dto.description.try_into()?,
+            tags: dto.tags,
+        })
+    }
 }
 
 #[derive(Convert, Serialize, Type)]
