@@ -2,6 +2,9 @@ use thiserror::Error;
 
 #[derive(Debug, Error)]
 pub enum ValidationError {
+    #[error("Invalid content: {0}")]
+    Content(String),
+
     #[error("Invalid email format")]
     Email,
 
@@ -10,4 +13,7 @@ pub enum ValidationError {
 
     #[error("Invalid username: {0}")]
     Username(String),
+
+    #[error("Invalid title: {0}")]
+    Title(String),
 }

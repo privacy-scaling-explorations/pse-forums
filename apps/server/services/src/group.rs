@@ -1,7 +1,7 @@
 use crate::error::Result;
 use async_trait::async_trait;
 use derive_more::Constructor;
-use domain::{Create, Delete, Group, Read};
+use domain::{Create, Delete, Description, Group, Name, Read};
 use infra::{CreateGroup, GroupRepository};
 use std::sync::Arc;
 use struct_convert::Convert;
@@ -12,8 +12,8 @@ pub struct GroupService(Arc<GroupRepository>);
 #[derive(Convert)]
 #[convert(into = "CreateGroup")]
 pub struct CreateGroupData {
-    pub description: String,
-    pub name: String,
+    pub description: Description,
+    pub name: Name,
     pub tags: Option<Vec<String>>,
 }
 

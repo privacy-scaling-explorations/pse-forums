@@ -4,13 +4,25 @@ use services::CreateCommentData;
 use specta::Type;
 use struct_convert::Convert;
 
-#[derive(Convert, Deserialize, Type)]
-#[convert(into = "CreateCommentData")]
+#[derive(Deserialize, Type)]
 pub struct CreateCommentDto {
     pub content: String,
     pub pid: i32,
     pub rid: Option<i32>,
     pub uid: Option<i32>,
+}
+
+impl TryFrom<CreateCommentDto> for CreateCommentData {
+    type Error = domain::ValidationError;
+
+    fn try_from(dto: CreateCommentDto) -> Result<Self, Self::Error> {
+        Ok(Self {
+            content: dto.content.try_into()?,
+            pid: dto.pid,
+            rid: dto.rid,
+            uid: dto.uid,
+        })
+    }
 }
 
 #[derive(Convert, Serialize, Type)]
