@@ -3,17 +3,17 @@ use crate::InfraError;
 use async_trait::async_trait;
 use db::{post, PrismaClient};
 use derive_more::derive::Constructor;
-use domain::{Create, Delete, Read};
+use domain::{Content, Create, Delete, Read, Title};
 use std::sync::Arc;
 
 #[derive(Constructor)]
 pub struct PostRepository(Arc<PrismaClient>);
 
 pub struct CreatePost {
-    pub content: String,
+    pub content: Content,
     pub gid: Option<i32>,
     pub tags: Option<Vec<String>>,
-    pub title: String,
+    pub title: Title,
     pub uid: Option<i32>,
 }
 
@@ -38,7 +38,7 @@ impl Create<CreatePost, Result<post::Data>> for PostRepository {
 
         self.0
             .post()
-            .create(content, title, extra)
+            .create(content.into(), title.into(), extra)
             .exec()
             .await
             .map_err(|e| InfraError::Db(e.to_string()))

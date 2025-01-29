@@ -1,7 +1,7 @@
 use crate::error::Result;
 use async_trait::async_trait;
 use derive_more::Constructor;
-use domain::{Create, Delete, Post, Read};
+use domain::{Content, Create, Delete, Post, Read, Title};
 use infra::{CreatePost, PostRepository};
 use std::sync::Arc;
 use struct_convert::Convert;
@@ -12,10 +12,10 @@ pub struct PostService(Arc<PostRepository>);
 #[derive(Convert)]
 #[convert(into = "CreatePost")]
 pub struct CreatePostData {
-    pub content: String,
+    pub content: Content,
     pub gid: Option<i32>,
     pub tags: Option<Vec<String>>,
-    pub title: String,
+    pub title: Title,
     pub uid: Option<i32>,
 }
 

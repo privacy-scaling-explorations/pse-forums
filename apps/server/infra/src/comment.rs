@@ -3,14 +3,14 @@ use crate::InfraError;
 use async_trait::async_trait;
 use db::{comment, PrismaClient};
 use derive_more::derive::Constructor;
-use domain::{Create, Delete, Read};
+use domain::{Content, Create, Delete, Read};
 use std::sync::Arc;
 
 #[derive(Constructor)]
 pub struct CommentRepository(Arc<PrismaClient>);
 
 pub struct CreateComment {
-    pub content: String,
+    pub content: Content,
     pub pid: i32,
     pub rid: Option<i32>,
     pub uid: Option<i32>,
@@ -38,7 +38,7 @@ impl Create<CreateComment, Result<comment::Data>> for CommentRepository {
         // https://prisma.brendonovich.dev/writing-data/create
         self.0
             .comment()
-            .create_unchecked(pid, content, extra)
+            .create_unchecked(pid, content.into(), extra)
             .exec()
             .await
             .map_err(|e| InfraError::Db(e.to_string()))

@@ -3,15 +3,15 @@ use crate::InfraError;
 use async_trait::async_trait;
 use db::{group, PrismaClient};
 use derive_more::derive::Constructor;
-use domain::{Create, Delete, Read};
+use domain::{Create, Delete, Description, Name, Read};
 use std::sync::Arc;
 
 #[derive(Constructor)]
 pub struct GroupRepository(Arc<PrismaClient>);
 
 pub struct CreateGroup {
-    pub description: String,
-    pub name: String,
+    pub description: Description,
+    pub name: Name,
     pub tags: Option<Vec<String>>,
 }
 
@@ -31,7 +31,7 @@ impl Create<CreateGroup, Result<group::Data>> for GroupRepository {
             .collect();
         self.0
             .group()
-            .create(description, name, extra)
+            .create(description.into(), name.into(), extra)
             .exec()
             .await
             .map_err(|e| InfraError::Db(e.to_string()))

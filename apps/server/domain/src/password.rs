@@ -1,6 +1,12 @@
-use crate::error::ValidationError;
+use crate::{
+    error::ValidationError,
+    validations::{too_long, too_short},
+};
 use nutype::nutype;
 use zxcvbn::{zxcvbn, Score};
+
+const PASSWORD_MIN_LEN: usize = 8;
+const PASSWORD_MAX_LEN: usize = 40;
 
 #[nutype(derive(Deserialize, Serialize, AsRef, TryFrom), validate(with = validate_password, error=ValidationError))]
 pub struct Password(String);
@@ -19,8 +25,8 @@ enum PasswordError {
 
 fn check_length(password: &str) -> Result<(), PasswordError> {
     match password.len() {
-        len if len < 8 => Err(PasswordError::TooShort),
-        len if len > 40 => Err(PasswordError::TooLong),
+        len if len < PASSWORD_MIN_LEN => Err(PasswordError::TooShort),
+        len if len > PASSWORD_MAX_LEN => Err(PasswordError::TooLong),
         _ => Ok(()),
     }
 }
@@ -35,8 +41,8 @@ fn check_entropy(password: &str) -> Result<(), PasswordError> {
 impl From<PasswordError> for ValidationError {
     fn from(error: PasswordError) -> Self {
         match error {
-            PasswordError::TooShort => ValidationError::Password("Too short (minimum 8 characters)".to_string()),
-            PasswordError::TooLong => ValidationError::Password("Too long (maximum 40 characters)".to_string()),
+            PasswordError::TooShort => ValidationError::Password(too_short(PASSWORD_MIN_LEN)),
+            PasswordError::TooLong => ValidationError::Password(too_long(PASSWORD_MAX_LEN)),
             PasswordError::TooSimple => {
                 ValidationError::Password("Too simple (low entropy: try mixing lowercase and uppercase letters, numbers and symbols)".to_string())
             }
