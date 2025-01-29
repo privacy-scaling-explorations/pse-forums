@@ -1,7 +1,7 @@
 use crate::error::Result;
 use async_trait::async_trait;
 use derive_more::Constructor;
-use domain::{Create, Delete, Read, User};
+use domain::{Create, Delete, Email, Read, User, Username};
 use infra::{CreateUser, UserRepository};
 use std::sync::Arc;
 use struct_convert::Convert;
@@ -23,10 +23,10 @@ impl Read<String, Result<User>> for UserService {
 #[derive(Convert)]
 #[convert(into = "CreateUser")]
 pub struct CreateUserData {
-    pub email: String,
+    pub email: Email,
     pub encrypted_password: String,
     pub salt: String,
-    pub username: String,
+    pub username: Username,
 }
 
 #[async_trait]

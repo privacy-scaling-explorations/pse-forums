@@ -1,16 +1,12 @@
-mod auth;
-mod comment;
 mod context;
 use axum::{http::request::Parts, routing::get, Router};
 use context::Context;
-mod group;
 use db::init_prisma;
+mod dtos;
 use std::sync::Arc;
-mod post;
-mod profile;
+mod routers;
 mod rspc;
 pub use rspc::mount;
-mod user;
 
 pub async fn app() -> Router {
     let prisma = Arc::new(init_prisma().await.unwrap());

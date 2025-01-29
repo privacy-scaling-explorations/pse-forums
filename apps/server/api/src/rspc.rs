@@ -1,4 +1,4 @@
-use crate::{auth::*, comment::*, group::*, post::*, profile::*, user::*, Context};
+use crate::{routers::*, Context};
 use rspc::Router;
 use std::sync::Arc;
 

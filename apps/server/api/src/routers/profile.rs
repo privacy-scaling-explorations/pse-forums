@@ -1,5 +1,4 @@
-use super::dtos::ProfileDto;
-use crate::Context;
+use crate::{dtos::ProfileDto, Context};
 use domain::Read;
 use rspc::{Router, RouterBuilder};
 

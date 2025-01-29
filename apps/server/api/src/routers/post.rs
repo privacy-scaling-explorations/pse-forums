@@ -1,17 +1,19 @@
-use super::dtos::{CreateGroupDto, GroupDto};
-use crate::Context;
+use crate::{
+    dtos::{CreatePostDto, PostDto},
+    Context,
+};
 use domain::{Create, Delete, Read};
 use rspc::{Router, RouterBuilder};
 
-pub fn public_group_router() -> RouterBuilder<Context> {
+pub fn public_post_router() -> RouterBuilder<Context, ()> {
     Router::<Context>::new()
         .query("read", |t| {
             t(|ctx, id: i32| async move {
                 ctx.services
-                    .group
+                    .post
                     .read(id)
                     .await
-                    .map(GroupDto::from)
+                    .map(PostDto::from)
                     // TODO: better error handling
                     .map_err(|e| {
                         rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
@@ -21,14 +23,14 @@ pub fn public_group_router() -> RouterBuilder<Context> {
         .query("list", |t| {
             t(|ctx, _: ()| async move {
                 ctx.services
-                    .group
+                    .post
                     .read(())
                     .await
-                    .map(|groups| {
-                        groups
+                    .map(|posts| {
+                        posts
                             .into_iter()
-                            .map(GroupDto::from)
-                            .collect::<Vec<GroupDto>>()
+                            .map(PostDto::from)
+                            .collect::<Vec<PostDto>>()
                     })
                     // TODO: better error handling
                     .map_err(|e| {
@@ -38,15 +40,15 @@ pub fn public_group_router() -> RouterBuilder<Context> {
         })
 }
 
-pub fn protected_group_router() -> RouterBuilder<Context> {
+pub fn protected_post_router() -> RouterBuilder<Context, ()> {
     Router::<Context>::new()
         .mutation("create", |t| {
-            t(|ctx, data: CreateGroupDto| async move {
+            t(|ctx, data: CreatePostDto| async move {
                 ctx.services
-                    .group
+                    .post
                     .create(data.into())
                     .await
-                    .map(GroupDto::from)
+                    .map(PostDto::from)
                     // TODO: better error handling
                     .map_err(|e| {
                         rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
@@ -55,12 +57,11 @@ pub fn protected_group_router() -> RouterBuilder<Context> {
         })
         .mutation("delete", |t| {
             t(|ctx, id: i32| async move {
-                // TODO: protect behind authn/authz
                 ctx.services
-                    .group
+                    .post
                     .delete(id)
                     .await
-                    .map(GroupDto::from)
+                    .map(PostDto::from)
                     // TODO: better error handling
                     .map_err(|e| {
                         rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())

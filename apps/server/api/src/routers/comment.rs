@@ -1,4 +1,4 @@
-use super::dtos::{CommentDto, CreateCommentDto};
+use crate::dtos::{CommentDto, CreateCommentDto};
 use crate::Context;
 use domain::{Create, Delete, Read};
 use rspc::{Router, RouterBuilder};
