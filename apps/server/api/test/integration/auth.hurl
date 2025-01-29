@@ -10,3 +10,9 @@ jsonpath "$.result.data.user.salt" exists
 jsonpath "$.result.data.user.username" == "user1"
 jsonpath "$.result.data.user.email" == "user1@example.com"
 jsonpath "$.result.data.token" exists
+
+# validations
+POST http://localhost:3000/rspc/auth.signup
+{ "email": "foo@bar.com" }
+HTTP 200
+[Asserts]

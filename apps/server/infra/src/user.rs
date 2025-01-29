@@ -3,7 +3,7 @@ use crate::InfraError;
 use async_trait::async_trait;
 use db::{user, PrismaClient};
 use derive_more::derive::Constructor;
-use domain::{Create, Delete, Read};
+use domain::{Create, Delete, Email, Read, Username};
 use std::sync::Arc;
 
 #[derive(Constructor)]
@@ -23,10 +23,10 @@ impl Read<String, Result<user::Data>> for UserRepository {
 }
 
 pub struct CreateUser {
-    pub email: String,
+    pub email: Email,
     pub encrypted_password: String,
     pub salt: String,
-    pub username: String,
+    pub username: Username,
 }
 
 #[async_trait]
@@ -42,7 +42,13 @@ impl Create<CreateUser, Result<user::Data>> for UserRepository {
     ) -> Result<user::Data> {
         self.0
             .user()
-            .create(email, encrypted_password, salt, username, vec![])
+            .create(
+                email.into(),
+                encrypted_password,
+                salt,
+                username.into(),
+                vec![],
+            )
             .exec()
             .await
             .map_err(|e| InfraError::Db(e.to_string()))

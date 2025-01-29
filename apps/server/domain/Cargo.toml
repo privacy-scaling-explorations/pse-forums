@@ -6,5 +6,9 @@ edition.workspace = true
 async-trait.workspace = true
 chrono.workspace = true
 db = { path = "../db" }
+nutype.workspace = true
+once_cell.workspace = true
 serde.workspace = true
+specta.workspace = true
 struct-convert.workspace = true
+validator.workspace = true

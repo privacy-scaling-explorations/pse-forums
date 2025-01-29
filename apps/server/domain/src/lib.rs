@@ -1,15 +1,18 @@
 mod claim;
-pub use claim::Claim;
 mod comment;
-pub use comment::Comment;
 mod group;
-pub use group::Group;
 mod post;
-pub use post::Post;
 mod profile;
-pub use profile::Profile;
-mod user;
-pub use user::User;
 mod traits;
+mod user;
+mod validations;
+
+pub use claim::Claim;
+pub use comment::Comment;
+pub use group::Group;
+pub use post::Post;
+pub use profile::Profile;
 pub use traits::crud::*;
 pub use traits::verifier::*;
+pub use user::User;
+pub use validations::*;
