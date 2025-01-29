@@ -23,10 +23,9 @@ pub struct SignupData {
     pub username: Username,
 }
 
-#[derive(Clone, Debug)]
 pub struct SigninData {
-    pub username: String,
-    pub password: String,
+    pub username: Username,
+    pub password: Password,
 }
 
 impl Into<CreateUserData> for SignupData {
@@ -89,11 +88,11 @@ impl AuthService {
     ) -> Result<(User, String), AuthError> {
         let user = self
             .user_service
-            .read(username.clone())
+            .read(username.into())
             .await
             .map_err(|_| AuthError::InvalidCredentials)?;
 
-        verify_pwd(&password, &user.salt, &user.encrypted_password)
+        verify_pwd(password.as_ref(), &user.salt, &user.encrypted_password)
             .map_err(|_| AuthError::InvalidCredentials)?;
 
         let jwt = self.issue_jwt(&user)?;

@@ -1,15 +1,26 @@
 use super::user::UserDto;
-use domain::{Email, Password, Username, ValidationError};
+use domain::ValidationError;
 use serde::{Deserialize, Serialize};
 use services::{SigninData, SignupData};
 use specta::Type;
-use struct_convert::Convert;
 
-#[derive(Convert, Deserialize, Type)]
-#[convert(into = "SigninData")]
+#[derive(Deserialize, Type)]
 pub struct SigninRequestDto {
     pub username: String,
     pub password: String,
+}
+
+impl TryFrom<SigninRequestDto> for SigninData {
+    type Error = ValidationError;
+
+    fn try_from(
+        SigninRequestDto { username, password }: SigninRequestDto,
+    ) -> Result<Self, Self::Error> {
+        Ok(Self {
+            username: username.try_into()?,
+            password: password.try_into()?,
+        })
+    }
 }
 
 #[derive(Serialize, Deserialize, Type)]
