@@ -2,6 +2,7 @@ use crate::{
     dtos::{AuthResponseDto, SigninRequestDto, SignupRequestDto},
     Context,
 };
+use domain::ValidationError;
 use rspc::{Router, RouterBuilder};
 use services::SignupData;
 
@@ -9,7 +10,7 @@ pub fn auth_router() -> RouterBuilder<Context> {
     Router::<Context>::new()
         .mutation("signup", |t| {
             t(|ctx, signup_dto: SignupRequestDto| async move {
-                let signup_data = signup_dto.try_into().map_err(|e: String| {
+                let signup_data = signup_dto.try_into().map_err(|e: ValidationError| {
                     rspc::Error::new(rspc::ErrorCode::BadRequest, e.to_string())
                 })?;
 

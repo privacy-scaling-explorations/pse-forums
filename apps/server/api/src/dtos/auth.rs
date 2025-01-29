@@ -1,5 +1,5 @@
 use super::user::UserDto;
-use domain::{Email, Password, Username};
+use domain::{Email, Password, Username, ValidationError};
 use serde::{Deserialize, Serialize};
 use services::{SigninData, SignupData};
 use specta::Type;
@@ -26,7 +26,7 @@ pub struct SignupRequestDto {
 }
 
 impl TryFrom<SignupRequestDto> for SignupData {
-    type Error = String;
+    type Error = ValidationError;
 
     fn try_from(
         SignupRequestDto {

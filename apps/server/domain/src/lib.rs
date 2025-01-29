@@ -1,18 +1,27 @@
 mod claim;
 mod comment;
+mod content;
+mod email;
+mod error;
 mod group;
+mod password;
 mod post;
 mod profile;
 mod traits;
 mod user;
+mod username;
 mod validations;
 
 pub use claim::Claim;
 pub use comment::Comment;
+pub use email::Email;
+pub use error::ValidationError;
 pub use group::Group;
+pub use password::Password;
 pub use post::Post;
 pub use profile::Profile;
 pub use traits::crud::*;
 pub use traits::verifier::*;
 pub use user::User;
+pub use username::Username;
 pub use validations::*;
