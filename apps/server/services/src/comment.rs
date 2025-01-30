@@ -1,4 +1,4 @@
-use crate::error::Result;
+use crate::{error::Result, PostService};
 use async_trait::async_trait;
 use derive_more::Constructor;
 use domain::{Comment, Content, Create, Delete, Read, Update};
@@ -7,7 +7,7 @@ use std::sync::Arc;
 use struct_convert::Convert;
 
 #[derive(Constructor)]
-pub struct CommentService(Arc<CommentRepository>);
+pub struct CommentService(Arc<CommentRepository>, Arc<PostService>);
 
 #[derive(Convert)]
 #[convert(into = "CreateComment")]
@@ -66,5 +66,14 @@ impl Update<UpdateCommentData, Result<Comment>> for CommentService {
             .await
             .map(Comment::from)
             .map_err(|e| e.into())
+    }
+}
+
+impl CommentService {
+    pub async fn list(&self, pid: i32) -> Result<Vec<Comment>> {
+        self.1
+            .read_with_comments(pid)
+            .await
+            .map(|p| p.comments.unwrap_or_default())
     }
 }

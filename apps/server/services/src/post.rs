@@ -48,6 +48,16 @@ impl Read<(), Result<Vec<Post>>> for PostService {
     }
 }
 
+impl PostService {
+    pub async fn read_with_comments(&self, id: i32) -> Result<Post> {
+        self.0
+            .read_with_comments(id)
+            .await
+            .map(Post::from)
+            .map_err(|e| e.into())
+    }
+}
+
 #[async_trait]
 impl Delete<i32, Result<Post>> for PostService {
     async fn delete(&self, id: i32) -> Result<Post> {

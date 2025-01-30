@@ -28,6 +28,7 @@ pub struct Services {
 impl Services {
     pub fn new(repositories: Repositories) -> Self {
         let group_service = Arc::new(GroupService::new(repositories.group));
+        let post_service = Arc::new(PostService::new(repositories.post, group_service.clone()));
         let user_service = Arc::new(UserService::new(repositories.user));
 
         Self {
@@ -35,9 +36,12 @@ impl Services {
                 user_service.clone(),
                 std::env::var("JWT_SECRET").expect("JWT_SECRET is not set"),
             )),
-            comment: Arc::new(CommentService::new(repositories.comment)),
-            group: group_service.clone(),
-            post: Arc::new(PostService::new(repositories.post, group_service)),
+            comment: Arc::new(CommentService::new(
+                repositories.comment,
+                post_service.clone(),
+            )),
+            group: group_service,
+            post: post_service,
             profile: Arc::new(ProfileService::new(repositories.profile)),
             user: user_service,
         }

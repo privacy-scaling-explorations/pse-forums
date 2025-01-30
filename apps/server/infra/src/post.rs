@@ -104,6 +104,19 @@ impl Read<(), Result<Vec<post::Data>>> for PostRepository {
     }
 }
 
+impl PostRepository {
+    pub async fn read_with_comments(&self, id: i32) -> Result<post::Data> {
+        self.0
+            .post()
+            .find_unique(post::id::equals(id))
+            .with(post::comments::fetch(vec![]))
+            .exec()
+            .await
+            .map_err(|e| InfraError::Db(e.to_string()))?
+            .ok_or(InfraError::NotFound)
+    }
+}
+
 #[async_trait]
 impl Delete<i32, Result<post::Data>> for PostRepository {
     async fn delete(&self, id: i32) -> Result<post::Data> {
