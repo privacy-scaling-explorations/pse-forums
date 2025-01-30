@@ -1,6 +1,6 @@
 use domain::Comment;
 use serde::{Deserialize, Serialize};
-use services::CreateCommentData;
+use services::{CreateCommentData, UpdateCommentData};
 use specta::Type;
 use struct_convert::Convert;
 
@@ -21,6 +21,23 @@ impl TryFrom<CreateCommentDto> for CreateCommentData {
             pid: dto.pid,
             rid: dto.rid,
             uid: dto.uid,
+        })
+    }
+}
+
+#[derive(Deserialize, Type)]
+pub struct UpdateCommentDto {
+    pub content: String,
+    pub id: i32,
+}
+
+impl TryFrom<UpdateCommentDto> for UpdateCommentData {
+    type Error = domain::ValidationError;
+
+    fn try_from(UpdateCommentDto { id, content }: UpdateCommentDto) -> Result<Self, Self::Error> {
+        Ok(Self {
+            content: content.try_into()?,
+            id,
         })
     }
 }

@@ -11,7 +11,7 @@ pub fn mount() -> Arc<Router<Context>> {
         .merge("profile.", public_profile_router())
         .merge("user.", public_user_router())
         .middleware(|mw| {
-            // TODO: extract in separate fn/module
+            // TODO: extract in separate fn/module?
             mw.middleware(|mw| async move {
                 let services = mw.ctx.services.clone();
                 let jwt = mw.ctx.jwt.clone();
@@ -39,6 +39,7 @@ pub fn mount() -> Arc<Router<Context>> {
         .merge("comment.", protected_comment_router())
         .merge("group.", protected_group_router())
         .merge("post.", protected_post_router())
+        .merge("profile.", protected_profile_router())
         .merge("user.", protected_user_router())
         .build()
         .arced()

@@ -3,7 +3,7 @@ use crate::InfraError;
 use async_trait::async_trait;
 use db::{post, PrismaClient};
 use derive_more::derive::Constructor;
-use domain::{Content, Create, Delete, Read, Title};
+use domain::{Content, Create, Delete, Read, Title, Update};
 use std::sync::Arc;
 
 #[derive(Constructor)]
@@ -45,17 +45,39 @@ impl Create<CreatePost, Result<post::Data>> for PostRepository {
     }
 }
 
-// #[async_trait]
-// impl Update<post::Data> for PostRepository {
-//     async fn update(&self, data: post::Data) -> Result<post::Data> {
-//         self.0
-//             .post()
-//             .update(data)
-//             .exec()
-//             .await
-//             .map_err(|e| InfraError::Db(e.to_string()))
-//     }
-// }
+pub struct UpdatePost {
+    pub content: Option<Content>,
+    pub id: i32,
+    pub tags: Option<Vec<String>>,
+    pub title: Option<Title>,
+}
+
+#[async_trait]
+impl Update<UpdatePost, Result<post::Data>> for PostRepository {
+    async fn update(
+        &self,
+        UpdatePost {
+            content,
+            id,
+            tags,
+            title,
+        }: UpdatePost,
+    ) -> Result<post::Data> {
+        let updates: Vec<post::SetParam> = vec![]
+            .into_iter()
+            .chain(content.map(|c| post::content::set(c.into())))
+            .chain(tags.map(|t| post::tags::set(t)))
+            .chain(title.map(|t| post::title::set(t.into())))
+            .collect();
+
+        self.0
+            .post()
+            .update(post::id::equals(id), updates)
+            .exec()
+            .await
+            .map_err(|e| InfraError::Db(e.to_string()))
+    }
+}
 
 #[async_trait]
 impl Read<i32, Result<post::Data>> for PostRepository {

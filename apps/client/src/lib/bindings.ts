@@ -15,10 +15,14 @@ export type Procedures = {
         { key: "auth.signup", input: SignupRequestDto, result: AuthResponseDto } | 
         { key: "comment.create", input: CreateCommentDto, result: CommentDto } | 
         { key: "comment.delete", input: number, result: CommentDto } | 
+        { key: "comment.update", input: UpdateCommentDto, result: CommentDto } | 
         { key: "group.create", input: CreateGroupDto, result: GroupDto } | 
         { key: "group.delete", input: number, result: GroupDto } | 
+        { key: "group.update", input: UpdateGroupDto, result: GroupDto } | 
         { key: "post.create", input: CreatePostDto, result: PostDto } | 
         { key: "post.delete", input: number, result: PostDto } | 
+        { key: "post.update", input: UpdatePostDto, result: PostDto } | 
+        { key: "profile.update", input: UpdateProfileDto, result: ProfileDto } | 
         { key: "user.delete", input: string, result: UserDto },
     subscriptions: never
 };
@@ -42,5 +46,13 @@ export type ProfileDto = { id: number; about: string | null; created_at: string;
 export type SigninRequestDto = { username: string; password: string }
 
 export type SignupRequestDto = { email: string; password: string; username: string }
+
+export type UpdateCommentDto = { content: string; id: number }
+
+export type UpdateGroupDto = { description: string | null; id: number; name: string | null; tags: string[] | null }
+
+export type UpdatePostDto = { content: string | null; id: number; tags: string[] | null; title: string | null }
+
+export type UpdateProfileDto = { about: string | null; id: number; url: string | null }
 
 export type UserDto = { created_at: string; id: number; email: string; encrypted_password: string; salt: string; username: string }

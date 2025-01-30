@@ -11,3 +11,7 @@ POST http://localhost:3000/rspc/comment.create
   "content": "some content",
   "pid": 1
 }
+HTTP 200
+[Asserts]
+jsonpath "$.result.data.code" == 401
+jsonpath "$.result.data.message" == "No Bearer token provided"

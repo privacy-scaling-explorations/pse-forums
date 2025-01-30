@@ -1,8 +1,8 @@
 use crate::error::Result;
 use async_trait::async_trait;
 use derive_more::Constructor;
-use domain::{Create, Delete, Description, Group, Name, Read};
-use infra::{CreateGroup, GroupRepository};
+use domain::{Create, Delete, Description, Group, Name, Read, Update};
+use infra::{CreateGroup, GroupRepository, UpdateGroup};
 use std::sync::Arc;
 use struct_convert::Convert;
 
@@ -57,4 +57,22 @@ impl Delete<i32, Result<Group>> for GroupService {
     }
 }
 
-// TODO: Implement Update
+#[derive(Convert)]
+#[convert(into = "UpdateGroup")]
+pub struct UpdateGroupData {
+    pub description: Option<Description>,
+    pub id: i32,
+    pub name: Option<Name>,
+    pub tags: Option<Vec<String>>,
+}
+
+#[async_trait]
+impl Update<UpdateGroupData, Result<Group>> for GroupService {
+    async fn update(&self, group: UpdateGroupData) -> Result<Group> {
+        self.0
+            .update(group.into())
+            .await
+            .map(Group::from)
+            .map_err(|e| e.into())
+    }
+}

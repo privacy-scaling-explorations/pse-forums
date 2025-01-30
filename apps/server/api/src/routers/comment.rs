@@ -1,6 +1,6 @@
-use crate::dtos::{CommentDto, CreateCommentDto};
+use crate::dtos::{CommentDto, CreateCommentDto, UpdateCommentDto};
 use crate::Context;
-use domain::{Create, Delete, Read, ValidationError};
+use domain::{Create, Delete, Read, Update, ValidationError};
 use rspc::{Router, RouterBuilder};
 
 pub fn public_comment_router() -> RouterBuilder<Context> {
@@ -36,9 +36,23 @@ pub fn protected_comment_router() -> RouterBuilder<Context> {
                     })
             })
         })
+        .mutation("update", |t| {
+            t(|ctx, dto: UpdateCommentDto| async move {
+                let data = dto.try_into().map_err(|e: ValidationError| {
+                    rspc::Error::new(rspc::ErrorCode::BadRequest, e.to_string())
+                })?;
+                ctx.services
+                    .comment
+                    .update(data)
+                    .await
+                    .map(CommentDto::from)
+                    .map_err(|e| {
+                        rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
+                    })
+            })
+        })
         .mutation("delete", |t| {
             t(|ctx, id: i32| async move {
-                // TODO: protect behind authn/authz
                 ctx.services
                     .comment
                     .delete(id)

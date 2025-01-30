@@ -1,5 +1,8 @@
-use crate::{dtos::ProfileDto, Context};
-use domain::Read;
+use crate::{
+    dtos::{ProfileDto, UpdateProfileDto},
+    Context,
+};
+use domain::{Read, Update, ValidationError};
 use rspc::{Router, RouterBuilder};
 
 pub fn public_profile_router() -> RouterBuilder<Context> {
@@ -35,4 +38,21 @@ pub fn public_profile_router() -> RouterBuilder<Context> {
                     })
             })
         })
+}
+
+pub fn protected_profile_router() -> RouterBuilder<Context> {
+    Router::<Context>::new().mutation("update", |t| {
+        t(|ctx, dto: UpdateProfileDto| async move {
+            let data = dto.try_into().map_err(|e: ValidationError| {
+                rspc::Error::new(rspc::ErrorCode::BadRequest, e.to_string())
+            })?;
+
+            ctx.services
+                .profile
+                .update(data)
+                .await
+                .map(ProfileDto::from)
+                .map_err(|e| rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string()))
+        })
+    })
 }

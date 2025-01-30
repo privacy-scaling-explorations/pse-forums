@@ -1,8 +1,8 @@
 use crate::error::Result;
 use async_trait::async_trait;
 use derive_more::Constructor;
-use domain::{Comment, Content, Create, Delete, Read};
-use infra::{CommentRepository, CreateComment};
+use domain::{Comment, Content, Create, Delete, Read, Update};
+use infra::{CommentRepository, CreateComment, UpdateComment};
 use std::sync::Arc;
 use struct_convert::Convert;
 
@@ -51,4 +51,20 @@ impl Delete<i32, Result<Comment>> for CommentService {
     }
 }
 
-// TODO: Implement Update
+#[derive(Convert)]
+#[convert(into = "UpdateComment")]
+pub struct UpdateCommentData {
+    pub id: i32,
+    pub content: Content,
+}
+
+#[async_trait]
+impl Update<UpdateCommentData, Result<Comment>> for CommentService {
+    async fn update(&self, comment: UpdateCommentData) -> Result<Comment> {
+        self.0
+            .update(comment.into())
+            .await
+            .map(Comment::from)
+            .map_err(|e| e.into())
+    }
+}
