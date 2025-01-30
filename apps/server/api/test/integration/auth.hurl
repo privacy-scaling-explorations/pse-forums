@@ -1,6 +1,6 @@
 POST http://localhost:3000/rspc/auth.signin
 {
-  "password": "11111111",
+  "password": "2Up7ib0&ab",
   "username": "user1"
 }
 HTTP 200

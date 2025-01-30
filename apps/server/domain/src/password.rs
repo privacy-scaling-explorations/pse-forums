@@ -2,7 +2,7 @@ use crate::error::{too_long, too_short, ValidationError};
 use nutype::nutype;
 use zxcvbn::{zxcvbn, Score};
 
-const PASSWORD_MIN_LEN: usize = 8;
+const PASSWORD_MIN_LEN: usize = 10;
 const PASSWORD_MAX_LEN: usize = 40;
 
 #[nutype(derive(Deserialize, Serialize, AsRef, TryFrom), validate(with = validate_password, error=ValidationError))]
