@@ -1,6 +1,7 @@
 use crate::content::Content;
 use chrono::{DateTime, FixedOffset};
 
+#[derive(Debug)]
 pub struct Post {
     pub id: i32,
     pub content: Content,
