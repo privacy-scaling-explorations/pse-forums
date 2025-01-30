@@ -1,4 +1,4 @@
-use crate::{user::CreateUserData, UserService};
+use crate::{user::CreateUserData, EmailConfirmationService, UserService};
 use chrono::{Duration, FixedOffset, Utc};
 use crypto::{hash_pwd, verify_pwd};
 use derive_more::derive::Constructor;
@@ -9,6 +9,8 @@ use thiserror::Error;
 
 #[derive(Error, Debug)]
 pub enum AuthError {
+    #[error("Email Confirmation Error")]
+    EmailConfirmationError,
     #[error("Invalid credentials")]
     InvalidCredentials,
     #[error("JWT error: {0}")]
@@ -45,6 +47,7 @@ const EXPIRATION_DURATION_SECS: i64 = 3600;
 
 #[derive(Constructor)]
 pub struct AuthService {
+    pub email_confirmation_service: Arc<EmailConfirmationService>,
     pub user_service: Arc<UserService>,
     pub jwt_secret: String,
 }
@@ -74,6 +77,11 @@ impl AuthService {
             .create(payload.into())
             .await
             .map_err(|_| AuthError::InvalidCredentials)?;
+
+        self.email_confirmation_service
+            .send_confirmation_email(user.id, &user.email)
+            .await
+            .map_err(|_| AuthError::EmailConfirmationError)?;
 
         let jwt = self.issue_jwt(&user)?;
 
