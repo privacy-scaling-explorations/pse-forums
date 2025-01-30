@@ -1,7 +1,4 @@
-use crate::{
-    error::ValidationError,
-    validations::{too_long, too_short},
-};
+use crate::error::{too_long, too_short, ValidationError};
 use nutype::nutype;
 use zxcvbn::{zxcvbn, Score};
 

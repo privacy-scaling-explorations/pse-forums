@@ -1,8 +1,8 @@
 use crate::{
-    dtos::{CreateGroupDto, GroupDto},
+    dtos::{CreateGroupDto, GroupDto, UpdateGroupDto},
     Context,
 };
-use domain::{Create, Delete, Read, ValidationError};
+use domain::{Create, Delete, Read, Update, ValidationError};
 use rspc::{Router, RouterBuilder};
 
 pub fn public_group_router() -> RouterBuilder<Context> {
@@ -59,9 +59,24 @@ pub fn protected_group_router() -> RouterBuilder<Context> {
                     })
             })
         })
+        .mutation("update", |t| {
+            t(|ctx, dto: UpdateGroupDto| async move {
+                let data = dto.try_into().map_err(|e: ValidationError| {
+                    rspc::Error::new(rspc::ErrorCode::BadRequest, e.to_string())
+                })?;
+
+                ctx.services
+                    .group
+                    .update(data)
+                    .await
+                    .map(GroupDto::from)
+                    .map_err(|e| {
+                        rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
+                    })
+            })
+        })
         .mutation("delete", |t| {
             t(|ctx, id: i32| async move {
-                // TODO: protect behind authn/authz
                 ctx.services
                     .group
                     .delete(id)

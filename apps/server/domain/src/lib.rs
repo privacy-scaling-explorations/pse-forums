@@ -12,7 +12,6 @@ mod title;
 mod traits;
 mod user;
 mod username;
-mod validations;
 
 pub use claim::Claim;
 pub use comment::Comment;

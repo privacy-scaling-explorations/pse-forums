@@ -1,4 +1,4 @@
-use crate::{validations::too_short, ValidationError};
+use crate::error::{too_short, ValidationError};
 use nutype::nutype;
 
 const CONTENT_MIN_LEN: usize = 10;
