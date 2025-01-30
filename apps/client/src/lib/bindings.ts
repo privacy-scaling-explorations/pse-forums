@@ -2,6 +2,7 @@
 
 export type Procedures = {
     queries: 
+        { key: "comment.list", input: number, result: CommentDto[] } | 
         { key: "comment.read", input: number, result: CommentDto } | 
         { key: "group.list", input: never, result: GroupDto[] } | 
         { key: "group.read", input: number, result: GroupDto } | 

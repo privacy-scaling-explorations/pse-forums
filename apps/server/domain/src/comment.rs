@@ -1,6 +1,7 @@
 use crate::content::Content;
 use chrono::{DateTime, FixedOffset};
 
+#[derive(Debug)]
 pub struct Comment {
     pub id: i32,
     pub rid: Option<i32>,
