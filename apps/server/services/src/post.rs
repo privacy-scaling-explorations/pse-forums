@@ -1,4 +1,4 @@
-use crate::error::Result;
+use crate::{error::Result, GroupService};
 use async_trait::async_trait;
 use derive_more::Constructor;
 use domain::{Content, Create, Delete, Post, Read, Title, Update};
@@ -7,7 +7,7 @@ use std::sync::Arc;
 use struct_convert::Convert;
 
 #[derive(Constructor)]
-pub struct PostService(Arc<PostRepository>);
+pub struct PostService(Arc<PostRepository>, Arc<GroupService>);
 
 #[derive(Convert)]
 #[convert(into = "CreatePost")]
@@ -76,5 +76,14 @@ impl Update<UpdatePostData, Result<Post>> for PostService {
             .await
             .map(Post::from)
             .map_err(|e| e.into())
+    }
+}
+
+impl PostService {
+    pub async fn list(&self, gid: i32) -> Result<Vec<Post>> {
+        self.1
+            .read_with_posts(gid)
+            .await
+            .map(|g| g.posts.unwrap_or_default())
     }
 }

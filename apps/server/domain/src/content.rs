@@ -4,7 +4,7 @@ use nutype::nutype;
 const CONTENT_MIN_LEN: usize = 10;
 
 #[nutype(
-    derive(Deserialize, Serialize, Into, TryFrom),
+    derive(Debug, Deserialize, Serialize, Into, TryFrom),
     sanitize(trim),
     validate(len_char_min = CONTENT_MIN_LEN, not_empty)
 )]

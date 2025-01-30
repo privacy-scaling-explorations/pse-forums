@@ -97,6 +97,22 @@ impl Read<(), Result<Vec<group::Data>>> for GroupRepository {
     }
 }
 
+impl GroupRepository {
+    // TODO: gid is nullable in db schema
+    // so fetching groupless posts means filtering with gid null?
+    // wouldn't it be better to change the schema to gid non nullable and default to 0?
+    pub async fn read_with_posts(&self, gid: i32) -> Result<group::Data> {
+        self.0
+            .group()
+            .find_unique(group::id::equals(gid))
+            .with(group::posts::fetch(vec![]))
+            .exec()
+            .await
+            .map_err(|e| InfraError::Db(e.to_string()))?
+            .ok_or(InfraError::NotFound)
+    }
+}
+
 #[async_trait]
 impl Delete<i32, Result<group::Data>> for GroupRepository {
     async fn delete(&self, id: i32) -> Result<group::Data> {

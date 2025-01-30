@@ -5,7 +5,7 @@ export type Procedures = {
         { key: "comment.read", input: number, result: CommentDto } | 
         { key: "group.list", input: never, result: GroupDto[] } | 
         { key: "group.read", input: number, result: GroupDto } | 
-        { key: "post.list", input: never, result: PostDto[] } | 
+        { key: "post.list", input: number, result: PostDto[] } | 
         { key: "post.read", input: number, result: PostDto } | 
         { key: "profile.list", input: never, result: ProfileDto[] } | 
         { key: "profile.read", input: string, result: ProfileDto } | 

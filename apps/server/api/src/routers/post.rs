@@ -21,10 +21,10 @@ pub fn public_post_router() -> RouterBuilder<Context, ()> {
             })
         })
         .query("list", |t| {
-            t(|ctx, _: ()| async move {
+            t(|ctx, gid: i32| async move {
                 ctx.services
                     .post
-                    .read(())
+                    .list(gid)
                     .await
                     .map(|posts| {
                         posts

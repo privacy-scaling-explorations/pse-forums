@@ -46,6 +46,16 @@ impl Read<(), Result<Vec<Group>>> for GroupService {
     }
 }
 
+impl GroupService {
+    pub async fn read_with_posts(&self, gid: i32) -> Result<Group> {
+        self.0
+            .read_with_posts(gid)
+            .await
+            .map(Group::from)
+            .map_err(|e| e.into())
+    }
+}
+
 #[async_trait]
 impl Delete<i32, Result<Group>> for GroupService {
     async fn delete(&self, id: i32) -> Result<Group> {
