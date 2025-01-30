@@ -1,3 +1,4 @@
+mod about;
 mod claim;
 mod comment;
 mod content;
@@ -10,9 +11,11 @@ mod post;
 mod profile;
 mod title;
 mod traits;
+mod url;
 mod user;
 mod username;
 
+pub use about::About;
 pub use claim::Claim;
 pub use comment::Comment;
 pub use content::Content;
@@ -26,5 +29,6 @@ pub use profile::Profile;
 pub use title::*;
 pub use traits::crud::*;
 pub use traits::verifier::*;
+pub use url::Url;
 pub use user::User;
 pub use username::Username;

@@ -19,6 +19,9 @@ pub enum ValidationError {
 
     #[error("Invalid title: {0}")]
     Title(String),
+
+    #[error("Invalid url format")]
+    Url,
 }
 
 pub fn too_long(max_len: usize) -> String {
