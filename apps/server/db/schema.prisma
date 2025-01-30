@@ -9,15 +9,16 @@ datasource db {
 }
 
 model User {
-  id                Int       @id @default(autoincrement())
-  created_at        DateTime  @default(now()) @db.Timestamptz(6)
-  email             String    @unique
-  encryptedPassword String    @map("encrypted_password")
+  id                Int                @id @default(autoincrement())
+  created_at        DateTime           @default(now()) @db.Timestamptz(6)
+  email             String             @unique
+  encryptedPassword String             @map("encrypted_password")
   salt              String
-  username          String    @unique
+  username          String             @unique
   Profile           Profile[]
   Post              Post[]
   Comment           Comment[]
+  EmailConfirmation EmailConfirmation?
 
   @@map("user")
 }
@@ -85,4 +86,14 @@ model Group {
 
   // moderators User[] // TODO: add moderators table, or extend user table?
   @@map("group")
+}
+
+model EmailConfirmation {
+  id         Int      @id @default(autoincrement())
+  uid        Int      @unique
+  token      String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  expires_at DateTime @db.Timestamptz(6)
+  user       User     @relation(fields: [uid], references: [id], onDelete: Cascade)
+
+  @@map("email_confirmation")
 }
