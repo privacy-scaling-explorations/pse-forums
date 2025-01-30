@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use services::CreatePostData;
+use services::{CreatePostData, UpdatePostData};
 use specta::Type;
 use struct_convert::Convert;
 
@@ -22,6 +22,38 @@ impl TryFrom<CreatePostDto> for CreatePostData {
             tags: dto.tags,
             title: dto.title.try_into()?,
             uid: dto.uid,
+        })
+    }
+}
+
+#[derive(Deserialize, Type)]
+pub struct UpdatePostDto {
+    pub content: Option<String>,
+    pub id: i32,
+    pub tags: Option<Vec<String>>,
+    pub title: Option<String>,
+}
+
+impl TryFrom<UpdatePostDto> for UpdatePostData {
+    type Error = domain::ValidationError;
+
+    fn try_from(
+        UpdatePostDto {
+            content,
+            id,
+            tags,
+            title,
+        }: UpdatePostDto,
+    ) -> Result<Self, Self::Error> {
+        if content.is_none() && tags.is_none() && title.is_none() {
+            return Err(domain::ValidationError::EmptyFields);
+        }
+
+        Ok(Self {
+            content: content.map(|c| c.try_into()).transpose()?,
+            id,
+            tags,
+            title: title.map(|t| t.try_into()).transpose()?,
         })
     }
 }

@@ -34,10 +34,10 @@ pub struct UpdateCommentDto {
 impl TryFrom<UpdateCommentDto> for UpdateCommentData {
     type Error = domain::ValidationError;
 
-    fn try_from(dto: UpdateCommentDto) -> Result<Self, Self::Error> {
+    fn try_from(UpdateCommentDto { id, content }: UpdateCommentDto) -> Result<Self, Self::Error> {
         Ok(Self {
-            content: dto.content.try_into()?,
-            id: dto.id,
+            content: content.try_into()?,
+            id,
         })
     }
 }

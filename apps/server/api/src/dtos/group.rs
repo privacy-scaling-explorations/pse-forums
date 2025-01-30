@@ -34,16 +34,23 @@ pub struct UpdateGroupDto {
 impl TryFrom<UpdateGroupDto> for UpdateGroupData {
     type Error = domain::ValidationError;
 
-    fn try_from(dto: UpdateGroupDto) -> Result<Self, Self::Error> {
-        if dto.description.is_none() && dto.name.is_none() && dto.tags.is_none() {
+    fn try_from(
+        UpdateGroupDto {
+            description,
+            id,
+            name,
+            tags,
+        }: UpdateGroupDto,
+    ) -> Result<Self, Self::Error> {
+        if description.is_none() && name.is_none() && tags.is_none() {
             return Err(domain::ValidationError::EmptyFields);
         }
 
         Ok(Self {
-            description: dto.description.map(|d| d.try_into()).transpose()?,
-            id: dto.id,
-            name: dto.name.map(|n| n.try_into()).transpose()?,
-            tags: dto.tags,
+            description: description.map(|d| d.try_into()).transpose()?,
+            id,
+            name: name.map(|n| n.try_into()).transpose()?,
+            tags,
         })
     }
 }

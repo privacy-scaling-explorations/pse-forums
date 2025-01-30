@@ -1,8 +1,8 @@
 use crate::{
-    dtos::{CreatePostDto, PostDto},
+    dtos::{CreatePostDto, PostDto, UpdatePostDto},
     Context,
 };
-use domain::{Create, Delete, Read, ValidationError};
+use domain::{Create, Delete, Read, Update, ValidationError};
 use rspc::{Router, RouterBuilder};
 
 pub fn public_post_router() -> RouterBuilder<Context, ()> {
@@ -51,6 +51,21 @@ pub fn protected_post_router() -> RouterBuilder<Context, ()> {
                 ctx.services
                     .post
                     .create(data)
+                    .await
+                    .map(PostDto::from)
+                    .map_err(|e| {
+                        rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
+                    })
+            })
+        })
+        .mutation("update", |t| {
+            t(|ctx, dto: UpdatePostDto| async move {
+                let data = dto.try_into().map_err(|e: ValidationError| {
+                    rspc::Error::new(rspc::ErrorCode::BadRequest, e.to_string())
+                })?;
+                ctx.services
+                    .post
+                    .update(data)
                     .await
                     .map(PostDto::from)
                     .map_err(|e| {

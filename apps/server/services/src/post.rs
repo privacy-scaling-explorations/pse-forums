@@ -1,8 +1,8 @@
 use crate::error::Result;
 use async_trait::async_trait;
 use derive_more::Constructor;
-use domain::{Content, Create, Delete, Post, Read, Title};
-use infra::{CreatePost, PostRepository};
+use domain::{Content, Create, Delete, Post, Read, Title, Update};
+use infra::{CreatePost, PostRepository, UpdatePost};
 use std::sync::Arc;
 use struct_convert::Convert;
 
@@ -59,4 +59,22 @@ impl Delete<i32, Result<Post>> for PostService {
     }
 }
 
-// TODO: Implement Update
+#[derive(Convert)]
+#[convert(into = "UpdatePost")]
+pub struct UpdatePostData {
+    pub content: Option<Content>,
+    pub id: i32,
+    pub tags: Option<Vec<String>>,
+    pub title: Option<Title>,
+}
+
+#[async_trait]
+impl Update<UpdatePostData, Result<Post>> for PostService {
+    async fn update(&self, post: UpdatePostData) -> Result<Post> {
+        self.0
+            .update(post.into())
+            .await
+            .map(Post::from)
+            .map_err(|e| e.into())
+    }
+}
