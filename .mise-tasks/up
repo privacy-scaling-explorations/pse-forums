@@ -77,10 +77,9 @@ wait_for_db() {
 }
 
 run_migrations() {
-  log "$GREEN" "📂 Running database migrations..."
+  printf "%s\n" "📂 Running database migrations..."
 
   for migration in "$SCRIPT_DIR/apps/server/db/migrations"/*/*.sql; do
-    log "$GREEN" "🚀 Applying migration: $migration"
     docker exec -i "$DB_CONTAINER" psql -U "$DB_USER" -d "$DB_NAME" <"$migration" >/dev/null 2>&1
   done
 

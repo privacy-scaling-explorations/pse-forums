@@ -53,3 +53,8 @@ impl TryFrom<SignupRequestDto> for SignupData {
         })
     }
 }
+
+#[derive(Deserialize)]
+pub struct TokenQuery {
+    pub token: String,
+}

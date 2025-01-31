@@ -3,7 +3,7 @@ use async_trait::async_trait;
 use chrono::{Duration, Utc};
 use db::{email_confirmation, user, PrismaClient};
 use derive_more::derive::Constructor;
-use domain::{Create, Delete, Email, Read, Token, Update};
+use domain::{Create, Delete, Read, Token};
 use std::sync::Arc;
 
 #[derive(Constructor)]

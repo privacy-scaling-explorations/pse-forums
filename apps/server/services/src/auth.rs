@@ -1,4 +1,4 @@
-use crate::{user::CreateUserData, EmailConfirmationService, ServiceError, UserService};
+use crate::{user::CreateUserData, EmailConfirmationService, UserService};
 use chrono::{Duration, FixedOffset, Utc};
 use crypto::{hash_pwd, verify_pwd};
 use derive_more::derive::Constructor;

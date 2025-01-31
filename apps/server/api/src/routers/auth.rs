@@ -1,13 +1,13 @@
 use crate::{
-    dtos::{AuthResponseDto, SigninRequestDto, SignupRequestDto},
+    dtos::{AuthResponseDto, SigninRequestDto, SignupRequestDto, TokenQuery},
     Context,
 };
 use axum::{
     extract::{Query, State},
     http::StatusCode,
-    response::{IntoResponse, Redirect},
+    response::Redirect,
 };
-use domain::{Token, TokenError, ValidationError};
+use domain::{Token, ValidationError};
 use rspc::{Router, RouterBuilder};
 use services::AuthService;
 use std::{env, sync::Arc};
@@ -56,18 +56,25 @@ pub fn auth_router() -> RouterBuilder<Context> {
 
 pub async fn confirm_email_handler(
     State(auth_service): State<Arc<AuthService>>,
-    Query(token): Query<Token>,
+    Query(TokenQuery { token }): Query<TokenQuery>,
 ) -> Result<Redirect, (StatusCode, Redirect)> {
     let frontend_url = env::var("FRONTEND_URL").expect("Missing FRONTEND_URL env var");
 
-    match auth_service.confirm_email(token).await {
-        Ok(_) => Ok(Redirect::temporary(&format!(
-            "{}/auth/signin",
-            frontend_url
-        ))),
-        Err(e) => Err((
-            StatusCode::UNAUTHORIZED,
-            Redirect::temporary(&format!("{}/error?reason={}", frontend_url, e)),
-        )),
+    if let Ok(token) = Token::try_from(token) {
+        auth_service
+            .confirm_email(token)
+            .await
+            .map(|()| Redirect::temporary(&format!("{}/", frontend_url)))
+            .map_err(|e| {
+                (
+                    StatusCode::UNAUTHORIZED,
+                    Redirect::temporary(&format!("{}/error?reason={}", frontend_url, e)),
+                )
+            })
+    } else {
+        Err((
+            StatusCode::BAD_REQUEST,
+            Redirect::temporary(&format!("{}/error?reason=missing_token", frontend_url)),
+        ))
     }
 }
