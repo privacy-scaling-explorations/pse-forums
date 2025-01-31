@@ -56,4 +56,4 @@ export type UpdatePostDto = { content: string | null; id: number; tags: string[]
 
 export type UpdateProfileDto = { about: string | null; id: number; url: string | null }
 
-export type UserDto = { created_at: string; id: number; email: string; encrypted_password: string; salt: string; username: string }
+export type UserDto = { created_at: string; id: number; email: string; email_confirmed: boolean; encrypted_password: string; salt: string; username: string }

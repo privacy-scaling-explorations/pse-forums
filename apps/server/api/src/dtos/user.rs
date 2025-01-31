@@ -10,6 +10,7 @@ pub struct UserDto {
     pub created_at: String,
     pub id: i32,
     pub email: String,
+    pub email_confirmed: bool,
     pub encrypted_password: String,
     pub salt: String,
     pub username: String,
