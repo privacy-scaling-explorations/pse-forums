@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+#MISE description="Reset DB (run migrations and seed data)"
+set -eu
+
+restart_postgres() {
+  docker compose stop postgres
+  docker compose rm -f postgres
+  docker compose up -d postgres
+}
+
+wait_for_postgres() {
+  printf "%s\n" "Waiting for postgres..."
+  until docker exec pse-forum-postgres pg_isready -U postgres -h localhost > /dev/null;do
+    sleep 1
+  done
+}
+
+main() {
+  restart_postgres
+  wait_for_postgres
+  mise r p migrate deploy
+  mise r seed
+}
+
+main

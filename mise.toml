@@ -1,7 +1,7 @@
 #:schema https://gist.githubusercontent.com/sripwoud/144f811fbaafe2765f894d81cb1d986c/raw/7bb569892c31e9aa692c0fb3808af9134cfe9764/mise-task.json
 
 [env]
-DATABASE_URL = "postgresql://postgres:postgres@127.0.0.1:54322/postgres"
+DATABASE_URL = "postgres://postgres:postgres@localhost:5432/postgres"
 PRISMA_GEN_TS_BINDINGS_PATH = "{{config_root}}/apps/client/src/lib/bindings.ts"
 VITE_SERVER_URL = "http://localhost:3000"
 _ = { file = ".env.yaml" }
@@ -15,56 +15,100 @@ hurl = "latest"
 lefthook = "latest"
 rust = "latest"
 
-[tasks]
-add-shadcn-component = { alias = "ac", dir = "apps/client", run = 'bunx --bun shadcn@latest add {{arg(name="component")}}' }
-build-client = { alias = "bc", dir = "apps/client", run = "bun vite build", sources = [
+[tasks.add-shadcn-component]
+run = "bunx --bun shadcn@latest add {{arg(name=\"component\")}}"
+alias = "ac"
+description = "Add a new shadcn component"
+
+[tasks.build-client]
+run = "bun vite build"
+alias = "bc"
+description = "Build client"
+dir = "apps/client"
+sources = [
     "apps/client/**/*",
     "!apps/client/dist/**",
     "!apps/client/node_modules/**",
-], outputs.auto = true, depends = [
-    "gen-ts",
-] }
-build-server = { alias = "bs", dir = "apps/server", run = "cargo build -r", sources = [
-    "apps/server/**/*.rs",
-], outputs.auto = true }
-db-reset = { alias = "dbr", run = "bun supabase db reset && mise r p migrate deploy && mise r seed" }
-db-migrate-prod = { dir = "apps/server/db", run = "DATABASE_URL=$DATABASE_URL_PROD cargo run --bin prisma -F bin -- migrate deploy", description = "Run migrations on hosted DB" }
-db-start = { alias = "dbs", description = "Run local postgres instance (with supabase docker container)", run = "bun supabase start" }
-dev = { alias = "d", depends = ["dev-client", "dev-server"] }
-dev-client = { alias = "dc", dir = "apps/client", run = "bun vite dev", depends = [
-    "install-node-modules",
-    "gen-ts",
-], wait_for = "dev-server" }
-dev-server = { alias = "ds", run = [
-    "mise r db-start && mise r p migrate deploy && mise r seed; cargo run --bin api",
-] }
-docker-build-server = { alias = "dbs", description = "Build docker image for server", run = "docker build -f apps/server/Dockerfile . -t pse-forum-server" }
-docker-run-server = { alias = "drs", description = "Run dockerized server", run = "docker run -p 3000:3000 pse-forum-server" }
-freedit = { dir = "apps/freedit", run = "cargo run -r --bin freedit" }
-install-node-modules = { hide = true, run = "bun i", sources = [
-    "package.json",
-    "apps/client/package.json",
-], outputs = [
-    "bun.lockb",
-] }
-gen-ts = { run = "cargo run --bin bindings", hide = true }
-prisma = { alias = "p", dir = "apps/server/db", description = "Run prisma CLI by connecting to the DB with pgbouncer", run = "cargo run -F bin --bin prisma --", depends_post = [
-    "post-gen-rs",
-] }
-seed = { run = "cargo run --bin seed" }
-start = { alias = "s", depends = ["db-start", "start-server", "start-client"] }
-start-client = { alias = "sc", depends = [
-    "install-node-modules",
-    "build-client",
-], dir = "apps/client", run = "bun vite preview", sources = [
+]
+outputs.auto = true
+depends = ["gen-ts"]
+
+[tasks.build-server]
+run = "cargo build -r"
+alias = "bs"
+description = "Build server"
+dir = "apps/server"
+sources = ["apps/server/**/*.rs"]
+outputs.auto = true
+
+[tasks.db-deploy]
+dir = "apps/server/db"
+description = "Run migrations on hosted DB"
+run = "DATABASE_URL=$DATABASE_URL_PROD cargo run --bin prisma -F bin -- migrate deploy"
+
+[tasks.db-start]
+run = "docker compose up -d postgres"
+alias = "dbs"
+description = "Run local dockerized postgres"
+
+[tasks.dev]
+alias = "d"
+depends = ["dev-client", "dev-server"]
+description = "Start everything in dev mode"
+
+[tasks.dev-client]
+run = "bun vite dev"
+alias = "dc"
+dir = "apps/client"
+depends = ["install-node-modules", "gen-ts"]
+sources = [
     "apps/client/**/*",
     "!apps/client/dist/**",
     "!apps/client/node_modules/**",
-], outputs.auto = true }
-start-server = { alias = "ss", dir = "apps/server", run = "cargo run -r --bin api", sources = [
-    "apps/server/**/*.rs",
-], outputs.auto = true, depends = [
-    "gen-rs",
-] }
-test = { alias = "t", run = "cargo nextest run" }
-test-hurl = { alias = "th", dir = "apps/server/api/test/integration", run = "hurl --test *" }
+]
+outputs.auto = true
+description = "Run client in dev mode"
+
+[tasks.dev-server]
+run = "mise r db-reset && cargo run --bin api"
+alias = "ds"
+description = "Run server in dev mode"
+
+[tasks.freedit]
+dir = "apps/freedit"
+run = "cargo run -r --bin freedit"
+description = "Start legacy freedit server"
+
+[tasks.gen-ts]
+run = "cargo run --bin bindings"
+hide = true
+description = "Generate r(s)pc ts bindings"
+
+[tasks.install-node-modules]
+run = "bun i"
+hide = true
+sources = ["package.json", "apps/client/package.json"]
+outputs = ["bun.lockb"]
+
+[tasks.prisma]
+run = "cargo run -F bin --bin prisma --"
+alias = "p"
+dir = "apps/server/db"
+depends_post = ["post-gen-rs"]
+description = "Run prisma CLI"
+
+[tasks.seed]
+run = "cargo run --bin seed"
+description = "Seed local DB"
+hide = true
+
+[tasks.test-rs]
+alias = "tr"
+run = "cargo nextest run"
+description = "Run Rust tests"
+
+[tasks.test-hurl]
+dir = "apps/server/api/test/integration"
+run = "hurl --test *"
+alias = "th"
+description = "Run http integration tests"
