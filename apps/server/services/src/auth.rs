@@ -2,7 +2,7 @@ use crate::{user::CreateUserData, UserService};
 use chrono::{Duration, FixedOffset, Utc};
 use crypto::{hash_pwd, verify_pwd};
 use derive_more::derive::Constructor;
-use domain::{Claim, Create, Read, User};
+use domain::{Claim, Create, Email, Password, Read, User, Username};
 use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
 use std::sync::Arc;
 use thiserror::Error;
@@ -18,20 +18,20 @@ pub enum AuthError {
 }
 
 pub struct SignupData {
-    pub email: String,
-    pub password: String,
-    pub username: String,
+    pub email: Email,
+    pub password: Password,
+    pub username: Username,
 }
 
-#[derive(Clone, Debug)]
 pub struct SigninData {
-    pub username: String,
-    pub password: String,
+    pub username: Username,
+    pub password: Password,
 }
 
 impl Into<CreateUserData> for SignupData {
     fn into(self) -> CreateUserData {
-        let (salt, encrypted_password) = hash_pwd(&self.password).expect("Failed to hash password");
+        let (salt, encrypted_password) =
+            hash_pwd(self.password.as_ref()).expect("Failed to hash password");
         CreateUserData {
             username: self.username,
             email: self.email,
@@ -88,11 +88,11 @@ impl AuthService {
     ) -> Result<(User, String), AuthError> {
         let user = self
             .user_service
-            .read(username.clone())
+            .read(username.into())
             .await
             .map_err(|_| AuthError::InvalidCredentials)?;
 
-        verify_pwd(&password, &user.salt, &user.encrypted_password)
+        verify_pwd(password.as_ref(), &user.salt, &user.encrypted_password)
             .map_err(|_| AuthError::InvalidCredentials)?;
 
         let jwt = self.issue_jwt(&user)?;

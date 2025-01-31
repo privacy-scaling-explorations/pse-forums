@@ -1,27 +1,53 @@
 import { createLazyFileRoute } from "@tanstack/react-router"
 import { PostCard } from "c/PostCard"
+import type { GroupDto } from "l/bindings"
+import { useQuery } from "l/rspc"
+import { useCallback, useMemo } from "react"
 import { Button } from "ui/button"
 
 export const Route = createLazyFileRoute("/")({
   component: Index,
 })
 
-const posts = [
-  {
-    created_at: "2023-03-01",
-    inn_name: "Inn",
-    title: "Title",
-    username: "Username",
-  },
-  {
-    created_at: "2023-03-02",
-    inn_name: "Inn",
-    title: "Title",
-    username: "Username",
-  },
-]
-
 function Index() {
+  const { data: posts, isLoading: postIsLoading, error: postError } = useQuery(["post.list", 1])
+  // TODO Is there a way we can use the post group ids in the list to only get what we need?
+  const { data: groups, isLoading: groupsIsLoading, error: groupErr } = useQuery(["group.list"])
+
+  const idToGroup = useMemo(() =>
+    groups?.reduce((prev, cur) => {
+      prev[cur.id] = cur
+      return prev
+    }, {} as Record<number, GroupDto>), [groups])
+
+  const getGroupName = useCallback((gid: number | null): string => {
+    if (!gid || !idToGroup || !idToGroup[gid]) {
+      return "Unknown"
+    }
+
+    return idToGroup[gid].name
+  }, [idToGroup])
+
+  const postsWithGroup = useMemo(() =>
+    posts?.map((p) => ({
+      ...p,
+      group_name: getGroupName(p.gid),
+    })), [posts, getGroupName])
+
+  const error = postError ?? groupErr
+  const isLoading = postIsLoading || groupsIsLoading
+
+  // TODO Error state
+  if (error) {
+    console.error(error.message)
+    return <div>{error.message}</div>
+  }
+
+  // TODO Loading state
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
   return (
     <div>
       <div className="flex justify-between mb-2">
@@ -29,7 +55,7 @@ function Index() {
         <Button>+ New Post</Button>
       </div>
       <ol className="space-y-2">
-        {posts.map((p) => <PostCard key={p.created_at} {...p} />)}
+        {postsWithGroup.map((p) => <PostCard key={p.id} {...p} />)}
       </ol>
     </div>
   )

@@ -78,12 +78,17 @@ macro_rules! Comment {
 
 // type Ok<T> = Result<T, prisma_client_rust::QueryError>;
 
-async fn seed_database(client: &PrismaClient) -> Result<(), prisma_client_rust::QueryError> {
+async fn seed_database(
+    client: &PrismaClient,
+) -> Result<((&str, &str, &str), (&str, &str, &str)), prisma_client_rust::QueryError> {
+    let user_data_1 = ("user1@example.com", "2Up7ib0&ab", "user1");
+    let user_data_2 = ("user2@example.com", "x.70QvcFab", "user2");
+
     let (user1, user2) = client
         ._transaction()
         .run(|client| async move {
-            let user1 = User!(client, "user1@example.com", "11111111", "user1")?;
-            let user2 = User!(client, "user2@example.com", "22222222", "user2")?;
+            let user1 = User!(client, user_data_1.0, user_data_1.1, user_data_1.2)?;
+            let user2 = User!(client, user_data_2.0, user_data_2.1, user_data_2.2)?;
 
             Ok((user1, user2))
         })
@@ -146,7 +151,7 @@ async fn seed_database(client: &PrismaClient) -> Result<(), prisma_client_rust::
     Comment!(client, "Comment by user 2 on post 2", post2.id, user2.id)?;
     Comment!(client, "Comment by user 2 on post 1", post1.id, user2.id)?;
 
-    Ok(())
+    Ok((user_data_1, user_data_2))
 }
 
 #[tokio::main]
@@ -154,7 +159,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = init_prisma().await.unwrap();
 
     match seed_database(&client).await {
-        Ok(_) => println!("Database seeded successfully"),
+        Ok((user1, user2)) => {
+            println!("Database seeded successfully");
+            println!("Test users: (email, password, username)");
+            println!("{:?}", user1);
+            println!("{:?}", user2);
+        }
         Err(e) => eprintln!("Error seeding the database: {:#?}", e),
     }
 

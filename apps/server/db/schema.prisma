@@ -50,10 +50,10 @@ model Post {
   // pid Int?         // TODO: define a policy table: eg 1 | require member of bandada group 1, 2|require mail of domain anon.xyz| ...
   // publicProofData String?         // TODO: any data we want to store and have a public for public verification
 
-  user    User?     @relation(fields: [uid], references: [id]) // TODO: Add cascade delete ??
-  Comment Comment[]
-  group   Group?    @relation("GroupPosts", fields: [gid], references: [id])
-  gid     Int? // Optional group ID; null for posts that are not part of a group
+  user     User?     @relation(fields: [uid], references: [id]) // TODO: Add cascade delete ??
+  comments Comment[]
+  group    Group?    @relation("GroupPosts", fields: [gid], references: [id])
+  gid      Int? // Optional group ID; null for posts that are not part of a group
 
   @@map("post")
 }

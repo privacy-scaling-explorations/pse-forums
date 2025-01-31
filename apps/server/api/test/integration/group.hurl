@@ -10,6 +10,7 @@ jsonpath "$.result.data.tags[1]" == "tag2"
 GET http://localhost:3000/rspc/group.list
 HTTP 200
 [Asserts]
+jsonpath "$.result.data" isCollection
 jsonpath "$.result.data" count >= 2
 jsonpath "$.result.data[0].description" == "This is group 1"
 jsonpath "$.result.data[0].id" == 1

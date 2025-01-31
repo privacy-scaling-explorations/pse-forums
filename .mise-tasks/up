@@ -1,0 +1,80 @@
+#!/bin/sh
+set -eu
+
+GREEN="\033[32m"
+RED="\033[31m"
+RESET="\033[0m"
+
+log() {
+  printf "%b%s%b\n" "$1" "$2" "$RESET"
+}
+
+open_url() {
+  URL="$1"
+  printf "%s\n" "🌍 Opening $URL in your current browser session..."
+
+  if command -v xdg-open >/dev/null 2>&1; then
+    xdg-open "$URL" # Linux
+  elif command -v open >/dev/null 2>&1; then
+    open "$URL" # macOS
+  elif command -v start >/dev/null 2>&1; then
+    start "$URL" # Windows (WSL)
+  else
+    >&2 log "$RED" "❌ Could not open browser. Please manually visit: $URL"
+  fi
+}
+
+check_docker() {
+  if ! command -v docker >/dev/null 2>&1; then
+    >&2 log "$RED" "❌ Docker is not installed or not in your PATH."
+    open_url "https://docs.docker.com/get-started/get-docker/"
+    exit 1
+  fi
+
+  if ! docker info >/dev/null 2>&1; then
+    >&2 log "$RED" "❌ Docker is installed but not running. Please start Docker."
+    exit 1
+  fi
+
+  if ! command -v docker compose >/dev/null 2>&1; then
+    >&2 log "$RED" "❌ Docker Compose is not installed or not in your PATH."
+    open_url "https://docs.docker.com/compose/install/"
+    exit 1
+  fi
+}
+
+start_docker() {
+  printf "%s\n" "🐳 Starting Docker containers..."
+  docker compose up -d
+}
+
+wait_for_client() {
+  echo "⌛ Waiting for client to start..."
+  until docker compose ps client | grep -q "Up"; do
+    sleep 1
+  done
+  log "$GREEN" "✅ Client is up!"
+}
+
+get_client_url() {
+  PORT=$(docker compose exec client printenv PORT 2>/dev/null || echo "80")
+  CLIENT_URL="http://localhost${PORT:+:$PORT}"
+  CLIENT_URL="${CLIENT_URL%:80}"
+  echo "$CLIENT_URL"
+}
+
+open_browser() {
+  CLIENT_URL=$(get_client_url)
+  echo "🌍 Opening $CLIENT_URL in your browser..."
+
+  open_url "$CLIENT_URL"
+}
+
+main() {
+  check_docker
+  start_docker
+  wait_for_client
+  open_browser
+}
+
+main

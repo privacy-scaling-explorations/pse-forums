@@ -1,7 +1,8 @@
+#!/usr/bin/env bash
 #MISE alias="c"
 #MISE quiet=true
+#MISE description="Clean all build artifacts and caches"
 
-#!/usr/bin/env bash
 
 BASE_DIRS=(
   "node_modules"

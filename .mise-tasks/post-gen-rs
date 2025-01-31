@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 #MISE hide=true
 #MISE quiet=true
-set -u
+
+set -eu
 
 GENERATED_PATH="$MISE_PROJECT_ROOT/apps/server/db/src/generated.rs"
 
