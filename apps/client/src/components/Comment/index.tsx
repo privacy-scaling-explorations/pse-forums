@@ -4,7 +4,7 @@ import { Comment } from "./_Comment"
 
 export function CommentList({ pid }: { pid: number }) {
   // TODO Only get comments for post (pid)
-  const { data: comments, isLoading, error } = useQuery(["comment.list"])
+  const { data: comments, isLoading, error } = useQuery(["comment.list", pid])
 
   // TODO Error state
   if (error) {

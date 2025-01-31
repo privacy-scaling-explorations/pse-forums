@@ -10,7 +10,7 @@ export const Route = createLazyFileRoute("/")({
 })
 
 function Index() {
-  const { data: posts, isLoading: postIsLoading, error: postError } = useQuery(["post.list"])
+  const { data: posts, isLoading: postIsLoading, error: postError } = useQuery(["post.list", 1])
   // TODO Is there a way we can use the post group ids in the list to only get what we need?
   const { data: groups, isLoading: groupsIsLoading, error: groupErr } = useQuery(["group.list"])
 
