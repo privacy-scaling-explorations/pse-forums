@@ -41,6 +41,17 @@ impl Read<i32, Result<Comment>> for CommentService {
 }
 
 #[async_trait]
+impl Read<(), Result<Vec<Comment>>> for CommentService {
+    async fn read(&self, _: ()) -> Result<Vec<Comment>> {
+        self.0
+            .read(())
+            .await
+            .map(|comments| comments.into_iter().map(Comment::from).collect())
+            .map_err(|e| e.into())
+    }
+}
+
+#[async_trait]
 impl Delete<i32, Result<Comment>> for CommentService {
     async fn delete(&self, id: i32) -> Result<Comment> {
         self.0

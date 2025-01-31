@@ -78,6 +78,19 @@ impl Read<i32, Result<comment::Data>> for CommentRepository {
     }
 }
 
+// TODO This should take in a post id to only get comments for that post
+#[async_trait]
+impl Read<(), Result<Vec<comment::Data>>> for CommentRepository {
+    async fn read(&self, _: ()) -> Result<Vec<comment::Data>> {
+        self.0
+            .comment()
+            .find_many(vec![])
+            .exec()
+            .await
+            .map_err(|e| InfraError::Db(e.to_string()))
+    }
+}
+
 #[async_trait]
 impl Delete<i32, Result<comment::Data>> for CommentRepository {
     async fn delete(&self, id: i32) -> Result<comment::Data> {
