@@ -4,6 +4,7 @@ edition.workspace = true
 
 [dependencies]
 async-trait.workspace = true
+chrono.workspace = true
 db = { path = "../db" }
 derive_more.workspace = true
 domain = { path = "../domain" }

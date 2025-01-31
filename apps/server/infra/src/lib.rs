@@ -1,20 +1,24 @@
 mod comment;
-pub use comment::*;
+mod email_confirmation;
 mod error;
-use db::PrismaClient;
-pub use error::InfraError;
 mod group;
-pub use group::*;
 mod post;
-pub use post::*;
-mod user;
-pub use user::*;
 mod profile;
+mod user;
+
+pub use comment::*;
+use db::PrismaClient;
+pub use email_confirmation::*;
+pub use error::InfraError;
+pub use group::*;
+pub use post::*;
 pub use profile::*;
 use std::sync::Arc;
+pub use user::*;
 
 pub struct Repositories {
     pub comment: Arc<CommentRepository>,
+    pub email_confirmation: Arc<EmailConfirmationRepository>,
     pub group: Arc<GroupRepository>,
     pub post: Arc<PostRepository>,
     pub profile: Arc<ProfileRepository>,
@@ -25,6 +29,7 @@ impl Repositories {
     pub fn new(prisma: Arc<PrismaClient>) -> Self {
         Self {
             comment: Arc::new(CommentRepository::new(prisma.clone())),
+            email_confirmation: Arc::new(EmailConfirmationRepository::new(prisma.clone())),
             group: Arc::new(GroupRepository::new(prisma.clone())),
             post: Arc::new(PostRepository::new(prisma.clone())),
             profile: Arc::new(ProfileRepository::new(prisma.clone())),

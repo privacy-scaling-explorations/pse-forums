@@ -1,11 +1,16 @@
-#:schema https://gist.githubusercontent.com/sripwoud/144f811fbaafe2765f894d81cb1d986c/raw/7bb569892c31e9aa692c0fb3808af9134cfe9764/mise-task.json
-
 [env]
+CLIENT_URL = "http://localhost:5173"
 DATABASE_URL = "postgres://postgres:postgres@localhost:5432/postgres"
+EMAIL_FROM = "pse-forum@noreply.com"
+EMAIL_HOST = "localhost"
+#EMAIL_PASSWORD=not needed during local dev with inbucket
+#EMAIL_USERNAME=not needed during local dev with inbucket
+EMAIL_PORT = 2500
+JWT_SECRET = "very-strong-secret"
 PRISMA_GEN_TS_BINDINGS_PATH = "{{config_root}}/apps/client/src/lib/bindings.ts"
+USE_INBUCKET = true
 VITE_SERVER_URL = "http://localhost:3000"
 _ = { file = ".env.yaml" }
-JWT_SECRET = "very-strong-secret"
 
 [tools]
 bun = "latest"
@@ -70,7 +75,7 @@ outputs.auto = true
 description = "Run client in dev mode"
 
 [tasks.dev-server]
-run = "mise r db-reset && cargo run --bin api"
+run = ["docker compose up mail -d", "mise r db-reset && cargo run --bin api"]
 alias = "ds"
 description = "Run server in dev mode"
 
@@ -96,6 +101,14 @@ alias = "p"
 dir = "apps/server/db"
 depends_post = ["post-gen-rs"]
 description = "Run prisma CLI"
+
+[tasks.restart]
+run = """
+mise r down && \
+docker compose build --no-cache && \
+mise run up
+"""
+description = "Restart everything (rebuild dockerized services)"
 
 [tasks.seed]
 run = "cargo run --bin seed"

@@ -2,6 +2,7 @@ CREATE TABLE "user" (
   "id" SERIAL NOT NULL,
   "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "email" TEXT NOT NULL,
+  "email_confirmed" BOOLEAN NOT NULL DEFAULT false,
   "encrypted_password" TEXT NOT NULL,
   "salt" TEXT NOT NULL,
   "username" TEXT NOT NULL,
