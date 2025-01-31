@@ -22,7 +22,7 @@ pub use comment::Comment;
 pub use content::Content;
 pub use description::Description;
 pub use email::Email;
-pub use email_confirmation::EmailConfirmation;
+pub use email_confirmation::*;
 pub use error::ValidationError;
 pub use group::Group;
 pub use password::Password;

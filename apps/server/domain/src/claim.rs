@@ -2,7 +2,7 @@ use crate::Username;
 use chrono::{DateTime, FixedOffset};
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Clone)]
 pub struct Claim {
     pub uid: String,
     #[serde(with = "custom_datetime")]

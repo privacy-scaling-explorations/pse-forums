@@ -4,6 +4,7 @@ use infra::Repositories;
 use services::Services;
 use std::sync::Arc;
 
+#[derive(Clone)]
 pub struct Context {
     pub claim: Option<Claim>,
     pub jwt: Option<String>,

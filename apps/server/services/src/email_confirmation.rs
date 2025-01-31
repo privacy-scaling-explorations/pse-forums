@@ -2,7 +2,7 @@ use super::Result;
 use crate::ServiceError;
 use async_trait::async_trait;
 use derive_more::derive::Constructor;
-use domain::{Create, Email, EmailConfirmation};
+use domain::{Create, Delete, Email, EmailConfirmation, Read, Token};
 use infra::EmailConfirmationRepository;
 use lettre::{Message, SmtpTransport, Transport};
 use std::sync::Arc;
@@ -21,14 +21,35 @@ impl Create<i32, Result<EmailConfirmation>> for EmailConfirmationService {
     }
 }
 
+#[async_trait]
+impl Read<Token, Result<EmailConfirmation>> for EmailConfirmationService {
+    async fn read(&self, token: Token) -> Result<EmailConfirmation> {
+        self.0
+            .read(token)
+            .await
+            .map(EmailConfirmation::from)
+            .map_err(|e| e.into())
+    }
+}
+
+#[async_trait]
+impl Delete<Token, Result<EmailConfirmation>> for EmailConfirmationService {
+    /// will automatically update user.email_confirmed to true via psql trigger IF token is valid
+    async fn delete(&self, token: Token) -> Result<EmailConfirmation> {
+        self.0
+            .delete(token)
+            .await
+            .map(EmailConfirmation::from)
+            .map_err(|e| e.into())
+    }
+}
+
 impl EmailConfirmationService {
     pub async fn send_confirmation_email(&self, uid: i32, email: &Email) -> Result<()> {
-        // insert token into db
         let EmailConfirmation { token, .. } = self.create(uid).await?;
 
-        // get token from db
-        // send email
-        let confirmation_link = format!("http://localhost:3000/rspc/auth.confirm?input={}", token);
+        // config host with env var
+        let confirmation_link = format!("http://localhost:3000/auth/confirm/email?token={}", token);
         let email = Message::builder()
             .from(
                 std::env::var("EMAIL_FROM")
@@ -48,6 +69,11 @@ impl EmailConfirmationService {
             .send(&email)
             .map_err(|e| ServiceError::EmailConfirmationSendFailed(e.to_string()))?;
 
+        Ok(())
+    }
+
+    pub async fn confirm_email(&self, token: Token) -> Result<()> {
+        self.delete(token).await?;
         Ok(())
     }
 }

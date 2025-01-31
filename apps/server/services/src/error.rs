@@ -5,8 +5,12 @@ use thiserror::Error;
 
 #[derive(Error, Debug, Serialize, Type)]
 pub enum ServiceError {
+    #[error("Failed to confirm email: {0}")]
+    EmailConfirmationFailed(String),
     #[error("Failed to send email confirmation: {0}")]
     EmailConfirmationSendFailed(String),
+    #[error("Email confirmation link expired")]
+    EmailConfirmationExpired,
     #[error("Infra error: {0}")]
     Infra(#[from] crate::error::InfraError),
 }

@@ -65,8 +65,6 @@ get_client_url() {
 
 open_browser() {
   CLIENT_URL=$(get_client_url)
-  echo "🌍 Opening $CLIENT_URL in your browser..."
-
   open_url "$CLIENT_URL"
 }
 

@@ -1,4 +1,4 @@
 #!/bin/sh
-#MISE desc="Stop local dockerized app"
+#MISE description="Stop local dockerized app"
 
 docker compose down

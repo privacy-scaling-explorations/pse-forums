@@ -24,6 +24,7 @@ services:
       postgres:
         condition: service_healthy
     environment:
+      CLIENT_URL: http://client
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
       EMAIL_HOST: pse-forum-mail
     ports: ["3000:3000"]

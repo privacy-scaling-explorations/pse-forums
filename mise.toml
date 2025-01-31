@@ -7,6 +7,7 @@ EMAIL_HOST = "localhost"
 #EMAIL_PASSWORD=not needed during local dev with inbucket
 #EMAIL_USERNAME=not needed during local dev with inbucket
 EMAIL_PORT = 2500
+CLIENT_URL = "http://localhost:5173"
 PRISMA_GEN_TS_BINDINGS_PATH = "{{config_root}}/apps/client/src/lib/bindings.ts"
 VITE_SERVER_URL = "http://localhost:3000"
 _ = { file = ".env.yaml" }
@@ -101,6 +102,14 @@ alias = "p"
 dir = "apps/server/db"
 depends_post = ["post-gen-rs"]
 description = "Run prisma CLI"
+
+[tasks.restart]
+run = """
+docker compose down && \
+docker compose build --no-cache && \
+docker compose up -d
+"""
+description = "Restart everything (rebuild dockerized services)"
 
 [tasks.seed]
 run = "cargo run --bin seed"

@@ -13,3 +13,29 @@ CREATE UNIQUE INDEX "email_confirmation_token_key" ON "email_confirmation"("toke
 ALTER TABLE "email_confirmation" ADD CONSTRAINT "email_confirmation_uid_fkey" FOREIGN KEY ("uid") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 comment on table email_confirmation is 'Email confirmation tokens for email verification on signup';
+
+-- automatically confirm user on deletion of row that contains a valid, non expired token
+CREATE FUNCTION confirm_user_on_valid_deletion() RETURNS TRIGGER AS $$
+DECLARE
+    token_exists BOOLEAN;
+BEGIN
+    -- Ensure the token is valid (not expired)
+    SELECT EXISTS (
+        SELECT 1 FROM email_confirmation
+        WHERE uid = OLD.uid
+          AND token = OLD.token
+          AND expires_at > NOW()
+    ) INTO token_exists;
+
+    IF token_exists THEN
+        UPDATE "user" SET email_confirmed = TRUE WHERE id = OLD.uid;
+    END IF;
+
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER email_confirmation_trigger
+BEFORE DELETE ON email_confirmation
+FOR EACH ROW
+EXECUTE FUNCTION confirm_user_on_valid_deletion();
