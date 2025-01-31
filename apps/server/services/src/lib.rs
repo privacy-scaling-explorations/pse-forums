@@ -39,7 +39,7 @@ impl Services {
             .parse::<u16>()
             .expect("EMAIL_PORT must be a valid number");
 
-        let emailer = if cfg!(debug_assertions) {
+        let emailer = if cfg!(debug_assertions) || env::var("USE_INBUCKET").is_ok() {
             // Inbucket doesn't require authentication
             SmtpTransport::builder_dangerous(&smtp_host)
                 .port(smtp_port)

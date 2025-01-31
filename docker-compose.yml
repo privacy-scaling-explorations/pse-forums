@@ -26,7 +26,11 @@ services:
     environment:
       CLIENT_URL: http://client
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
+      EMAIL_FROM: "${EMAIL_FROM:-pse-forum@noreply.com}"
       EMAIL_HOST: pse-forum-mail
+      EMAIL_PORT: "${EMAIL_PORT:-2500}"
+      JWT_SECRET: "${JWT_SECRET:-secret}"
+      USE_INBUCKET: true # LOCAL DEV ONLY
     ports: ["3000:3000"]
 
   postgres:

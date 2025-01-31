@@ -68,9 +68,39 @@ open_browser() {
   open_url "$CLIENT_URL"
 }
 
+wait_for_db() {
+  printf "%s\n" "⌛ Waiting for database to be start..."
+  until docker exec "$DB_CONTAINER" pg_isready -U "$DB_USER" >/dev/null 2>&1; do
+    sleep 1
+  done
+  log "$GREEN" "✅ Database is up!"
+}
+
+run_migrations() {
+  log "$GREEN" "📂 Running database migrations..."
+
+  for migration in "$SCRIPT_DIR/apps/server/db/migrations"/*/*.sql; do
+    log "$GREEN" "🚀 Applying migration: $migration"
+    docker exec -i "$DB_CONTAINER" psql -U "$DB_USER" -d "$DB_NAME" <"$migration" >/dev/null 2>&1
+  done
+
+  log "$GREEN" "🎉 All migrations applied successfully!"
+}
+
 main() {
+  DB_CONTAINER="pse-forum-postgres"
+  DB_NAME="postgres"
+  DB_USER="postgres"
+
+  # Resolve the actual path of the script (handle symlinks & direct execution)
+  SCRIPT_PATH="$(readlink -f "$0" 2>/dev/null || realpath "$0")"
+  SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_PATH")/.." && pwd)" # Move up to project root
+  cd "$SCRIPT_DIR"
+
   check_docker
   start_docker
+  wait_for_db
+  run_migrations
   wait_for_client
   open_browser
 }
