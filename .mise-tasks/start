@@ -1,0 +1,55 @@
+#!/bin/sh
+set -eu
+
+GREEN="\033[32m"
+RED="\033[31m"
+RESET="\033[0m"
+
+log() {
+  printf "%b%s%b\n" "$1" "$2" "$RESET"
+}
+
+start_docker() {
+  printf "%s\n" "🐳 Starting Docker containers..."
+  docker compose up -d
+}
+
+# Function to wait for the client container to be ready
+wait_for_client() {
+  printf "%s\n" "⌛ Waiting for client to start..."
+  while ! docker compose ps client | grep -q "Up"; do
+    sleep 1
+  done
+  log "$GREEN" "✅ Client is up!"
+}
+
+get_client_url() {
+  PORT=$(docker compose exec client printenv PORT 2>/dev/null || echo "80")
+  CLIENT_URL="http://localhost${PORT:+:$PORT}"
+  CLIENT_URL="${CLIENT_URL%:80}"
+  echo "$CLIENT_URL"
+}
+
+open_browser() {
+  CLIENT_URL=$(get_client_url)
+  printf "%s\n" "🌍 Opening $CLIENT_URL in your browser..."
+
+  if command -v xdg-open >/dev/null 2>&1; then
+    xdg-open "$CLIENT_URL"  # Linux
+  elif command -v open >/dev/null 2>&1; then
+    open "$CLIENT_URL"  # macOS
+  elif command -v start >/dev/null 2>&1; then
+    start "$CLIENT_URL"  # Windows (WSL)
+  else
+    log "$RED" "❌ Could not detect OS to automatically open the browser."
+    log "$RED" "🌍 Please manually open: $CLIENT_URL"
+  fi
+}
+
+main() {
+  start_docker
+  wait_for_client
+  open_browser
+}
+
+main
