@@ -47,9 +47,8 @@ impl Delete<Token, Result<EmailConfirmation>> for EmailConfirmationService {
 impl EmailConfirmationService {
     pub async fn send_confirmation_email(&self, uid: i32, email: &Email) -> Result<()> {
         let EmailConfirmation { token, .. } = self.create(uid).await?;
-
-        // config host with env var
-        let confirmation_link = format!("http://localhost:3000/auth/confirm/email?token={}", token);
+        let server_url = std::env::var("VITE_SERVER_URL").expect("Missing VITE_SERVER_URL env var");
+        let confirmation_link = format!("{}/confirm-email?token={}", server_url, token);
         let email = Message::builder()
             .from(
                 std::env::var("EMAIL_FROM")

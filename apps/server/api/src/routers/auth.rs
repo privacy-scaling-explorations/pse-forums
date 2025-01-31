@@ -58,7 +58,7 @@ pub async fn confirm_email_handler(
     State(auth_service): State<Arc<AuthService>>,
     Query(TokenQuery { token }): Query<TokenQuery>,
 ) -> Result<Redirect, (StatusCode, Redirect)> {
-    let frontend_url = env::var("FRONTEND_URL").expect("Missing FRONTEND_URL env var");
+    let frontend_url = env::var("CLIENT_URL").expect("Missing CLIENT_URL env var");
 
     if let Ok(token) = Token::try_from(token) {
         auth_service
