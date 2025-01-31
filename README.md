@@ -47,7 +47,7 @@ mise run d
 ### Inbucket
 
 During local development, we use [inbucket](https://github.com/inbucket/inbucket) to receive confirmation emails.\
-The mailboxes are available at `http://localhost:9000`.
+The mailboxes are available at [localhost:9000](http://localhost:9000).
 
 ## Freedit
 
