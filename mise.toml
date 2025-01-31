@@ -2,6 +2,11 @@
 
 [env]
 DATABASE_URL = "postgres://postgres:postgres@localhost:5432/postgres"
+EMAIL_FROM = "pse-forum@noreply.com"
+EMAIL_HOST = "localhost"
+#EMAIL_PASSWORD=not needed during local dev with inbucket
+#EMAIL_USERNAME=not needed during local dev with inbucket
+EMAIL_PORT = 2500
 PRISMA_GEN_TS_BINDINGS_PATH = "{{config_root}}/apps/client/src/lib/bindings.ts"
 VITE_SERVER_URL = "http://localhost:3000"
 _ = { file = ".env.yaml" }
@@ -70,7 +75,7 @@ outputs.auto = true
 description = "Run client in dev mode"
 
 [tasks.dev-server]
-run = "mise r db-reset && cargo run --bin api"
+run = ["docker compose up mail -d", "mise r db-reset && cargo run --bin api"]
 alias = "ds"
 description = "Run server in dev mode"
 

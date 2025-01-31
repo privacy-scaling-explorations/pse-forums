@@ -9,8 +9,8 @@ use thiserror::Error;
 
 #[derive(Error, Debug)]
 pub enum AuthError {
-    #[error("Email Confirmation Error")]
-    EmailConfirmationError,
+    #[error("Email Confirmation Error: {0}")]
+    EmailConfirmationError(String),
     #[error("Invalid credentials")]
     InvalidCredentials,
     #[error("JWT error: {0}")]
@@ -81,7 +81,7 @@ impl AuthService {
         self.email_confirmation_service
             .send_confirmation_email(user.id, &user.email)
             .await
-            .map_err(|_| AuthError::EmailConfirmationError)?;
+            .map_err(|e| AuthError::EmailConfirmationError(e.to_string()))?;
 
         let jwt = self.issue_jwt(&user)?;
 

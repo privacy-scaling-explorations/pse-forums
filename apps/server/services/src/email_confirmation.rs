@@ -28,7 +28,7 @@ impl EmailConfirmationService {
 
         // get token from db
         // send email
-        let confirmation_link = format!("http://localhost:3000/confirm?token={}", token);
+        let confirmation_link = format!("http://localhost:3000/rspc/auth.confirm?input={}", token);
         let email = Message::builder()
             .from(
                 std::env::var("EMAIL_FROM")
@@ -38,12 +38,15 @@ impl EmailConfirmationService {
             )
             .to(email.as_ref().parse().unwrap())
             .subject("PSE FORUM: Confirm your Email")
-            .body(format!("Click to confirmation link: {}", confirmation_link))
+            .body(format!(
+                "Click to confirm your registration: {}",
+                confirmation_link
+            ))
             .unwrap();
 
         self.1
             .send(&email)
-            .map_err(|_| ServiceError::EmailConfirmationSendFailed)?;
+            .map_err(|e| ServiceError::EmailConfirmationSendFailed(e.to_string()))?;
 
         Ok(())
     }

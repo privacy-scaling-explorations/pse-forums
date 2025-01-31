@@ -1,4 +1,7 @@
+use lettre::{transport::smtp::authentication::Credentials, SmtpTransport};
+use std::env;
 use std::sync::Arc;
+
 mod auth;
 mod comment;
 mod email_confirmation;
@@ -14,7 +17,6 @@ pub use comment::*;
 pub use email_confirmation::*;
 pub use error::*;
 pub use group::*;
-use lettre::{transport::smtp::authentication::Credentials, SmtpTransport};
 pub use post::*;
 pub use profile::*;
 pub use user::*;
@@ -31,18 +33,29 @@ pub struct Services {
 
 impl Services {
     pub fn new(repositories: Repositories) -> Self {
-        let creds = Credentials::new(
-            std::env::var("EMAIL_USERNAME").expect("EMAIL_USERNAME is not set"),
-            std::env::var("EMAIL_PASSWORD").expect("EMAIL_PASSWORD is not set"),
-        );
-        let emailer = SmtpTransport::relay(
-            std::env::var("EMAIL_HOST")
-                .expect("EMAIL_HOST is not set")
-                .as_str(),
-        )
-        .expect("Failed to connect to email relay")
-        .credentials(creds)
-        .build();
+        let smtp_host = env::var("EMAIL_HOST").expect("EMAIL_HOST is not set");
+        let smtp_port = env::var("EMAIL_PORT")
+            .expect("EMAIL_PORT is not set")
+            .parse::<u16>()
+            .expect("EMAIL_PORT must be a valid number");
+
+        let emailer = if cfg!(debug_assertions) {
+            // Inbucket doesn't require authentication
+            SmtpTransport::builder_dangerous(&smtp_host)
+                .port(smtp_port)
+                .build()
+        } else {
+            // Use production SMTP server with authentication
+            let creds = Credentials::new(
+                env::var("EMAIL_USERNAME").expect("EMAIL_USERNAME is not set"),
+                env::var("EMAIL_PASSWORD").expect("EMAIL_PASSWORD is not set"),
+            );
+            SmtpTransport::relay(&smtp_host)
+                .expect("Failed to connect to email relay")
+                .credentials(creds)
+                .port(smtp_port)
+                .build()
+        };
 
         let email_confirmation_service = Arc::new(EmailConfirmationService::new(
             repositories.email_confirmation,
