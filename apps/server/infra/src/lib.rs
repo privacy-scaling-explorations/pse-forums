@@ -10,7 +10,7 @@ pub use post::*;
 mod user;
 pub use user::*;
 mod profile;
-pub use profile::ProfileRepository;
+pub use profile::*;
 use std::sync::Arc;
 
 pub struct Repositories {

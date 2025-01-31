@@ -1,3 +1,4 @@
+use crate::Username;
 use chrono::{DateTime, FixedOffset};
 use serde::{Deserialize, Serialize};
 
@@ -6,7 +7,7 @@ pub struct Claim {
     pub uid: String,
     #[serde(with = "custom_datetime")]
     pub exp: DateTime<FixedOffset>,
-    pub username: String,
+    pub username: Username,
 }
 
 mod custom_datetime {
