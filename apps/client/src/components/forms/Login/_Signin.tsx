@@ -1,5 +1,6 @@
 import { Label } from "@radix-ui/react-label"
 import { useForm } from "@tanstack/react-form"
+import { useNavigate } from "@tanstack/react-router"
 import { FieldInfo } from "c/FieldInfo"
 import { Button } from "c/ui/button"
 import { Input } from "c/ui/input"
@@ -17,6 +18,7 @@ const signinSchema = z.object({
 type SigninFormData = z.infer<typeof signinSchema>
 
 export function Signin() {
+  const navigate = useNavigate()
   const { setAuth } = useAuth()
 
   const handleAuth = useCallback(async ({ value }: { value: SigninFormData }) => {
@@ -31,7 +33,8 @@ export function Signin() {
         username,
       })
 
-  }, [setAuth])
+      navigate({ to: "/" })
+  }, [navigate, setAuth])
 
   const signinForm = useForm<SigninRequestDto>({
     defaultValues: { username: "", password: "" },
