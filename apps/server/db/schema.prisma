@@ -1,11 +1,13 @@
 generator client {
-  provider = "cargo run -F bin --bin prisma --"
-  output   = "./src/generated.rs"
+  provider        = "cargo run -F bin --bin prisma --"
+  output          = "./src/generated.rs"
+  previewFeatures = ["multiSchema"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  schemas  = ["bandada", "public"]
 }
 
 model User {
@@ -16,65 +18,57 @@ model User {
   encryptedPassword String             @map("encrypted_password")
   salt              String
   username          String             @unique
-  Profile           Profile[]
-  Post              Post[]
   Comment           Comment[]
   EmailConfirmation EmailConfirmation?
+  Post              Post?
+  Profile           Profile?
 
   @@map("user")
+  @@schema("public")
 }
 
 model Profile {
   id         Int      @id
   about      String?
   created_at DateTime @db.Timestamptz(6)
-  user       User     @relation(fields: [id], references: [id], onDelete: Cascade)
   username   String   @unique
   url        String?
+  user       User     @relation(fields: [id], references: [id], onDelete: Cascade)
 
   @@map("profile")
+  @@schema("public")
 }
 
 model Post {
-  id         Int      @id @default(autoincrement())
-  uid        Int?     @unique // Optional user ID; null for anonymous posts
-  content    String
-  created_at DateTime @default(now()) @db.Timestamptz(6)
+  id         Int       @id @default(autoincrement())
+  uid        Int?      @unique
   title      String
-  tags       String[] @default([])
-
-  // TODO: groupId          Int             // Assuming posts belong to a group
-  // TODO? feedItemId       Int?
-  // Making status optional or defaulting if status handling is simplified
-  // TODO? status           PostStatus      @default(Normal)
-
-  // Fields for anonymous posts
-  // pid Int?         // TODO: define a policy table: eg 1 | require member of bandada group 1, 2|require mail of domain anon.xyz| ...
-  // publicProofData String?         // TODO: any data we want to store and have a public for public verification
-
-  user     User?     @relation(fields: [uid], references: [id]) // TODO: Add cascade delete ??
-  comments Comment[]
-  group    Group?    @relation("GroupPosts", fields: [gid], references: [id])
-  gid      Int? // Optional group ID; null for posts that are not part of a group
+  tags       String[]  @default([])
+  content    String
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  gid        Int?
+  comments   Comment[]
+  group      Group?    @relation("GroupPosts", fields: [gid], references: [id])
+  user       User?     @relation(fields: [uid], references: [id])
 
   @@map("post")
+  @@schema("public")
 }
 
 model Comment {
-  id         Int      @id @default(autoincrement())
-  rid        Int? // Optional reply ID
+  id         Int       @id @default(autoincrement())
+  rid        Int?
   pid        Int
-  uid        Int? // Optional user ID; null for anonymous comments
-  created_at DateTime @default(now()) @db.Timestamptz(6)
+  uid        Int?
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
   content    String
-  // isHidden   Boolean  @default(false) // TODO: was in freedit schema, what is this for?
-
-  parent  Comment?  @relation("CommentReplies", fields: [rid], references: [id])
-  replies Comment[] @relation("CommentReplies")
-  post    Post      @relation(fields: [pid], references: [id], onDelete: Cascade)
-  user    User?     @relation(fields: [uid], references: [id]) // TODO: Add cascade delete ??
+  post       Post      @relation(fields: [pid], references: [id], onDelete: Cascade)
+  parent     Comment?  @relation("CommentReplies", fields: [rid], references: [id])
+  replies    Comment[] @relation("CommentReplies")
+  user       User?     @relation(fields: [uid], references: [id])
 
   @@map("comment")
+  @@schema("public")
 }
 
 model Group {
@@ -82,11 +76,11 @@ model Group {
   description String
   name        String
   created_at  DateTime @default(now()) @db.Timestamptz(6)
-  tags        String[] // TODO: add tags table?
+  tags        String[]
   posts       Post[]   @relation("GroupPosts")
 
-  // moderators User[] // TODO: add moderators table, or extend user table?
   @@map("group")
+  @@schema("public")
 }
 
 model EmailConfirmation {
@@ -97,4 +91,76 @@ model EmailConfirmation {
   user       User     @relation(fields: [uid], references: [id], onDelete: Cascade)
 
   @@map("email_confirmation")
+  @@schema("public")
+}
+
+model admins {
+  id          String   @id @db.VarChar
+  address     String   @unique @db.VarChar
+  username    String   @unique @db.VarChar
+  api_key     String?  @db.VarChar
+  api_enabled Boolean  @default(false)
+  created_at  DateTime @default(now()) @db.Timestamp(6)
+  updated_at  DateTime @default(now()) @db.Timestamp(6)
+  groups      groups[]
+
+  @@schema("bandada")
+}
+
+model groups {
+  id                   String           @id @db.VarChar(32)
+  name                 String           @db.VarChar
+  description          String           @db.VarChar
+  admin_id             String           @db.VarChar
+  tree_depth           Int
+  fingerprint_duration Int
+  credentials          String?
+  created_at           DateTime         @default(now()) @db.Timestamp(6)
+  updated_at           DateTime         @default(now()) @db.Timestamp(6)
+  admins               admins           @relation(fields: [admin_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  invites              invites[]
+  memberships          memberships[]
+  oauth_accounts       oauth_accounts[]
+
+  @@schema("bandada")
+}
+
+model invites {
+  id          Int      @id @default(autoincrement())
+  code        String   @db.VarChar
+  is_redeemed Boolean  @default(false)
+  created_at  DateTime @default(now()) @db.Timestamp(6)
+  group_id    String?  @db.VarChar(32)
+  groups      groups?  @relation(fields: [group_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@schema("bandada")
+}
+
+model members {
+  id          String        @id @db.VarChar
+  created_at  DateTime      @default(now()) @db.Timestamp(6)
+  memberships memberships[]
+
+  @@schema("bandada")
+}
+
+model memberships {
+  group   String  @db.VarChar(32)
+  member  String  @db.VarChar
+  groups  groups  @relation(fields: [group], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  members members @relation(fields: [member], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([group, member])
+  @@index([member])
+  @@index([group])
+  @@schema("bandada")
+}
+
+model oauth_accounts {
+  accountHash String  @id @db.VarChar
+  group_id    String? @db.VarChar(32)
+  groups      groups? @relation(fields: [group_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([accountHash, group_id])
+  @@schema("bandada")
 }
