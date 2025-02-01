@@ -1,10 +1,12 @@
 generator client {
-  provider = "cargo run -F bin --bin prisma --"
-  output   = "./src/generated.rs"
+  previewFeatures = ["multiSchema"]
+  provider        = "cargo run -F bin --bin prisma --"
+  output          = "./src/generated.rs"
 }
 
 datasource db {
   provider = "postgresql"
+  schemas  = ["public"]
   url      = env("DATABASE_URL")
 }
 
@@ -22,6 +24,7 @@ model User {
   EmailConfirmation EmailConfirmation?
 
   @@map("user")
+  @@schema("public")
 }
 
 model Profile {
@@ -33,6 +36,7 @@ model Profile {
   url        String?
 
   @@map("profile")
+  @@schema("public")
 }
 
 model Post {
@@ -58,6 +62,7 @@ model Post {
   gid      Int? // Optional group ID; null for posts that are not part of a group
 
   @@map("post")
+  @@schema("public")
 }
 
 model Comment {
@@ -75,6 +80,7 @@ model Comment {
   user    User?     @relation(fields: [uid], references: [id]) // TODO: Add cascade delete ??
 
   @@map("comment")
+  @@schema("public")
 }
 
 model Group {
@@ -87,6 +93,7 @@ model Group {
 
   // moderators User[] // TODO: add moderators table, or extend user table?
   @@map("group")
+  @@schema("public")
 }
 
 model EmailConfirmation {
@@ -97,4 +104,5 @@ model EmailConfirmation {
   user       User     @relation(fields: [uid], references: [id], onDelete: Cascade)
 
   @@map("email_confirmation")
+  @@schema("public")
 }
