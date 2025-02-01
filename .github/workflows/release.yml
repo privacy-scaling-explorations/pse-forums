@@ -3,6 +3,7 @@ name: Publish Docker Images
 on:
   push:
     branches: ["main"]
+    paths: ["apps/client/**", "apps/server/**", "Cargo.toml"]
 
 env:
   REGISTRY: ghcr.io
