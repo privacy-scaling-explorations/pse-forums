@@ -55,7 +55,7 @@ function Index() {
         <Button>+ New Post</Button>
       </div>
       <ol className="space-y-2">
-        {postsWithGroup.map((p) => <PostCard key={p.id} {...p} />)}
+        {postsWithGroup?.map((p) => <PostCard key={p.id} {...p} />)}
       </ol>
     </div>
   )

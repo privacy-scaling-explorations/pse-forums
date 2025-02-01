@@ -3,9 +3,10 @@ import { useForm } from "@tanstack/react-form"
 import { FieldInfo } from "c/FieldInfo"
 import { Button } from "c/ui/button"
 import { Input } from "c/ui/input"
+import { useAuth } from "h/useAuth"
 import { SigninRequestDto } from "l/bindings"
 import { rspc } from "l/rspc"
-import type { FormEvent } from "react"
+import { useCallback, type FormEvent } from "react"
 import { z } from "zod"
 
 const signinSchema = z.object({
@@ -13,12 +14,28 @@ const signinSchema = z.object({
   password: z.string(),
 })
 
+type SigninFormData = z.infer<typeof signinSchema>
+
 export function Signin() {
+  const { setAuth } = useAuth()
+
+  const handleAuth = useCallback(async ({ value }: { value: SigninFormData }) => {
+      const {
+        user: { id, username },
+        token,
+      } = await rspc.mutation(["auth.signin", value])
+
+      setAuth({
+        token,
+        uid: id,
+        username,
+      })
+
+  }, [setAuth])
+
   const signinForm = useForm<SigninRequestDto>({
     defaultValues: { username: "", password: "" },
-    onSubmit: async ({ value }) => {
-      await rspc.mutation(["auth.signin", value])
-    },
+    onSubmit: handleAuth,
     validators: { onChange: signinSchema },
   })
 
