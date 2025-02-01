@@ -15,13 +15,13 @@ const signinSchema = z.object({
   password: z.string(),
 })
 
-type SigninFormData = z.infer<typeof signinSchema>
+type SigninSchema = z.infer<typeof signinSchema>
 
 export function Signin() {
   const navigate = useNavigate()
   const { setAuth } = useAuth()
 
-  const handleAuth = useCallback(async ({ value }: { value: SigninFormData }) => {
+  const handleAuth = useCallback(async ({ value }: { value: SigninSchema }) => {
       const {
         user: { id, username },
         token,
