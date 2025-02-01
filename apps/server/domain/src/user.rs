@@ -5,6 +5,7 @@ pub struct User {
     pub id: i32,
     pub created_at: DateTime<FixedOffset>,
     pub email: Email,
+    pub email_confirmed: bool,
     pub encrypted_password: String,
     pub salt: String,
     pub username: Username,
@@ -16,6 +17,7 @@ impl From<db::user::Data> for User {
             id: data.id,
             created_at: data.created_at,
             email: data.email.try_into().unwrap(), // if was inserted successfully in DB it is valid, safe to unwrap
+            email_confirmed: data.email_confirmed,
             encrypted_password: data.encrypted_password,
             salt: data.salt,
             username: data.username.try_into().unwrap(), // if was inserted successfully in DB it is valid, safe to unwrap

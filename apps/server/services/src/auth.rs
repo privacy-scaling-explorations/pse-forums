@@ -1,14 +1,16 @@
-use crate::{user::CreateUserData, UserService};
+use crate::{user::CreateUserData, EmailConfirmationService, UserService};
 use chrono::{Duration, FixedOffset, Utc};
 use crypto::{hash_pwd, verify_pwd};
 use derive_more::derive::Constructor;
-use domain::{Claim, Create, Email, Password, Read, User, Username};
+use domain::{Claim, Create, Email, Password, Read, Token, User, Username};
 use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
 use std::sync::Arc;
 use thiserror::Error;
 
 #[derive(Error, Debug)]
 pub enum AuthError {
+    #[error("Email Confirmation Error: {0}")]
+    EmailConfirmationError(String),
     #[error("Invalid credentials")]
     InvalidCredentials,
     #[error("JWT error: {0}")]
@@ -45,6 +47,7 @@ const EXPIRATION_DURATION_SECS: i64 = 3600;
 
 #[derive(Constructor)]
 pub struct AuthService {
+    pub email_confirmation_service: Arc<EmailConfirmationService>,
     pub user_service: Arc<UserService>,
     pub jwt_secret: String,
 }
@@ -74,6 +77,11 @@ impl AuthService {
             .create(payload.into())
             .await
             .map_err(|_| AuthError::InvalidCredentials)?;
+
+        self.email_confirmation_service
+            .send_confirmation_email(user.id, &user.email)
+            .await
+            .map_err(|e| AuthError::EmailConfirmationError(e.to_string()))?;
 
         let jwt = self.issue_jwt(&user)?;
 
@@ -110,5 +118,12 @@ impl AuthService {
         )
         .map(|data| data.claims)
         .map_err(|err| AuthError::JwtError(err.to_string()))
+    }
+
+    pub async fn confirm_email(&self, token: Token) -> Result<(), AuthError> {
+        self.email_confirmation_service
+            .confirm_email(token)
+            .await
+            .map_err(|e| AuthError::EmailConfirmationError(e.to_string()))
     }
 }

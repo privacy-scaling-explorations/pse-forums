@@ -1,4 +1,4 @@
-use crate::error::{too_long, too_short, ValidationError};
+use crate::error::{too_long, ValidationError};
 use nutype::nutype;
 
 const TITLE_MAX_LEN: usize = 50;

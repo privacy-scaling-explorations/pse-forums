@@ -2,6 +2,7 @@ mod context;
 use axum::{http::request::Parts, routing::get, Router};
 use context::Context;
 use db::init_prisma;
+use routers::confirm_email_handler;
 mod dtos;
 use std::sync::Arc;
 mod routers;
@@ -11,9 +12,11 @@ pub use rspc::mount;
 pub async fn app() -> Router {
     let prisma = Arc::new(init_prisma().await.unwrap());
     let router = mount();
-
+    let context = Context::new(prisma.clone(), None);
     Router::new()
         .route("/", get(|| async { "Hello rspc!" }))
+        .route("/confirm-email", get(confirm_email_handler))
+        .with_state(context.services.auth.clone())
         .nest(
             "/rspc",
             rspc_axum::endpoint(router, move |parts: Parts| {
@@ -22,7 +25,8 @@ pub async fn app() -> Router {
                     .get("Authorization")
                     .and_then(|v| v.to_str().ok())
                     .and_then(|v| v.strip_prefix("Bearer ").map(String::from));
-                Context::new(prisma.clone(), jwt)
+                let context = context.clone();
+                Context { jwt, ..context }
             }),
         )
 }

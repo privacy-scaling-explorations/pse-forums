@@ -16,6 +16,7 @@ apps/server/infra/prisma.rs
 biome.json
 bun.lockb
 dist
+mise.local.toml
 node_modules
 target
 *.tsbuildinfo
