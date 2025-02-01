@@ -1,7 +1,6 @@
 services:
   client:
-    build:
-      context: apps/client
+    image: ghcr.io/privacy-scaling-explorations/pse-forums-client:latest
     container_name: pse-forum-client
     environment:
       VITE_SERVER_URL: http://server:3000
@@ -15,9 +14,7 @@ services:
     ports: ["9000:9000", "2500:2500", "1100:1100"]
 
   server:
-    build:
-      context: .
-      dockerfile: apps/server/Dockerfile
+    image: ghcr.io/privacy-scaling-explorations/pse-forums-server:latest
     container_name: pse-forum-server
     depends_on:
       postgres:
