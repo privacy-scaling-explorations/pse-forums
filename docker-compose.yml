@@ -1,4 +1,20 @@
 services:
+  bandada:
+    # https://github.com/bandada-infra/bandada/blob/f92d71681f9f268e46ce1ab41b11c9e5622fb29c/docker-compose.prod.yml#L9C16-L9C75
+    image: ghcr.io/sripwoud/bandada-api:latest
+    container_name: pse-forum-bandada
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_SCHEMA: bandada
+      DB_TYPE: postgres
+      DB_URL: postgres://postgres:postgres@postgres:5432/postgres
+      API_URL: http://localhost:3000
+    pull_policy: always
+    restart: unless-stopped
+    ports: ["3001:3000"]
+
   client:
     image: ghcr.io/privacy-scaling-explorations/pse-forums-client:latest
     container_name: pse-forum-client

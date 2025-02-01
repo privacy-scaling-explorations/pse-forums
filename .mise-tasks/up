@@ -46,6 +46,7 @@ check_docker() {
 start_docker() {
   printf "%s\n" "🐳 Starting Docker containers..."
   docker compose up --pull always -d
+  docker compose logs -f &
 }
 
 wait_for_client() {
