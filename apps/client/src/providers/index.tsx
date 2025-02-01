@@ -1,7 +1,7 @@
 import { TooltipProvider } from "c/ui/tooltip"
+import { AuthProvider } from "./AuthProvider"
 import { QueryProvider } from "./QueryProvider"
 import { RouterProvider } from "./RouterProvider"
-import { AuthProvider } from "./AuthProvider"
 
 export function Providers() {
   return (

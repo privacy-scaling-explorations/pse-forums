@@ -6,9 +6,7 @@ export function Profile() {
   const { isSignedIn, auth } = useAuth()
 
   if (isSignedIn) {
-    return (
-      <div>{auth?.username}</div>
-    )
+    return <div>{auth?.username}</div>
   }
 
   return (

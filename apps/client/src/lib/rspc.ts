@@ -1,7 +1,7 @@
 import { createClient, FetchTransport } from "@rspc/client"
 import { createReactQueryHooks } from "@rspc/react-query"
-import type { Procedures } from "./bindings"
 import { getAuth } from "p/AuthProvider"
+import type { Procedures } from "./bindings"
 
 export const {
   Provider: RspcProvider,
@@ -15,7 +15,7 @@ export const rspc = createClient<Procedures>({
     (input, init) => {
       const auth = getAuth()
       const authHeader = {
-        "Authorization": `Bearer ${auth?.token}`
+        Authorization: `Bearer ${auth?.token}`,
       }
 
       return fetch(input, {
@@ -23,9 +23,9 @@ export const rspc = createClient<Procedures>({
         credentials: auth ? "include" : undefined,
         headers: {
           ...init?.headers,
-          ...(auth && authHeader)
-        }
+          ...(auth && authHeader),
+        },
       })
-    }
+    },
   ),
 })

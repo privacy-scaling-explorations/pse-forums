@@ -8,7 +8,7 @@ import { Input } from "c/ui/input"
 import { useAuth } from "h/useAuth"
 import { capitalize } from "l/format"
 import { rspc } from "l/rspc"
-import { useCallback, type FormEvent } from "react"
+import { type FormEvent, useCallback } from "react"
 import { z } from "zod"
 
 // TODO: restrict schema
