@@ -5,7 +5,7 @@ export function useAuth() {
   const authCtx = useContext(AuthContext)
 
   if (!authCtx) {
-    throw new Error("useTheme must be used within a ThemeProvider")
+    throw new Error("useAuth must be used within an AuthProvider")
   }
 
   return authCtx
