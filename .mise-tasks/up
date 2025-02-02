@@ -13,11 +13,11 @@ open_url() {
   URL="$1"
   printf "%s\n" "🌍 Opening $URL in your current browser session..."
 
-  if command -v xdg-open >/dev/null 2>&1; then
+  if command -v xdg-open &>/dev/null; then
     xdg-open "$URL" # Linux
-  elif command -v open >/dev/null 2>&1; then
+  elif command -v open &>/dev/null; then
     open "$URL" # macOS
-  elif command -v start >/dev/null 2>&1; then
+  elif command -v start &>/dev/null; then
     start "$URL" # Windows (WSL)
   else
     >&2 log "$RED" "❌ Could not open browser. Please manually visit: $URL"
@@ -25,18 +25,18 @@ open_url() {
 }
 
 check_docker() {
-  if ! command -v docker >/dev/null 2>&1; then
+  if ! command -v docker &> /dev/null; then
     >&2 log "$RED" "❌ Docker is not installed or not in your PATH."
     open_url "https://docs.docker.com/get-started/get-docker/"
     exit 1
   fi
 
-  if ! docker info >/dev/null 2>&1; then
+  if ! docker info &> /dev/null; then
     >&2 log "$RED" "❌ Docker is installed but not running. Please start Docker."
     exit 1
   fi
 
-  if ! command -v docker compose >/dev/null 2>&1; then
+  if ! command -v docker compose &> /dev/null; then
     >&2 log "$RED" "❌ Docker Compose is not installed or not in your PATH."
     open_url "https://docs.docker.com/compose/install/"
     exit 1
@@ -57,21 +57,13 @@ wait_for_client() {
   log "$GREEN" "✅ Client is up!"
 }
 
-get_client_url() {
-  PORT=$(docker compose exec client printenv PORT 2>/dev/null || echo "80")
-  CLIENT_URL="http://localhost${PORT:+:$PORT}"
-  CLIENT_URL="${CLIENT_URL%:80}"
-  echo "$CLIENT_URL"
-}
-
-open_browser() {
-  CLIENT_URL=$(get_client_url)
-  open_url "$CLIENT_URL"
+open_client() {
+  open_url "http://localhost"
 }
 
 wait_for_db() {
   printf "%s\n" "⌛ Waiting for database to be start..."
-  until docker exec "$DB_CONTAINER" pg_isready -U "$DB_USER" >/dev/null 2>&1; do
+  until docker exec "$DB_CONTAINER" pg_isready -U "$DB_USER" &> /dev/null; do
     sleep 1
   done
   log "$GREEN" "✅ Database is up!"
@@ -81,7 +73,10 @@ run_migrations() {
   printf "%s\n" "⌛  Running database migrations..."
 
   for migration in "$SCRIPT_DIR/apps/server/db/migrations"/*/*.sql; do
-    docker exec -i "$DB_CONTAINER" psql -U "$DB_USER" -d "$DB_NAME" <"$migration" >/dev/null 2>&1
+   if ! docker exec -i "$DB_CONTAINER" psql -U "$DB_USER" -d "$DB_NAME" <"$migration" > /dev/null;then
+      >&2 log "$RED" "❌  Failed to run migration $migration"
+      exit 1
+    fi
   done
 
   log "$GREEN" "✅  All migrations applied successfully!"
@@ -102,7 +97,7 @@ main() {
   wait_for_db
   run_migrations
   wait_for_client
-  open_browser
+  open_client
 }
 
 main
