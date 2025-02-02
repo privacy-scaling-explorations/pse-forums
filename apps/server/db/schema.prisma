@@ -98,8 +98,8 @@ model BandadaAdmin {
   // this deviates from original schema, TODO we set it to User.id via psql trigger
   id          Int            @id
   // default setting deviates from original schema
-  // we don't need the address field, setting to default instead of removing to avoid potential breaking side effects
-  address     String         @unique @default("unused") @db.VarChar
+  // we don't need the address field, setting to default and not unique instead of removing to avoid potential breaking side effects
+  // address     String         @default("unused") @db.VarChar
   // TODO set to user.id with psql trigger function
   username    String         @unique
   // THIS DEVIATES FROM ORIGINAL SCHEMA, WE WANT TO ALLOW API FOR ALL ADMINS WE CREATE
