@@ -94,73 +94,79 @@ model EmailConfirmation {
   @@schema("public")
 }
 
-model admins {
-  id          String   @id @db.VarChar
-  address     String   @unique @db.VarChar
-  username    String   @unique @db.VarChar
-  api_key     String?  @db.VarChar
-  api_enabled Boolean  @default(false)
-  created_at  DateTime @default(now()) @db.Timestamp(6)
-  updated_at  DateTime @default(now()) @db.Timestamp(6)
-  groups      groups[]
+model BandadaAdmin {
+  id          String         @id @db.VarChar
+  address     String         @unique @db.VarChar
+  username    String         @unique @db.VarChar
+  api_key     String?        @db.VarChar
+  api_enabled Boolean        @default(false)
+  created_at  DateTime       @default(now()) @db.Timestamp(6)
+  updated_at  DateTime       @default(now()) @db.Timestamp(6)
+  groups      BandadaGroup[]
 
+  @@map("admins")
   @@schema("bandada")
 }
 
-model groups {
-  id                   String           @id @db.VarChar(32)
-  name                 String           @db.VarChar
-  description          String           @db.VarChar
-  admin_id             String           @db.VarChar
+model BandadaGroup {
+  id                   String               @id @db.VarChar(32)
+  name                 String               @db.VarChar
+  description          String               @db.VarChar
+  admin_id             String               @db.VarChar
   tree_depth           Int
   fingerprint_duration Int
   credentials          String?
-  created_at           DateTime         @default(now()) @db.Timestamp(6)
-  updated_at           DateTime         @default(now()) @db.Timestamp(6)
-  admins               admins           @relation(fields: [admin_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  invites              invites[]
-  memberships          memberships[]
-  oauth_accounts       oauth_accounts[]
+  created_at           DateTime             @default(now()) @db.Timestamp(6)
+  updated_at           DateTime             @default(now()) @db.Timestamp(6)
+  admin                BandadaAdmin         @relation(fields: [admin_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  invites              BandadaInvite[]
+  memberships          BandadaMembership[]
+  oauth_accounts       BandadaOuthAccount[]
 
+  @@map("groups")
   @@schema("bandada")
 }
 
-model invites {
-  id          Int      @id @default(autoincrement())
-  code        String   @db.VarChar
-  is_redeemed Boolean  @default(false)
-  created_at  DateTime @default(now()) @db.Timestamp(6)
-  group_id    String?  @db.VarChar(32)
-  groups      groups?  @relation(fields: [group_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
-  @@schema("bandada")
-}
-
-model members {
-  id          String        @id @db.VarChar
+model BandadaInvite {
+  id          Int           @id @default(autoincrement())
+  code        String        @db.VarChar
+  is_redeemed Boolean       @default(false)
   created_at  DateTime      @default(now()) @db.Timestamp(6)
-  memberships memberships[]
+  group_id    String?       @db.VarChar(32)
+  group       BandadaGroup? @relation(fields: [group_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
+  @@map("invites")
   @@schema("bandada")
 }
 
-model memberships {
-  group   String  @db.VarChar(32)
-  member  String  @db.VarChar
-  groups  groups  @relation(fields: [group], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  members members @relation(fields: [member], references: [id], onDelete: NoAction, onUpdate: NoAction)
+model BandadaMember {
+  id          String              @id @db.VarChar
+  created_at  DateTime            @default(now()) @db.Timestamp(6)
+  memberships BandadaMembership[]
+
+  @@map("members")
+  @@schema("bandada")
+}
+
+model BandadaMembership {
+  group          String        @db.VarChar(32)
+  member         String        @db.VarChar
+  bandada_group  BandadaGroup  @relation(fields: [group], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  bandada_member BandadaMember @relation(fields: [member], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@id([group, member])
   @@index([member])
   @@index([group])
+  @@map("memberships")
   @@schema("bandada")
 }
 
-model oauth_accounts {
-  accountHash String  @id @db.VarChar
-  group_id    String? @db.VarChar(32)
-  groups      groups? @relation(fields: [group_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+model BandadaOuthAccount {
+  accountHash String        @id @db.VarChar
+  group_id    String?       @db.VarChar(32)
+  group       BandadaGroup? @relation(fields: [group_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@unique([accountHash, group_id])
+  @@map("oauth_accounts")
   @@schema("bandada")
 }
