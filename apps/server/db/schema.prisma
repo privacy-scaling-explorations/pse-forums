@@ -95,11 +95,17 @@ model EmailConfirmation {
 }
 
 model BandadaAdmin {
-  id          String         @id @db.VarChar
-  address     String         @unique @db.VarChar
-  username    String         @unique @db.VarChar
-  api_key     String?        @db.VarChar
-  api_enabled Boolean        @default(false)
+  // this deviates from original schema, TODO we set it to User.id via psql trigger
+  id          Int            @id
+  // default setting deviates from original schema
+  // we don't need the address field, setting to default instead of removing to avoid potential breaking side effects
+  address     String         @unique @default("unused") @db.VarChar
+  // TODO set to user.id with psql trigger function
+  username    String         @unique
+  // THIS DEVIATES FROM ORIGINAL SCHEMA, WE WANT TO ALLOW API FOR ALL ADMINS WE CREATE
+  api_key     String         @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  // THIS DEVIATES FROM ORIGINAL SCHEMA, WE WANT TO ALLOW API FOR ALL ADMINS WE CREATE
+  api_enabled Boolean        @default(true)
   created_at  DateTime       @default(now()) @db.Timestamp(6)
   updated_at  DateTime       @default(now()) @db.Timestamp(6)
   groups      BandadaGroup[]
@@ -112,7 +118,7 @@ model BandadaGroup {
   id                   String               @id @db.VarChar(32)
   name                 String               @db.VarChar
   description          String               @db.VarChar
-  admin_id             String               @db.VarChar
+  admin_id             Int                  @unique
   tree_depth           Int
   fingerprint_duration Int
   credentials          String?

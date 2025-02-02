@@ -1,15 +1,19 @@
+-- Original schema: https://github.com/bandada-infra/bandada/blob/main/database/seed.sql
+-- With some slight changes:
+-- Enabling API for all admins, generating automatically API keys as UUIDs
+-- Automatically syncing admin with user table via psql trigger
+
 CREATE SCHEMA IF NOT EXISTS "bandada";
 comment on schema bandada is 'Tables required for self-hosted Bandada API (https://bandada.pse.dev/)';
 
 CREATE TABLE "bandada"."admins" (
-    "id" VARCHAR NOT NULL,
-    "address" VARCHAR NOT NULL,
-    "username" VARCHAR NOT NULL,
-    "api_key" VARCHAR,
-    "api_enabled" BOOLEAN NOT NULL DEFAULT false,
+    "id" INTEGER NOT NULL,
+    "address" VARCHAR NOT NULL DEFAULT 'unused',
+    "username" TEXT NOT NULL,
+    "api_key" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "api_enabled" BOOLEAN NOT NULL DEFAULT true,
     "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
     CONSTRAINT "admins_pkey" PRIMARY KEY ("id")
 );
 
@@ -17,7 +21,7 @@ CREATE TABLE "bandada"."groups" (
     "id" VARCHAR(32) NOT NULL,
     "name" VARCHAR NOT NULL,
     "description" VARCHAR NOT NULL,
-    "admin_id" VARCHAR NOT NULL,
+    "admin_id" INTEGER NOT NULL,
     "tree_depth" INTEGER NOT NULL,
     "fingerprint_duration" INTEGER NOT NULL,
     "credentials" TEXT,
@@ -60,8 +64,10 @@ CREATE TABLE "bandada"."oauth_accounts" (
     CONSTRAINT "oauth_accounts_pkey" PRIMARY KEY ("accountHash")
 );
 
+CREATE UNIQUE INDEX "admins_api_key_key" ON "bandada"."admins"("api_key");
 CREATE UNIQUE INDEX "admins_address_key" ON "bandada"."admins"("address");
 CREATE UNIQUE INDEX "admins_username_key" ON "bandada"."admins"("username");
+CREATE UNIQUE INDEX "groups_admin_id_key" ON "bandada"."groups"("admin_id");
 CREATE INDEX "memberships_member_idx" ON "bandada"."memberships"("member" text_ops);
 CREATE INDEX "memberships_group_idx" ON "bandada"."memberships"("group" text_ops);
 CREATE UNIQUE INDEX "oauth_accounts_accountHash_group_id_key" ON "bandada"."oauth_accounts"("accountHash", "group_id");
