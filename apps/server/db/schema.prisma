@@ -11,17 +11,17 @@ datasource db {
 }
 
 model User {
-  id                Int                @id @default(autoincrement())
-  created_at        DateTime           @default(now()) @db.Timestamptz(6)
-  email             String             @unique
-  email_confirmed   Boolean            @default(false)
-  encryptedPassword String             @map("encrypted_password")
-  salt              String
-  username          String             @unique
-  Comment           Comment[]
-  EmailConfirmation EmailConfirmation?
-  Post              Post?
-  Profile           Profile?
+  id                 Int                @id @default(autoincrement())
+  created_at         DateTime           @default(now()) @db.Timestamptz(6)
+  email              String             @unique
+  email_confirmed    Boolean            @default(false)
+  encrypted_password String             @map("encrypted_password")
+  salt               String
+  username           String             @unique
+  comments           Comment[]
+  email_confirmation EmailConfirmation?
+  post               Post?
+  profile            Profile?
 
   @@map("user")
   @@schema("public")
