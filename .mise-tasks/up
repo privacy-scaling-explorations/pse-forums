@@ -61,31 +61,16 @@ open_client() {
   open_url "http://localhost"
 }
 
-wait_for_db() {
+wait_for_postgres() {
   printf "%s\n" "⌛ Waiting for database to be start..."
-  until docker exec "$DB_CONTAINER" pg_isready -U "$DB_USER" &> /dev/null; do
+  until docker exec "$DB_CONTAINER" pg_isready &> /dev/null; do
     sleep 1
   done
   log "$GREEN" "✅ Database is up!"
 }
 
-run_migrations() {
-  printf "%s\n" "⌛  Running database migrations..."
-
-  for migration in "$SCRIPT_DIR/apps/server/db/migrations"/*/*.sql; do
-   if ! docker exec -i "$DB_CONTAINER" psql -U "$DB_USER" -d "$DB_NAME" <"$migration" > /dev/null;then
-      >&2 log "$RED" "❌  Failed to run migration $migration"
-      exit 1
-    fi
-  done
-
-  log "$GREEN" "✅  All migrations applied successfully!"
-}
-
 main() {
   DB_CONTAINER="pse-forum-postgres"
-  DB_NAME="postgres"
-  DB_USER="postgres"
 
   # Resolve the actual path of the script (handle symlinks & direct execution)
   SCRIPT_PATH="$(readlink -f "$0" 2>/dev/null || realpath "$0")"
@@ -94,8 +79,7 @@ main() {
 
   check_docker
   start_docker
-  wait_for_db
-  run_migrations
+  wait_for_postgres
   wait_for_client
   open_client
 }
