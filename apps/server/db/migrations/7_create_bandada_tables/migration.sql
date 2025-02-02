@@ -8,7 +8,7 @@ comment on schema bandada is 'Tables required for self-hosted Bandada API (https
 
 CREATE TABLE "bandada"."admins" (
     "id" INTEGER NOT NULL,
-    "address" VARCHAR NOT NULL DEFAULT 'unused',
+    -- "address" VARCHAR NOT NULL DEFAULT 'unused',
     "username" TEXT NOT NULL,
     "api_key" UUID NOT NULL DEFAULT gen_random_uuid(),
     "api_enabled" BOOLEAN NOT NULL DEFAULT true,
@@ -65,7 +65,7 @@ CREATE TABLE "bandada"."oauth_accounts" (
 );
 
 CREATE UNIQUE INDEX "admins_api_key_key" ON "bandada"."admins"("api_key");
-CREATE UNIQUE INDEX "admins_address_key" ON "bandada"."admins"("address");
+-- CREATE UNIQUE INDEX "admins_address_key" ON "bandada"."admins"("address");
 CREATE UNIQUE INDEX "admins_username_key" ON "bandada"."admins"("username");
 CREATE UNIQUE INDEX "groups_admin_id_key" ON "bandada"."groups"("admin_id");
 CREATE INDEX "memberships_member_idx" ON "bandada"."memberships"("member" text_ops);
