@@ -38,7 +38,7 @@ export type CreateGroupDto = { create_bandada_group: boolean | null; description
 
 export type CreatePostDto = { content: string; gid: number | null; tags: string[] | null; title: string; uid: number | null }
 
-export type GroupDto = { id: number; name: string; description: string; tags: string[] }
+export type GroupDto = { bandada_admin_id: number | null; id: number; name: string; description: string; tags: string[] }
 
 export type PostDto = { created_at: string; content: string; gid: number | null; id: number; tags: string[]; title: string; uid: number | null }
 
