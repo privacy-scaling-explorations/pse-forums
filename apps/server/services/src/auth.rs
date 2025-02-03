@@ -85,9 +85,10 @@ impl AuthService {
 
         let jwt = self.issue_jwt(&user)?;
 
-        // TODO: receive a semaphore id commitment and add it to ??
+        // TODO: receive a semaphore id commitment and add it to ?? and how ??
         // - bandada.members table with psql trigger on user insert (add new semaphore id commitment column to user table)?
         // - create a whole new commitments table and insert manually here?
+        // - make request to https://api.bandada.pse.dev/#/groups/GroupsController_addMember ?
 
         Ok((user, jwt))
     }
