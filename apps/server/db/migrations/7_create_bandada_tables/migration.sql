@@ -17,13 +17,16 @@ CREATE TABLE "bandada"."admins" (
     CONSTRAINT "admins_pkey" PRIMARY KEY ("id")
 );
 
+ALTER TABLE "public"."group" ADD COLUMN "bandada_admin_id" INTEGER;
+
 CREATE TABLE "bandada"."groups" (
     "id" VARCHAR(32) NOT NULL,
-    "name" VARCHAR NOT NULL,
-    "description" VARCHAR NOT NULL,
+    "gid" INTEGER NOT NULL,
+    "name" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
     "admin_id" INTEGER NOT NULL,
-    "tree_depth" INTEGER NOT NULL,
-    "fingerprint_duration" INTEGER NOT NULL,
+    "tree_depth" INTEGER NOT NULL DEFAULT 16,
+    "fingerprint_duration" INTEGER NOT NULL DEFAULT 3600,
     "credentials" TEXT,
     "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -68,11 +71,15 @@ CREATE UNIQUE INDEX "admins_api_key_key" ON "bandada"."admins"("api_key");
 -- CREATE UNIQUE INDEX "admins_address_key" ON "bandada"."admins"("address");
 CREATE UNIQUE INDEX "admins_username_key" ON "bandada"."admins"("username");
 CREATE UNIQUE INDEX "groups_admin_id_key" ON "bandada"."groups"("admin_id");
+CREATE UNIQUE INDEX "groups_gid_key" ON "bandada"."groups"("gid");
 CREATE INDEX "memberships_member_idx" ON "bandada"."memberships"("member" text_ops);
 CREATE INDEX "memberships_group_idx" ON "bandada"."memberships"("group" text_ops);
 CREATE UNIQUE INDEX "oauth_accounts_accountHash_group_id_key" ON "bandada"."oauth_accounts"("accountHash", "group_id");
 
+ALTER TABLE "public"."group" ADD CONSTRAINT "group_bandada_admin_id_fkey" FOREIGN KEY ("bandada_admin_id") REFERENCES "bandada"."admins"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "bandada"."admins" ADD CONSTRAINT "admins_id_fkey" FOREIGN KEY ("id") REFERENCES "public"."user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE "bandada"."groups" ADD CONSTRAINT "groups_admin_id_fkey" FOREIGN KEY ("admin_id") REFERENCES "bandada"."admins"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "bandada"."groups" ADD CONSTRAINT "groups_gid_fkey" FOREIGN KEY ("gid") REFERENCES "public"."group"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE "bandada"."invites" ADD CONSTRAINT "invites_group_id_fkey" FOREIGN KEY ("group_id") REFERENCES "bandada"."groups"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE "bandada"."memberships" ADD CONSTRAINT "memberships_group_fkey" FOREIGN KEY ("group") REFERENCES "bandada"."groups"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE "bandada"."memberships" ADD CONSTRAINT "memberships_member_fkey" FOREIGN KEY ("member") REFERENCES "bandada"."members"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;

@@ -1,7 +1,7 @@
 CREATE TABLE "profile" (
   "id" INTEGER NOT NULL,
   "about" TEXT,
-  "created_at" TIMESTAMPTZ(6) NOT NULL,
+  "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "username" TEXT NOT NULL,
   "url" TEXT,
   CONSTRAINT "profile_pkey" PRIMARY KEY ("id")
