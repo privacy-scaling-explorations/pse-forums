@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router"
-import { Button } from "ui/button"
 import { Input } from "ui/input"
 import { Separator } from "ui/separator"
+import { Profile } from "./Profile"
 
 export function Header() {
   return (
@@ -16,9 +16,7 @@ export function Header() {
         </div>
 
         <div className="flex gap-2">
-          <Link to="/login">
-            <Button>Sign-In/Up</Button>
-          </Link>
+          <Profile />
         </div>
       </div>
       <Separator />
