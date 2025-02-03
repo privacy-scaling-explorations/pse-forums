@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Clone)]
 pub struct Claim {
-    pub uid: String,
+    pub uid: i32,
     #[serde(with = "custom_datetime")]
     pub exp: DateTime<FixedOffset>,
     pub username: Username,

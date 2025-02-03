@@ -14,7 +14,7 @@ mod profile;
 mod user;
 
 pub use auth::*;
-pub use bandada::BandadaService;
+pub use bandada::service::*;
 pub use comment::*;
 pub use email_confirmation::*;
 pub use error::*;

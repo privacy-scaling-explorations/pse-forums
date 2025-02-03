@@ -22,6 +22,7 @@ nutype = { version = "0.5.1", features = ["regex", "serde"] }
 prisma-client-rust = { default-features = false, git = "https://github.com/Brendonovich/prisma-client-rust", features = ["mocking", "postgresql", "rspc"], tag = "0.6.11" }
 prisma-client-rust-cli = { default-features = false, git = "https://github.com/Brendonovich/prisma-client-rust", features = ["mocking", "postgresql", "rspc"], tag = "0.6.11" }
 regex = "1.11.1"
+reqwest = { version = "0.12.12", features = ["json"] }
 ring = "0.17.8"
 rspc = "0.3.1"
 rspc-axum = "0.2.1"

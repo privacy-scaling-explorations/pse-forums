@@ -12,6 +12,7 @@ domain = { path = "../domain" }
 infra = { path = "../infra" }
 jsonwebtoken.workspace = true
 lettre.workspace = true
+reqwest.workspace = true
 rspc.workspace = true
 serde.workspace = true
 serde_json.workspace = true

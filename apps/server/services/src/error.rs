@@ -5,6 +5,8 @@ use thiserror::Error;
 
 #[derive(Error, Debug, Serialize, Type)]
 pub enum ServiceError {
+    #[error("Bandada API error: {0}")]
+    BandadaApiError(String),
     #[error("Failed to confirm email: {0}")]
     EmailConfirmationFailed(String),
     #[error("Failed to send email confirmation: {0}")]
