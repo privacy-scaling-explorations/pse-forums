@@ -1,4 +1,4 @@
-use domain::Group;
+use domain::{Claim, Group};
 use serde::{Deserialize, Serialize};
 use services::{CreateGroupData, UpdateGroupData};
 use specta::Type;
@@ -6,19 +6,19 @@ use struct_convert::Convert;
 
 #[derive(Deserialize, Type)]
 pub struct CreateGroupDto {
-    pub name: String,
+    pub create_bandada_group: Option<bool>,
     pub description: String,
+    pub name: String,
     pub tags: Option<Vec<String>>,
 }
 
-impl TryFrom<CreateGroupDto> for CreateGroupData {
-    type Error = domain::ValidationError;
-
-    fn try_from(dto: CreateGroupDto) -> Result<Self, Self::Error> {
-        Ok(Self {
-            name: dto.name.try_into()?,
-            description: dto.description.try_into()?,
-            tags: dto.tags,
+impl CreateGroupDto {
+    pub fn transform(self, claim: Claim) -> Result<CreateGroupData, domain::ValidationError> {
+        Ok(CreateGroupData {
+            bandada_admin_id: self.create_bandada_group.map(|_| claim.uid),
+            description: self.description.try_into()?,
+            name: self.name.try_into()?,
+            tags: self.tags,
         })
     }
 }
@@ -58,6 +58,7 @@ impl TryFrom<UpdateGroupDto> for UpdateGroupData {
 #[derive(Convert, Serialize, Type)]
 #[convert(from = "Group")]
 pub struct GroupDto {
+    pub bandada_admin_id: Option<i32>,
     pub id: i32,
     pub name: String,
     pub description: String,

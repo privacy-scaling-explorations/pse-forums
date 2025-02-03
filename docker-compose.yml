@@ -1,7 +1,24 @@
 services:
+  bandada:
+    # https://github.com/bandada-infra/bandada/blob/f92d71681f9f268e46ce1ab41b11c9e5622fb29c/docker-compose.prod.yml#L9C16-L9C75
+    image: ghcr.io/sripwoud/bandada-api:latest
+    container_name: pse-forum-bandada
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_SCHEMA: bandada
+      DB_TYPE: postgres
+      DB_URL: postgres://postgres:postgres@postgres:5432/postgres
+      API_URL: http://localhost:3000
+    pull_policy: always
+    restart: unless-stopped
+    ports: ["3001:3000"]
+
   client:
-    build:
-      context: apps/client
+    image: ghcr.io/privacy-scaling-explorations/pse-forums-client:latest
     container_name: pse-forum-client
     environment:
       VITE_SERVER_URL: http://server:3000
@@ -15,14 +32,15 @@ services:
     ports: ["9000:9000", "2500:2500", "1100:1100"]
 
   server:
-    build:
-      context: .
-      dockerfile: apps/server/Dockerfile
+    image: ghcr.io/privacy-scaling-explorations/pse-forums-server:latest
     container_name: pse-forum-server
     depends_on:
+      migrate:
+        condition: service_completed_successfully
       postgres:
         condition: service_healthy
     environment:
+      BANDADA_URL: http://bandada:3000
       CLIENT_URL: http://localhost # must be url on external network (not docker's), with docker compose the client is served with nginx on port 80
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
       EMAIL_FROM: "${EMAIL_FROM:-pse-forum@noreply.com}"
@@ -38,8 +56,32 @@ services:
     container_name: pse-forum-postgres
     restart: unless-stopped
     environment:
+      PGUSER: postgres # used by pg_isready
       POSTGRES_PASSWORD: postgres
-    ports: ["5432:5432"]
-    tmpfs: [/var/lib/postgresql/data]
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
+    ports: ["5432:5432"]
+    volumes: ["pse-forum-bandada:/var/lib/postgresql/data"]
+
+  migrate:
+    image: postgres:latest
+    container_name: pse-forum-migrate
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # env var used by psql and pg_isready (not postgres server which uses POSTGRES_PASSWORD)
+      PGHOST: postgres
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: postgres
+    volumes:
+      [
+        "./apps/server/db/migrations:/migrations",
+        "./apps/server/db/migrate.sh:/migrate.sh",
+      ]
+    entrypoint: ["/bin/sh", "-c", "/migrate.sh"]
+    restart: "no"
+
+volumes:
+  pse-forum-bandada:

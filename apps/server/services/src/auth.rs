@@ -58,7 +58,7 @@ impl AuthService {
             + Duration::seconds(EXPIRATION_DURATION_SECS);
 
         let claim = Claim {
-            uid: user.id.to_string(),
+            uid: user.id,
             exp,
             username: user.username.clone(),
         };
@@ -84,6 +84,11 @@ impl AuthService {
             .map_err(|e| AuthError::EmailConfirmationError(e.to_string()))?;
 
         let jwt = self.issue_jwt(&user)?;
+
+        // TODO: receive a semaphore id commitment and add it to ?? and how ??
+        // - bandada.members table with psql trigger on user insert (add new semaphore id commitment column to user table)?
+        // - create a whole new commitments table and insert manually here?
+        // - make request to https://api.bandada.pse.dev/#/groups/GroupsController_addMember ?
 
         Ok((user, jwt))
     }

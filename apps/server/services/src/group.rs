@@ -12,6 +12,7 @@ pub struct GroupService(Arc<GroupRepository>);
 #[derive(Convert)]
 #[convert(into = "CreateGroup")]
 pub struct CreateGroupData {
+    pub bandada_admin_id: Option<i32>,
     pub description: Description,
     pub name: Name,
     pub tags: Option<Vec<String>>,
