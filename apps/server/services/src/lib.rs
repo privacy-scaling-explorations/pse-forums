@@ -1,3 +1,4 @@
+use bandada::http_client::HttpClient;
 use lettre::{transport::smtp::authentication::Credentials, SmtpTransport};
 use std::env;
 use std::sync::Arc;
@@ -26,6 +27,7 @@ pub use user::*;
 #[derive(Clone)]
 pub struct Services {
     pub auth: Arc<AuthService>,
+    pub bandada: Arc<BandadaService>,
     pub comment: Arc<CommentService>,
     pub group: Arc<GroupService>,
     pub post: Arc<PostService>,
@@ -74,6 +76,14 @@ impl Services {
 
         Self {
             auth: auth_service,
+            bandada: Arc::new(BandadaService::new(
+                repositories.bandada_admin,
+                HttpClient::new(
+                    env::var("BANDADA_URL")
+                        .expect("BANDADA_URL is not set")
+                        .as_str(),
+                ),
+            )),
             comment: Arc::new(CommentService::new(
                 repositories.comment,
                 post_service.clone(),
