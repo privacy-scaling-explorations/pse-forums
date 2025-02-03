@@ -11,17 +11,18 @@ datasource db {
 }
 
 model User {
-  id                Int                @id @default(autoincrement())
-  created_at        DateTime           @default(now()) @db.Timestamptz(6)
-  email             String             @unique
-  email_confirmed   Boolean            @default(false)
-  encryptedPassword String             @map("encrypted_password")
-  salt              String
-  username          String             @unique
-  Comment           Comment[]
-  EmailConfirmation EmailConfirmation?
-  Post              Post?
-  Profile           Profile?
+  id                 Int                @id @default(autoincrement())
+  created_at         DateTime           @default(now()) @db.Timestamptz(6)
+  email              String             @unique
+  email_confirmed    Boolean            @default(false)
+  encrypted_password String             @map("encrypted_password")
+  salt               String
+  username           String             @unique
+  comments           Comment[]
+  email_confirmation EmailConfirmation?
+  posts              Post[]
+  profile            Profile?
+  BandadaAdmin       BandadaAdmin?
 
   @@map("user")
   @@schema("public")
@@ -30,7 +31,7 @@ model User {
 model Profile {
   id         Int      @id
   about      String?
-  created_at DateTime @db.Timestamptz(6)
+  created_at DateTime @default(now()) @db.Timestamptz(6)
   username   String   @unique
   url        String?
   user       User     @relation(fields: [id], references: [id], onDelete: Cascade)
@@ -72,12 +73,15 @@ model Comment {
 }
 
 model Group {
-  id          Int      @id @default(autoincrement())
-  description String
-  name        String
-  created_at  DateTime @default(now()) @db.Timestamptz(6)
-  tags        String[]
-  posts       Post[]   @relation("GroupPosts")
+  id                  Int           @id @default(autoincrement())
+  description         String
+  name                String
+  created_at          DateTime      @default(now()) @db.Timestamptz(6)
+  bandada_admin_id    Int? // null if this group is not associated with an semaphore group managed by bandada, otherwise the id of the bandada group admin
+  tags                String[]
+  posts               Post[]        @relation("GroupPosts")
+  bandada_group       BandadaGroup?
+  bandada_group_admin BandadaAdmin? @relation(fields: [bandada_admin_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("group")
   @@schema("public")
@@ -95,29 +99,40 @@ model EmailConfirmation {
 }
 
 model BandadaAdmin {
-  id          String         @id @db.VarChar
-  address     String         @unique @db.VarChar
-  username    String         @unique @db.VarChar
-  api_key     String?        @db.VarChar
-  api_enabled Boolean        @default(false)
+  // this deviates from original schema, set automatically to User.id via psql trigger
+  id          Int            @id
+  // default setting deviates from original schema
+  // we don't need the address field, setting to default and not unique instead of removing to avoid potential breaking side effects
+  // address     String         @default("unused") @db.VarChar
+  // set to User.username with psql trigger function
+  username    String         @unique
+  // THIS DEVIATES FROM ORIGINAL SCHEMA, WE WANT TO ALLOW API FOR ALL ADMINS WE CREATE
+  api_key     String         @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  // THIS DEVIATES FROM ORIGINAL SCHEMA, WE WANT TO ALLOW API FOR ALL ADMINS WE CREATE
+  api_enabled Boolean        @default(true)
   created_at  DateTime       @default(now()) @db.Timestamp(6)
   updated_at  DateTime       @default(now()) @db.Timestamp(6)
   groups      BandadaGroup[]
+  Group       Group[]
+
+  user User @relation(fields: [id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("admins")
   @@schema("bandada")
 }
 
 model BandadaGroup {
-  id                   String               @id @db.VarChar(32)
-  name                 String               @db.VarChar
-  description          String               @db.VarChar
-  admin_id             String               @db.VarChar
-  tree_depth           Int
-  fingerprint_duration Int
+  id                   String               @id @db.VarChar(32) // redundant with gid, but kept for compat with bandada api
+  gid                  Int                  @unique // set via psql trigger on group insert
+  name                 String
+  description          String
+  admin_id             Int                  @unique
+  tree_depth           Int                  @default(16)
+  fingerprint_duration Int                  @default(3600)
   credentials          String?
   created_at           DateTime             @default(now()) @db.Timestamp(6)
   updated_at           DateTime             @default(now()) @db.Timestamp(6)
+  group                Group                @relation(fields: [gid], references: [id], onDelete: NoAction, onUpdate: NoAction)
   admin                BandadaAdmin         @relation(fields: [admin_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   invites              BandadaInvite[]
   memberships          BandadaMembership[]

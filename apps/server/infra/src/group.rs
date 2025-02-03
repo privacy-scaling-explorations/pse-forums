@@ -10,6 +10,7 @@ use std::sync::Arc;
 pub struct GroupRepository(Arc<PrismaClient>);
 
 pub struct CreateGroup {
+    pub bandada_admin_id: Option<i32>,
     pub description: Description,
     pub name: Name,
     pub tags: Option<Vec<String>>,
@@ -20,6 +21,7 @@ impl Create<CreateGroup, Result<group::Data>> for GroupRepository {
     async fn create(
         &self,
         CreateGroup {
+            bandada_admin_id,
             description,
             name,
             tags,
@@ -27,6 +29,7 @@ impl Create<CreateGroup, Result<group::Data>> for GroupRepository {
     ) -> Result<group::Data> {
         let extra: Vec<group::SetParam> = vec![]
             .into_iter()
+            .chain(bandada_admin_id.map(|id| group::bandada_admin_id::set(Some(id))))
             .chain(tags.map(|t| group::tags::set(t)))
             .collect();
         self.0
