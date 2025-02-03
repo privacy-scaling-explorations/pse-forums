@@ -1,3 +1,4 @@
+mod bandada_admin;
 mod comment;
 mod email_confirmation;
 mod error;
@@ -6,6 +7,7 @@ mod post;
 mod profile;
 mod user;
 
+pub use bandada_admin::*;
 pub use comment::*;
 use db::PrismaClient;
 pub use email_confirmation::*;

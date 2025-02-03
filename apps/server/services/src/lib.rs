@@ -3,6 +3,7 @@ use std::env;
 use std::sync::Arc;
 
 mod auth;
+mod bandada;
 mod comment;
 mod email_confirmation;
 mod error;
@@ -13,6 +14,7 @@ mod profile;
 mod user;
 
 pub use auth::*;
+pub use bandada::BandadaService;
 pub use comment::*;
 pub use email_confirmation::*;
 pub use error::*;
