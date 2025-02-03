@@ -58,6 +58,7 @@ impl TryFrom<UpdateGroupDto> for UpdateGroupData {
 #[derive(Convert, Serialize, Type)]
 #[convert(from = "Group")]
 pub struct GroupDto {
+    pub bandada_admin_id: Option<i32>,
     pub id: i32,
     pub name: String,
     pub description: String,
