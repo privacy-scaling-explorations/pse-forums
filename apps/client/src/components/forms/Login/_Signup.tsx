@@ -1,12 +1,14 @@
 // import { Checkbox } from "@radix-ui/react-checkbox"
 import { Label } from "@radix-ui/react-label"
 import { useForm } from "@tanstack/react-form"
+import { useNavigate } from "@tanstack/react-router"
 import { FieldInfo } from "c/FieldInfo"
 import { Button } from "c/ui/button"
 import { Input } from "c/ui/input"
+import { useAuth } from "h/useAuth"
 import { capitalize } from "l/format"
 import { rspc } from "l/rspc"
-import type { FormEvent } from "react"
+import { type FormEvent, useCallback } from "react"
 import { z } from "zod"
 
 // TODO: restrict schema
@@ -19,14 +21,30 @@ const signupSchema = z.object({
 type SignupSchema = z.infer<typeof signupSchema>
 
 export function Signup() {
+  const navigate = useNavigate()
+  const { setAuth } = useAuth()
+
+  const handleAuth = useCallback(async ({ value: { email, password, username } }: { value: SignupSchema }) => {
+    const {
+      user: { id },
+      token,
+    } = await rspc.mutation(["auth.signup", { email, password, username }])
+
+    setAuth({
+      token,
+      uid: id,
+      username,
+    })
+
+    navigate({ to: "/" })
+  }, [navigate, setAuth])
+
   const signupForm = useForm({
     defaultValues: {
       email: "",
       username: "",
     } as SignupSchema,
-    onSubmit: async ({ value: { email, password, username } }) => {
-      await rspc.mutation(["auth.signup", { email, password, username }])
-    },
+    onSubmit: handleAuth,
     validators: { onChange: signupSchema },
   })
 
