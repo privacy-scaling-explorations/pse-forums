@@ -32,9 +32,9 @@ alias = "bc"
 description = "Build client"
 dir = "apps/client"
 sources = [
-    "apps/client/**/*",
-    "!apps/client/dist/**",
-    "!apps/client/node_modules/**",
+  "apps/client/**/*",
+  "!apps/client/dist/**",
+  "!apps/client/node_modules/**",
 ]
 outputs.auto = true
 depends = ["gen-ts"]
@@ -68,9 +68,9 @@ alias = "dc"
 dir = "apps/client"
 depends = ["install-node-modules", "gen-ts"]
 sources = [
-    "apps/client/**/*",
-    "!apps/client/dist/**",
-    "!apps/client/node_modules/**",
+  "apps/client/**/*",
+  "!apps/client/dist/**",
+  "!apps/client/node_modules/**",
 ]
 outputs.auto = true
 description = "Run client in dev mode"
@@ -79,6 +79,10 @@ description = "Run client in dev mode"
 run = ["docker compose up mail -d", "mise r db-reset && cargo run --bin api"]
 alias = "ds"
 description = "Run server in dev mode"
+
+[tasks.docker-login]
+run = "echo $GH_PAT | docker login ghcr.io -u $USER --password-stdin"
+description = "login to github docker registry"
 
 [tasks.freedit]
 dir = "apps/freedit"
