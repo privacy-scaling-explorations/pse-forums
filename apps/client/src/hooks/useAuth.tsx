@@ -1,12 +1,19 @@
-import { AuthContext } from "p/AuthProvider"
-import { useContext } from "react"
+import { useAtom } from "jotai"
+import { authAtom, type AuthData } from "l/auth"
+import { useCallback, useMemo } from "react"
 
 export function useAuth() {
-  const authCtx = useContext(AuthContext)
+  const [{ auth }, setAuthImpl] = useAtom(authAtom)
 
-  if (!authCtx) {
-    throw new Error("useAuth must be used within an AuthProvider")
-  }
+  const setAuth = useCallback((auth?: AuthData) => {
+    setAuthImpl({ auth })
+  }, [setAuthImpl])
 
-  return authCtx
+  const isSignedIn = useMemo(() => !!auth, [auth])
+
+  return useMemo(() => ({
+    auth,
+    isSignedIn,
+    setAuth,
+  }), [auth, isSignedIn, setAuth])
 }
