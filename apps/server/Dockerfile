@@ -1,7 +1,8 @@
 FROM debian:bookworm-slim as base
 WORKDIR /app
 RUN apt update &&\
-    apt install -y libssl-dev
+    apt install -y libssl-dev openssl ca-certificates &&\
+    rm -rf /var/lib/apt/lists/*
 
 FROM rust:latest as build
 WORKDIR /app
