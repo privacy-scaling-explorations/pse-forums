@@ -9,13 +9,14 @@ services:
       postgres:
         condition: service_healthy
     environment:
+      API_URL: http://localhost:3000
       DB_SCHEMA: bandada
       DB_TYPE: postgres
       DB_URL: postgres://postgres:postgres@postgres:5432/postgres
-      API_URL: http://localhost:3000
+      IRON_SESSION_PASSWORD: thirty-two-characters-long-random-string
     pull_policy: always
-    restart: unless-stopped
     ports: ["3001:3000"]
+    restart: unless-stopped
 
   client:
     image: ghcr.io/privacy-scaling-explorations/pse-forums-client:latest
@@ -29,8 +30,8 @@ services:
   mail:
     image: inbucket/inbucket:stable
     container_name: pse-forum-mail
-    restart: unless-stopped
     ports: ["9000:9000", "2500:2500", "1100:1100"]
+    restart: unless-stopped
 
   server:
     image: ghcr.io/privacy-scaling-explorations/pse-forums-server:latest
@@ -71,19 +72,19 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    entrypoint: ["/bin/sh", "-c", "/migrate.sh"]
     environment:
       # env var used by psql and pg_isready (not postgres server which uses POSTGRES_PASSWORD)
       PGHOST: postgres
       PGUSER: postgres
       PGPASSWORD: postgres
       PGDATABASE: postgres
+    restart: "no"
     volumes:
       [
         "./apps/server/db/migrations:/migrations",
         "./apps/server/db/migrate.sh:/migrate.sh",
       ]
-    entrypoint: ["/bin/sh", "-c", "/migrate.sh"]
-    restart: "no"
 
 volumes:
   pse-forum-bandada:
