@@ -4,8 +4,8 @@ HTTP 200
 jsonpath "$.result.data.id" == 1
 jsonpath "$.result.data.email" == "user1@example.com"
 jsonpath "$.result.data.username" == "user1"
-jsonpath "$.result.data.encrypted_password" isString # not checking value as salting is random and will be different on each seeding
-jsonpath "$.result.data.salt" isString
+jsonpath "$.result.data.encrypted_password" not exists
+jsonpath "$.result.data.salt" not exists
 
 POST http://localhost:3000/rspc/user.delete
 {
