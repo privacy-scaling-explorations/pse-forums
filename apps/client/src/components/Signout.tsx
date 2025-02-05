@@ -1,18 +1,22 @@
-import { useLogout } from "h/useLogout"
+import { useAuth } from "h/useAuth"
+import { useSignout } from "h/useSignout"
 import { LogOut } from "lucide-react"
 import { Button } from "ui/button"
 
 export const Signout = () => {
-  const logout = useLogout()
+  const signout = useSignout()
+  const { isSignedIn } = useAuth()
 
   return (
-    <Button
-      className="w-full justify-start flex items-center space-x-2"
-      variant="ghost"
-      onClick={logout}
-    >
-      <LogOut className="h-5 w-5" />
-      <span>Sign Out</span>
-    </Button>
+    isSignedIn && (
+      <Button
+        className="w-full justify-start flex items-center space-x-2"
+        variant="ghost"
+        onClick={signout}
+      >
+        <LogOut className="h-5 w-5" />
+        <span>Sign Out</span>
+      </Button>
+    )
   )
 }

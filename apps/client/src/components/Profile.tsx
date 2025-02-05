@@ -1,17 +1,16 @@
 import { Link } from "@tanstack/react-router"
+import { Signout } from "c/Signout"
 import { useAuth } from "h/useAuth"
 import { Button } from "ui/button"
 
+const renderSignin = () => (
+  <Link to="/login">
+    <Button>Sign-In/Up</Button>
+  </Link>
+)
+
 export function Profile() {
-  const { isSignedIn, auth } = useAuth()
+  const { auth } = useAuth()
 
-  if (isSignedIn) {
-    return <div>{auth?.username}</div>
-  }
-
-  return (
-    <Link to="/login">
-      <Button>Sign-In/Up</Button>
-    </Link>
-  )
+  return auth.mapOrElseSync(renderSignin, ({ username }) => <div>{username}</div>)
 }

@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router"
 import { Signout } from "c/Signout"
-import { Bell, Home, LogOut, PencilLine, Rss, Settings, Users } from "lucide-react"
+import { Bell, Home, PencilLine, Rss, Settings, Users } from "lucide-react"
 import { Button } from "ui/button"
 
 const items = {
