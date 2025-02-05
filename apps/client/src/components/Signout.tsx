@@ -5,18 +5,16 @@ import { Button } from "ui/button"
 
 export const Signout = () => {
   const signout = useSignout()
-  const { isSignedIn } = useAuth()
+  const { auth } = useAuth()
 
-  return (
-    isSignedIn && (
-      <Button
-        className="w-full justify-start flex items-center space-x-2"
-        variant="ghost"
-        onClick={signout}
-      >
-        <LogOut className="h-5 w-5" />
-        <span>Sign Out</span>
-      </Button>
-    )
-  )
+  return auth.mapSync(() => (
+    <Button
+      className="w-full justify-start flex items-center space-x-2"
+      variant="ghost"
+      onClick={signout}
+    >
+      <LogOut className="h-5 w-5" />
+      <span>Sign Out</span>
+    </Button>
+  ))
 }

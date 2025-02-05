@@ -1,5 +1,6 @@
-import { None, Option } from "@hazae41/option"
+import { Option } from "@hazae41/option"
 import { useAtom } from "jotai"
+import { RESET } from "jotai/utils"
 import { useCallback, useMemo } from "react"
 import { authAtom, type AuthData } from "s/atoms"
 
@@ -14,7 +15,7 @@ export function useAuth() {
   )
 
   const resetAuth = useCallback(() => {
-    setAuthImpl(new None())
+    setAuthImpl(RESET)
   }, [setAuthImpl])
 
   const isSignedIn = useMemo(() => auth.isSome(), [auth])
