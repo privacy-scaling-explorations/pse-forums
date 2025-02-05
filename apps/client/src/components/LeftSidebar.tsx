@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router"
+import { Signout } from "c/Signout"
 import { Bell, Home, LogOut, PencilLine, Rss, Settings, Users } from "lucide-react"
 import { Button } from "ui/button"
 
@@ -10,10 +11,7 @@ const items = {
     { title: "Notifications", to: "/notifications", icon: Bell },
   ],
   mid: [{ title: "My Groups", to: "/groups", icon: Users }],
-  end: [
-    { title: "Settings", to: "/settings", icon: Settings },
-    { title: "Sign Out", to: "/logout", icon: LogOut },
-  ],
+  end: [{ title: "Settings", to: "/settings", icon: Settings }],
 }
 
 export function LeftSidebar() {
@@ -44,7 +42,7 @@ export function LeftSidebar() {
                   className="w-full justify-start flex items-center space-x-2"
                   variant="ghost"
                 >
-                  <item.icon className="w-5 h-5" />
+                  <item.icon className="h-5 w-5" />
                   <span>{item.title}</span>
                 </Button>
               </Link>
@@ -69,6 +67,7 @@ export function LeftSidebar() {
                 </Button>
               </Link>
             ))}
+            <Signout />
           </div>
         )}
       </nav>

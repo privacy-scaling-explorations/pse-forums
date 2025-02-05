@@ -1,5 +1,21 @@
 import { None, type Option } from "@hazae41/option"
-import type { Session } from "@supabase/supabase-js"
-import { atom } from "jotai"
+import { atomWithStorage, createJSONStorage } from "jotai/utils"
 
-export const sessionAtom = atom<Option<Session>>(new None())
+export type AuthData = {
+  token: string
+  uid: number
+  username: string
+}
+
+type AuthStorage = {
+  auth: Option<AuthData>
+}
+
+export const AUTH_LOCAL_STORAGE_KEY = "auth"
+
+const storage = createJSONStorage<AuthStorage>(() => localStorage)
+export const authAtom = atomWithStorage<AuthStorage>(
+  AUTH_LOCAL_STORAGE_KEY,
+  { auth: new None() },
+  storage,
+)
