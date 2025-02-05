@@ -18,15 +18,12 @@ export function useAuth() {
     setAuthImpl(RESET)
   }, [setAuthImpl])
 
-  const isSignedIn = useMemo(() => auth.isSome(), [auth])
-
   return useMemo(
     () => ({
       auth,
-      isSignedIn,
       resetAuth,
       setAuth,
     }),
-    [auth, isSignedIn, resetAuth, setAuth],
+    [auth, resetAuth, setAuth],
   )
 }
