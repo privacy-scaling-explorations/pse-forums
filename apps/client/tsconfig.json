@@ -13,6 +13,7 @@
       "p/*": ["providers/*"],
       "p": ["providers"],
       "r/*": ["routes/*"],
+      "s/*": ["state/*"],
       "ui/*": ["components/ui/*"]
     }
   }

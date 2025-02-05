@@ -3,15 +3,12 @@ import { useAuth } from "h/useAuth"
 import { Button } from "ui/button"
 
 export function Profile() {
-  const { isSignedIn, auth } = useAuth()
+  const { auth } = useAuth()
 
-  if (isSignedIn) {
-    return <div>{auth?.username}</div>
-  }
-
-  return (
+  return auth.mapOrSync(
     <Link to="/login">
       <Button>Sign-In/Up</Button>
-    </Link>
+    </Link>,
+    ({ username }) => <div>{username}</div>,
   )
 }
