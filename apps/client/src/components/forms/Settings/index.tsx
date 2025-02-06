@@ -8,7 +8,7 @@ export function Settings() {
   return (
     <div className="space-y-8">
       <h1 className="text-xl font-bold">Settings</h1>
-      <AvatarSettings />
+      {/* <AvatarSettings /> */}
       <BasicInfoSettings />
       <ChangePwdSettings />
       <RecoveryCode />

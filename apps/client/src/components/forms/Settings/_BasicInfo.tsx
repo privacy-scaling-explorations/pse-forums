@@ -10,7 +10,15 @@ import { Button } from "ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "ui/card"
 import { Input } from "ui/input"
 import { Textarea } from "ui/textarea"
+import { z } from "zod"
 
+const basicInfoSchema = z.object({
+  username: z.string().nonempty(),
+  url: z.string(),
+  about: z.string(),
+})
+
+type BasicInfoSchema = z.infer<typeof basicInfoSchema>
 export function BasicInfoSettings() {
   return (
     <Card>
