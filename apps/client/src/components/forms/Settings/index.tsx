@@ -9,7 +9,7 @@ import { RecoveryCode } from "./_RecoveryCode"
 export function Settings() {
   const { auth } = useAuth()
   const { data, error, isLoading } = useQuery(
-    // @ts-ignore
+    // @ts-ignore TODO fix typings ???
     ["profile.read", auth.inner?.username],
     {
       enabled: auth.isSome(),

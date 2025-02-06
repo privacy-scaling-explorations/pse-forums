@@ -2,7 +2,17 @@ use crate::ValidationError;
 use nutype::nutype;
 
 #[nutype(
-    derive(Deserialize, Serialize, Into, TryFrom, Clone, Eq, PartialEq),
+    derive(
+        Deserialize,
+        Serialize,
+        Into,
+        TryFrom,
+        Clone,
+        Eq,
+        PartialEq,
+        Debug,
+        Clone
+    ),
     validate(regex = "^[a-zA-Z0-9_]{1,20}$")
 )]
 pub struct Username(String);

@@ -29,15 +29,11 @@ export const BasicInfoSettings: FC<ProfileDto> = ({
       getToken()
       const { profile, jwt: token } = await rspc.mutation([
         "profile.update",
-        {
-          about: about || null, // rspc generated ts bindings sets null for optional fields
-          id,
-          username: username || null,
-          url: url || null,
-        },
+        // needs to explicitly set fields that are nullable to `null` to empty them
+        { about: about || null, id, username, url: url || null },
       ])
 
-      if (token !== null) {
+      if (token !== null && token !== undefined) {
         setAuth({ username: profile.username, token, uid: id })
       }
     },

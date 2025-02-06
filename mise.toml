@@ -80,6 +80,7 @@ wait_for = ["dev-server"]
 run = [
     "docker compose down -v",
     "docker compose up mail migrate postgres -d",
+    "mise r seed",
     "cargo run --bin api",
 ]
 alias = "ds"
