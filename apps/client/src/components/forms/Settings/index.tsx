@@ -1,4 +1,4 @@
-import { AvatarSettings } from "./_Avatar"
+// import { AvatarSettings } from "./_Avatar"
 import { BasicInfoSettings } from "./_BasicInfo"
 import { ChangePwdSettings } from "./_ChangePwd"
 import { OpenSessions } from "./_OpenSessions"
