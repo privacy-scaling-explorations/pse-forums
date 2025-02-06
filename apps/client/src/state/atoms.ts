@@ -1,4 +1,4 @@
-import { None, Option, Some } from "@hazae41/option"
+import { None, type Option, Some } from "@hazae41/option"
 import { atomWithStorage, createJSONStorage } from "jotai/utils"
 
 export type AuthData = {
@@ -10,15 +10,22 @@ export type AuthData = {
 export const AUTH_LOCAL_STORAGE_KEY = "auth"
 
 const storage = createJSONStorage<Option<AuthData>>(() => localStorage, {
-  replacer: (key, value) => {
-    console.log(key, value)
+  replacer: (_, value) => {
     if (value instanceof None) return null
     if (value instanceof Some) return value.get()
     return value
   },
-  reviver: (key, value) => {
-    console.log(key, value)
-    return Option.wrap(value)
+  reviver: (_, value) => {
+    if (value === null || value === undefined) return new None()
+    if (
+      typeof value === "object"
+      && "token" in value
+      && "uid" in value
+      && "username" in value
+    ) {
+      return new Some(value as AuthData)
+    }
+    return value
   },
 })
 

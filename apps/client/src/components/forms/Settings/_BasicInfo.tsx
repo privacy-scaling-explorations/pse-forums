@@ -1,87 +1,123 @@
 import { Label } from "@radix-ui/react-label"
-// import {
-//   Select,
-//   SelectTrigger,
-//   SelectValue,
-//   SelectContent,
-//   SelectItem,
-// } from "@radix-ui/react-select";
+import { useForm } from "@tanstack/react-form"
+import { FieldInfo } from "c/FieldInfo"
+import type { ProfileDto } from "l/bindings"
+import { capitalize } from "l/format"
+import { getToken, rspc } from "l/rspc"
+import { type BasicInfoSchema, basicInfoSchema } from "l/schemas"
+import type { FC, FormEvent } from "react"
 import { Button } from "ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "ui/card"
 import { Input } from "ui/input"
 import { Textarea } from "ui/textarea"
-import { z } from "zod"
 
-const basicInfoSchema = z.object({
-  username: z.string().nonempty(),
-  url: z.string(),
-  about: z.string(),
-})
+export const BasicInfoSettings: FC<ProfileDto> = ({
+  about,
+  username,
+  url,
+  id,
+}) => {
+  const basicInfoForm = useForm<BasicInfoSchema>({
+    defaultValues: {
+      about: about ?? "",
+      username,
+      url: url ?? "",
+    },
+    onSubmit: async ({ value }) => {
+      getToken()
+      await rspc.mutation(["profile.update", { id, ...value }])
+    },
+    validators: { onChange: basicInfoSchema },
+  })
 
-type BasicInfoSchema = z.infer<typeof basicInfoSchema>
-export function BasicInfoSettings() {
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    e.stopPropagation()
+    basicInfoForm.handleSubmit()
+  }
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-xl">Basic information</CardTitle>
-        <CardDescription>
-          View and update your personal details.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="grid grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <Label htmlFor="username">Username</Label>
-            <Input
-              id="username"
-              placeholder="Your username (e.g., JohnDoe123)"
+    <form onSubmit={(e) => handleSubmit(e)}>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-xl">Basic information</CardTitle>
+          <CardDescription>
+            View and update your personal details.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="grid grid-cols-2 gap-6">
+            <basicInfoForm.Field
+              name="username"
+              children={(field) => (
+                <>
+                  <div className="space-y-2">
+                    <Label htmlFor={field.name}>{capitalize(field.name)}</Label>
+                    <Input
+                      id={field.name}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      placeholder={username}
+                      value={field.state.value}
+                    />
+                  </div>
+                  <FieldInfo field={field} />
+                </>
+              )}
+            />
+            <basicInfoForm.Field
+              name="url"
+              children={(field) => (
+                <>
+                  <div className="space-y-2">
+                    <Label htmlFor={field.name}>URL</Label>
+                    <Input
+                      id={field.name}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      placeholder="https://domain.com"
+                      value={field.state.value}
+                    />
+                  </div>
+                  <FieldInfo field={field} />
+                </>
+              )}
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="url">URL</Label>
-            <Input id="url" placeholder="https://" />
-          </div>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="about">About</Label>
-          <Textarea
-            id="about"
-            placeholder="Tell us a little about yourself in the community."
-            className="min-h-[100px]"
+          <basicInfoForm.Field
+            name="about"
+            children={(field) => (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor={field.name}>{capitalize(field.name)}</Label>
+                  <Textarea
+                    className="min-h-[100px]"
+                    id={field.name}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    placeholder="Tell us a little about yourself in the community."
+                    value={field.state.value}
+                  />
+                </div>
+                <FieldInfo field={field} />
+                <br />
+              </>
+            )}
           />
-        </div>
-        {
-          /* <div className="grid grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <Label htmlFor="homepage">Default Home Page</Label>
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder="GroupsMe" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="groupsme">GroupsMe</SelectItem>
-                <SelectItem value="home">Home</SelectItem>
-                <SelectItem value="profile">Profile</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="language">Language</Label>
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder="English" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="en">English</SelectItem>
-                <SelectItem value="es">Spanish</SelectItem>
-                <SelectItem value="fr">French</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div> */
-        }
-        <Button className="ml-auto">Save</Button>
-      </CardContent>
-    </Card>
+          <basicInfoForm.Subscribe
+            selector={({ canSubmit, isSubmitting }) => [
+              canSubmit,
+              isSubmitting,
+            ]}
+            children={([canSubmit, isSubmitting]) => (
+              <Button
+                aria-busy={isSubmitting}
+                disabled={!canSubmit}
+                className="ml-auto"
+              >
+                Save
+              </Button>
+            )}
+          />
+        </CardContent>
+      </Card>
+    </form>
   )
 }

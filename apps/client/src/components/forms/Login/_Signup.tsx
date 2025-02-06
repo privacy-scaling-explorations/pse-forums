@@ -65,6 +65,7 @@ export function Signup() {
               onChange={(e) => field.handleChange(e.target.value)}
               placeholder="anon"
               required
+              value={field.state.value}
             />
             <FieldInfo field={field} />
           </div>
@@ -82,6 +83,7 @@ export function Signup() {
               placeholder="anon@mail.xyz"
               type="email"
               required
+              value={field.state.value}
             />
             <FieldInfo field={field} />
           </div>
