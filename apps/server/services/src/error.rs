@@ -15,6 +15,8 @@ pub enum ServiceError {
     EmailConfirmationExpired,
     #[error("Infra error: {0}")]
     Infra(#[from] crate::error::InfraError),
+    #[error("Failed to issue JWT JWT: {0}")]
+    JwtError(String),
 }
 
 pub type Result<T> = std::result::Result<T, ServiceError>;

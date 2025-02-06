@@ -23,7 +23,7 @@ export type Procedures = {
         { key: "post.create", input: CreatePostDto, result: PostDto } | 
         { key: "post.delete", input: number, result: PostDto } | 
         { key: "post.update", input: UpdatePostDto, result: PostDto } | 
-        { key: "profile.update", input: UpdateProfileDto, result: ProfileDto } | 
+        { key: "profile.update", input: UpdateProfileReqDto, result: UpdateProfileResDto } | 
         { key: "user.delete", input: string, result: UserDto },
     subscriptions: never
 };
@@ -54,6 +54,8 @@ export type UpdateGroupDto = { description: string | null; id: number; name: str
 
 export type UpdatePostDto = { content: string | null; id: number; tags: string[] | null; title: string | null }
 
-export type UpdateProfileDto = { about: string | null; id: number; url: string | null }
+export type UpdateProfileReqDto = { about: string | null; id: number; url: string | null; username: string | null }
+
+export type UpdateProfileResDto = { profile: ProfileDto; jwt: string | null }
 
 export type UserDto = { created_at: string; id: number; email: string; email_confirmed: boolean; username: string }

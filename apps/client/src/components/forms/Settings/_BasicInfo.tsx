@@ -1,6 +1,7 @@
 import { Label } from "@radix-ui/react-label"
 import { useForm } from "@tanstack/react-form"
 import { FieldInfo } from "c/FieldInfo"
+import { useAuth } from "h/useAuth"
 import type { ProfileDto } from "l/bindings"
 import { capitalize } from "l/format"
 import { getToken, rspc } from "l/rspc"
@@ -17,6 +18,7 @@ export const BasicInfoSettings: FC<ProfileDto> = ({
   url,
   id,
 }) => {
+  const { setAuth } = useAuth()
   const basicInfoForm = useForm<BasicInfoSchema>({
     defaultValues: {
       about: about ?? "",
@@ -25,7 +27,14 @@ export const BasicInfoSettings: FC<ProfileDto> = ({
     },
     onSubmit: async ({ value }) => {
       getToken()
-      await rspc.mutation(["profile.update", { id, ...value }])
+      const { profile, jwt: token } = await rspc.mutation([
+        "profile.update",
+        { id, ...value },
+      ])
+
+      if (token !== null) {
+        setAuth({ username: profile.username, token, uid: id })
+      }
     },
     validators: { onChange: basicInfoSchema },
   })

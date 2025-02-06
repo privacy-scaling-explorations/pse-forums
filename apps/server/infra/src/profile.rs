@@ -23,6 +23,20 @@ impl Read<String, Result<profile::Data>> for ProfileRepository {
 }
 
 #[async_trait]
+impl Read<i32, Result<profile::Data>> for ProfileRepository {
+    async fn read(&self, id: i32) -> Result<profile::Data> {
+        self.0
+            .profile()
+            .find_unique(profile::id::equals(id))
+            .with(profile::user::fetch())
+            .exec()
+            .await
+            .map_err(|e| InfraError::Db(e.to_string()))?
+            .ok_or(InfraError::NotFound)
+    }
+}
+
+#[async_trait]
 impl Read<(), Result<Vec<profile::Data>>> for ProfileRepository {
     async fn read(&self, _: ()) -> Result<Vec<profile::Data>> {
         self.0
@@ -38,18 +52,25 @@ pub struct UpdateProfile {
     pub about: Option<About>,
     pub id: i32,
     pub url: Option<Url>,
+    pub username: Option<String>,
 }
 
 #[async_trait]
 impl Update<UpdateProfile, Result<profile::Data>> for ProfileRepository {
     async fn update(
         &self,
-        UpdateProfile { about, id, url }: UpdateProfile,
+        UpdateProfile {
+            about,
+            id,
+            url,
+            username,
+        }: UpdateProfile,
     ) -> Result<profile::Data> {
         let updates: Vec<profile::SetParam> = vec![]
             .into_iter()
             .chain(about.map(|a| profile::about::set(Some(a.into()))))
             .chain(url.map(|u| profile::url::set(Some(u.into()))))
+            .chain(username.map(|u| profile::username::set(u.into())))
             .collect();
 
         self.0

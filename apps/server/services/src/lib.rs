@@ -75,7 +75,7 @@ impl Services {
         ));
 
         Self {
-            auth: auth_service,
+            auth: auth_service.clone(),
             bandada: Arc::new(BandadaService::new(
                 repositories.bandada_admin,
                 HttpClient::new(
@@ -90,7 +90,10 @@ impl Services {
             )),
             group: group_service,
             post: post_service,
-            profile: Arc::new(ProfileService::new(repositories.profile)),
+            profile: Arc::new(ProfileService::new(
+                repositories.profile,
+                auth_service.clone(),
+            )),
             user: user_service,
         }
     }
