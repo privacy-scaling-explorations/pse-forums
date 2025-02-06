@@ -58,6 +58,7 @@ export function Signin() {
               onChange={(e) => field.handleChange(e.target.value)}
               type="text"
               required
+              value={field.state.value}
             />
             <FieldInfo field={field} />
           </div>
@@ -74,6 +75,7 @@ export function Signin() {
               onChange={(e) => field.handleChange(e.target.value)}
               type="password"
               required
+              value={field.state.value}
             />
             <FieldInfo field={field} />
           </div>

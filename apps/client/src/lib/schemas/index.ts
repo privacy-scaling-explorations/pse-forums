@@ -1,6 +1,15 @@
+import { aboutSchema } from "l/schemas/about"
 import { passwordSchema } from "l/schemas/password"
 import { usernameSchema } from "l/schemas/username"
 import { z } from "zod"
+
+export const basicInfoSchema = z.object({
+  about: aboutSchema,
+  username: usernameSchema,
+  url: z.string().url(),
+})
+
+export type BasicInfoSchema = z.infer<typeof basicInfoSchema>
 
 export const signinSchema = z.object({
   username: usernameSchema,
