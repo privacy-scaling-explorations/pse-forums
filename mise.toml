@@ -32,9 +32,9 @@ alias = "bc"
 description = "Build client"
 dir = "apps/client"
 sources = [
-  "apps/client/**/*",
-  "!apps/client/dist/**",
-  "!apps/client/node_modules/**",
+    "apps/client/**/*",
+    "!apps/client/dist/**",
+    "!apps/client/node_modules/**",
 ]
 outputs.auto = true
 depends = ["gen-ts"]
@@ -53,7 +53,7 @@ description = "Run migrations on hosted DB"
 run = "DATABASE_URL=$DATABASE_URL_PROD cargo run --bin prisma -F bin -- migrate deploy"
 
 [tasks.db-start]
-run = "docker compose up -d postgres"
+run = "docker compose up -d postgres migrate"
 alias = "dbs"
 description = "Run local dockerized postgres"
 
@@ -68,15 +68,20 @@ alias = "dc"
 dir = "apps/client"
 depends = ["install-node-modules", "gen-ts"]
 sources = [
-  "apps/client/**/*",
-  "!apps/client/dist/**",
-  "!apps/client/node_modules/**",
+    "apps/client/**/*",
+    "!apps/client/dist/**",
+    "!apps/client/node_modules/**",
 ]
 outputs.auto = true
 description = "Run client in dev mode"
+wait_for = ["dev-server"]
 
 [tasks.dev-server]
-run = ["docker compose up mail -d", "mise r db-reset && cargo run --bin api"]
+run = [
+    "docker compose down -v",
+    "docker compose up mail migrate postgres -d",
+    "cargo run --bin api",
+]
 alias = "ds"
 description = "Run server in dev mode"
 
