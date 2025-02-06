@@ -7,34 +7,30 @@ import { Input } from "c/ui/input"
 import { useAuth } from "h/useAuth"
 import type { SigninRequestDto } from "l/bindings"
 import { rspc } from "l/rspc"
+import { type SigninSchema, signinSchema } from "l/schemas"
 import { type FormEvent, useCallback } from "react"
-import { z } from "zod"
-
-const signinSchema = z.object({
-  username: z.string(),
-  password: z.string(),
-})
-
-type SigninSchema = z.infer<typeof signinSchema>
 
 export function Signin() {
   const navigate = useNavigate()
   const { setAuth } = useAuth()
 
-  const handleAuth = useCallback(async ({ value }: { value: SigninSchema }) => {
-    const {
-      user: { id, username },
-      token,
-    } = await rspc.mutation(["auth.signin", value])
+  const handleAuth = useCallback(
+    async ({ value }: { value: SigninSchema }) => {
+      const {
+        user: { id, username },
+        token,
+      } = await rspc.mutation(["auth.signin", value])
 
-    setAuth({
-      token,
-      uid: id,
-      username,
-    })
+      setAuth({
+        token,
+        uid: id,
+        username,
+      })
 
-    navigate({ to: "/" })
-  }, [navigate, setAuth])
+      navigate({ to: "/" })
+    },
+    [navigate, setAuth],
+  )
 
   const signinForm = useForm<SigninRequestDto>({
     defaultValues: { username: "", password: "" },

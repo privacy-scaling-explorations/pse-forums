@@ -8,36 +8,34 @@ import { Input } from "c/ui/input"
 import { useAuth } from "h/useAuth"
 import { capitalize } from "l/format"
 import { rspc } from "l/rspc"
+import { type SignupSchema, signupSchema } from "l/schemas"
 import { type FormEvent, useCallback } from "react"
-import { z } from "zod"
-
-// TODO: restrict schema
-const signupSchema = z.object({
-  confirm: z.string().min(8),
-  email: z.string().email(), // let html do the validation
-  password: z.string().min(8),
-  username: z.string().min(3).max(20),
-})
-type SignupSchema = z.infer<typeof signupSchema>
 
 export function Signup() {
   const navigate = useNavigate()
   const { setAuth } = useAuth()
 
-  const handleAuth = useCallback(async ({ value: { email, password, username } }: { value: SignupSchema }) => {
-    const {
-      user: { id },
-      token,
-    } = await rspc.mutation(["auth.signup", { email, password, username }])
+  const handleAuth = useCallback(
+    async ({
+      value: { email, password, username },
+    }: {
+      value: SignupSchema
+    }) => {
+      const {
+        user: { id },
+        token,
+      } = await rspc.mutation(["auth.signup", { email, password, username }])
 
-    setAuth({
-      token,
-      uid: id,
-      username,
-    })
+      setAuth({
+        token,
+        uid: id,
+        username,
+      })
 
-    navigate({ to: "/" })
-  }, [navigate, setAuth])
+      navigate({ to: "/" })
+    },
+    [navigate, setAuth],
+  )
 
   const signupForm = useForm({
     defaultValues: {
