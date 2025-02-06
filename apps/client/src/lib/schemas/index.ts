@@ -1,13 +1,18 @@
 import { aboutSchema } from "l/schemas/about"
 import { passwordSchema } from "l/schemas/password"
+import { urlSchema } from "l/schemas/url"
 import { usernameSchema } from "l/schemas/username"
 import { z } from "zod"
 
-export const basicInfoSchema = z.object({
-  about: aboutSchema,
-  username: usernameSchema,
-  url: z.string().url(),
-})
+export const basicInfoSchema = z
+  .object({
+    about: aboutSchema.optional(),
+    username: usernameSchema.optional(),
+    url: urlSchema,
+  })
+  .refine((data) => Object.values(data).some((value) => value !== undefined), {
+    message: "At least one field is required",
+  })
 
 export type BasicInfoSchema = z.infer<typeof basicInfoSchema>
 
@@ -24,8 +29,5 @@ export const signupSchema = z.object({
   username: usernameSchema,
   password: passwordSchema,
 })
-export type SignupSchema = z.infer<typeof signupSchema>
 
-export const updateUsernameSchema = z.object({
-  username: usernameSchema,
-})
+export type SignupSchema = z.infer<typeof signupSchema>

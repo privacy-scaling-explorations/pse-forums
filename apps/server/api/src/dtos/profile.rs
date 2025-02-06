@@ -39,10 +39,6 @@ impl TryFrom<UpdateProfileReqDto> for UpdateProfileReqData {
             username,
         }: UpdateProfileReqDto,
     ) -> Result<Self, Self::Error> {
-        if about.is_none() && url.is_none() {
-            return Err(ValidationError::EmptyFields);
-        }
-
         Ok(UpdateProfileReqData {
             about: about.map(|n| n.try_into()).transpose()?,
             id,

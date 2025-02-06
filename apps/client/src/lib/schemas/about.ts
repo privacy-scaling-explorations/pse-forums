@@ -7,3 +7,5 @@ export const aboutSchema = z
   .string()
   .min(ABOUT_MIN_LENGTH)
   .max(ABOUT_MAX_LENGTH)
+  .or(z.literal(""))
+  .optional()

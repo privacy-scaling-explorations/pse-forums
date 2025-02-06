@@ -5,7 +5,7 @@ const ABOUT_MIN_LEN: usize = 10;
 const ABOUT_MAX_LEN: usize = 500;
 
 #[nutype(
-    derive(Deserialize, Serialize, Into, TryFrom),
+    derive(Deserialize, Serialize, Into, TryFrom, Debug,Clone),
     sanitize(trim),
     validate(len_char_min = ABOUT_MIN_LEN, len_char_max = ABOUT_MAX_LEN, not_empty)
 )]
