@@ -3,7 +3,7 @@ import { useForm } from "@tanstack/react-form"
 import { FieldInfo } from "c/FieldInfo"
 import type { ProfileDto } from "l/bindings"
 import { capitalize } from "l/format"
-import { rspc } from "l/rspc"
+import { getToken, rspc } from "l/rspc"
 import { type BasicInfoSchema, basicInfoSchema } from "l/schemas"
 import type { FC, FormEvent } from "react"
 import { Button } from "ui/button"
@@ -24,6 +24,7 @@ export const BasicInfoSettings: FC<ProfileDto> = ({
       url: url ?? "",
     },
     onSubmit: async ({ value }) => {
+      getToken()
       await rspc.mutation(["profile.update", { id, ...value }])
     },
     validators: { onChange: basicInfoSchema },

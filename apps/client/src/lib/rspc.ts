@@ -9,12 +9,12 @@ export const {
   useMutation,
 } = createReactQueryHooks<Procedures>()
 
-const getToken = (): string | undefined => {
+export const getToken = (): string | undefined => {
   const jsonStr = localStorage.getItem(AUTH_LOCAL_STORAGE_KEY)
   if (!jsonStr) {
     return undefined
   }
-  const { auth } = JSON.parse(jsonStr) as { auth: AuthData }
+  const auth = JSON.parse(jsonStr) as AuthData
   return auth?.token
 }
 
