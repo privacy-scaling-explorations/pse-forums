@@ -8,7 +8,9 @@ use struct_convert::Convert;
 pub struct CreateCommentDto {
     pub content: String,
     pub pid: i32,
+    #[specta(optional)]
     pub rid: Option<i32>,
+    #[specta(optional)]
     pub uid: Option<i32>,
 }
 
@@ -50,6 +52,8 @@ pub struct CommentDto {
     pub content: String,
     pub id: i32,
     pub pid: i32,
+    #[specta(optional)]
     pub rid: Option<i32>,
+    #[specta(optional)]
     pub uid: Option<i32>,
 }

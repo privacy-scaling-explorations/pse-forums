@@ -30,19 +30,19 @@ export type Procedures = {
 
 export type AuthResponseDto = { user: UserDto; token: string }
 
-export type CommentDto = { created_at: string; content: string; id: number; pid: number; rid: number | null; uid: number | null }
+export type CommentDto = { created_at: string; content: string; id: number; pid: number; rid?: number | null; uid?: number | null }
 
-export type CreateCommentDto = { content: string; pid: number; rid: number | null; uid: number | null }
+export type CreateCommentDto = { content: string; pid: number; rid?: number | null; uid?: number | null }
 
-export type CreateGroupDto = { create_bandada_group: boolean | null; description: string; name: string; tags: string[] | null }
+export type CreateGroupDto = { create_bandada_group?: boolean | null; description: string; name: string; tags?: string[] | null }
 
-export type CreatePostDto = { content: string; gid: number | null; tags: string[] | null; title: string; uid: number | null }
+export type CreatePostDto = { content: string; gid?: number | null; tags?: string[] | null; title: string; uid?: number | null }
 
-export type GroupDto = { bandada_admin_id: number | null; id: number; name: string; description: string; tags: string[] }
+export type GroupDto = { bandada_admin_id?: number | null; id: number; name: string; description: string; tags: string[] }
 
-export type PostDto = { created_at: string; content: string; gid: number | null; id: number; tags: string[]; title: string; uid: number | null }
+export type PostDto = { created_at: string; content: string; gid?: number | null; id: number; tags: string[]; title: string; uid?: number | null }
 
-export type ProfileDto = { id: number; about: string | null; created_at: string; username: string; url: string | null }
+export type ProfileDto = { id: number; about?: string | null; created_at: string; username: string; url?: string | null }
 
 export type SigninRequestDto = { username: string; password: string }
 
@@ -50,12 +50,12 @@ export type SignupRequestDto = { email: string; password: string; username: stri
 
 export type UpdateCommentDto = { content: string; id: number }
 
-export type UpdateGroupDto = { description: string | null; id: number; name: string | null; tags: string[] | null }
+export type UpdateGroupDto = { description?: string | null; id: number; name?: string | null; tags?: string[] | null }
 
-export type UpdatePostDto = { content: string | null; id: number; tags: string[] | null; title: string | null }
+export type UpdatePostDto = { content?: string | null; id: number; tags?: string[] | null; title?: string | null }
 
-export type UpdateProfileReqDto = { about: string | null; id: number; url: string | null; username: string | null }
+export type UpdateProfileReqDto = { about?: string | null; id: number; url?: string | null; username?: string | null }
 
-export type UpdateProfileResDto = { profile: ProfileDto; jwt: string | null }
+export type UpdateProfileResDto = { profile: ProfileDto; jwt?: string | null }
 
 export type UserDto = { created_at: string; id: number; email: string; email_confirmed: boolean; username: string }

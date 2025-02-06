@@ -8,18 +8,23 @@ use struct_convert::Convert;
 #[convert(from = "Profile")]
 pub struct ProfileDto {
     pub id: i32,
+    #[specta(optional)]
     pub about: Option<String>,
     #[convert_field(to_string)]
     pub created_at: String,
     pub username: String,
+    #[specta(optional)]
     pub url: Option<String>,
 }
 
 #[derive(Deserialize, Type)]
 pub struct UpdateProfileReqDto {
+    #[specta(optional)]
     pub about: Option<String>,
     pub id: i32,
+    #[specta(optional)]
     pub url: Option<String>,
+    #[specta(optional)]
     pub username: Option<String>,
 }
 
@@ -50,5 +55,6 @@ impl TryFrom<UpdateProfileReqDto> for UpdateProfileReqData {
 #[derive(Serialize, Type)]
 pub struct UpdateProfileResDto {
     pub profile: ProfileDto,
+    #[specta(optional)]
     pub jwt: Option<String>,
 }
