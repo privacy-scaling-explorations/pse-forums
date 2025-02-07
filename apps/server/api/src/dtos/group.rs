@@ -7,8 +7,9 @@ use struct_convert::Convert;
 #[derive(Deserialize, Type)]
 pub struct CreateGroupDto {
     #[specta(optional)]
-    pub create_bandada_group: Option<bool>,
-    pub description: String,
+    pub anonymous: Option<bool>,
+    #[specta(optional)]
+    pub description: Option<String>,
     pub name: String,
     #[specta(optional)]
     pub tags: Option<Vec<String>>,
@@ -17,8 +18,9 @@ pub struct CreateGroupDto {
 impl CreateGroupDto {
     pub fn transform(self, claim: Claim) -> Result<CreateGroupData, domain::ValidationError> {
         Ok(CreateGroupData {
-            bandada_admin_id: self.create_bandada_group.map(|_| claim.uid),
-            description: self.description.try_into()?,
+            aid: claim.uid,
+            anonymous: self.anonymous,
+            description: self.description.map(|d| d.try_into()).transpose()?,
             name: self.name.try_into()?,
             tags: self.tags,
         })
@@ -63,8 +65,8 @@ impl TryFrom<UpdateGroupDto> for UpdateGroupData {
 #[derive(Convert, Serialize, Type)]
 #[convert(from = "Group")]
 pub struct GroupDto {
-    #[specta(optional)]
-    pub bandada_admin_id: Option<i32>,
+    pub aid: i32,
+    pub anonymous: bool,
     pub id: i32,
     pub name: String,
     pub description: String,

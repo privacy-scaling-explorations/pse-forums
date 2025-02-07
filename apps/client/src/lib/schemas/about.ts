@@ -9,3 +9,5 @@ export const aboutSchema = z
   .max(ABOUT_MAX_LENGTH)
   .or(z.literal(""))
   .optional()
+
+export const descriptionSchema = aboutSchema

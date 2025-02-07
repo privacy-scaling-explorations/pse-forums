@@ -2,6 +2,9 @@ use thiserror::Error;
 
 #[derive(Debug, Error)]
 pub enum ValidationError {
+    #[error("Invalid about: {0}")]
+    About(String),
+
     #[error("All updatable fields are empty")]
     EmptyFields,
 

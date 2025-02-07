@@ -1,10 +1,10 @@
-import { Link } from "@tanstack/react-router";
-import { Avatar } from "c/Avatar";
-import type { PostDto } from "l/bindings";
-import type { FC } from "react";
-import { Card } from "ui/card";
-import { Badge } from "./ui/badge";
-import { TimeSince } from "./ui/time-since";
+import { Link } from "@tanstack/react-router"
+import { Avatar } from "c/Avatar"
+import type { PostDto } from "l/bindings"
+import type { FC } from "react"
+import { Card } from "ui/card"
+import { Badge } from "./ui/badge"
+import { TimeSince } from "./ui/time-since"
 
 export const PostCard: FC<PostDto & { group_name: string }> = ({
   id,
@@ -35,5 +35,5 @@ export const PostCard: FC<PostDto & { group_name: string }> = ({
         </div>
       </Link>
     </Card>
-  );
-};
+  )
+}

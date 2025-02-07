@@ -1,8 +1,9 @@
-import { aboutSchema } from "l/schemas/about"
+import { aboutSchema, descriptionSchema } from "l/schemas/about"
 import { passwordSchema } from "l/schemas/password"
 import { urlSchema } from "l/schemas/url"
 import { usernameSchema } from "l/schemas/username"
 import { z } from "zod"
+import { nameSchema } from "./title"
 
 export const basicInfoSchema = z
   .object({
@@ -31,3 +32,11 @@ export const signupSchema = z.object({
 })
 
 export type SignupSchema = z.infer<typeof signupSchema>
+
+export const createGroupSchema = z.object({
+  createBandadaGroup: z.boolean().optional(),
+  description: descriptionSchema,
+  name: nameSchema,
+})
+
+export type CreateGroupSchema = z.infer<typeof createGroupSchema>

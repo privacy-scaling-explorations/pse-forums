@@ -68,6 +68,7 @@ impl TryFrom<UpdatePostDto> for UpdatePostData {
 #[convert(from = "domain::Post")]
 pub struct PostDto {
     #[convert_field(to_string)]
+    #[serde(rename = "createdAt")]
     pub created_at: String,
     pub content: String,
     #[specta(optional)]

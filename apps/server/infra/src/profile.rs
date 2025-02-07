@@ -68,9 +68,9 @@ impl Update<UpdateProfile, Result<profile::Data>> for ProfileRepository {
     ) -> Result<profile::Data> {
         let updates: Vec<profile::SetParam> = vec![]
             .into_iter()
-            .chain(Some(profile::about::set(about.clone().map(About::into))))
-            .chain(Some(profile::url::set(url.clone().map(Url::into))))
+            .chain(about.map(|a| profile::about::set(a.into())))
             .chain(username.clone().map(|u| profile::username::set(u.into())))
+            .chain(url.map(|u| profile::url::set(u.into())))
             .collect();
 
         self.0

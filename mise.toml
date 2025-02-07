@@ -24,6 +24,7 @@ rust = "latest"
 [tasks.add-shadcn-component]
 run = "bunx --bun shadcn@latest add {{arg(name=\"component\")}}"
 alias = "ac"
+dir = "apps/client"
 description = "Add a new shadcn component"
 
 [tasks.build-client]
@@ -74,7 +75,7 @@ sources = [
 ]
 outputs.auto = true
 description = "Run client in dev mode"
-wait_for = ["dev-server"]
+wait_for = ["seed"]
 
 [tasks.dev-server]
 run = [

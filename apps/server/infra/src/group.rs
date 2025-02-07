@@ -1,7 +1,7 @@
 use crate::error::Result;
 use crate::InfraError;
 use async_trait::async_trait;
-use db::{group, PrismaClient};
+use db::{group, user, PrismaClient};
 use derive_more::derive::Constructor;
 use domain::{Create, Delete, Description, Name, Read, Update};
 use std::sync::Arc;
@@ -10,8 +10,10 @@ use std::sync::Arc;
 pub struct GroupRepository(Arc<PrismaClient>);
 
 pub struct CreateGroup {
-    pub bandada_admin_id: Option<i32>,
-    pub description: Description,
+    /// admin id
+    pub aid: i32,
+    pub anonymous: Option<bool>,
+    pub description: Option<Description>,
     pub name: Name,
     pub tags: Option<Vec<String>>,
 }
@@ -21,7 +23,8 @@ impl Create<CreateGroup, Result<group::Data>> for GroupRepository {
     async fn create(
         &self,
         CreateGroup {
-            bandada_admin_id,
+            aid,
+            anonymous,
             description,
             name,
             tags,
@@ -29,12 +32,13 @@ impl Create<CreateGroup, Result<group::Data>> for GroupRepository {
     ) -> Result<group::Data> {
         let extra: Vec<group::SetParam> = vec![]
             .into_iter()
-            .chain(bandada_admin_id.map(|id| group::bandada_admin_id::set(Some(id))))
+            .chain(anonymous.map(|a| group::anonymous::set(a)))
+            .chain(description.map(|d| group::description::set(d.into())))
             .chain(tags.map(|t| group::tags::set(t)))
             .collect();
         self.0
             .group()
-            .create(description.into(), name.into(), extra)
+            .create(name.into(), user::id::equals(aid), extra)
             .exec()
             .await
             .map_err(|e| InfraError::Db(e.to_string()))

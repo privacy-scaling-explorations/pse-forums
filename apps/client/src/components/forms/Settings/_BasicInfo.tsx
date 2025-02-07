@@ -1,22 +1,16 @@
-import { Label } from "@radix-ui/react-label";
-import { useForm } from "@tanstack/react-form";
-import { FieldInfo } from "c/FieldInfo";
-import { useAuth } from "h/useAuth";
-import type { ProfileDto } from "l/bindings";
-import { capitalize } from "l/format";
-import { getToken, rspc } from "l/rspc";
-import { type BasicInfoSchema, basicInfoSchema } from "l/schemas";
-import type { FC, FormEvent } from "react";
-import { Button } from "ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "ui/card";
-import { Input } from "ui/input";
-import { Textarea } from "ui/textarea";
+import { Label } from "@radix-ui/react-label"
+import { useForm } from "@tanstack/react-form"
+import { FieldInfo } from "c/FieldInfo"
+import { useAuth } from "h/useAuth"
+import type { ProfileDto } from "l/bindings"
+import { capitalize } from "l/format"
+import { getToken, rspc } from "l/rspc"
+import { type BasicInfoSchema, basicInfoSchema } from "l/schemas"
+import type { FC, FormEvent } from "react"
+import { Button } from "ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "ui/card"
+import { Input } from "ui/input"
+import { Textarea } from "ui/textarea"
 
 export const BasicInfoSettings: FC<ProfileDto> = ({
   about,
@@ -24,7 +18,7 @@ export const BasicInfoSettings: FC<ProfileDto> = ({
   url,
   id,
 }) => {
-  const { setAuth } = useAuth();
+  const { setAuth } = useAuth()
   const basicInfoForm = useForm<BasicInfoSchema>({
     defaultValues: {
       about,
@@ -32,23 +26,23 @@ export const BasicInfoSettings: FC<ProfileDto> = ({
       url,
     },
     onSubmit: async ({ value }) => {
-      getToken();
+      getToken()
       const { profile, jwt: token } = await rspc.mutation([
         "profile.update",
         { id, ...value },
-      ]);
+      ])
 
       if (token !== null && token !== undefined) {
-        setAuth({ username: profile.username, token, uid: id });
+        setAuth({ username: profile.username, token, uid: id })
       }
     },
     validators: { onChange: basicInfoSchema },
-  });
+  })
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    e.stopPropagation();
-    basicInfoForm.handleSubmit();
+    e.preventDefault()
+    e.stopPropagation()
+    basicInfoForm.handleSubmit()
   }
 
   return (
@@ -134,5 +128,5 @@ export const BasicInfoSettings: FC<ProfileDto> = ({
         </CardContent>
       </Card>
     </form>
-  );
-};
+  )
+}
