@@ -34,11 +34,11 @@ export type CommentDto = { createdAt: string; content: string; id: number; pid: 
 
 export type CreateCommentDto = { content: string; pid: number; rid?: number | null; uid?: number | null }
 
-export type CreateGroupDto = { createBandadaGroup?: boolean | null; description?: string | null; name: string; tags?: string[] | null }
+export type CreateGroupDto = { anonymous?: boolean | null; description?: string | null; name: string; tags?: string[] | null }
 
 export type CreatePostDto = { content: string; gid?: number | null; tags?: string[] | null; title: string; uid?: number | null }
 
-export type GroupDto = { bandadaAdminId?: number | null; id: number; name: string; description: string; tags: string[] }
+export type GroupDto = { aid: number; anonymous: boolean; id: number; name: string; description: string; tags: string[] }
 
 export type PostDto = { createdAt: string; content: string; gid?: number | null; id: number; tags: string[]; title: string; uid?: number | null }
 

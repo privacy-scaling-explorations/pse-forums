@@ -23,6 +23,7 @@ model User {
   posts              Post[]
   profile            Profile?
   BandadaAdmin       BandadaAdmin?
+  Group              Group[]
 
   @@map("user")
   @@schema("public")
@@ -77,11 +78,13 @@ model Group {
   description         String        @default("")
   name                String
   created_at          DateTime      @default(now()) @db.Timestamptz(6)
-  bandada_admin_id    Int? // null if this group is not associated with an semaphore group managed by bandada, otherwise the id of the bandada group admin
+  anonymous           Boolean       @default(false)
+  aid                 Int
   tags                String[]
   posts               Post[]        @relation("GroupPosts")
+  admin               User          @relation(fields: [aid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "group_aid_user_fkey")
   bandada_group       BandadaGroup?
-  bandada_group_admin BandadaAdmin? @relation(fields: [bandada_admin_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  bandada_group_admin BandadaAdmin? @relation(fields: [aid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "group_aid_bandada_admin_fkey")
 
   @@map("group")
   @@schema("public")

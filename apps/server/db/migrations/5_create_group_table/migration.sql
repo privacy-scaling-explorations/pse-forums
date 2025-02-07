@@ -5,6 +5,8 @@ comment on column "post"."gid" is 'Optional group ID; null for posts that are no
 -- CreateTable
 CREATE TABLE "group" (
     "id" SERIAL NOT NULL,
+    "aid" INTEGER NOT NULL,
+    "anonymous" BOOLEAN NOT NULL DEFAULT false,
     "description" TEXT NOT NULL DEFAULT '',
     "name" TEXT NOT NULL,
     "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
