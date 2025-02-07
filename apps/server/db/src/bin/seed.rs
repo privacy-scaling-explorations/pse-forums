@@ -25,8 +25,8 @@ macro_rules! Profile {
             .update(
                 profile::id::equals($uid),
                 vec![
-                    profile::about::set(Some($about.to_string())),
-                    profile::url::set(Some($url.to_string())),
+                    profile::about::set($about.to_string()),
+                    profile::url::set($url.to_string()),
                 ],
             )
             .exec()
@@ -39,9 +39,8 @@ macro_rules! Group {
         $client
             .group()
             .create(
-                $description.to_string(),
                 $name.to_string(),
-                vec![group::bandada_admin_id::set(Some($bandada_admin_id)), group::tags::set(vec![$($tag.to_string()),*])]
+                vec![group::description::set($description.to_string()), group::bandada_admin_id::set(Some($bandada_admin_id)), group::tags::set(vec![$($tag.to_string()),*])]
             )
             .exec()
             .await

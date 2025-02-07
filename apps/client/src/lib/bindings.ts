@@ -30,19 +30,19 @@ export type Procedures = {
 
 export type AuthResponseDto = { user: UserDto; token: string }
 
-export type CommentDto = { created_at: string; content: string; id: number; pid: number; rid?: number | null; uid?: number | null }
+export type CommentDto = { createdAt: string; content: string; id: number; pid: number; rid?: number | null; uid?: number | null }
 
 export type CreateCommentDto = { content: string; pid: number; rid?: number | null; uid?: number | null }
 
-export type CreateGroupDto = { create_bandada_group?: boolean | null; description: string; name: string; tags?: string[] | null }
+export type CreateGroupDto = { createBandadaGroup?: boolean | null; description?: string | null; name: string; tags?: string[] | null }
 
 export type CreatePostDto = { content: string; gid?: number | null; tags?: string[] | null; title: string; uid?: number | null }
 
-export type GroupDto = { bandada_admin_id?: number | null; id: number; name: string; description: string; tags: string[] }
+export type GroupDto = { bandadaAdminId?: number | null; id: number; name: string; description: string; tags: string[] }
 
-export type PostDto = { created_at: string; content: string; gid?: number | null; id: number; tags: string[]; title: string; uid?: number | null }
+export type PostDto = { createdAt: string; content: string; gid?: number | null; id: number; tags: string[]; title: string; uid?: number | null }
 
-export type ProfileDto = { id: number; about?: string | null; created_at: string; username: string; url?: string | null }
+export type ProfileDto = { id: number; about: string; createdAt: string; username: string; url: string }
 
 export type SigninRequestDto = { username: string; password: string }
 
@@ -58,4 +58,4 @@ export type UpdateProfileReqDto = { about?: string | null; id: number; url?: str
 
 export type UpdateProfileResDto = { profile: ProfileDto; jwt?: string | null }
 
-export type UserDto = { created_at: string; id: number; email: string; email_confirmed: boolean; username: string }
+export type UserDto = { createdAt: string; id: number; email: string; emailConfirmed: boolean; username: string }
