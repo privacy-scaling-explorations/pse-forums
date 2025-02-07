@@ -1,14 +1,17 @@
-import { Link } from "@tanstack/react-router"
-import { Avatar } from "c/Avatar"
-import type { PostDto } from "l/bindings"
-import type { FC } from "react"
-import { Card } from "ui/card"
-import { Badge } from "./ui/badge"
-import { TimeSince } from "./ui/time-since"
+import { Link } from "@tanstack/react-router";
+import { Avatar } from "c/Avatar";
+import type { PostDto } from "l/bindings";
+import type { FC } from "react";
+import { Card } from "ui/card";
+import { Badge } from "./ui/badge";
+import { TimeSince } from "./ui/time-since";
 
-export const PostCard: FC<
-  PostDto & { group_name: string }
-> = ({ id, title, created_at, group_name }) => {
+export const PostCard: FC<PostDto & { group_name: string }> = ({
+  id,
+  title,
+  createdAt,
+  group_name,
+}) => {
   return (
     <Card>
       <Link to="/post/$pid" params={{ pid: `${id}` }}>
@@ -23,11 +26,14 @@ export const PostCard: FC<
             <h3 className="font-bold text-lg mb-1">{title}</h3>
             <div className="flex space-x-2">
               <Badge variant="secondary">{group_name}</Badge>
-              <TimeSince className="text-sm text-gray-600" isoDateTime={created_at} />
+              <TimeSince
+                className="text-sm text-gray-600"
+                isoDateTime={createdAt}
+              />
             </div>
           </div>
         </div>
       </Link>
     </Card>
-  )
-}
+  );
+};
