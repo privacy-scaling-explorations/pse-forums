@@ -8,13 +8,12 @@ use struct_convert::Convert;
 #[convert(from = "Profile")]
 pub struct ProfileDto {
     pub id: i32,
-    #[specta(optional)]
-    pub about: Option<String>,
+    pub about: String,
     #[convert_field(to_string)]
+    #[serde(rename = "createdAt")]
     pub created_at: String,
     pub username: String,
-    #[specta(optional)]
-    pub url: Option<String>,
+    pub url: String,
 }
 
 #[derive(Deserialize, Type)]

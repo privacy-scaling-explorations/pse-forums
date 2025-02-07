@@ -1,10 +1,10 @@
-// import { AvatarSettings } from "./_Avatar"
 import { useAuth } from "h/useAuth"
 import { useQuery } from "l/rspc"
 import { BasicInfoSettings } from "./_BasicInfo"
-import { ChangePwdSettings } from "./_ChangePwd"
-import { OpenSessions } from "./_OpenSessions"
-import { RecoveryCode } from "./_RecoveryCode"
+// import { AvatarSettings } from "./_Avatar"
+// import { ChangePwdSettings } from "./_ChangePwd";
+// import { OpenSessions } from "./_OpenSessions";
+// import { RecoveryCode } from "./_RecoveryCode";
 
 export function Settings() {
   const { auth } = useAuth()
@@ -25,9 +25,9 @@ export function Settings() {
       <h1 className="text-xl font-bold">Settings</h1>
       {/* <AvatarSettings /> */}
       <BasicInfoSettings {...data} />
-      <ChangePwdSettings />
-      <RecoveryCode />
-      <OpenSessions />
+      {/* <ChangePwdSettings /> */}
+      {/* <RecoveryCode /> */}
+      {/* <OpenSessions /> */}
     </div>
   )
 }

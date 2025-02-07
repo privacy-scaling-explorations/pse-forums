@@ -25,8 +25,8 @@ macro_rules! Profile {
             .update(
                 profile::id::equals($uid),
                 vec![
-                    profile::about::set(Some($about.to_string())),
-                    profile::url::set(Some($url.to_string())),
+                    profile::about::set($about.to_string()),
+                    profile::url::set($url.to_string()),
                 ],
             )
             .exec()
@@ -35,13 +35,13 @@ macro_rules! Profile {
 }
 
 macro_rules! Group {
-    ($client:expr, $description:expr, $name:expr, $bandada_admin_id:expr, ($($tag:expr),*)) => {
+    ($client:expr, $name:expr, $aid:expr, $description:expr, $anonymous:expr, ($($tag:expr),*)) => {
         $client
             .group()
             .create(
-                $description.to_string(),
                 $name.to_string(),
-                vec![group::bandada_admin_id::set(Some($bandada_admin_id)), group::tags::set(vec![$($tag.to_string()),*])]
+                user::id::equals($aid),
+                vec![group::anonymous::set($anonymous), group::description::set($description.to_string()), group::tags::set(vec![$($tag.to_string()),*])]
             )
             .exec()
             .await
@@ -119,12 +119,20 @@ async fn seed_database(
         .run(|client| async move {
             let group1 = Group!(
                 client,
-                "This is group 1",
                 "group1",
                 user1.id,
+                "This is group 1",
+                true,
                 ("tag1", "tag2")
             )?;
-            let group2 = Group!(client, "This is group 2", "group2", user2.id, ("tag3"))?;
+            let group2 = Group!(
+                client,
+                "group2",
+                user2.id,
+                "This is group 2",
+                false,
+                ("tag3")
+            )?;
             Ok((group1, group2))
         })
         .await?;

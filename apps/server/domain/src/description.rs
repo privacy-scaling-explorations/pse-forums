@@ -7,20 +7,15 @@ const DESC_MAX_LEN: usize = 500;
 #[nutype(
     derive(Deserialize, Serialize, Into, TryFrom),
     sanitize(trim),
-    validate(len_char_min = DESC_MIN_LEN, len_char_max = DESC_MAX_LEN, not_empty)
+    validate(with = validate_description, error = ValidationError)
 )]
 pub struct Description(String);
 
-impl From<DescriptionError> for ValidationError {
-    fn from(error: DescriptionError) -> Self {
-        match error {
-            DescriptionError::LenCharMinViolated => {
-                ValidationError::Content(too_short(DESC_MIN_LEN))
-            }
-            DescriptionError::LenCharMaxViolated => {
-                ValidationError::Content(too_long(DESC_MAX_LEN))
-            }
-            DescriptionError::NotEmptyViolated => ValidationError::Content("Empty".to_string()),
-        }
+fn validate_description(description: &str) -> Result<(), ValidationError> {
+    match description.len() {
+        0 => Ok(()),
+        l if l < DESC_MIN_LEN => Err(ValidationError::Content(too_short(DESC_MIN_LEN))),
+        l if l > DESC_MAX_LEN => Err(ValidationError::Content(too_long(DESC_MAX_LEN))),
+        _ => Ok(()),
     }
 }

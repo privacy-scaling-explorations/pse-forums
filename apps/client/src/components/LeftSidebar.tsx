@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router"
+import { CreateGroup } from "c/CreateGroup"
 import { Signout } from "c/Signout"
 import { useAuth } from "h/useAuth"
 import { Bell, Home as HomeIcon, PencilLine, Rss, Settings, Users } from "lucide-react"
@@ -56,7 +57,10 @@ export function LeftSidebar() {
           {auth.mapSync(renderStartItems)}
         </div>
 
-        <div className="space-y-2 mt-6">{auth.mapSync(renderMidItems)}</div>
+        <div className="space-y-2 mt-6">
+          {auth.mapSync(renderMidItems)}
+          <CreateGroup />
+        </div>
 
         <div className="flex-grow" />
 

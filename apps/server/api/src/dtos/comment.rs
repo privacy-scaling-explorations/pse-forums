@@ -48,6 +48,7 @@ impl TryFrom<UpdateCommentDto> for UpdateCommentData {
 #[convert(from = "Comment")]
 pub struct CommentDto {
     #[convert_field(to_string)]
+    #[serde(rename = "createdAt")]
     pub created_at: String,
     pub content: String,
     pub id: i32,

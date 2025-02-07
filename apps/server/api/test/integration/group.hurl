@@ -14,6 +14,8 @@ jsonpath "$.result.data" isCollection
 jsonpath "$.result.data" count >= 2
 jsonpath "$.result.data[0].description" == "This is group 1"
 jsonpath "$.result.data[0].id" == 1
+jsonpath "$.result.data[0].aid" == 1
+jsonpath "$.result.data[0].anonymous" == true
 jsonpath "$.result.data[0].name" == "group1"
 jsonpath "$.result.data[0].tags" count == 2
 jsonpath "$.result.data[0].tags[0]" == "tag1"
