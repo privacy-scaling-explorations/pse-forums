@@ -50,3 +50,9 @@ export const createPostSchema = z.object({
 })
 
 export type CreatePostSchema = z.infer<typeof createPostSchema>
+
+export const createCommentSchema = z.object({
+  content: contentSchema,
+})
+
+export type CreateCommentSchema = z.infer<typeof createCommentSchema>

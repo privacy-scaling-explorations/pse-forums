@@ -18,8 +18,8 @@ export function CommentList({ pid }: { pid: number }) {
   }
 
   return (
-    <Card>
+    <>
       {comments.map((c) => <Comment key={c.id} {...c} />)}
-    </Card>
+    </>
   )
 }

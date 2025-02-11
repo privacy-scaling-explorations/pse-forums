@@ -7,16 +7,18 @@ import type { PostDto } from "l/bindings"
 import { Eye } from "lucide-react"
 import { Route } from "r/post/$pid"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "ui/card"
-import { Downvote } from "../ui/downvote"
-import { EmojiReact } from "../ui/emoji-react"
-import { Upvote } from "../ui/upvote"
+// import { Downvote } from "ui/downvote";
+// import { EmojiReact } from "ui/emoji-react";
+// import { Upvote } from "ui/upvote";
+import { CommentForm } from "c/forms/CommentForm"
+import { Separator } from "c/ui/separator"
 import { CommentCounter } from "./_CommentCounter"
 
 export function Post() {
   const { id, title, createdAt, content, tags }: PostDto = Route.useLoaderData()
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-4">
       <Card className="w-full">
         <CardHeader className="space-y-4">
           <div className="flex items-center space-x-2">
@@ -25,10 +27,15 @@ export function Post() {
             <Badge>PSE</Badge>
             <TimeSince isoDateTime={createdAt} />
             {/* TODO Align this left, maybe split to another component */}
+            {/* TODO count views */}
+            {
+              /*
             <div className="flex items-center">
               <Eye />
               117
             </div>
+              */
+            }
           </div>
           <CardTitle className="text-2xl font-bold">{title}</CardTitle>
           <CardDescription className="space-x-2">
@@ -41,13 +48,19 @@ export function Post() {
         </CardHeader>
         <CardContent>{content}</CardContent>
         <CardFooter className="space-x-2">
-          <Upvote />
-          <Downvote />
-          <EmojiReact />
+          {/* Count votes */}
+          {/* <Upvote />*/}
+          {/* <Downvote /> */}
+          {/* TODO: manage emoji reactions */}
+          {/* <EmojiReact /> */}
           <CommentCounter />
         </CardFooter>
       </Card>
-      <CommentList pid={id} />
+      <Separator orientation="vertical" />
+      <div>
+        <CommentList pid={id} />
+        <CommentForm pid={id} />
+      </div>
     </div>
   )
 }
