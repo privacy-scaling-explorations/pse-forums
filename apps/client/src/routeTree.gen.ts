@@ -21,6 +21,7 @@ import { Route as UserUsernameImport } from './routes/user.$username'
 import { Route as PostCreateImport } from './routes/post/create'
 import { Route as PostPidImport } from './routes/post/$pid'
 import { Route as GroupCreateImport } from './routes/group/create'
+import { Route as GroupGidImport } from './routes/group/$gid'
 
 // Create Virtual Routes
 
@@ -110,6 +111,12 @@ const GroupCreateRoute = GroupCreateImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const GroupGidRoute = GroupGidImport.update({
+  id: '/group/$gid',
+  path: '/group/$gid',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -170,6 +177,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SoloLazyImport
       parentRoute: typeof rootRoute
     }
+    '/group/$gid': {
+      id: '/group/$gid'
+      path: '/group/$gid'
+      fullPath: '/group/$gid'
+      preLoaderRoute: typeof GroupGidImport
+      parentRoute: typeof rootRoute
+    }
     '/group/create': {
       id: '/group/create'
       path: '/group/create'
@@ -219,6 +233,7 @@ export interface FileRoutesByFullPath {
   '/notifications': typeof NotificationsLazyRoute
   '/rss': typeof RssLazyRoute
   '/solo': typeof SoloLazyRoute
+  '/group/$gid': typeof GroupGidRoute
   '/group/create': typeof GroupCreateRoute
   '/post/$pid': typeof PostPidRoute
   '/post/create': typeof PostCreateRoute
@@ -235,6 +250,7 @@ export interface FileRoutesByTo {
   '/notifications': typeof NotificationsLazyRoute
   '/rss': typeof RssLazyRoute
   '/solo': typeof SoloLazyRoute
+  '/group/$gid': typeof GroupGidRoute
   '/group/create': typeof GroupCreateRoute
   '/post/$pid': typeof PostPidRoute
   '/post/create': typeof PostCreateRoute
@@ -252,6 +268,7 @@ export interface FileRoutesById {
   '/notifications': typeof NotificationsLazyRoute
   '/rss': typeof RssLazyRoute
   '/solo': typeof SoloLazyRoute
+  '/group/$gid': typeof GroupGidRoute
   '/group/create': typeof GroupCreateRoute
   '/post/$pid': typeof PostPidRoute
   '/post/create': typeof PostCreateRoute
@@ -270,6 +287,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/rss'
     | '/solo'
+    | '/group/$gid'
     | '/group/create'
     | '/post/$pid'
     | '/post/create'
@@ -285,6 +303,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/rss'
     | '/solo'
+    | '/group/$gid'
     | '/group/create'
     | '/post/$pid'
     | '/post/create'
@@ -300,6 +319,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/rss'
     | '/solo'
+    | '/group/$gid'
     | '/group/create'
     | '/post/$pid'
     | '/post/create'
@@ -317,6 +337,7 @@ export interface RootRouteChildren {
   NotificationsLazyRoute: typeof NotificationsLazyRoute
   RssLazyRoute: typeof RssLazyRoute
   SoloLazyRoute: typeof SoloLazyRoute
+  GroupGidRoute: typeof GroupGidRoute
   GroupCreateRoute: typeof GroupCreateRoute
   PostPidRoute: typeof PostPidRoute
   PostCreateRoute: typeof PostCreateRoute
@@ -333,6 +354,7 @@ const rootRouteChildren: RootRouteChildren = {
   NotificationsLazyRoute: NotificationsLazyRoute,
   RssLazyRoute: RssLazyRoute,
   SoloLazyRoute: SoloLazyRoute,
+  GroupGidRoute: GroupGidRoute,
   GroupCreateRoute: GroupCreateRoute,
   PostPidRoute: PostPidRoute,
   PostCreateRoute: PostCreateRoute,
@@ -358,6 +380,7 @@ export const routeTree = rootRoute
         "/notifications",
         "/rss",
         "/solo",
+        "/group/$gid",
         "/group/create",
         "/post/$pid",
         "/post/create",
@@ -388,6 +411,9 @@ export const routeTree = rootRoute
     },
     "/solo": {
       "filePath": "solo.lazy.tsx"
+    },
+    "/group/$gid": {
+      "filePath": "group/$gid.tsx"
     },
     "/group/create": {
       "filePath": "group/create.tsx"

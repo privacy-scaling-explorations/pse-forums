@@ -75,7 +75,7 @@ CREATE INDEX "memberships_group_idx" ON "bandada"."memberships"("group" text_ops
 CREATE UNIQUE INDEX "oauth_accounts_accountHash_group_id_key" ON "bandada"."oauth_accounts"("accountHash", "group_id");
 
 ALTER TABLE "public"."group" ADD CONSTRAINT "group_aid_user_fkey" FOREIGN KEY ("aid") REFERENCES "public"."user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
-ALTER TABLE "public"."group" ADD CONSTRAINT "group_aid_bandada_admins_fkey" FOREIGN KEY ("aid") REFERENCES "bandada"."admins"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "public"."group" ADD CONSTRAINT "group_aid_bandada_admin_fkey" FOREIGN KEY ("aid") REFERENCES "bandada"."admins"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE "bandada"."admins" ADD CONSTRAINT "admins_id_fkey" FOREIGN KEY ("id") REFERENCES "public"."user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE "bandada"."groups" ADD CONSTRAINT "groups_admin_id_fkey" FOREIGN KEY ("admin_id") REFERENCES "bandada"."admins"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE "bandada"."groups" ADD CONSTRAINT "groups_gid_fkey" FOREIGN KEY ("gid") REFERENCES "public"."group"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;

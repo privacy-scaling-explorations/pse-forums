@@ -13,5 +13,6 @@ pub struct UserDto {
     pub email: String,
     #[serde(rename = "emailConfirmed")]
     pub email_confirmed: bool,
+    pub memberships: Vec<(i32, String)>,
     pub username: String,
 }
