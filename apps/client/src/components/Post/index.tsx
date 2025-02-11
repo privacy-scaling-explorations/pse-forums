@@ -17,16 +17,6 @@ import { CommentCounter } from "./_CommentCounter"
 export function Post() {
   const { id, title, createdAt, comments, content, tags }: PostDto = Route.useLoaderData()
 
-  function renderComments() {
-    if (isLoading) return <div>Loading...</div>
-    if (error) return <div>Error: {error.message}</div>
-    return (
-      <div className="space-y-2 w-full">
-        {comments.map((c) => <Comment key={c.id} {...c} />)}
-      </div>
-    )
-  }
-
   return (
     <div className="flex flex-col items-center">
       <Card className="w-full">
@@ -63,7 +53,7 @@ export function Post() {
           {/* <Downvote /> */}
           {/* TODO: manage emoji reactions */}
           {/* <EmojiReact /> */}
-          <CommentCounter />
+          <CommentCounter count={comments.length} />
         </CardFooter>
       </Card>
       {comments?.length > 0 ? <Separator className="w-px h-10" orientation="vertical" /> : null}

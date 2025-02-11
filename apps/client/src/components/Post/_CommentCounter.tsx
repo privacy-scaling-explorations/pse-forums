@@ -1,11 +1,13 @@
-import { Button } from "c/ui/button"
 import { MessageSquare } from "lucide-react"
+import type { FC } from "react"
 
-export function CommentCounter() {
+export const CommentCounter: FC<{ count: number }> = ({ count }) => {
   return (
-    <Button variant="outline">
-      <MessageSquare />
-      17
-    </Button>
+    count > 1 && (
+      <div className="border rounded-md px-3 py-1 inline-flex items-center gap-1">
+        <MessageSquare />
+        {count}
+      </div>
+    )
   )
 }
