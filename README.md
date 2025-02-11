@@ -1,5 +1,11 @@
 # PSE Forum
 
+## Client
+
+|                 Freedit                 |                    New UI dev version                    |
+| :-------------------------------------: | :------------------------------------------------------: |
+| [forum.pse.dev](https://forum.pse.dev/) | [forum-blond.vercel.app](https://forum-blond.vercel.app) |
+
 ## Just run the whole thing locally
 
 ☑️ Requirements: [docker](https://docs.docker.com/get-started/get-docker/), [docker-compose](https://docs.docker.com/compose/install/).
