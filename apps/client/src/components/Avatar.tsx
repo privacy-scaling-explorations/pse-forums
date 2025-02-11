@@ -3,7 +3,7 @@ import { Avatar as AvatarBase, AvatarFallback, AvatarImage } from "ui/avatar"
 
 interface AvatarProps {
   src?: string
-  username?: string
+  username?: string | null
 }
 
 export const Avatar: FC<AvatarProps> = ({ src, username }) => (

@@ -2,7 +2,7 @@ use crate::error::ValidationError;
 use nutype::nutype;
 use validator::ValidateEmail;
 
-#[nutype(derive(Deserialize, Serialize, Into, TryFrom, AsRef), validate(with = validate_email, error = ValidationError ))]
+#[nutype(derive(Deserialize, Serialize, Into, TryFrom, AsRef, Debug), validate(with = validate_email, error = ValidationError ))]
 pub struct Email(String);
 
 fn validate_email(email: &str) -> Result<(), ValidationError> {

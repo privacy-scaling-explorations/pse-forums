@@ -1,6 +1,7 @@
 use crate::{Email, Username};
 use chrono::{DateTime, FixedOffset};
 
+#[derive(Debug)]
 pub struct User {
     pub id: i32,
     pub created_at: DateTime<FixedOffset>,

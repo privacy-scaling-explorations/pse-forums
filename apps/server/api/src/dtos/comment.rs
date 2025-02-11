@@ -44,10 +44,8 @@ impl TryFrom<UpdateCommentDto> for UpdateCommentData {
     }
 }
 
-#[derive(Convert, Serialize, Type)]
-#[convert(from = "Comment")]
+#[derive(Serialize, Type)]
 pub struct CommentDto {
-    #[convert_field(to_string)]
     #[serde(rename = "createdAt")]
     pub created_at: String,
     pub content: String,
@@ -57,4 +55,20 @@ pub struct CommentDto {
     pub rid: Option<i32>,
     #[specta(optional)]
     pub uid: Option<i32>,
+    #[specta(optional)]
+    pub username: Option<String>,
+}
+
+impl From<Comment> for CommentDto {
+    fn from(comment: Comment) -> Self {
+        Self {
+            created_at: comment.created_at.to_string(),
+            content: comment.content.into(),
+            id: comment.id,
+            pid: comment.pid,
+            rid: comment.rid,
+            uid: comment.uid,
+            username: comment.user.map(|u| u.username.into()),
+        }
+    }
 }

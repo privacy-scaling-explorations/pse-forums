@@ -1,4 +1,4 @@
-use crate::{content::Content, Comment};
+use crate::{content::Content, Comment, User};
 use chrono::{DateTime, FixedOffset};
 
 #[derive(Debug)]

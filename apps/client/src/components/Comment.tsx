@@ -7,13 +7,13 @@ import { TimeSince } from "c/ui/time-since"
 import type { CommentDto } from "l/bindings"
 import { Card, CardContent, CardFooter, CardHeader } from "ui/card"
 
-export function Comment({ content, createdAt }: CommentDto) {
+export function Comment({ content, createdAt, username }: CommentDto) {
   return (
     <Card className="w-full">
       <CardHeader className="space-y-4">
         <div className="flex items-center space-x-2">
-          <Avatar username={"usr"} />
-          <Label>Username</Label>
+          <Avatar username={username} />
+          <span>{username}</span>
           <TimeSince isoDateTime={createdAt} />
         </div>
       </CardHeader>

@@ -1,7 +1,7 @@
 use crate::error::Result;
 use crate::InfraError;
 use async_trait::async_trait;
-use db::{post, PrismaClient};
+use db::{comment, post, PrismaClient};
 use derive_more::derive::Constructor;
 use domain::{Content, Create, Delete, Read, Title, Update};
 use std::sync::Arc;
@@ -85,6 +85,9 @@ impl Read<i32, Result<post::Data>> for PostRepository {
         self.0
             .post()
             .find_unique(post::id::equals(id))
+            .with(
+                post::comments::fetch(vec![comment::pid::equals(id)]).with(comment::user::fetch()),
+            )
             .exec()
             .await
             .map_err(|e| InfraError::Db(e.to_string()))?

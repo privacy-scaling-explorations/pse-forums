@@ -1,10 +1,9 @@
 import { Avatar } from "c/Avatar"
-import { CommentList } from "c/Comment"
 import { Badge } from "c/ui/badge"
 import { Label } from "c/ui/label"
 import { TimeSince } from "c/ui/time-since"
 import type { PostDto } from "l/bindings"
-import { Eye } from "lucide-react"
+// import { Eye } from "lucide-react"
 import { Route } from "r/post/$pid"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "ui/card"
 // import { Downvote } from "ui/downvote";
@@ -13,13 +12,10 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Comment } from "c/Comment"
 import { CommentForm } from "c/forms/CommentForm"
 import { Separator } from "c/ui/separator"
-import { useQuery } from "l/rspc"
 import { CommentCounter } from "./_CommentCounter"
 
 export function Post() {
-  const { id, title, createdAt, content, tags }: PostDto = Route.useLoaderData()
-
-  const { data: comments, isLoading, error } = useQuery(["comment.list", id])
+  const { id, title, createdAt, comments, content, tags }: PostDto = Route.useLoaderData()
 
   function renderComments() {
     if (isLoading) return <div>Loading...</div>
@@ -71,7 +67,9 @@ export function Post() {
         </CardFooter>
       </Card>
       {comments?.length > 0 ? <Separator className="w-px h-10" orientation="vertical" /> : null}
-      {renderComments()}
+      <div className="space-y-2 w-full">
+        {comments.map((c) => <Comment key={c.id} {...c} />)}
+      </div>
       <CommentForm pid={id} />
     </div>
   )

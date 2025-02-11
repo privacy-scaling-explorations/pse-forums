@@ -1,7 +1,9 @@
+use domain::Post;
 use serde::{Deserialize, Serialize};
 use services::{CreatePostData, UpdatePostData};
 use specta::Type;
-use struct_convert::Convert;
+
+use super::CommentDto;
 
 #[derive(Deserialize, Type)]
 pub struct CreatePostDto {
@@ -64,12 +66,11 @@ impl TryFrom<UpdatePostDto> for UpdatePostData {
     }
 }
 
-#[derive(Convert, Serialize, Type)]
-#[convert(from = "domain::Post")]
+#[derive(Serialize, Type)]
 pub struct PostDto {
-    #[convert_field(to_string)]
     #[serde(rename = "createdAt")]
     pub created_at: String,
+    pub comments: Vec<CommentDto>,
     pub content: String,
     #[specta(optional)]
     pub gid: Option<i32>,
@@ -78,4 +79,24 @@ pub struct PostDto {
     pub title: String,
     #[specta(optional)]
     pub uid: Option<i32>,
+}
+
+impl From<Post> for PostDto {
+    fn from(post: Post) -> Self {
+        Self {
+            created_at: post.created_at.to_string(),
+            comments: post
+                .comments
+                .into_iter()
+                .flatten()
+                .map(Into::into)
+                .collect(),
+            content: post.content.into(),
+            gid: post.gid,
+            id: post.id,
+            tags: post.tags,
+            title: post.title.into(),
+            uid: post.uid,
+        }
+    }
 }
