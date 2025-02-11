@@ -55,6 +55,12 @@ mise run d
 During local development, we use [inbucket](https://github.com/inbucket/inbucket) to receive confirmation emails.\
 The mailboxes are available at [localhost:9000](http://localhost:9000).
 
+### Monitoring
+
+The docker compose setup includes a [Grafana](https://grafana.com), [Loki](https://grafana.com/oss/loki), and [Promtail](https://grafana.com/docs/loki/latest/send-data/promtail/) instance to monitor the server logs.\
+The Grafana dashboard is accessible at [localhost:3002](http://localhost:3002] during local development.
+You will have to add the Loki data source to your grafana instance (explore > open advanced data source picker > configure new data source > loki > add url).
+
 ## Freedit
 
 This project started as a fork of [Freedit](https://github.com/FreedEdit/freedit), but has since diverged quite a bit.\

@@ -9,6 +9,7 @@ EMAIL_HOST = "localhost"
 #EMAIL_USERNAME=not needed during local dev with inbucket
 EMAIL_PORT = 2500
 JWT_SECRET = "very-strong-secret"
+LOKI_URL = "http://localhost:3100"
 PRISMA_GEN_TS_BINDINGS_PATH = "{{config_root}}/apps/client/src/lib/bindings.ts"
 USE_INBUCKET = true
 VITE_SERVER_URL = "http://localhost:3000"
