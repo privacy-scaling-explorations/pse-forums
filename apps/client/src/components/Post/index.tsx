@@ -7,16 +7,32 @@ import type { PostDto } from "l/bindings"
 import { Eye } from "lucide-react"
 import { Route } from "r/post/$pid"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "ui/card"
-import { Downvote } from "../ui/downvote"
-import { EmojiReact } from "../ui/emoji-react"
-import { Upvote } from "../ui/upvote"
+// import { Downvote } from "ui/downvote";
+// import { EmojiReact } from "ui/emoji-react";
+// import { Upvote } from "ui/upvote";
+import { Comment } from "c/Comment"
+import { CommentForm } from "c/forms/CommentForm"
+import { Separator } from "c/ui/separator"
+import { useQuery } from "l/rspc"
 import { CommentCounter } from "./_CommentCounter"
 
 export function Post() {
   const { id, title, createdAt, content, tags }: PostDto = Route.useLoaderData()
 
+  const { data: comments, isLoading, error } = useQuery(["comment.list", id])
+
+  function renderComments() {
+    if (isLoading) return <div>Loading...</div>
+    if (error) return <div>Error: {error.message}</div>
+    return (
+      <div className="space-y-2 w-full">
+        {comments.map((c) => <Comment key={c.id} {...c} />)}
+      </div>
+    )
+  }
+
   return (
-    <div className="space-y-10">
+    <div className="flex flex-col items-center">
       <Card className="w-full">
         <CardHeader className="space-y-4">
           <div className="flex items-center space-x-2">
@@ -25,10 +41,15 @@ export function Post() {
             <Badge>PSE</Badge>
             <TimeSince isoDateTime={createdAt} />
             {/* TODO Align this left, maybe split to another component */}
+            {/* TODO count views */}
+            {
+              /*
             <div className="flex items-center">
               <Eye />
               117
             </div>
+              */
+            }
           </div>
           <CardTitle className="text-2xl font-bold">{title}</CardTitle>
           <CardDescription className="space-x-2">
@@ -41,13 +62,17 @@ export function Post() {
         </CardHeader>
         <CardContent>{content}</CardContent>
         <CardFooter className="space-x-2">
-          <Upvote />
-          <Downvote />
-          <EmojiReact />
+          {/* Count votes */}
+          {/* <Upvote />*/}
+          {/* <Downvote /> */}
+          {/* TODO: manage emoji reactions */}
+          {/* <EmojiReact /> */}
           <CommentCounter />
         </CardFooter>
       </Card>
-      <CommentList pid={id} />
+      {comments?.length > 0 ? <Separator className="w-px h-10" orientation="vertical" /> : null}
+      {renderComments()}
+      <CommentForm pid={id} />
     </div>
   )
 }
