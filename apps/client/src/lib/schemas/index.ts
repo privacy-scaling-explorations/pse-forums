@@ -1,9 +1,10 @@
 import { aboutSchema, descriptionSchema } from "l/schemas/about"
+import { contentSchema } from "l/schemas/content"
 import { passwordSchema } from "l/schemas/password"
+import { nameSchema, titleSchema } from "l/schemas/title"
 import { urlSchema } from "l/schemas/url"
 import { usernameSchema } from "l/schemas/username"
 import { z } from "zod"
-import { nameSchema } from "./title"
 
 export const basicInfoSchema = z
   .object({
@@ -40,3 +41,12 @@ export const createGroupSchema = z.object({
 })
 
 export type CreateGroupSchema = z.infer<typeof createGroupSchema>
+
+export const createPostSchema = z.object({
+  content: contentSchema,
+  gid: z.number().int().positive(),
+  title: titleSchema,
+  // tags: z.array(z.string()).min(1), // TODO
+})
+
+export type CreatePostSchema = z.infer<typeof createPostSchema>

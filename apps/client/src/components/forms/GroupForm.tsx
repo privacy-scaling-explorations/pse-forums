@@ -101,8 +101,8 @@ export function CreateGroup() {
             children={([canSubmit, isSubmitting]) => (
               <Button
                 aria-busy={isSubmitting}
-                disabled={!canSubmit}
                 className="ml-auto"
+                disabled={!canSubmit}
               >
                 Create
               </Button>
@@ -113,3 +113,5 @@ export function CreateGroup() {
     </form>
   )
 }
+
+// TODO: edit group
