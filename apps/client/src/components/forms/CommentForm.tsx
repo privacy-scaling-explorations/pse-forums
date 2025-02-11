@@ -24,7 +24,7 @@ export const CommentForm: FC<{ pid: number }> = ({ pid }) => {
 
   return (
     <form
-      className="w-full flex flex-col space-y-2"
+      className="w-full flex flex-col space-y-2 mt-2"
       onSubmit={(e) => handleSubmit(e)}
     >
       <h1 className="text-xl font-semibold">New Comment</h1>
@@ -57,7 +57,7 @@ export const CommentForm: FC<{ pid: number }> = ({ pid }) => {
             className="self-end w-fit"
             disabled={!canSubmit}
           >
-            Post
+            Comment
           </Button>
         )}
       />

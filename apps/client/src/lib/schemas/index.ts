@@ -15,14 +15,12 @@ export const basicInfoSchema = z
   .refine((data) => Object.values(data).some((value) => value !== undefined), {
     message: "At least one field is required",
   })
-
 export type BasicInfoSchema = z.infer<typeof basicInfoSchema>
 
 export const signinSchema = z.object({
   username: usernameSchema,
   password: passwordSchema,
 })
-
 export type SigninSchema = z.infer<typeof signinSchema>
 
 export const signupSchema = z.object({
@@ -31,7 +29,6 @@ export const signupSchema = z.object({
   username: usernameSchema,
   password: passwordSchema,
 })
-
 export type SignupSchema = z.infer<typeof signupSchema>
 
 export const createGroupSchema = z.object({
@@ -39,7 +36,6 @@ export const createGroupSchema = z.object({
   description: descriptionSchema,
   name: nameSchema,
 })
-
 export type CreateGroupSchema = z.infer<typeof createGroupSchema>
 
 export const createPostSchema = z.object({
@@ -48,11 +44,7 @@ export const createPostSchema = z.object({
   title: titleSchema,
   // tags: z.array(z.string()).min(1), // TODO
 })
-
 export type CreatePostSchema = z.infer<typeof createPostSchema>
 
-export const createCommentSchema = z.object({
-  content: contentSchema,
-})
-
+export const createCommentSchema = z.object({ content: contentSchema })
 export type CreateCommentSchema = z.infer<typeof createCommentSchema>
