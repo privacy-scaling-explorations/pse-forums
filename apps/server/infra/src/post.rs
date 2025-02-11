@@ -38,7 +38,7 @@ impl Create<CreatePost, Result<post::Data>> for PostRepository {
 
         self.0
             .post()
-            .create(content.into(), title.into(), extra)
+            .create(title.into(), content.into(), extra)
             .exec()
             .await
             .map_err(|e| InfraError::Db(e.to_string()))

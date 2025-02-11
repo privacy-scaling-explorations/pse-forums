@@ -6,8 +6,7 @@ CREATE TABLE "post" (
     "content" TEXT NOT NULL,
     "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "post_pkey" PRIMARY KEY ("id"),
-    CONSTRAINT "content_min_length" CHECK (char_length(content) >= 10)
+    CONSTRAINT "post_pkey" PRIMARY KEY ("id")
 );
 
 CREATE UNIQUE INDEX "post_uid_key" ON "post"("uid");

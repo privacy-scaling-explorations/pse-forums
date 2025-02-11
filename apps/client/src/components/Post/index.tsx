@@ -13,7 +13,7 @@ import { Upvote } from "../ui/upvote"
 import { CommentCounter } from "./_CommentCounter"
 
 export function Post() {
-  const { id, title, created_at, content, tags }: PostDto = Route.useLoaderData()
+  const { id, title, createdAt, content, tags }: PostDto = Route.useLoaderData()
 
   return (
     <div className="space-y-10">
@@ -23,7 +23,7 @@ export function Post() {
             <Avatar username={"usr"} />
             <Label>Username</Label>
             <Badge>PSE</Badge>
-            <TimeSince isoDateTime={created_at} />
+            <TimeSince isoDateTime={createdAt} />
             {/* TODO Align this left, maybe split to another component */}
             <div className="flex items-center">
               <Eye />
@@ -32,12 +32,14 @@ export function Post() {
           </div>
           <CardTitle className="text-2xl font-bold">{title}</CardTitle>
           <CardDescription className="space-x-2">
-            {tags.map(t => <Badge variant="secondary" key={t}>{t}</Badge>)}
+            {tags.map((t) => (
+              <Badge variant="secondary" key={t}>
+                {t}
+              </Badge>
+            ))}
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          {content}
-        </CardContent>
+        <CardContent>{content}</CardContent>
         <CardFooter className="space-x-2">
           <Upvote />
           <Downvote />
