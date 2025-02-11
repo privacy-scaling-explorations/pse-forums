@@ -54,6 +54,6 @@ return new;
 end;
 $$;
 
-create trigger after_group_created
+create trigger after_group_created_create_bandada_group
 after insert on public."group"
 for each row execute procedure maybe_create_bandada_group_from_new_group();

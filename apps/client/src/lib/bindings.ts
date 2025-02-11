@@ -58,4 +58,4 @@ export type UpdateProfileReqDto = { about?: string | null; id: number; url?: str
 
 export type UpdateProfileResDto = { profile: ProfileDto; jwt?: string | null }
 
-export type UserDto = { createdAt: string; id: number; email: string; emailConfirmed: boolean; username: string }
+export type UserDto = { createdAt: string; id: number; email: string; emailConfirmed: boolean; memberships: ([number, string])[]; username: string }

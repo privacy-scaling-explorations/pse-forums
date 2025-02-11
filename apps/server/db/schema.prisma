@@ -22,8 +22,9 @@ model User {
   email_confirmation EmailConfirmation?
   posts              Post[]
   profile            Profile?
-  BandadaAdmin       BandadaAdmin?
-  Group              Group[]
+  bandada_admin      BandadaAdmin?
+  admin_of_groups    Group[]
+  memberships        Membership[]
 
   @@map("user")
   @@schema("public")
@@ -85,8 +86,23 @@ model Group {
   admin               User          @relation(fields: [aid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "group_aid_user_fkey")
   bandada_group       BandadaGroup?
   bandada_group_admin BandadaAdmin? @relation(fields: [aid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "group_aid_bandada_admin_fkey")
+  memberships         Membership[]
 
   @@map("group")
+  @@schema("public")
+}
+
+model Membership {
+  uid Int
+  gid Int
+
+  user  User  @relation(fields: [uid], references: [id], onDelete: Cascade)
+  group Group @relation(fields: [gid], references: [id], onDelete: Cascade)
+
+  @@id([uid, gid])
+  @@index([uid])
+  @@index([gid])
+  @@map("membership")
   @@schema("public")
 }
 

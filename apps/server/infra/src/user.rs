@@ -1,7 +1,7 @@
 use crate::error::Result;
 use crate::InfraError;
 use async_trait::async_trait;
-use db::{user, PrismaClient};
+use db::{membership, user, PrismaClient};
 use derive_more::derive::Constructor;
 use domain::{Create, Delete, Email, Read, Username};
 use std::sync::Arc;
@@ -15,6 +15,7 @@ impl Read<String, Result<user::Data>> for UserRepository {
         self.0
             .user()
             .find_unique(user::username::equals(username))
+            .with(user::memberships::fetch(vec![]).with(membership::group::fetch()))
             .exec()
             .await
             .map_err(|e| InfraError::Db(e.to_string()))?

@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router"
 import { CreateGroup } from "c/CreateGroup"
 import { Signout } from "c/Signout"
 import { useAuth } from "h/useAuth"
+import { useQuery } from "l/rspc"
 import {
   // Bell,
   Home as HomeIcon,
@@ -15,7 +16,7 @@ import { Button } from "ui/button"
 type Icon = typeof Settings
 
 const items: Record<
-  "start" | "mid" | "end",
+  "start" | "end",
   Array<{ title: string; to: string; icon: Icon }>
 > = {
   start: [
@@ -24,7 +25,6 @@ const items: Record<
     //  { title: "RSS", to: "/rss", icon: Rss },
     //  { title: "Notifications", to: "/notifications", icon: Bell },
   ],
-  mid: [{ title: "My Groups", to: "/groups", icon: Users }],
   end: [{ title: "Settings", to: "/settings", icon: Settings }],
 }
 
@@ -42,7 +42,6 @@ const renderItems = (_items: (typeof items)[keyof typeof items]) =>
   ))
 
 const renderStartItems = () => renderItems(items.start)
-const renderMidItems = () => renderItems(items.mid)
 const renderEndItems = () => renderItems(items.end)
 
 const Home = () => (
@@ -58,6 +57,10 @@ const Home = () => (
 )
 export function LeftSidebar() {
   const { auth } = useAuth()
+  // @ts-ignore FIXME
+  const { data: user } = useQuery(["user.read", auth.inner?.username], {
+    enabled: auth.isSome(),
+  })
 
   return (
     <aside className="w-64 pr-4 bg-gray-50 flex flex-col">
@@ -67,10 +70,25 @@ export function LeftSidebar() {
           {auth.mapSync(renderStartItems)}
         </div>
 
-        <div className="space-y-2 mt-6">
-          {auth.mapSync(renderMidItems)}
-          <CreateGroup />
-        </div>
+        {user !== undefined && (
+          <div className="space-y-2 mt-6">
+            <div className="w-full justify-start flex items-center space-x-3 px-4 py-2 text-sm">
+              <Users className="w-5 h-5" />
+              <span>My Groups</span>
+            </div>
+            {user.memberships.map(([gid, name]) => (
+              <Link key={gid} to="/group/$gid" params={{ gid: `${gid}` }}>
+                <Button
+                  className="w-full justify-start flex items-center space-x-2"
+                  variant="ghost"
+                >
+                  <span>{name}</span>
+                </Button>
+              </Link>
+            ))}
+            <CreateGroup />
+          </div>
+        )}
 
         <div className="flex-grow" />
 
