@@ -2,17 +2,27 @@ import { Link } from "@tanstack/react-router"
 import { CreateGroup } from "c/CreateGroup"
 import { Signout } from "c/Signout"
 import { useAuth } from "h/useAuth"
-import { Bell, Home as HomeIcon, PencilLine, Rss, Settings, Users } from "lucide-react"
+import {
+  // Bell,
+  Home as HomeIcon,
+  //  PencilLine,
+  //  Rss,
+  Settings,
+  Users,
+} from "lucide-react"
 import { Button } from "ui/button"
+
+type Icon = typeof Settings
 
 const items: Record<
   "start" | "mid" | "end",
-  Array<{ title: string; to: string; icon: typeof Bell }>
+  Array<{ title: string; to: string; icon: Icon }>
 > = {
   start: [
-    { title: "Solo", to: "/solo", icon: PencilLine },
-    { title: "RSS", to: "/rss", icon: Rss },
-    { title: "Notifications", to: "/notifications", icon: Bell },
+    // TODO
+    //  { title: "Solo", to: "/solo", icon: PencilLine },
+    //  { title: "RSS", to: "/rss", icon: Rss },
+    //  { title: "Notifications", to: "/notifications", icon: Bell },
   ],
   mid: [{ title: "My Groups", to: "/groups", icon: Users }],
   end: [{ title: "Settings", to: "/settings", icon: Settings }],
