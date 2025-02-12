@@ -1,5 +1,4 @@
-use crate::error::Result;
-use crate::InfraError;
+use anyhow::{anyhow, Context, Result};
 use async_trait::async_trait;
 use db::{profile, PrismaClient};
 use derive_more::derive::Constructor;
@@ -14,11 +13,11 @@ impl Read<String, Result<profile::Data>> for ProfileRepository {
     async fn read(&self, username: String) -> Result<profile::Data> {
         self.0
             .profile()
-            .find_unique(profile::username::equals(username))
+            .find_unique(profile::username::equals(username.clone()))
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))?
-            .ok_or(InfraError::NotFound)
+            .context("Failed to read profile record")?
+            .ok_or_else(|| anyhow!("Profile record with username {} not found", username))
     }
 }
 
@@ -31,8 +30,8 @@ impl Read<i32, Result<profile::Data>> for ProfileRepository {
             .with(profile::user::fetch())
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))?
-            .ok_or(InfraError::NotFound)
+            .context("Failed to read profile record")?
+            .ok_or_else(|| anyhow!("Profile record with id {} not found", id))
     }
 }
 
@@ -44,7 +43,7 @@ impl Read<(), Result<Vec<profile::Data>>> for ProfileRepository {
             .find_many(vec![])
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))
+            .context("Failed to read all profile records")
     }
 }
 
@@ -78,6 +77,6 @@ impl Update<UpdateProfile, Result<profile::Data>> for ProfileRepository {
             .update(profile::id::equals(id), updates)
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))
+            .context("Failed to update profile record")
     }
 }

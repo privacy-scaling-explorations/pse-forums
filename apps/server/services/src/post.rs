@@ -1,4 +1,5 @@
-use crate::{error::Result, GroupService};
+use crate::GroupService;
+use anyhow::Result;
 use async_trait::async_trait;
 use derive_more::Constructor;
 use domain::{Content, Create, Delete, Post, Read, Title, Update};
@@ -22,18 +23,14 @@ pub struct CreatePostData {
 #[async_trait]
 impl Create<CreatePostData, Result<Post>> for PostService {
     async fn create(&self, post: CreatePostData) -> Result<Post> {
-        self.0
-            .create(post.into())
-            .await
-            .map(Post::from)
-            .map_err(|e| e.into())
+        self.0.create(post.into()).await.map(Post::from)
     }
 }
 
 #[async_trait]
 impl Read<i32, Result<Post>> for PostService {
     async fn read(&self, id: i32) -> Result<Post> {
-        self.0.read(id).await.map(Post::from).map_err(|e| e.into())
+        self.0.read(id).await.map(Post::from)
     }
 }
 
@@ -44,28 +41,19 @@ impl Read<(), Result<Vec<Post>>> for PostService {
             .read(())
             .await
             .map(|posts| posts.into_iter().map(Post::from).collect())
-            .map_err(|e| e.into())
     }
 }
 
 impl PostService {
     pub async fn read_with_comments(&self, id: i32) -> Result<Post> {
-        self.0
-            .read_with_comments(id)
-            .await
-            .map(Post::from)
-            .map_err(|e| e.into())
+        self.0.read_with_comments(id).await.map(Post::from)
     }
 }
 
 #[async_trait]
 impl Delete<i32, Result<Post>> for PostService {
     async fn delete(&self, id: i32) -> Result<Post> {
-        self.0
-            .delete(id)
-            .await
-            .map(Post::from)
-            .map_err(|e| e.into())
+        self.0.delete(id).await.map(Post::from)
     }
 }
 
@@ -81,11 +69,7 @@ pub struct UpdatePostData {
 #[async_trait]
 impl Update<UpdatePostData, Result<Post>> for PostService {
     async fn update(&self, post: UpdatePostData) -> Result<Post> {
-        self.0
-            .update(post.into())
-            .await
-            .map(Post::from)
-            .map_err(|e| e.into())
+        self.0.update(post.into()).await.map(Post::from)
     }
 }
 

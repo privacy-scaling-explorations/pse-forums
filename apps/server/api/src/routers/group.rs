@@ -2,8 +2,10 @@ use crate::{
     dtos::{CreateGroupDto, GroupDto, UpdateGroupDto},
     Context,
 };
-use domain::{Create, Delete, Read, Update, ValidationError};
+use anyhow::Error;
+use domain::{Create, Delete, Read, Update};
 use rspc::{Router, RouterBuilder};
+use tracing::error;
 
 pub fn public_group_router() -> RouterBuilder<Context> {
     Router::<Context>::new()
@@ -14,8 +16,8 @@ pub fn public_group_router() -> RouterBuilder<Context> {
                     .read(id)
                     .await
                     .map(GroupDto::from)
-                    // TODO: better error handling
                     .map_err(|e| {
+                        error!("group.read service error: {:?}", e);
                         rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
                     })
             })
@@ -32,8 +34,8 @@ pub fn public_group_router() -> RouterBuilder<Context> {
                             .map(GroupDto::from)
                             .collect::<Vec<GroupDto>>()
                     })
-                    // TODO: better error handling
                     .map_err(|e| {
+                        error!("group.list service error: {:?}", e);
                         rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
                     })
             })
@@ -48,7 +50,8 @@ pub fn protected_group_router() -> RouterBuilder<Context> {
                     .transform(ctx.claim.expect(
                         "Claim should be present, authentication via middleware did not happen",
                     ))
-                    .map_err(|e: ValidationError| {
+                    .map_err(|e| {
+                        error!("Group creation request validation failed: {:?}", e);
                         rspc::Error::new(rspc::ErrorCode::BadRequest, e.to_string())
                     })?;
 
@@ -57,15 +60,16 @@ pub fn protected_group_router() -> RouterBuilder<Context> {
                     .create(data)
                     .await
                     .map(GroupDto::from)
-                    // TODO: better error handling
                     .map_err(|e| {
+                        error!("group.create service error: {:?}", e);
                         rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
                     })
             })
         })
         .mutation("update", |t| {
             t(|ctx, dto: UpdateGroupDto| async move {
-                let data = dto.try_into().map_err(|e: ValidationError| {
+                let data = dto.try_into().map_err(|e: Error| {
+                    error!("Group update request validation error: {:?}", e);
                     rspc::Error::new(rspc::ErrorCode::BadRequest, e.to_string())
                 })?;
 
@@ -75,6 +79,7 @@ pub fn protected_group_router() -> RouterBuilder<Context> {
                     .await
                     .map(GroupDto::from)
                     .map_err(|e| {
+                        error!("group.update service error: {:?}", e);
                         rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
                     })
             })
@@ -86,8 +91,8 @@ pub fn protected_group_router() -> RouterBuilder<Context> {
                     .delete(id)
                     .await
                     .map(GroupDto::from)
-                    // TODO: better error handling
                     .map_err(|e| {
+                        error!("group.delete service error: {:?}", e);
                         rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
                     })
             })

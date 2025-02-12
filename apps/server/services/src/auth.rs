@@ -1,23 +1,11 @@
 use crate::{user::CreateUserData, EmailConfirmationService, UserService};
+use anyhow::{Context, Result};
 use chrono::{Duration, FixedOffset, Utc};
 use crypto::{hash_pwd, verify_pwd};
 use derive_more::derive::Constructor;
 use domain::{Claim, Create, Email, Password, Read, Token, User, Username};
 use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
 use std::sync::Arc;
-use thiserror::Error;
-
-#[derive(Error, Debug)]
-pub enum AuthError {
-    #[error("Email Confirmation Error: {0}")]
-    EmailConfirmationError(String),
-    #[error("Invalid credentials")]
-    InvalidCredentials,
-    #[error("JWT error: {0}")]
-    JwtError(String),
-    #[error("Hashing error: {0}")]
-    HashError(String),
-}
 
 pub struct SignupData {
     pub email: Email,
@@ -53,7 +41,7 @@ pub struct AuthService {
 }
 
 impl AuthService {
-    pub fn issue_jwt(&self, user: &User) -> Result<String, AuthError> {
+    pub fn issue_jwt(&self, user: &User) -> Result<String> {
         let exp = Utc::now().with_timezone(&FixedOffset::east_opt(0).unwrap())
             + Duration::seconds(EXPIRATION_DURATION_SECS);
 
@@ -68,22 +56,18 @@ impl AuthService {
             &claim,
             &EncodingKey::from_secret(self.jwt_secret.as_ref()),
         )
-        .map_err(|e| AuthError::JwtError(e.to_string()))
+        .context("Failed to encode JWT")
     }
 
-    pub async fn signup(&self, payload: SignupData) -> Result<(User, String), AuthError> {
-        let user = self
-            .user_service
-            .create(payload.into())
-            .await
-            .map_err(|_| AuthError::InvalidCredentials)?;
+    pub async fn signup(&self, payload: SignupData) -> Result<(User, String)> {
+        let user = self.user_service.create(payload.into()).await?;
 
         self.email_confirmation_service
             .send_confirmation_email(user.id, &user.email)
             .await
-            .map_err(|e| AuthError::EmailConfirmationError(e.to_string()))?;
+            .context("Failed to send confirmation email")?;
 
-        let jwt = self.issue_jwt(&user)?;
+        let jwt = self.issue_jwt(&user).context("Failed to issue JWT")?;
 
         // TODO: receive a semaphore id commitment and add it to ?? and how ??
         // - bandada.members table with psql trigger on user insert (add new semaphore id commitment column to user table)?
@@ -98,22 +82,18 @@ impl AuthService {
         SigninData {
             password, username, ..
         }: SigninData,
-    ) -> Result<(User, String), AuthError> {
-        let user = self
-            .user_service
-            .read(username.into())
-            .await
-            .map_err(|_| AuthError::InvalidCredentials)?;
+    ) -> Result<(User, String)> {
+        let user = self.user_service.read(username.into()).await?;
 
         verify_pwd(password.as_ref(), &user.salt, &user.encrypted_password)
-            .map_err(|_| AuthError::InvalidCredentials)?;
+            .context("Invalid credentials")?;
 
         let jwt = self.issue_jwt(&user)?;
 
         Ok((user, jwt))
     }
 
-    pub fn validate_jwt(&self, token: &str) -> Result<Claim, AuthError> {
+    pub fn validate_jwt(&self, token: &str) -> Result<Claim> {
         let validation = Validation::new(jsonwebtoken::Algorithm::HS256);
 
         decode::<Claim>(
@@ -122,13 +102,13 @@ impl AuthService {
             &validation,
         )
         .map(|data| data.claims)
-        .map_err(|err| AuthError::JwtError(err.to_string()))
+        .context("Failed to decode JWT")
     }
 
-    pub async fn confirm_email(&self, token: Token) -> Result<(), AuthError> {
+    pub async fn confirm_email(&self, token: Token) -> Result<()> {
         self.email_confirmation_service
             .confirm_email(token)
             .await
-            .map_err(|e| AuthError::EmailConfirmationError(e.to_string()))
+            .context("Failed to confirm email")
     }
 }

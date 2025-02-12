@@ -2,8 +2,10 @@ use crate::{
     dtos::{CreatePostDto, PostDto, UpdatePostDto},
     Context,
 };
-use domain::{Create, Delete, Read, Update, ValidationError};
+use anyhow::Error;
+use domain::{Create, Delete, Read, Update};
 use rspc::{Router, RouterBuilder};
+use tracing::error;
 
 pub fn public_post_router() -> RouterBuilder<Context, ()> {
     Router::<Context>::new()
@@ -14,8 +16,8 @@ pub fn public_post_router() -> RouterBuilder<Context, ()> {
                     .read(id)
                     .await
                     .map(PostDto::from)
-                    // TODO: better error handling
                     .map_err(|e| {
+                        error!("post.read service error: {:?}", e);
                         rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
                     })
             })
@@ -32,8 +34,8 @@ pub fn public_post_router() -> RouterBuilder<Context, ()> {
                             .map(PostDto::from)
                             .collect::<Vec<PostDto>>()
                     })
-                    // TODO: better error handling
                     .map_err(|e| {
+                        error!("post.list service error: {:?}", e);
                         rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
                     })
             })
@@ -44,7 +46,8 @@ pub fn protected_post_router() -> RouterBuilder<Context, ()> {
     Router::<Context>::new()
         .mutation("create", |t| {
             t(|ctx, dto: CreatePostDto| async move {
-                let data = dto.try_into().map_err(|e: ValidationError| {
+                let data = dto.try_into().map_err(|e: Error| {
+                    error!("Create post request validation failed: {:?}", e);
                     rspc::Error::new(rspc::ErrorCode::BadRequest, e.to_string())
                 })?;
 
@@ -54,13 +57,15 @@ pub fn protected_post_router() -> RouterBuilder<Context, ()> {
                     .await
                     .map(PostDto::from)
                     .map_err(|e| {
+                        error!("post.create service error: {:?}", e);
                         rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
                     })
             })
         })
         .mutation("update", |t| {
             t(|ctx, dto: UpdatePostDto| async move {
-                let data = dto.try_into().map_err(|e: ValidationError| {
+                let data = dto.try_into().map_err(|e: Error| {
+                    error!("Update post request validation failed: {:?}", e);
                     rspc::Error::new(rspc::ErrorCode::BadRequest, e.to_string())
                 })?;
                 ctx.services
@@ -69,6 +74,7 @@ pub fn protected_post_router() -> RouterBuilder<Context, ()> {
                     .await
                     .map(PostDto::from)
                     .map_err(|e| {
+                        error!("post.update service error: {:?}", e);
                         rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
                     })
             })
@@ -80,8 +86,8 @@ pub fn protected_post_router() -> RouterBuilder<Context, ()> {
                     .delete(id)
                     .await
                     .map(PostDto::from)
-                    // TODO: better error handling
                     .map_err(|e| {
+                        error!("post.delete service error: {:?}", e);
                         rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
                     })
             })

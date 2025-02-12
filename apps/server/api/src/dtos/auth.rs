@@ -1,5 +1,5 @@
 use super::user::UserDto;
-use domain::ValidationError;
+use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use services::{SigninData, SignupData};
 use specta::Type;
@@ -11,11 +11,9 @@ pub struct SigninRequestDto {
 }
 
 impl TryFrom<SigninRequestDto> for SigninData {
-    type Error = ValidationError;
+    type Error = anyhow::Error;
 
-    fn try_from(
-        SigninRequestDto { username, password }: SigninRequestDto,
-    ) -> Result<Self, Self::Error> {
+    fn try_from(SigninRequestDto { username, password }: SigninRequestDto) -> Result<Self> {
         Ok(Self {
             username: username.try_into()?,
             password: password.try_into()?,
@@ -37,7 +35,7 @@ pub struct SignupRequestDto {
 }
 
 impl TryFrom<SignupRequestDto> for SignupData {
-    type Error = ValidationError;
+    type Error = anyhow::Error;
 
     fn try_from(
         SignupRequestDto {
@@ -45,7 +43,7 @@ impl TryFrom<SignupRequestDto> for SignupData {
             password,
             username,
         }: SignupRequestDto,
-    ) -> Result<Self, Self::Error> {
+    ) -> Result<Self> {
         Ok(Self {
             email: email.try_into()?,
             password: password.try_into()?,

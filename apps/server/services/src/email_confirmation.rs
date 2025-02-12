@@ -1,5 +1,4 @@
-use super::Result;
-use crate::ServiceError;
+use anyhow::Result;
 use async_trait::async_trait;
 use derive_more::derive::Constructor;
 use domain::{Create, Delete, Email, EmailConfirmation, Read, Token};
@@ -13,22 +12,14 @@ pub struct EmailConfirmationService(Arc<EmailConfirmationRepository>, SmtpTransp
 #[async_trait]
 impl Create<i32, Result<EmailConfirmation>> for EmailConfirmationService {
     async fn create(&self, uid: i32) -> Result<EmailConfirmation> {
-        self.0
-            .create(uid)
-            .await
-            .map(EmailConfirmation::from)
-            .map_err(|e| e.into())
+        self.0.create(uid).await.map(EmailConfirmation::from)
     }
 }
 
 #[async_trait]
 impl Read<Token, Result<EmailConfirmation>> for EmailConfirmationService {
     async fn read(&self, token: Token) -> Result<EmailConfirmation> {
-        self.0
-            .read(token)
-            .await
-            .map(EmailConfirmation::from)
-            .map_err(|e| e.into())
+        self.0.read(token).await.map(EmailConfirmation::from)
     }
 }
 
@@ -36,11 +27,7 @@ impl Read<Token, Result<EmailConfirmation>> for EmailConfirmationService {
 impl Delete<Token, Result<EmailConfirmation>> for EmailConfirmationService {
     /// will automatically update user.email_confirmed to true via psql trigger IF token is valid
     async fn delete(&self, token: Token) -> Result<EmailConfirmation> {
-        self.0
-            .delete(token)
-            .await
-            .map(EmailConfirmation::from)
-            .map_err(|e| e.into())
+        self.0.delete(token).await.map(EmailConfirmation::from)
     }
 }
 
@@ -64,9 +51,7 @@ impl EmailConfirmationService {
             ))
             .unwrap();
 
-        self.1
-            .send(&email)
-            .map_err(|e| ServiceError::EmailConfirmationSendFailed(e.to_string()))?;
+        self.1.send(&email)?;
 
         Ok(())
     }

@@ -1,5 +1,4 @@
-use crate::error::Result;
-use crate::InfraError;
+use anyhow::{anyhow, Context, Result};
 use async_trait::async_trait;
 use db::{membership, user, PrismaClient};
 use derive_more::derive::Constructor;
@@ -14,12 +13,12 @@ impl Read<String, Result<user::Data>> for UserRepository {
     async fn read(&self, username: String) -> Result<user::Data> {
         self.0
             .user()
-            .find_unique(user::username::equals(username))
+            .find_unique(user::username::equals(username.clone()))
             .with(user::memberships::fetch(vec![]).with(membership::group::fetch()))
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))?
-            .ok_or(InfraError::NotFound)
+            .context("Failed to read user record")?
+            .ok_or_else(|| anyhow!("User record with username {} not found", username))
     }
 }
 
@@ -52,7 +51,7 @@ impl Create<CreateUser, Result<user::Data>> for UserRepository {
             )
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))
+            .context("Failed to create user record")
     }
 }
 
@@ -64,6 +63,6 @@ impl Delete<String, Result<user::Data>> for UserRepository {
             .delete(user::username::equals(username))
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))
+            .context("Failed to delete user record")
     }
 }

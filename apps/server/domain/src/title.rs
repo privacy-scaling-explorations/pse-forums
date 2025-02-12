@@ -1,4 +1,5 @@
-use crate::error::{too_long, ValidationError};
+use crate::error::too_long;
+use anyhow::{anyhow, Error, Result};
 use nutype::nutype;
 
 const TITLE_MAX_LEN: usize = 50;
@@ -6,16 +7,17 @@ const TITLE_MAX_LEN: usize = 50;
 #[nutype(
     derive(Deserialize, Serialize, Into, TryFrom),
     sanitize(trim),
-    validate(len_char_max = TITLE_MAX_LEN, not_empty)
+    validate(with = validate_title, error = Error)
 )]
 pub struct Title(String);
 
-impl From<TitleError> for ValidationError {
-    fn from(error: TitleError) -> Self {
-        match error {
-            TitleError::LenCharMaxViolated => ValidationError::Content(too_long(TITLE_MAX_LEN)),
-            TitleError::NotEmptyViolated => ValidationError::Content("Empty".to_string()),
-        }
+fn validate_title(title: &str) -> Result<()> {
+    if title.is_empty() {
+        Err(anyhow!("Title cannot be empty"))
+    } else if title.chars().count() > TITLE_MAX_LEN {
+        Err(anyhow!(too_long(TITLE_MAX_LEN)))
+    } else {
+        Ok(())
     }
 }
 

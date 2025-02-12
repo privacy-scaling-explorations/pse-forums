@@ -1,5 +1,5 @@
 use super::http_client::HttpClient;
-use crate::{error::Result, ServiceError};
+use anyhow::Result;
 use db::bandada_admin;
 use derive_more::derive::Constructor;
 use domain::Read;

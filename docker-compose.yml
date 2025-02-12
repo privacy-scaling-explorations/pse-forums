@@ -24,9 +24,9 @@ services:
 
   client:
     container_name: pse-forum-client
-    depends_on:
-      server:
-        condition: service_healthy
+    #depends_on:
+    #  server:
+    #    condition: service_healthy
     environment:
       VITE_SERVER_URL: http://server:3000
     image: ghcr.io/privacy-scaling-explorations/pse-forums-client:latest
@@ -101,12 +101,14 @@ services:
     volumes: [bandada:/var/lib/postgresql/data]
 
   loki:
+    container_name: pse-forum-loki
     command: -config.file=/etc/loki/config.yaml
     image: grafana/loki:latest
     ports: ["3100:3100"]
     volumes: [./loki-config.yaml:/etc/loki/config.yaml]
 
   grafana:
+    container_name: pse-forum-grafana
     depends_on: [loki]
     environment:
       GF_SECURITY_ADMIN_PASSWORD: admin
@@ -116,6 +118,7 @@ services:
     volumes: [grafana:/var/lib/grafana]
 
   promtail:
+    container_name: pse-forum-promtail
     command: -config.file=/etc/promtail/config.yaml
     depends_on: [loki]
     image: grafana/promtail:latest
