@@ -76,6 +76,7 @@ services:
       EMAIL_HOST: pse-forum-mail # mail service container name if using inbucket
       EMAIL_PORT: "${EMAIL_PORT:-2500}"
       JWT_SECRET: "${JWT_SECRET:-secret}"
+      LOKI_URL: http://loki:3100
       USE_INBUCKET: "${USE_INBUCKET:-false}"
       VITE_SERVER_URL: "${VITE_SERVER_URL:-http://localhost:3000}"
     image: ghcr.io/privacy-scaling-explorations/pse-forums-server:latest
@@ -97,7 +98,33 @@ services:
     image: postgres:latest
     restart: unless-stopped
     ports: ["5432:5432"]
-    volumes: ["pse-forum-bandada:/var/lib/postgresql/data"]
+    volumes: [bandada:/var/lib/postgresql/data]
+
+  loki:
+    command: -config.file=/etc/loki/config.yaml
+    image: grafana/loki:latest
+    ports: ["3100:3100"]
+    volumes: [./loki-config.yaml:/etc/loki/config.yaml]
+
+  grafana:
+    depends_on: [loki]
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_SECURITY_ADMIN_USER: admin
+    image: grafana/grafana:latest
+    ports: ["3002:3000"]
+    volumes: [grafana:/var/lib/grafana]
+
+  promtail:
+    command: -config.file=/etc/promtail/config.yaml
+    depends_on: [loki]
+    image: grafana/promtail:latest
+    volumes: [
+      ./promtail-config.yaml:/etc/promtail/config.yaml,
+      /var/lib/promtail:/var/lib/promtail,
+      /var/run/docker.sock:/var/run/docker.sock, # allow access to docker logs
+    ]
 
 volumes:
-  pse-forum-bandada:
+  bandada:
+  grafana:
