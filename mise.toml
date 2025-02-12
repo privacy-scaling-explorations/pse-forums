@@ -1,6 +1,7 @@
 [env]
 BANDADA_URL = "http://localhost:3001"
 CLIENT_URL = "http://localhost:5173"
+EXT_CLIENT_URL = "http://localhost"
 DATABASE_URL = "postgres://postgres:postgres@localhost:5432/postgres"
 EMAIL_FROM = "pse-forum@noreply.com"
 EMAIL_HOST = "localhost"
