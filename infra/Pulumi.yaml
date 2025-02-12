@@ -1,0 +1,16 @@
+name: pse-forum
+description: Pulumi program for pse-forum deployment with AWS lightsail and docker compose
+runtime:
+  name: nodejs
+  options:
+    packagemanager: yarn
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: aws-typescript
+  aws:region: eu-north-1
+  aws:profile: ""
+  pse-forum:sshPubKeyPath: "~/.ssh/yourpubkey.pub"
+  pse-forum:domain: "domain.com"
+  # set pulumi secret
+  pse-forum:githubToken: ""

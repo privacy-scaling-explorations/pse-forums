@@ -10,6 +10,7 @@
   },
   "private": true,
   "workspaces": [
-    "apps/client"
+    "apps/client",
+    "infra"
   ]
 }

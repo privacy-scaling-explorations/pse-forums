@@ -70,7 +70,7 @@ services:
         condition: service_healthy
     environment:
       BANDADA_URL: http://bandada:3000
-      CLIENT_URL: http://localhost # must be url on external network (not docker's), with docker compose the client is served with nginx on port 80
+      CLIENT_URL: "${EXT_CLIENT_URL:-https://ui.aforum.click}" # must be url on external network (not docker's), with docker compose the client is served with nginx on port 80
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
       EMAIL_FROM: "${EMAIL_FROM:-pse-forum@noreply.com}"
       EMAIL_HOST: pse-forum-mail # mail service container name if using inbucket
@@ -79,6 +79,12 @@ services:
       USE_INBUCKET: "${USE_INBUCKET:-false}"
       VITE_SERVER_URL: "${VITE_SERVER_URL:-http://localhost:3000}"
     image: ghcr.io/privacy-scaling-explorations/pse-forums-server:latest
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 5s
+      retries: 3
+      start_period: 10s
+      timeout: 3s
     ports: ["3000:3000"]
 
   postgres:
