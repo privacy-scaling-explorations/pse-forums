@@ -1,5 +1,4 @@
-use crate::error::Result;
-use crate::InfraError;
+use anyhow::{anyhow, Context, Result};
 use async_trait::async_trait;
 use db::{comment, PrismaClient};
 use derive_more::derive::Constructor;
@@ -41,7 +40,7 @@ impl Create<CreateComment, Result<comment::Data>> for CommentRepository {
             .create_unchecked(pid, content.into(), extra)
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))
+            .context("Failed to create comment record")
     }
 }
 
@@ -61,7 +60,7 @@ impl Update<UpdateComment, Result<comment::Data>> for CommentRepository {
             )
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))
+            .context("Failed to update comment record")
     }
 }
 
@@ -73,8 +72,8 @@ impl Read<i32, Result<comment::Data>> for CommentRepository {
             .find_unique(comment::id::equals(id))
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))?
-            .ok_or(InfraError::NotFound)
+            .context("Failed to read comment")?
+            .ok_or_else(|| anyhow!("Comment record with id {} not found", id))
     }
 }
 
@@ -87,7 +86,7 @@ impl Read<(), Result<Vec<comment::Data>>> for CommentRepository {
             .find_many(vec![])
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))
+            .context("Failed to read all comment records")
     }
 }
 
@@ -99,6 +98,6 @@ impl Delete<i32, Result<comment::Data>> for CommentRepository {
             .delete(comment::id::equals(id))
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))
+            .context("Failed to delete comment record")
     }
 }

@@ -1,4 +1,4 @@
-use crate::{error::Result, InfraError};
+use anyhow::{anyhow, Context, Result};
 use async_trait::async_trait;
 use chrono::{Duration, Utc};
 use db::{email_confirmation, user, PrismaClient};
@@ -19,7 +19,7 @@ impl Create<i32, Result<email_confirmation::Data>> for EmailConfirmationReposito
             .create(expires_at.into(), user::id::equals(uid), vec![])
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))
+            .context("Failed to create email confirmation record")
     }
 }
 
@@ -31,8 +31,8 @@ impl Read<Token, Result<email_confirmation::Data>> for EmailConfirmationReposito
             .find_unique(email_confirmation::token::equals(token.to_string()))
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))?
-            .ok_or(InfraError::NotFound)
+            .context("Failed to read email confirmation record")?
+            .ok_or_else(|| anyhow!("Email confirmation record with token {} not found", token))
     }
 }
 
@@ -56,6 +56,6 @@ impl Delete<Token, Result<email_confirmation::Data>> for EmailConfirmationReposi
             .delete(email_confirmation::token::equals(token.to_string()))
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))
+            .context("Failed to delete email confirmation record")
     }
 }

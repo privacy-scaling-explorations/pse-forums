@@ -1,3 +1,4 @@
+use anyhow::{anyhow, Result};
 use domain::{Claim, Group};
 use serde::{Deserialize, Serialize};
 use services::{CreateGroupData, UpdateGroupData};
@@ -16,7 +17,7 @@ pub struct CreateGroupDto {
 }
 
 impl CreateGroupDto {
-    pub fn transform(self, claim: Claim) -> Result<CreateGroupData, domain::ValidationError> {
+    pub fn transform(self, claim: Claim) -> Result<CreateGroupData> {
         Ok(CreateGroupData {
             aid: claim.uid,
             anonymous: self.anonymous,
@@ -39,7 +40,7 @@ pub struct UpdateGroupDto {
 }
 
 impl TryFrom<UpdateGroupDto> for UpdateGroupData {
-    type Error = domain::ValidationError;
+    type Error = anyhow::Error;
 
     fn try_from(
         UpdateGroupDto {
@@ -48,9 +49,11 @@ impl TryFrom<UpdateGroupDto> for UpdateGroupData {
             name,
             tags,
         }: UpdateGroupDto,
-    ) -> Result<Self, Self::Error> {
+    ) -> Result<Self> {
         if description.is_none() && name.is_none() && tags.is_none() {
-            return Err(domain::ValidationError::EmptyFields);
+            return Err(anyhow!(
+                "At least one of description, name, or tags must be provided"
+            ));
         }
 
         Ok(Self {

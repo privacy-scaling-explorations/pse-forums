@@ -29,7 +29,7 @@ async fn main() -> Result<()> {
         .await
         .context("Failed to bind to port")?;
 
-    println!("Server running on 0.0.0.0:3000");
+    info!("Server running on 0.0.0.0:3000");
     axum::serve(listener, app)
         .await
         .context("Failed to serve")?;

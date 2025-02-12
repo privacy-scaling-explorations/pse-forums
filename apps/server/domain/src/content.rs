@@ -1,4 +1,5 @@
-use crate::error::{too_short, ValidationError};
+use crate::error::too_short;
+use anyhow::{anyhow, Error, Result};
 use nutype::nutype;
 
 const CONTENT_MIN_LEN: usize = 10;
@@ -6,17 +7,16 @@ const CONTENT_MIN_LEN: usize = 10;
 #[nutype(
     derive(Debug, Deserialize, Serialize, Into, TryFrom),
     sanitize(trim),
-    validate(len_char_min = CONTENT_MIN_LEN, not_empty)
+    validate(with=validate_content, error = Error)
 )]
 pub struct Content(String);
 
-impl From<ContentError> for ValidationError {
-    fn from(error: ContentError) -> Self {
-        match error {
-            ContentError::LenCharMinViolated => {
-                ValidationError::Content(too_short(CONTENT_MIN_LEN))
-            }
-            ContentError::NotEmptyViolated => ValidationError::Content("Empty".to_string()),
-        }
+fn validate_content(content: &str) -> Result<()> {
+    if content.is_empty() {
+        Err(anyhow!("Content cannot be empty"))
+    } else if content.chars().count() < CONTENT_MIN_LEN {
+        Err(anyhow!(too_short(CONTENT_MIN_LEN)))
+    } else {
+        Ok(())
     }
 }

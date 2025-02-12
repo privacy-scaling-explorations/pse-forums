@@ -1,5 +1,4 @@
-use crate::error::Result;
-use crate::InfraError;
+use anyhow::{anyhow, Context, Result};
 use async_trait::async_trait;
 use db::{comment, post, PrismaClient};
 use derive_more::derive::Constructor;
@@ -41,7 +40,7 @@ impl Create<CreatePost, Result<post::Data>> for PostRepository {
             .create(title.into(), content.into(), extra)
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))
+            .context("Failed to create post record")
     }
 }
 
@@ -75,7 +74,7 @@ impl Update<UpdatePost, Result<post::Data>> for PostRepository {
             .update(post::id::equals(id), updates)
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))
+            .context("Failed to update post record")
     }
 }
 
@@ -90,8 +89,8 @@ impl Read<i32, Result<post::Data>> for PostRepository {
             )
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))?
-            .ok_or(InfraError::NotFound)
+            .context("Failed to read post record")?
+            .ok_or_else(|| anyhow!("Post record with id {} not found", id))
     }
 }
 
@@ -103,7 +102,7 @@ impl Read<(), Result<Vec<post::Data>>> for PostRepository {
             .find_many(vec![])
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))
+            .context("Failed to read all post records")
     }
 }
 
@@ -115,8 +114,8 @@ impl PostRepository {
             .with(post::comments::fetch(vec![]))
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))?
-            .ok_or(InfraError::NotFound)
+            .context("Failed to read post record with comments relation")?
+            .ok_or_else(|| anyhow!("Post record with id {} not found", id))
     }
 }
 
@@ -128,6 +127,6 @@ impl Delete<i32, Result<post::Data>> for PostRepository {
             .delete(post::id::equals(id))
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))
+            .context("Failed to delete post record")
     }
 }

@@ -1,4 +1,4 @@
-use crate::{error::Result, InfraError};
+use anyhow::{anyhow, Context, Result};
 use async_trait::async_trait;
 use db::{bandada_admin, PrismaClient};
 use derive_more::derive::Constructor;
@@ -16,7 +16,7 @@ impl Read<i32, Result<bandada_admin::Data>> for BandadaAdminRepository {
             .find_unique(bandada_admin::id::equals(uid))
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))?
-            .ok_or(InfraError::NotFound)
+            .context("Failed to read Bandada admin record")?
+            .ok_or_else(|| anyhow!("Bandada admin record with id {} not found", uid))
     }
 }

@@ -1,8 +1,8 @@
+use anyhow::Result;
 use domain::Comment;
 use serde::{Deserialize, Serialize};
 use services::{CreateCommentData, UpdateCommentData};
 use specta::Type;
-use struct_convert::Convert;
 
 #[derive(Deserialize, Type)]
 pub struct CreateCommentDto {
@@ -15,7 +15,7 @@ pub struct CreateCommentDto {
 }
 
 impl TryFrom<CreateCommentDto> for CreateCommentData {
-    type Error = domain::ValidationError;
+    type Error = anyhow::Error;
 
     fn try_from(dto: CreateCommentDto) -> Result<Self, Self::Error> {
         Ok(Self {
@@ -34,7 +34,7 @@ pub struct UpdateCommentDto {
 }
 
 impl TryFrom<UpdateCommentDto> for UpdateCommentData {
-    type Error = domain::ValidationError;
+    type Error = anyhow::Error;
 
     fn try_from(UpdateCommentDto { id, content }: UpdateCommentDto) -> Result<Self, Self::Error> {
         Ok(Self {

@@ -1,3 +1,4 @@
+use anyhow::{anyhow, Result};
 use domain::Post;
 use serde::{Deserialize, Serialize};
 use services::{CreatePostData, UpdatePostData};
@@ -18,9 +19,9 @@ pub struct CreatePostDto {
 }
 
 impl TryFrom<CreatePostDto> for CreatePostData {
-    type Error = domain::ValidationError;
+    type Error = anyhow::Error;
 
-    fn try_from(dto: CreatePostDto) -> Result<Self, Self::Error> {
+    fn try_from(dto: CreatePostDto) -> Result<Self> {
         Ok(Self {
             content: dto.content.try_into()?,
             gid: dto.gid,
@@ -43,7 +44,7 @@ pub struct UpdatePostDto {
 }
 
 impl TryFrom<UpdatePostDto> for UpdatePostData {
-    type Error = domain::ValidationError;
+    type Error = anyhow::Error;
 
     fn try_from(
         UpdatePostDto {
@@ -54,7 +55,9 @@ impl TryFrom<UpdatePostDto> for UpdatePostData {
         }: UpdatePostDto,
     ) -> Result<Self, Self::Error> {
         if content.is_none() && tags.is_none() && title.is_none() {
-            return Err(domain::ValidationError::EmptyFields);
+            return Err(anyhow!(
+                "At least one of content, tags, or title must be provided"
+            ));
         }
 
         Ok(Self {

@@ -3,15 +3,16 @@ name = "domain"
 edition.workspace = true
 
 [dependencies]
+anyhow.workspace = true
 async-trait.workspace = true
 chrono.workspace = true
 db = { path = "../db" }
 nutype.workspace = true
+once_cell.workspace = true
 regex.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 specta.workspace = true
 struct-convert.workspace = true
-thiserror.workspace = true
 validator.workspace = true
 zxcvbn.workspace = true

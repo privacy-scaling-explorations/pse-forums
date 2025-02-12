@@ -839,16 +839,17 @@ dependencies = [
 name = "domain"
 version = "0.0.0"
 dependencies = [
+ "anyhow",
  "async-trait",
  "chrono",
  "db",
  "nutype",
+ "once_cell",
  "regex",
  "serde",
  "serde_json",
  "specta 2.0.0-rc.20",
  "struct-convert",
- "thiserror 2.0.11",
  "validator",
  "zxcvbn",
 ]
@@ -1680,6 +1681,7 @@ checksum = "bfa799dd5ed20a7e349f3b4639aa80d74549c81716d9ec4f994c9b5815598306"
 name = "infra"
 version = "0.0.0"
 dependencies = [
+ "anyhow",
  "async-trait",
  "chrono",
  "db",
@@ -1687,7 +1689,6 @@ dependencies = [
  "domain",
  "serde",
  "specta 2.0.0-rc.20",
- "thiserror 2.0.11",
 ]
 
 [[package]]
@@ -2348,9 +2349,9 @@ dependencies = [
 
 [[package]]
 name = "once_cell"
-version = "1.20.2"
+version = "1.20.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1261fe7e33c73b354eab43b1273a57c8f967d0391e80353e51f764ac02cf6775"
+checksum = "945462a4b81e43c4e3ba96bd7b49d834c6f61198356aa858733bc4acf3cbe62e"
 
 [[package]]
 name = "opaque-debug"
@@ -3616,6 +3617,7 @@ dependencies = [
 name = "services"
 version = "0.0.0"
 dependencies = [
+ "anyhow",
  "async-trait",
  "chrono",
  "crypto",
@@ -3632,7 +3634,6 @@ dependencies = [
  "serde_json",
  "specta 2.0.0-rc.20",
  "struct-convert",
- "thiserror 2.0.11",
  "tokio",
 ]
 

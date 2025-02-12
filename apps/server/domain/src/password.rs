@@ -1,48 +1,31 @@
-use crate::error::{too_long, too_short, ValidationError};
+use crate::error::{too_long, too_short};
+use anyhow::{anyhow, Error, Result};
 use nutype::nutype;
 use zxcvbn::{zxcvbn, Score};
 
 const PASSWORD_MIN_LEN: usize = 10;
 const PASSWORD_MAX_LEN: usize = 40;
 
-#[nutype(derive(Deserialize, Serialize, AsRef, TryFrom), validate(with = validate_password, error=ValidationError))]
+#[nutype(derive(Deserialize, Serialize, AsRef, TryFrom), validate(with = validate_password, error=Error))]
 pub struct Password(String);
 
-fn validate_password(password: &str) -> Result<(), ValidationError> {
-    check_length(password)
-        .and(check_entropy(password))
-        .map_err(ValidationError::from)
+fn validate_password(password: &str) -> Result<()> {
+    check_length(password)?;
+    check_entropy(password)?;
+    Ok(())
 }
 
-enum PasswordError {
-    TooShort,
-    TooLong,
-    TooSimple,
-}
-
-fn check_length(password: &str) -> Result<(), PasswordError> {
+fn check_length(password: &str) -> Result<()> {
     match password.len() {
-        len if len < PASSWORD_MIN_LEN => Err(PasswordError::TooShort),
-        len if len > PASSWORD_MAX_LEN => Err(PasswordError::TooLong),
+        len if len < PASSWORD_MIN_LEN => Err(anyhow!(too_short(PASSWORD_MIN_LEN))),
+        len if len > PASSWORD_MAX_LEN => Err(anyhow!(too_long(PASSWORD_MAX_LEN))),
         _ => Ok(()),
     }
 }
 
-fn check_entropy(password: &str) -> Result<(), PasswordError> {
+fn check_entropy(password: &str) -> Result<()> {
     match zxcvbn(password, &[]).score() {
         Score::Three | Score::Four => Ok(()),
-        _ => Err(PasswordError::TooSimple),
-    }
-}
-
-impl From<PasswordError> for ValidationError {
-    fn from(error: PasswordError) -> Self {
-        match error {
-            PasswordError::TooShort => ValidationError::Password(too_short(PASSWORD_MIN_LEN)),
-            PasswordError::TooLong => ValidationError::Password(too_long(PASSWORD_MAX_LEN)),
-            PasswordError::TooSimple => {
-                ValidationError::Password("Too simple (low entropy: try mixing lowercase and uppercase letters, numbers and symbols)".to_string())
-            }
-        }
+        _ => Err(anyhow!("Password too simple (try mixing more lowercase and uppercase letters, numbers and special characters")),
     }
 }

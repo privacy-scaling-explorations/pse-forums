@@ -1,4 +1,5 @@
-use domain::{Profile, ValidationError};
+use anyhow::Result;
+use domain::Profile;
 use serde::{Deserialize, Serialize};
 use services::UpdateProfileReqData;
 use specta::Type;
@@ -28,7 +29,7 @@ pub struct UpdateProfileReqDto {
 }
 
 impl TryFrom<UpdateProfileReqDto> for UpdateProfileReqData {
-    type Error = ValidationError;
+    type Error = anyhow::Error;
 
     fn try_from(
         UpdateProfileReqDto {
@@ -37,7 +38,7 @@ impl TryFrom<UpdateProfileReqDto> for UpdateProfileReqData {
             url,
             username,
         }: UpdateProfileReqDto,
-    ) -> Result<Self, Self::Error> {
+    ) -> Result<Self> {
         Ok(UpdateProfileReqData {
             about: about.map(|n| n.try_into()).transpose()?,
             id,

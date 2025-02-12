@@ -23,7 +23,6 @@ pub use content::Content;
 pub use description::Description;
 pub use email::Email;
 pub use email_confirmation::*;
-pub use error::ValidationError;
 pub use group::Group;
 pub use password::Password;
 pub use post::Post;

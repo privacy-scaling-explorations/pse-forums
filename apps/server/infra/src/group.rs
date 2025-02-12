@@ -1,5 +1,4 @@
-use crate::error::Result;
-use crate::InfraError;
+use anyhow::{anyhow, Context, Result};
 use async_trait::async_trait;
 use db::{group, user, PrismaClient};
 use derive_more::derive::Constructor;
@@ -36,12 +35,13 @@ impl Create<CreateGroup, Result<group::Data>> for GroupRepository {
             .chain(description.map(|d| group::description::set(d.into())))
             .chain(tags.map(|t| group::tags::set(t)))
             .collect();
+
         self.0
             .group()
             .create(name.into(), user::id::equals(aid), extra)
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))
+            .context("Failed to create group record")
     }
 }
 
@@ -75,7 +75,7 @@ impl Update<UpdateGroup, Result<group::Data>> for GroupRepository {
             .update(group::id::equals(id), updates)
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))
+            .context("Failed to update group record")
     }
 }
 
@@ -87,8 +87,8 @@ impl Read<i32, Result<group::Data>> for GroupRepository {
             .find_unique(group::id::equals(id))
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))?
-            .ok_or(InfraError::NotFound)
+            .context("Failed to read group record")?
+            .ok_or_else(|| anyhow!("Group record with id {} not found", id))
     }
 }
 
@@ -100,7 +100,7 @@ impl Read<(), Result<Vec<group::Data>>> for GroupRepository {
             .find_many(vec![])
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))
+            .context("Failed to read all group records")
     }
 }
 
@@ -115,8 +115,8 @@ impl GroupRepository {
             .with(group::posts::fetch(vec![]))
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))?
-            .ok_or(InfraError::NotFound)
+            .context("Failed to read group record with posts relation")?
+            .ok_or_else(|| anyhow!("Group record with id {} not found", gid))
     }
 }
 
@@ -128,6 +128,6 @@ impl Delete<i32, Result<group::Data>> for GroupRepository {
             .delete(group::id::equals(id))
             .exec()
             .await
-            .map_err(|e| InfraError::Db(e.to_string()))
+            .context("Failed to delete group record")
     }
 }
