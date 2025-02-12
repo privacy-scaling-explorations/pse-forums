@@ -14,7 +14,7 @@ pub async fn app() -> Router {
     let router = mount();
     let context = Context::new(prisma.clone(), None);
     Router::new()
-        .route("/", get(|| async { "Hello rspc!" }))
+        .route("/health", get(|| async { "OK" }))
         .route("/confirm-email", get(confirm_email_handler))
         .with_state(context.services.auth.clone())
         .nest(

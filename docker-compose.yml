@@ -79,6 +79,12 @@ services:
       USE_INBUCKET: "${USE_INBUCKET:-false}"
       VITE_SERVER_URL: "${VITE_SERVER_URL:-http://localhost:3000}"
     image: ghcr.io/privacy-scaling-explorations/pse-forums-server:latest
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 5s
+      retries: 3
+      start_period: 10s
+      timeout: 3s
     ports: ["3000:3000"]
 
   postgres:

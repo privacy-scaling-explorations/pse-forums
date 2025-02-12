@@ -18,7 +18,7 @@ bun.lockb
 dist
 mise.local.toml
 node_modules
-Pulumi.dev.yaml
+Pulumi.*.yaml
 target
 *.tsbuildinfo
 yarn.lock
