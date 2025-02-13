@@ -40,7 +40,7 @@ export type CreatePostDto = { content: string; gid?: number | null; tags?: strin
 
 export type GroupDto = { aid: number; anonymous: boolean; id: number; name: string; description: string; tags: string[] }
 
-export type PostDto = { createdAt: string; comments: CommentDto[]; content: string; gid?: number | null; id: number; tags: string[]; title: string; uid?: number | null }
+export type PostDto = { createdAt: string; comments: CommentDto[]; content: string; gid: number; id: number; tags: string[]; title: string; uid?: number | null }
 
 export type ProfileDto = { id: number; about: string; createdAt: string; username: string; url: string }
 

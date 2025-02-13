@@ -55,7 +55,7 @@ macro_rules! Post {
             .create(
                 $title.to_string(),
                 $content.to_string(),
-                vec![post::uid::set(Some($uid)), post::gid::set(Some($gid)),post::tags::set(vec![$($tag.to_string()),*])],
+                vec![post::uid::set(Some($uid)), post::gid::set($gid),post::tags::set(vec![$($tag.to_string()),*])],
             )
             .exec()
             .await
@@ -114,6 +114,14 @@ async fn seed_database(
         })
         .await?;
 
+    let default_group = client
+        .group()
+        .find_first(vec![group::name::equals("Default".to_string())])
+        .exec()
+        .await
+        .expect("Failed to find default group")
+        .expect("No default group found");
+
     let (group1, group2) = client
         ._transaction()
         .run(|client| async move {
@@ -137,7 +145,7 @@ async fn seed_database(
         })
         .await?;
 
-    let (post1, post2, user1, user2) = client
+    let (post1, post2, post3, user1, user2) = client
         ._transaction()
         .run(|client| async move {
             let post1 = Post!(
@@ -145,7 +153,7 @@ async fn seed_database(
                 "Post Title 1",
                 "This is the content of post 1",
                 user1.id,
-                group1.id,
+                default_group.id,
                 ("tag1", "tag2")
             )?;
             let post2 = Post!(
@@ -156,12 +164,21 @@ async fn seed_database(
                 group2.id,
                 ("tag3")
             )?;
+            let post3 = Post!(
+                client,
+                "Post Title 3",
+                "This is the content of post 3",
+                user2.id,
+                group1.id,
+                ("tag3")
+            )?;
 
-            Ok((post1, post2, user1, user2))
+            Ok((post1, post2, post3, user1, user2))
         })
         .await?;
 
     Comment!(client, "Comment by user 1 on post 1", post1.id, user1.id)?;
+    Comment!(client, "Comment by user 1 on post 3", post3.id, user1.id)?;
     Comment!(client, "Comment by user 2 on post 2", post2.id, user2.id)?;
     Comment!(client, "Comment by user 2 on post 1", post1.id, user2.id)?;
 
@@ -178,6 +195,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("Test users: (email, password, username)");
             println!("{:?}", user1);
             println!("{:?}", user2);
+            println!("{:?}", ("admin@placeholder.dev", "admin", "admin@dm1n!"))
         }
         Err(e) => eprintln!("Error seeding the database: {:#?}", e),
     }

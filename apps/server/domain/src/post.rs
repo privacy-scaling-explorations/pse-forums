@@ -7,7 +7,7 @@ pub struct Post {
     pub comments: Option<Vec<Comment>>,
     pub content: Content,
     pub created_at: DateTime<FixedOffset>,
-    pub gid: Option<i32>,
+    pub gid: i32,
     pub uid: Option<i32>,
     pub title: String,
     pub tags: Vec<String>,

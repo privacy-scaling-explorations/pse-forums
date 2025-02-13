@@ -75,8 +75,7 @@ pub struct PostDto {
     pub created_at: String,
     pub comments: Vec<CommentDto>,
     pub content: String,
-    #[specta(optional)]
-    pub gid: Option<i32>,
+    pub gid: i32,
     pub id: i32,
     pub tags: Vec<String>,
     pub title: String,

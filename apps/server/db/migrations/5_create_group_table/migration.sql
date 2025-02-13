@@ -1,5 +1,5 @@
-ALTER TABLE "post" ADD COLUMN     "gid" INTEGER;
-comment on column "post"."gid" is 'Optional group ID; null for posts that are not part of a group';
+-- 1 is the default (first) group id
+alter table post add column gid integer not null default 1;
 
 CREATE TABLE "group" (
     "id" SERIAL NOT NULL,
@@ -24,11 +24,13 @@ CREATE TABLE "public"."membership" (
 CREATE INDEX "membership_uid_idx" ON "public"."membership"("uid");
 CREATE INDEX "membership_gid_idx" ON "public"."membership"("gid");
 
-ALTER TABLE "post" ADD CONSTRAINT "post_gid_fkey" FOREIGN KEY ("gid") REFERENCES "group"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "post" ADD CONSTRAINT "post_gid_fkey" FOREIGN KEY ("gid") REFERENCES "group"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "group" ADD CONSTRAINT "group_aid_user_fkey" FOREIGN KEY ("aid") REFERENCES "public"."user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE "public"."membership" ADD CONSTRAINT "membership_uid_fkey" FOREIGN KEY ("uid") REFERENCES "public"."user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "public"."membership" ADD CONSTRAINT "membership_gid_fkey" FOREIGN KEY ("gid") REFERENCES "public"."group"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
-CREATE FUNCTION add_creator_to_group()
+
+CREATE FUNCTION add_admin_to_group_fn()
 RETURNS TRIGGER AS $$
 BEGIN
   INSERT INTO membership (uid, gid)
@@ -37,6 +39,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER add_creator_to_group
+CREATE TRIGGER add_admin_to_group_trigger
 AFTER INSERT ON "group"
-FOR EACH ROW EXECUTE FUNCTION add_creator_to_group();
+FOR EACH ROW EXECUTE FUNCTION add_admin_to_group_fn();

@@ -1,5 +1,6 @@
 -- on signup: copy user.{id,created_at,username} into public.profiles
-create function create_profile_from_new_user() returns trigger
+create function create_profile_from_new_user_fn()
+returns trigger
 language plpgsql
 security definer
 as $$
@@ -10,12 +11,13 @@ return new;
 end;
 $$;
 
-create trigger after_user_created
+create trigger create_profile_from_new_user_trigger
 after insert on public."user"
-for each row execute procedure create_profile_from_new_user();
+for each row execute procedure create_profile_from_new_user_fn();
 
 
-create function create_bandada_admin_from_new_group() returns trigger
+create function create_bandada_admin_from_new_group_fn()
+returns trigger
 language plpgsql
 security definer
 as $$
@@ -32,13 +34,14 @@ begin
 end;
 $$;
 
-create trigger before_group_created
+create trigger create_bandada_admin_from_new_group_trigger
 -- need to insert before insert on public."group" because of foreign key constraint
 before insert on public."group"
-for each row execute procedure create_bandada_admin_from_new_group();
+for each row execute procedure create_bandada_admin_from_new_group_fn();
 
 
-create function maybe_create_bandada_group_from_new_group() returns trigger
+create function maybe_create_bandada_group_from_new_group_fn()
+returns trigger
 language plpgsql
 security definer
 as $$
@@ -54,6 +57,6 @@ return new;
 end;
 $$;
 
-create trigger after_group_created_create_bandada_group
+create trigger maybe_create_bandada_group_from_new_group_trigger
 after insert on public."group"
-for each row execute procedure maybe_create_bandada_group_from_new_group();
+for each row execute procedure maybe_create_bandada_group_from_new_group_fn();
