@@ -1,16 +1,12 @@
-import "katex/dist/katex.min.css"
-import Latex from "react-latex-next"
-import ReactMarkdown from "react-markdown"
-import rehypeHighlight from "rehype-highlight"
-import remarkGfm from "remark-gfm"
 import { Button } from "ui/button"
 import { Input } from "ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "ui/select"
 // import { Tabs, TabsList, TabsTrigger } from "ui/tabs";
 import { useField, useForm } from "@tanstack/react-form"
+import { Content } from "c/Content"
 import { FieldInfo } from "c/FieldInfo"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "c/ui/tabs"
-import { capitalize, detectFormat, Format } from "l/format"
+import { capitalize } from "l/format"
 import { getToken, rspc } from "l/rspc"
 import { type CreatePostSchema, createPostSchema } from "l/schemas"
 import { Route } from "r/post/create"
@@ -20,24 +16,6 @@ import { Textarea } from "ui/textarea"
 enum TabName {
   Write = "write",
   Preview = "preview",
-}
-
-const previewContent = (content: string) => {
-  switch (detectFormat(content)) {
-    case Format.Markdown:
-      return (
-        <ReactMarkdown
-          remarkPlugins={[remarkGfm]}
-          rehypePlugins={[rehypeHighlight]}
-        >
-          {content}
-        </ReactMarkdown>
-      )
-    case Format.Latex:
-      return <Latex>{content}</Latex>
-    case Format.Raw:
-      return content
-  }
 }
 
 export function PostForm() {
@@ -155,7 +133,7 @@ export function PostForm() {
             className="p-4 border rounded-md bg-gray-50"
           >
             <div className="min-h-[200px] prose">
-              {previewContent(contentField.state.value)}
+              <Content content={contentField.state.value} />
             </div>
           </TabsContent>
         </Tabs>

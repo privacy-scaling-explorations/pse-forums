@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 // import { EmojiReact } from "ui/emoji-react";
 // import { Upvote } from "ui/upvote";
 import { Comment } from "c/Comment"
+import { Content } from "c/Content"
 import { CommentForm } from "c/forms/CommentForm"
 import { Separator } from "c/ui/separator"
 import { CommentCounter } from "./_CommentCounter"
@@ -46,7 +47,9 @@ export function Post() {
             ))}
           </CardDescription>
         </CardHeader>
-        <CardContent>{content}</CardContent>
+        <CardContent>
+          <Content content={content} />
+        </CardContent>
         <CardFooter className="space-x-2">
           {/* Count votes */}
           {/* <Upvote />*/}

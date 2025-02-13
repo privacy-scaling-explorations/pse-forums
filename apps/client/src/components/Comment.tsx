@@ -1,9 +1,9 @@
 import { Avatar } from "c/Avatar"
 // import { Downvote } from "c/ui/downvote";
 // import { EmojiReact } from "c/ui/emoji-react";
-import { Label } from "c/ui/label"
 import { TimeSince } from "c/ui/time-since"
 // import { Upvote } from "c/ui/upvote";
+import { Content } from "c/Content"
 import type { CommentDto } from "l/bindings"
 import { Card, CardContent, CardFooter, CardHeader } from "ui/card"
 
@@ -17,7 +17,9 @@ export function Comment({ content, createdAt, username }: CommentDto) {
           <TimeSince isoDateTime={createdAt} />
         </div>
       </CardHeader>
-      <CardContent>{content}</CardContent>
+      <CardContent>
+        <Content content={content} />
+      </CardContent>
       <CardFooter className="space-x-2">
         {
           /* TODO: manage votes and emoji reactions
