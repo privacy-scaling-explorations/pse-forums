@@ -11,6 +11,6 @@
   "private": true,
   "workspaces": [
     "apps/client",
-    "infra"
+    "pulumi"
   ]
 }
