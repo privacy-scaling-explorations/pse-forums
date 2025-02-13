@@ -61,8 +61,6 @@ export function PostForm() {
     name: "content",
   })
 
-  console.log(detectFormat(contentField.state.value))
-
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     e.stopPropagation()
