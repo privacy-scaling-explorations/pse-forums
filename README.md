@@ -70,7 +70,7 @@ The Grafana dashboard is accessible at [localhost:3002](http://localhost:3002) d
 
    ![capture](https://github.com/user-attachments/assets/5c8cc799-0763-4f7a-8635-724b3e5038e7)\
 
-4.Configure new data source > search for loki\
+4. Configure new data source > search for loki
 6. Add connection url
 
 Pay attention to which network you are on, in case loki and grafana runs within the docker network or localhost: `http://<loki|localhost>:3100`
