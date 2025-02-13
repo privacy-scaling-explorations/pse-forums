@@ -1,15 +1,44 @@
+import "katex/dist/katex.min.css"
+import Latex from "react-latex-next"
+import ReactMarkdown from "react-markdown"
+import rehypeHighlight from "rehype-highlight"
+import remarkGfm from "remark-gfm"
 import { Button } from "ui/button"
 import { Input } from "ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "ui/select"
 // import { Tabs, TabsList, TabsTrigger } from "ui/tabs";
-import { useForm } from "@tanstack/react-form"
+import { useField, useForm } from "@tanstack/react-form"
 import { FieldInfo } from "c/FieldInfo"
-import { capitalize } from "l/format"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "c/ui/tabs"
+import { capitalize, detectFormat, Format } from "l/format"
 import { getToken, rspc } from "l/rspc"
 import { type CreatePostSchema, createPostSchema } from "l/schemas"
 import { Route } from "r/post/create"
 import type { FormEvent } from "react"
 import { Textarea } from "ui/textarea"
+
+enum TabName {
+  Write = "write",
+  Preview = "preview",
+}
+
+const previewContent = (content: string) => {
+  switch (detectFormat(content)) {
+    case Format.Markdown:
+      return (
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          rehypePlugins={[rehypeHighlight]}
+        >
+          {content}
+        </ReactMarkdown>
+      )
+    case Format.Latex:
+      return <Latex>{content}</Latex>
+    case Format.Raw:
+      return content
+  }
+}
 
 export function PostForm() {
   const groups = Route.useLoaderData()
@@ -26,6 +55,13 @@ export function PostForm() {
     },
     validators: { onChange: createPostSchema },
   })
+
+  const contentField = useField<CreatePostSchema, "content">({
+    form,
+    name: "content",
+  })
+
+  console.log(detectFormat(contentField.state.value))
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -100,20 +136,31 @@ export function PostForm() {
         </Button>
         */
         }
-        <form.Field
-          name="content"
-          children={(field) => (
-            <>
-              <Textarea
-                id={field.name}
-                className="min-h-[200px]"
-                onChange={(e) => field.handleChange(e.target.value)}
-                value={field.state.value}
-              />
-              <FieldInfo field={field} />
-            </>
-          )}
-        />
+
+        <Tabs defaultValue={TabName.Write}>
+          <TabsList className="grid w-[420px] grid-cols-2">
+            <TabsTrigger value={TabName.Write}>{TabName.Write}</TabsTrigger>
+            <TabsTrigger value={TabName.Preview}>{TabName.Preview}</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value={TabName.Write}>
+            <Textarea
+              id={contentField.name}
+              className="min-h-[200px]"
+              onChange={(e) => contentField.handleChange(e.target.value)}
+              value={contentField.state.value}
+            />
+            <FieldInfo field={contentField} />
+          </TabsContent>
+          <TabsContent
+            value={TabName.Preview}
+            className="p-4 border rounded-md bg-gray-50"
+          >
+            <div className="min-h-[200px] prose">
+              {previewContent(contentField.state.value)}
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
       <div className="flex justify-end gap-2">
         {/* TODO: drafts */}
