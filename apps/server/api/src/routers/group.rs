@@ -22,6 +22,19 @@ pub fn public_group_router() -> RouterBuilder<Context> {
                     })
             })
         })
+        .query("read_with_posts", |t| {
+            t(|ctx, id: i32| async move {
+                ctx.services
+                    .group
+                    .read_with_posts(id)
+                    .await
+                    .map(GroupDto::from)
+                    .map_err(|e| {
+                        error!("group.read_with_posts service error: {:?}", e);
+                        rspc::Error::new(rspc::ErrorCode::InternalServerError, e.to_string())
+                    })
+            })
+        })
         .query("list", |t| {
             t(|ctx, _: ()| async move {
                 ctx.services

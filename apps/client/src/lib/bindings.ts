@@ -6,6 +6,7 @@ export type Procedures = {
         { key: "comment.read", input: number, result: CommentDto } | 
         { key: "group.list", input: never, result: GroupDto[] } | 
         { key: "group.read", input: number, result: GroupDto } | 
+        { key: "group.read_with_posts", input: number, result: GroupDto } | 
         { key: "post.read", input: number, result: PostDto } | 
         { key: "post.read_by_group", input: number, result: PostDto[] } | 
         { key: "profile.list", input: never, result: ProfileDto[] } | 
@@ -38,9 +39,9 @@ export type CreateGroupDto = { anonymous?: boolean | null; description?: string 
 
 export type CreatePostDto = { content: string; gid?: number | null; tags?: string[] | null; title: string; uid?: number | null }
 
-export type GroupDto = { aid: number; anonymous: boolean; id: number; name: string; description: string; tags: string[] }
+export type GroupDto = { aid: number; anonymous: boolean; id: number; name: string; description: string; posts?: PostDto[] | null; tags: string[] }
 
-export type PostDto = { createdAt: string; comments: CommentDto[]; content: string; group: [number, string]; id: number; tags: string[]; title: string; uid?: number | null }
+export type PostDto = { createdAt: string; comments: CommentDto[]; content: string; group?: [number, string] | null; id: number; tags: string[]; title: string; uid?: number | null }
 
 export type ProfileDto = { id: number; about: string; createdAt: string; username: string; url: string }
 

@@ -39,6 +39,7 @@ impl Create<CreatePost, Result<post::Data>> for PostRepository {
             .post()
             // FIXME: make it work with `create` intead of `create_unchecked`
             .create_unchecked(title.into(), content.into(), extra)
+            .with(post::group::fetch())
             .exec()
             .await
             .context("Failed to create post record")

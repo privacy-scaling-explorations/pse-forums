@@ -5,6 +5,8 @@ use services::{CreateGroupData, UpdateGroupData};
 use specta::Type;
 use struct_convert::Convert;
 
+use super::PostDto;
+
 #[derive(Deserialize, Type)]
 pub struct CreateGroupDto {
     #[specta(optional)]
@@ -65,13 +67,30 @@ impl TryFrom<UpdateGroupDto> for UpdateGroupData {
     }
 }
 
-#[derive(Convert, Serialize, Type)]
-#[convert(from = "Group")]
+#[derive(Serialize, Type)]
 pub struct GroupDto {
     pub aid: i32,
     pub anonymous: bool,
     pub id: i32,
     pub name: String,
     pub description: String,
+    #[specta(optional)]
+    pub posts: Option<Vec<PostDto>>,
     pub tags: Vec<String>,
+}
+
+impl From<Group> for GroupDto {
+    fn from(group: Group) -> Self {
+        Self {
+            aid: group.aid,
+            anonymous: group.anonymous,
+            id: group.id,
+            name: group.name.into(),
+            description: group.description.into(),
+            posts: group
+                .posts
+                .map(|p| p.into_iter().map(PostDto::from).collect()),
+            tags: group.tags,
+        }
+    }
 }
