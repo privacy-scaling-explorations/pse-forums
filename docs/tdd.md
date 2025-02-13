@@ -34,25 +34,29 @@ It implements fine-grained access control using a policy-based system.
 
 ## Technology Stack
 
+### DB
+
+[Postgres](https://www.postgresql.org/) with heavy use of psql triggers ([ex](https://github.com/privacy-scaling-explorations/pse-forums/blob/main/apps/server/db/migrations/8_handle_new_user_and_group/migration.sql)).
+
 ### Backend
 
 - Runtime: [Rust](https://www.rust-lang.org/)
-- Database: [Postgres](https://www.postgresql.org/)
 - ORM: [prisma-client-rust](https://github.com/Brendonovich/prisma-client-rust)
-- Web Framework: [rspc](https://rspc.dev) + [axum](https://github.com/tokio-rs/axum)
-- Validation: [validator](https://github.com/Keats/validator.rs) & [nutype](https://github.com/greyblake/nutype)
+- Web Framework: [rspc](https://rspc.dev), [axum](https://github.com/tokio-rs/axum)
+- Validation: [validator](https://github.com/Keats/validator), [nutype](https://github.com/greyblake/nutype)
 - Mailer library: [lettre](https://github.com/lettre/lettre)
 - Cryptography:
   - JWT: [jsonwebtoken](https://github.com/Keats/jsonwebtoken)
   - password hashing/salting: [ring](https://github.com/briansmith/ring)
   - ZK:
     - semaphore: [semapore-rs-backend](https://github.com/adria0/semaphore-rs-backend)
+- monitoring: [grafana loki](https://grafana.com/oss/loki/)
 
-## Frontend
+### Frontend
 
 - Runtime: [Bun](https://bun.sh/)
 - Build Tool: [Vite](https://vitejs.dev/)
 - Routing: [tanstack/react-router](https://tanstack.com/router/latest)
 - Form validation: [tanstack/react-form](https://tanstack.com/form/latest)
 - State management: [jotai](https://jotai.org/)
-- Styling: [shadcn](https://ui.shadcn.com/) && [tailwind](https://tailwindcss.com/)
+- Styling: [shadcn](https://ui.shadcn.com/), [tailwind](https://tailwindcss.com/)
