@@ -9,13 +9,12 @@ CREATE TABLE "post" (
     CONSTRAINT "post_pkey" PRIMARY KEY ("id")
 );
 
-CREATE UNIQUE INDEX "post_uid_key" ON "post"("uid");
-
 ALTER TABLE "post" ADD CONSTRAINT "post_uid_fkey" FOREIGN KEY ("uid") REFERENCES "user"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 comment on column post.uid is 'Optional user ID; null for anonymous posts';
 
-CREATE OR REPLACE FUNCTION update_user_username()
+-- update user record on profile record update
+CREATE FUNCTION update_user_username_fn()
 RETURNS TRIGGER AS $$
 BEGIN
     UPDATE public."user"
@@ -25,7 +24,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trigger_update_user_username
+CREATE TRIGGER trigger_update_user_username_trigger
 AFTER UPDATE OF username ON public.profile
 FOR EACH ROW
-EXECUTE FUNCTION update_user_username();
+EXECUTE FUNCTION update_user_username_fn();
