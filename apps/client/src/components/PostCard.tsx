@@ -6,12 +6,7 @@ import { Card } from "ui/card"
 import { Badge } from "./ui/badge"
 import { TimeSince } from "./ui/time-since"
 
-export const PostCard: FC<PostDto & { group_name: string }> = ({
-  id,
-  title,
-  createdAt,
-  group_name,
-}) => {
+export const PostCard: FC<PostDto> = ({ id, title, createdAt, group }) => {
   return (
     <Card>
       <Link to="/post/$pid" params={{ pid: `${id}` }}>
@@ -25,7 +20,7 @@ export const PostCard: FC<PostDto & { group_name: string }> = ({
           <div className="flex-grow flex flex-col items-start">
             <h3 className="font-bold text-lg mb-1">{title}</h3>
             <div className="flex space-x-2">
-              <Badge variant="secondary">{group_name}</Badge>
+              <Badge variant="secondary">{group[1]}</Badge>
               <TimeSince
                 className="text-sm text-gray-600"
                 isoDateTime={createdAt}

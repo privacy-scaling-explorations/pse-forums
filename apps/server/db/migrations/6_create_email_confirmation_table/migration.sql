@@ -15,7 +15,8 @@ ALTER TABLE "email_confirmation" ADD CONSTRAINT "email_confirmation_uid_fkey" FO
 comment on table email_confirmation is 'Email confirmation tokens for email verification on signup';
 
 -- automatically confirm user on deletion of row that contains a valid, non expired token
-CREATE FUNCTION confirm_user_on_valid_deletion() RETURNS TRIGGER AS $$
+CREATE FUNCTION confirm_user_on_valid_deletion_fn()
+RETURNS TRIGGER AS $$
 DECLARE
     token_exists BOOLEAN;
 BEGIN
@@ -35,7 +36,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER email_confirmation_trigger
+CREATE TRIGGER confirm_user_on_valid_deletion_trigger
 BEFORE DELETE ON email_confirmation
 FOR EACH ROW
-EXECUTE FUNCTION confirm_user_on_valid_deletion();
+EXECUTE FUNCTION confirm_user_on_valid_deletion_fn();

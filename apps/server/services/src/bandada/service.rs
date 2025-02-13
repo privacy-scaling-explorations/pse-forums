@@ -1,3 +1,5 @@
+// TODO remove allow directive
+#![allow(unused_variables, dead_code)]
 use super::http_client::HttpClient;
 use anyhow::Result;
 use db::bandada_admin;

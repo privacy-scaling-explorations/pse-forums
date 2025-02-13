@@ -75,8 +75,7 @@ pub struct PostDto {
     pub created_at: String,
     pub comments: Vec<CommentDto>,
     pub content: String,
-    #[specta(optional)]
-    pub gid: Option<i32>,
+    pub group: (i32, String),
     pub id: i32,
     pub tags: Vec<String>,
     pub title: String,
@@ -85,21 +84,27 @@ pub struct PostDto {
 }
 
 impl From<Post> for PostDto {
-    fn from(post: Post) -> Self {
+    fn from(
+        Post {
+            created_at,
+            comments,
+            content,
+            group,
+            id,
+            tags,
+            title,
+            uid,
+        }: Post,
+    ) -> Self {
         Self {
-            created_at: post.created_at.to_string(),
-            comments: post
-                .comments
-                .into_iter()
-                .flatten()
-                .map(Into::into)
-                .collect(),
-            content: post.content.into(),
-            gid: post.gid,
-            id: post.id,
-            tags: post.tags,
-            title: post.title.into(),
-            uid: post.uid,
+            created_at: created_at.to_string(),
+            comments: comments.into_iter().flatten().map(Into::into).collect(),
+            content: content.into(),
+            group,
+            id,
+            tags,
+            title: title.into(),
+            uid,
         }
     }
 }
