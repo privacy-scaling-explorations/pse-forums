@@ -57,9 +57,23 @@ The mailboxes are available at [localhost:9000](http://localhost:9000).
 
 ### Monitoring
 
-The docker compose setup includes a [Grafana](https://grafana.com), [Loki](https://grafana.com/oss/loki), and [Promtail](https://grafana.com/docs/loki/latest/send-data/promtail/) instance to monitor the server logs.\
-The Grafana dashboard is accessible at [localhost:3002](http://localhost:3002] during local development.
-You will have to add the Loki data source to your grafana instance (explore > open advanced data source picker > configure new data source > loki > add url).
+The docker compose setup includes a [Grafana](https://grafana.com), [Loki](https://grafana.com/oss/loki), and [Promtail](https://grafana.com/docs/loki/latest/send-data/promtail/) instances to monitor the server logs.
+The Grafana dashboard is accessible at [localhost:3002](http://localhost:3002) during local development.
+
+<details>
+<summary>You will have to add the Loki data source to your grafana instance
+</summary>
+
+1. Go to [localhost:3002](http://localhost:3002)
+2. Default credentials are `admin:admin`
+3. Explore > open advanced data source picker
+   [capture](https://github.com/user-attachments/assets/5c8cc799-0763-4f7a-8635-724b3e5038e7)\
+   3.Configure new data source > search for loki
+4. Add connection url
+   Pay attention to which network you are on, in case loki and grafana runs within the docker network or localhost: `http://<loki|localhost>:3100`
+   configure new data source > loki > add url).
+
+</details>
 
 ## Freedit
 
