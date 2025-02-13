@@ -2,102 +2,57 @@
 
 ## Overview
 
-This document outlines the architecture and design choices for the forum backend, focusing on modularity, security, and maintainability.
+The forum is a self hostable, modular and secure backend and frontend application that supports **authenticated anomymous** interactions.\
+It implements fine-grained access control using a policy-based system.
 
-## Architecture Diagram
+### Key Features
 
-```
-┌────────────────────────────────────┐
-│             Client App             │
-│  - Initiates actions               │
-│  - Generates proofs (ZKPs, etc.)   │
-│  - Manages tokens/credentials      │
-└────────────────────────────────────┘
-             │       ▲
-             ▼       │
-┌────────────────────────────────────┐
-│          API Gateway / RPC         │
-│  - Exposes rspc endpoints          │
-│  - Routes requests                 │
-│  - Handles authentication          │
-│  - Enforces authorization          │
-└────────────────────────────────────┘
-             │
-             ▼
-┌───────────────────────────────────────┐
-│         Application Services          │
-│  ┌───────────────┐  ┌────────────┐    │
-│  │ Authn Service │  │ Authz Service   │
-│  │ (Credential,  │  │ (Policy    │    │
-│  │  JWT, etc.)   │  │  Engine)   │    │
-│  └───────────────┘  └────────────┘    │
-│         │            │                │
-│         ▼            ▼                │
-│  ┌──────────────────────────────┐     │
-│  │  Pluggable Verification Layer │◄─  ┼─ Interface for various proof verifiers
-│  │  (JWT verifier, ZKP verifier, │    │  Each implements a defined interface
-│  │   VC verifier, etc.)          │    │
-│  └──────────────────────────────┘     │
-│         │            │                │
-│         ▼            ▼               │
-│  ┌──────────────────────────────┐     │
-│  │ Modular Policy System        │     │
-│  │  - Enforces group policies   │     │
-│  │  - Authenticated authz       │     │
-│  │  - ZK verifier for anon auth │     │
-│  └──────────────────────────────┘     │
-└───────────────────────────────────---─┘
-             │
-             ▼
-┌────────────────────────────────────┐
-│             Datastore              │
-│  - User profiles, credentials      │
-│  - Group and post records          │
-│  - Configuration for policies      │
-│  - Optional revocation lists       │
-└────────────────────────────────────┘
-```
+- Authentication (Authn): "you are a user that meets some requirements" (owns a particular email address, or pass another kind of verification)
+- Authorization (Authz): "Based on your authentication, you are allowed to do something" (can create a post, can join a group, can delete a post)
+- Modular verification layer (JWT, ZKP, Verifiable Credential...).
+- Policy-based access control.
+- Groups management
+- LateX and Markdown support
 
-## Key Components
+## Functional Requirements
 
-### API Layer
+- User authentication and session management (JWT).
+- Authorization middleware for role-based and group-based access control.
+- Support for unauthenticated, authenticated, and anonymous-authenticated interactions.
+- Cryptographic verification layer for JWTs, ZKPs, and VCs.
+- CRUD operations for users, posts, comments, and groups.
+- Modular policy system to define access rules dynamically.
+- Efficient querying for related data (e.g., fetching posts within a group).
+- Users should be able to interact with the forum without compromising anonymity.
+- E.g ZKPs allows for actions without revealing the user's full identity.
 
-- Exposes RPC endpoints using `rspc`
-- Handles authentication (JWT-based)
-- Implements authorization middleware
-- Provides endpoints for CRUD operations on users, posts, comments, and groups
+## Suggested/In Progress Implementation
 
-### Service Layer
+## Diagram
 
-- Encapsulates business logic
-- Interacts with repositories for data access
-- Implements authentication and authorization logic
-- Supports **modular policies and group management with authn/authz**
-  - **Authenticated authorization**
-  - **Unauthenticated authorization with zk verifier**
+![diagram](./diagram.png)
 
-### Infrastructure Layer
+## Technology Stack
 
-- Manages database interactions using Prisma ORM
-- Implements repository pattern for data access
+### Backend
 
-## Authentication & Authorization
+- Runtime: [Rust](https://www.rust-lang.org/)
+- Database: [Postgres](https://www.postgresql.org/)
+- ORM: [prisma-client-rust](https://github.com/Brendonovich/prisma-client-rust)
+- Web Framework: [rspc](https://rspc.dev) + [axum](https://github.com/tokio-rs/axum)
+- Validation: [validator](https://github.com/Keats/validator.rs) & [nutype](https://github.com/greyblake/nutype)
+- Mailer library: [lettre](https://github.com/lettre/lettre)
+- Cryptography:
+  - JWT: [jsonwebtoken](https://github.com/Keats/jsonwebtoken)
+  - password hashing/salting: [ring](https://github.com/briansmith/ring)
+  - ZK:
+    - semaphore: [semapore-rs-backend](https://github.com/adria0/semaphore-rs-backend)
 
-- **Authentication:** JWT-based authentication for registered users
-- **Authorization:**
-  - Middleware enforces permissions on protected routes
-  - Supports **modular policies for group management**
-  - Implements both **authenticated authorization** and **unauthenticated authorization using zk verifier**
+## Frontend
 
-## Group Management
-
-- Groups (`Group` model) allow users to create, join, and manage communities
-- Posts can belong to groups
-- **Authorization policies dictate who can create, update, or delete groups and posts**
-- Supports **zk verifier for anonymous access control**
-
-## Next Steps
-
-- Implement **policy-based access control (PBAC)**
-- Integrate zk verifier for unauthenticated authorization
-- Optimize queries for fetching groups with posts efficiently
+- Runtime: [Bun](https://bun.sh/)
+- Build Tool: [Vite](https://vitejs.dev/)
+- Routing: [tanstack/react-router](https://tanstack.com/router/latest)
+- Form validation: [tanstack/react-form](https://tanstack.com/form/latest)
+- State management: [jotai](https://jotai.org/)
+- Styling: [shadcn](https://ui.shadcn.com/) && [tailwind](https://tailwindcss.com/)
