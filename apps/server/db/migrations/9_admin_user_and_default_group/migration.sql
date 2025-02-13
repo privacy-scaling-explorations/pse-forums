@@ -1,8 +1,10 @@
 -- disable triggers to prevent circular foreign key constraint violation
 -- can't insert default group first as it refer to a user (aid),
 -- can't insert user first as the trigger will try to insert into membership that refers to the group table
-alter table "group" disable TRIGGER add_admin_to_group_trigger;
+alter table "group" disable trigger add_admin_to_group_trigger;
 
+-- no need for a profile for the admin user
+alter table "user" disable trigger create_profile_from_new_user_trigger;
 -- TODO: make this configurable by env var secret? force reset on first login?
 insert into "user" (
   "email",
@@ -16,6 +18,7 @@ insert into "user" (
   '558add8565fadd0916328576df4c2c9e86e99b3b5b871bb725a023bfe14e71c4de400cabc48cb26f2ec2cdd9a933017ded1b4c32ec3706b8905504431f07a5cf',
   'admin'
 );
+alter table "user" enable trigger create_profile_from_new_user_trigger;
 
 -- create default group and make admin user a member of the default group
 with admin_user as (
@@ -31,7 +34,7 @@ insert into membership (uid, gid)
 select admin_user.id, default_group.id
 from admin_user, default_group;
 
-alter table "group" enable TRIGGER add_admin_to_group_trigger;
+alter table "group" enable trigger add_admin_to_group_trigger;
 
 create function add_new_user_to_default_group_fn()
 returns trigger as $$

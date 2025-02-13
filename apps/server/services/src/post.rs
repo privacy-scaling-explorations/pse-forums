@@ -34,11 +34,10 @@ impl Read<i32, Result<Post>> for PostService {
     }
 }
 
-#[async_trait]
-impl Read<(), Result<Vec<Post>>> for PostService {
-    async fn read(&self, _: ()) -> Result<Vec<Post>> {
+impl PostService {
+    pub async fn read_by_group(&self, gid: i32) -> Result<Vec<Post>> {
         self.0
-            .read(())
+            .read_by_group(gid)
             .await
             .map(|posts| posts.into_iter().map(Post::from).collect())
     }

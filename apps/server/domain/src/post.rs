@@ -7,7 +7,7 @@ pub struct Post {
     pub comments: Option<Vec<Comment>>,
     pub content: Content,
     pub created_at: DateTime<FixedOffset>,
-    pub gid: i32,
+    pub group: (i32, String),
     pub uid: Option<i32>,
     pub title: String,
     pub tags: Vec<String>,
@@ -22,7 +22,7 @@ impl From<db::post::Data> for Post {
                 .map(|c| c.into_iter().map(Comment::from).collect()),
             content: data.content.try_into().unwrap(), // if it is in DB, it's already validated
             created_at: data.created_at,
-            gid: data.gid,
+            group: (data.gid, data.group.unwrap().name),
             uid: data.uid,
             title: data.title.try_into().unwrap(), // if it is in DB, it's already validated
             tags: data.tags,

@@ -28,16 +28,17 @@ impl Create<CreatePost, Result<post::Data>> for PostRepository {
             uid,
         }: CreatePost,
     ) -> Result<post::Data> {
-        let extra: Vec<post::SetParam> = vec![]
+        let extra: Vec<post::UncheckedSetParam> = vec![]
             .into_iter()
-            .chain(gid.map(|gid| post::gid::set(gid)))
-            .chain(tags.map(|t| post::tags::set(t)))
-            .chain(uid.map(|id| post::uid::set(Some(id))))
+            .chain(gid.map(|gid| post::UncheckedSetParam::Gid(gid)))
+            .chain(tags.map(|t| post::UncheckedSetParam::Tags(t)))
+            .chain(uid.map(|id| post::UncheckedSetParam::Uid(Some(id))))
             .collect();
 
         self.0
             .post()
-            .create(title.into(), content.into(), extra)
+            // FIXME: make it work with `create` intead of `create_unchecked`
+            .create_unchecked(title.into(), content.into(), extra)
             .exec()
             .await
             .context("Failed to create post record")
@@ -94,12 +95,12 @@ impl Read<i32, Result<post::Data>> for PostRepository {
     }
 }
 
-#[async_trait]
-impl Read<(), Result<Vec<post::Data>>> for PostRepository {
-    async fn read(&self, _: ()) -> Result<Vec<post::Data>> {
+impl PostRepository {
+    pub async fn read_by_group(&self, gid: i32) -> Result<Vec<post::Data>> {
         self.0
             .post()
-            .find_many(vec![])
+            .find_many(vec![post::gid::equals(gid)])
+            .with(post::group::fetch())
             .exec()
             .await
             .context("Failed to read all post records")

@@ -52,7 +52,7 @@ macro_rules! Post {
     ($client:expr, $title:expr, $content:expr, $uid:expr, $gid:expr, ($($tag:expr),*)) => {
         $client
             .post()
-            .create(
+            .create_unchecked(
                 $title.to_string(),
                 $content.to_string(),
                 vec![post::uid::set(Some($uid)), post::gid::set($gid),post::tags::set(vec![$($tag.to_string()),*])],
