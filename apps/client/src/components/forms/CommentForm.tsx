@@ -3,7 +3,7 @@ import { FieldInfo } from "c/FieldInfo"
 import { getToken, rspc } from "l/rspc"
 import { type CreateCommentSchema, createCommentSchema } from "l/schemas"
 import type { FC, FormEvent } from "react"
-import { Button } from "ui/button"
+import { Button } from "c/ui/Button"
 import { Textarea } from "ui/textarea"
 
 export const CommentForm: FC<{ pid: number }> = ({ pid }) => {

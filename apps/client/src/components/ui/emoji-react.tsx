@@ -1,4 +1,4 @@
-import { Button } from "c/ui/button"
+import { Button } from "c/ui/Button"
 import { Smile } from "lucide-react"
 
 export function EmojiReact() {

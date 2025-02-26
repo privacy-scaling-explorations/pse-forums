@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "c/cards/Card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "ui/tabs"
 import { Signin } from "./_Signin"
 import { Signup } from "./_Signup"

@@ -8,9 +8,7 @@ export function useAuth() {
   const [auth, setAuthImpl] = useAtom(authAtom)
 
   const setAuth = useCallback(
-    (auth?: AuthData) => {
-      setAuthImpl(Option.wrap(auth))
-    },
+    (auth?: AuthData) => setAuthImpl(Option.wrap(auth)),
     [setAuthImpl],
   )
 

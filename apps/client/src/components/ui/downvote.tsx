@@ -1,4 +1,4 @@
-import { Button } from "c/ui/button"
+import { Button } from "c/ui/Button"
 import { ThumbsDown } from "lucide-react"
 
 export function Downvote() {

@@ -1,6 +1,6 @@
 import { Upload } from "lucide-react"
-import { Button } from "ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "ui/card"
+import { Button } from "c/ui/Button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "c/cards/Card"
 import { Input } from "ui/input"
 
 export function AvatarSettings() {

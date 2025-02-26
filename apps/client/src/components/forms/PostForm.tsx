@@ -1,56 +1,61 @@
-import { Button } from "ui/button"
-import { Input } from "ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "ui/select"
-// import { Tabs, TabsList, TabsTrigger } from "ui/tabs";
-import { useField, useForm } from "@tanstack/react-form"
-import { Content } from "c/Content"
-import { FieldInfo } from "c/FieldInfo"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "c/ui/tabs"
-import { capitalize } from "l/format"
-import { getToken, rspc } from "l/rspc"
-import { type CreatePostSchema, createPostSchema } from "l/schemas"
-import { Route } from "r/post/create"
-import type { FormEvent } from "react"
-import { Textarea } from "ui/textarea"
-
+import { Input } from "ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "ui/select";
+import { Tabs, TabsList, TabsTrigger } from "ui/tabs";
+import { useField, useForm } from "@tanstack/react-form";
+import { Content } from "c/Content";
+import { FieldInfo } from "c/FieldInfo";
+import { capitalize } from "l/format";
+import { getToken, rspc } from "l/rspc";
+import { type CreatePostSchema, createPostSchema } from "l/schemas";
+import type { FormEvent } from "react";
+import { Textarea } from "ui/textarea";
+import { Button } from "ui/button";
+import { Route, useLoaderData } from "@tanstack/react-router";
+import { TabsContent } from "@radix-ui/react-tabs";
+import { Labels } from "c/ui/Labels";
 enum TabName {
   Write = "write",
   Preview = "preview",
 }
 
 export function PostForm() {
-  const groups = Route.useLoaderData()
+  const groups = useLoaderData({ from: "/_app/post/create" }) ?? [];
 
   const form = useForm<CreatePostSchema>({
     defaultValues: {
       content: "",
-      gid: groups[0].id,
+      gid: /*groups?.[0]?.id */ 1,
       title: "",
     },
     onSubmit: async ({ value }) => {
-      getToken()
-      await rspc.mutation(["post.create", value])
+      getToken();
+      await rspc.mutation(["post.create", value]);
     },
     validators: { onChange: createPostSchema },
-  })
+  });
 
   const contentField = useField<CreatePostSchema, "content">({
     form,
     name: "content",
-  })
+  });
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    e.stopPropagation()
-    form.handleSubmit()
+    e.preventDefault();
+    e.stopPropagation();
+    form.handleSubmit();
   }
 
   return (
     <form className="w-full" onSubmit={(e) => handleSubmit(e)}>
-      <h1 className="text-xl font-semibold mb-4">New Post</h1>
+      <Labels.PageTitle>New Post</Labels.PageTitle>
       {/* TODO: drafts */}
-      {
-        /*   <div className="pb-3">
+      {/*   <div className="pb-3">
         <Tabs defaultValue="new-post">
           <TabsList className="grid w-[420px] grid-cols-2">
             <TabsTrigger value="new-post">New Post</TabsTrigger>
@@ -58,14 +63,13 @@ export function PostForm() {
           </TabsList>
         </Tabs>
       </div>
-      */
-      }
+      */}
       <div className="space-y-4 py-6">
         <form.Field
           name="gid"
           children={(field) => (
             <Select
-              defaultValue={groups[0].id.toString()}
+              defaultValue={groups[0]?.id?.toString()}
               onValueChange={(value) => field.handleChange(Number(value))}
               value={field.state.value.toString()}
             >
@@ -106,12 +110,10 @@ export function PostForm() {
           </div>
         </div>
         {/* TODO */}
-        {
-          /*   <Button variant="outline" className="h-8">
+        {/*   <Button variant="outline" className="h-8">
           + Add Tags
         </Button>
-        */
-        }
+        */}
 
         <Tabs defaultValue={TabName.Write}>
           <TabsList className="grid w-[420px] grid-cols-2">
@@ -151,5 +153,5 @@ export function PostForm() {
         />
       </div>
     </form>
-  )
+  );
 }

@@ -5,7 +5,7 @@ import { TimeSince } from "c/ui/time-since"
 import type { PostDto } from "l/bindings"
 // import { Eye } from "lucide-react"
 import { Route } from "r/post/$pid"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "ui/card"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "c/cards/Card"
 // import { Downvote } from "ui/downvote";
 // import { EmojiReact } from "ui/emoji-react";
 // import { Upvote } from "ui/upvote";

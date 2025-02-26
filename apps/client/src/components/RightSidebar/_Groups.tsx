@@ -1,9 +1,9 @@
-import { Link } from "@tanstack/react-router"
-import { Avatar } from "c/Avatar"
-import type { FC } from "react"
-import { Button } from "ui/button"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "ui/card"
-import { Separator } from "ui/separator"
+import { Avatar } from "c/Avatar";
+import type { FC } from "react";
+import { Button } from "c/ui/Button";
+import { Card, CardTitle } from "c/cards/Card";
+import { Separator } from "ui/separator";
+import { Link } from "@tanstack/react-router";
 
 const groups = [
   {
@@ -18,37 +18,31 @@ const groups = [
     name: "PSE",
     id: 2,
   },
-]
+];
 
 export const Groups: FC = () => (
-  <Card className="bg-gray-50">
-    <CardHeader>
-      <CardTitle className="self-start text-xs">EXPLORE GROUPS</CardTitle>
-    </CardHeader>
-    <CardContent>
-      <div className="space-y-2">
-        {groups.map(({ name, id: iid }, i) => (
-          <div key={iid}>
-            <div key={iid} className="flex items-center justify-between">
-              <div className="flex items-center gap-1">
-                <Avatar />
-                <span className="font-bold">{name}</span>
-              </div>
-              <Link to={`/group/${iid}`}>
-                <Button variant="outline" size="sm">
-                  Join
-                </Button>
-              </Link>
+  <Card className="flex flex-col gap-6" spacing="md">
+    <CardTitle className="self-start text-xs">EXPLORE GROUPS</CardTitle>
+    <div className="space-y-2">
+      {groups.map(({ name, id: iid }, i) => (
+        <div key={iid}>
+          <div key={iid} className="flex items-center justify-between">
+            <div className="flex items-center gap-1">
+              <Avatar />
+              <span className="font-semibold font-inter text-black">{name}</span>
             </div>
-            {i < groups.length - 1 && <Separator className="mt-2" />}
+            <Link to={`/group/${iid}` as any}>
+              <Button variant="outline" size="sm">
+                Join
+              </Button>
+            </Link>
           </div>
-        ))}
-      </div>
-    </CardContent>
-    <CardFooter>
-      <Button variant="ghost" size="sm">
-        Show more
-      </Button>
-    </CardFooter>
+          {i < groups.length - 1 && <Separator className="mt-2" />}
+        </div>
+      ))}
+    </div>
+    <Button variant="ghost" size="sm" className="!text-xs">
+      Show more
+    </Button>
   </Card>
-)
+);

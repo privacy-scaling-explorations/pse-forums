@@ -20,7 +20,7 @@ export const getToken = (): string | undefined => {
 }
 
 export const rspc = createClient<Procedures>({
-  transport: new FetchTransport(`${config.serverUrl}/rspc`, (input, init) => {
+  transport: new FetchTransport(`${"http://server:3000"}/rspc`, (input, init) => {
     const token = getToken()
 
     const authHeader = {

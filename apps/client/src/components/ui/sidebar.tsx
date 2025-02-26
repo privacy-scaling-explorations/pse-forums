@@ -7,7 +7,7 @@ import * as React from "react"
 
 import { useIsMobile } from "h/use-mobile"
 import { cn } from "l/utils"
-import { Button } from "ui/button"
+import { Button } from "c/ui/Button"
 import { Input } from "ui/input"
 import { Separator } from "ui/separator"
 import { Sheet, SheetContent } from "ui/sheet"

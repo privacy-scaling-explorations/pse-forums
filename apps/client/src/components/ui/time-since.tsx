@@ -1,13 +1,17 @@
 import { cn } from "l/utils"
 import { DateTime } from "luxon"
 import { useMemo } from "react"
-import { Label } from "./label"
 import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip"
+import { classed } from "@tw-classed/react"
 
 type TimeSinceProps = {
   isoDateTime: string
   className?: string
 }
+
+const TimeSinceBase = classed.span(
+  "italic leading-[10px] text-[10px] font-inter text-[#71717A]",
+);
 
 export function TimeSince({ isoDateTime, className }: TimeSinceProps) {
   const timeSince = useMemo(() => {
@@ -19,7 +23,7 @@ export function TimeSince({ isoDateTime, className }: TimeSinceProps) {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Label className={cn("italic", className)}>{timeSince}</Label>
+        <TimeSinceBase className={cn("italic", className)}>{timeSince}</TimeSinceBase>
       </TooltipTrigger>
       <TooltipContent align="center">
         {isoDateTime}
