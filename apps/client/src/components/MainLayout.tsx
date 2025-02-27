@@ -1,6 +1,6 @@
-import { Header } from "c/Header";
-import { LeftSidebar } from "c/LeftSidebar";
-import { RightSidebar } from "c/RightSidebar";
+import { Header } from "@/components/Header";
+import { LeftSidebar } from "@/components/LeftSidebar";
+import { RightSidebar } from "@/components/RightSidebar";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -16,18 +16,16 @@ export const MainLayout = ({
   showRightSidebar = false,
 }: MainLayoutProps) => {
   return (
-    <div className="min-h-screen">
+    <div className="h-screen">
       {showHeader && <Header />}
-      <main className="bg-white">
-        <div className="flex justify-between">
-          {showLeftSidebar && <LeftSidebar />}
-          {children && <div className="flex-1 p-6">{children}</div>}
-          {showRightSidebar && (
-            <div className="mr-6 pt-6">
-              <RightSidebar />
-            </div>
-          )}
-        </div>
+      <main className="bg-white h-[calc(100vh-60px)] flex justify-between">
+        {showLeftSidebar && <LeftSidebar />}
+        {children && <div className="flex-1 p-6 overflow-y-auto">{children}</div>}
+        {showRightSidebar && (
+          <div className="mr-6 pt-6 hidden lg:block">
+            <RightSidebar />
+          </div>
+        )}
       </main>
     </div>
   );

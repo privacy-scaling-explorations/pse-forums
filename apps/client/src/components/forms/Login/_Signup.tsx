@@ -1,41 +1,41 @@
 // import { Checkbox } from "@radix-ui/react-checkbox"
-import { Label } from "@radix-ui/react-label"
-import { useForm } from "@tanstack/react-form"
-import { useNavigate } from "@tanstack/react-router"
-import { FieldInfo } from "c/FieldInfo"
-import { Button } from "c/ui/Button"
-import { Input } from "c/ui/input"
-import { useAuth } from "h/useAuth"
-import { capitalize } from "l/format"
-import { rspc } from "l/rspc"
-import { type SignupSchema, signupSchema } from "l/schemas"
-import { type FormEvent, useCallback } from "react"
+import { Label } from "@radix-ui/react-label";
+import { useForm } from "@tanstack/react-form";
+import { useNavigate } from "@tanstack/react-router";
+
+import { type SignupSchema, signupSchema } from "lib/schemas";
+import { type FormEvent, useCallback } from "react";
+import { useAuth } from "hooks/useAuth";
+import { capitalize } from "lib/format";
+import { rspc } from "lib/rspc";
+
+
 
 export function Signup() {
-  const navigate = useNavigate()
-  const { setAuth } = useAuth()
+  const navigate = useNavigate();
+  const { setAuth } = useAuth();
 
   const handleAuth = useCallback(
     async ({
       value: { email, password, username },
     }: {
-      value: SignupSchema
+      value: SignupSchema;
     }) => {
       const {
         user: { id },
         token,
-      } = await rspc.mutation(["auth.signup", { email, password, username }])
+      } = await rspc.mutation(["auth.signup", { email, password, username }]);
 
       setAuth({
         token,
         uid: id,
         username,
-      })
+      });
 
-      navigate({ to: "/" })
+      navigate({ to: "/" });
     },
     [navigate, setAuth],
-  )
+  );
 
   const signupForm = useForm({
     defaultValues: {
@@ -44,12 +44,12 @@ export function Signup() {
     } as SignupSchema,
     onSubmit: handleAuth,
     validators: { onChange: signupSchema },
-  })
+  });
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    e.stopPropagation()
-    signupForm.handleSubmit()
+    e.preventDefault();
+    e.stopPropagation();
+    signupForm.handleSubmit();
   }
 
   return (
@@ -127,12 +127,10 @@ export function Signup() {
           </div>
         )}
       />
-      {
-        /* <div className="flex items-center space-x-2">
+      {/* <div className="flex items-center space-x-2">
         <Checkbox id="terms" />
         <label htmlFor="terms">I agree to the Terms and Conditions</label>
-      </div> */
-      }
+      </div> */}
       <Button
         type="submit"
         className="w-full bg-black text-white hover:bg-black/90"
@@ -140,5 +138,5 @@ export function Signup() {
         Sign Up
       </Button>
     </form>
-  )
+  );
 }

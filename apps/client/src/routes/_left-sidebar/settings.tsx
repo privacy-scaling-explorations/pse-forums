@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Labels } from "c/ui/Labels";
+import { Labels } from "@/components/ui/Labels";
 
 export const Route = createFileRoute("/_left-sidebar/settings")({
   component: RouteComponent,

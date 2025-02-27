@@ -19,13 +19,14 @@ const RandomBackgroundColors = [
 
 const AvatarBase = classed(
   AvatarPrimitive.Root,
-  "inline-flex overflow-hidden rounded-full shrink-0 relative",
+  "flex overflow-hidden rounded-full shrink-0 relative",
   {
     variants: {
       size: {
         sm: "h-5 w-5",
         md: "h-10 w-10",
         lg: "h-12 w-12",
+        xl: "size-[78px]",
       },
     },
     defaultVariants: {

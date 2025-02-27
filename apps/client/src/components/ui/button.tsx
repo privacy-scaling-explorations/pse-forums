@@ -36,7 +36,7 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof ButtonComponent> {
   asChild?: boolean;
-  icon?: LucideIcon;  
+  icon?: LucideIcon;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -50,6 +50,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     );
   },
 );
+
 Button.displayName = "Button";
 
 export { Button };

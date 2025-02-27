@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { PostForm as component } from "c/forms/PostForm"
+import { PostForm as component } from "@/components/forms/PostForm"
 
 export const Route = createFileRoute("/_app/post/create")({
   component,

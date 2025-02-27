@@ -5,6 +5,9 @@ const config: Config = {
   content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      boxShadow: {
+        tabs: "0px 1px 3px 0px rgba(0, 0, 0, 0.10), 0px 1px 2px 0px rgba(0, 0, 0, 0.06)",
+      },
       colors: {
         black: "#18181B",
         gray: "#E4E4E7",

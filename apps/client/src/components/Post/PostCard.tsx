@@ -3,6 +3,8 @@ import { Card } from "../cards/Card";
 import { classed, VariantProps } from "@tw-classed/react";
 import { Link } from "@tanstack/react-router";
 import { Eye as EyeIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { MessageSquare as MessageSquareIcon } from 'lucide-react';
 
 
 export interface PostCardProps extends VariantProps<typeof Card> {
@@ -12,6 +14,7 @@ export interface PostCardProps extends VariantProps<typeof Card> {
   size?: "sm" | "lg";
   withLink?: boolean;
   postId?: string | number;
+  className?: string;
 }
 
 const PostCardBase = classed(Card, {
@@ -21,6 +24,16 @@ const PostCardBase = classed(Card, {
   },
 });
 
+const PostCommentCount = ({ count, className }: { count: number, className?: string }) => {
+  return (
+    <div className={cn("px-[6px] py-1 items-center gap-1 bg-black rounded-full inline-flex", className)}>
+      <MessageSquareIcon className="size-3 text-white" />
+      <span className="text-xs font-inter font-medium text-white">
+        {count}
+      </span>
+    </div>
+  );
+};
 const PostTitle = classed.span(
   "text-black font-inter line-clamp-2 lg:line-clamp-1",
   {
@@ -44,9 +57,15 @@ const PostCard = ({
   withLink = true,
   postId,
   withHover = false,
+  className,
 }: PostCardProps) => {
   return (
-    <PostCardBase withHover={withHover}>
+    <PostCardBase
+      withHover={withHover}
+      className={cn({
+        group: withHover,
+      }, className)}
+    >
       {header && <div className="flex flex-col gap-2">{header}</div>}
       {title &&
         (withLink && postId ? (
@@ -75,5 +94,6 @@ const PostTotalView = ({ totalViews }: { totalViews: number }) => {
 PostCard.displayName = "PostCard";
 PostCard.TotalViews = PostTotalView;
 PostCard.Title = PostTitle;
+PostCard.CommentCount = PostCommentCount;
 
 export { PostCard };

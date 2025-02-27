@@ -1,12 +1,12 @@
 import { Link } from "@tanstack/react-router";
-import { CreateGroup } from "c/CreateGroup";
-import { Signout } from "c/Signout";
-import { useAuth } from "h/useAuth";
-import { useQuery } from "l/rspc";
-import { Home as HomeIcon, Icon, LucideIcon, Users } from "lucide-react";
-import { Button } from "c/ui/button";
+import { CreateGroup } from "@/components/CreateGroup";
+import { Signout } from "@/components/Signout";
+import { useAuth } from "@/hooks/useAuth";
+import { useQuery } from "@/lib/rspc";
+import { Home as HomeIcon, LucideIcon, Users } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 import { MAIN_NAV_ITEMS } from "settings";
-import { cn } from "l/utils";
+import { cn } from "@/lib/utils";
 
 const renderNavItems = (
   _items: (typeof MAIN_NAV_ITEMS)[keyof typeof MAIN_NAV_ITEMS],
@@ -44,9 +44,7 @@ const NavItem = ({
         "inline-flex items-center gap-2 whitespace-nowrap rounded-md h-9 py-2 w-full justify-start",
       )}
     >
-      <Button
-        variant="ghost"
-      >
+      <Button variant="ghost">
         <Icon className="text-black text-base" size={16} />
         <span>{title}</span>
       </Button>
@@ -61,18 +59,20 @@ export function LeftSidebar() {
     enabled: auth?.isSome(),
   });
 
-
   return (
-    <aside className="w-[264px] p-6 bg-white-dark flex flex-col sticky top-[60px] z-[49]">
-      <nav aria-label="Sidebar Navigation" className="flex flex-col">
-        <div className="space-y-2">
+    <aside className="w-[264px] p-6 bg-white-dark hidden flex-col sticky top-[60px] z-[49] lg:flex ">
+      <nav
+        aria-label="Sidebar Navigation"
+        className="flex flex-col divide-y-[1px] divide-[#E5E7EB]"
+      >
+        <div className="space-y-1 py-6">
           <NavItem title="Home" to="/" icon={HomeIcon} />
           {renderStartItems()}
           {auth?.mapSync(renderStartItems)}
         </div>
 
         {user !== undefined && (
-          <div className="space-y-2 mt-6">
+          <div className="space-y-2 py-6">
             <div className="w-full justify-start flex items-center space-x-3 text-sm">
               <Users className="w-5 h-5" />
               <span>My Groups</span>
@@ -91,9 +91,7 @@ export function LeftSidebar() {
           </div>
         )}
 
-        <div className="flex-grow" />
-
-        <div className="space-y-2">
+        <div className="space-y-1 py-6">
           {renderEndItems()}
           {auth.mapSync(renderEndItems)}
           <Signout />

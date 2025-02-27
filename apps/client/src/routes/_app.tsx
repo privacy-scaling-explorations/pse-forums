@@ -1,5 +1,5 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import { MainLayout } from "c/MainLayout";
+import { MainLayout } from "@/components/MainLayout";
 
 export const Route = createFileRoute("/_app")({
   component: RouteLayout,

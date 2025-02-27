@@ -1,7 +1,6 @@
-import { TooltipProvider } from "c/ui/tooltip"
 import { QueryProvider } from "./QueryProvider"
 import { RouterProvider } from "./RouterProvider"
-
+import { TooltipProvider } from "@/components/ui/tooltip"
 export function Providers() {
   return (
     <QueryProvider>

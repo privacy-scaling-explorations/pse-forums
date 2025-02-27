@@ -21,7 +21,23 @@ function helloWorld() {
       {
         id: 101,
         author: "Alex",
-        content: "Vestibulum ante ipsum primis in faucibus.",
+        content: `# h1
+## h2
+### h3
+#### h4
+##### h5
+###### h6
+*italic*
+**bold**
+~~strikethrough~~
+- Signed user interactions - posts/comments/emoji reactions/upvotes/etc
+- User badges like Carlos mentioned that are signed or expose a proof: verified email (at some domain), verified passport, verified NFT, etc
+- Gated inns/subreddits; gated posts (for example: only someone with a verified email at pse.dev or ethereum.org can respond)
+- Anonymous gated polls (everyone that can prove they are a current ethereum validator can respond)
+- If a user signs up with an email domain that hasn't been used previously, an inn/subreddit is created and gated for that email domain.
+
+I have a bunch more but we will start there
+        `,
         createdAt: "2025-02-26T12:00:00Z",
       },
       {

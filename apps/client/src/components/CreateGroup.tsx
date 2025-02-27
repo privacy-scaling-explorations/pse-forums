@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router"
 import { Plus } from "lucide-react"
-import { Button } from "c/ui/Button"
+import { Button } from "@/components/ui/Button"
 
 export const CreateGroup = () => (
   <Link to="/group/create">

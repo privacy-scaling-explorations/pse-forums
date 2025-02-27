@@ -1,8 +1,8 @@
-import { Avatar } from "c/Avatar";
+import { Avatar } from "@/components/Avatar";
 import type { FC } from "react";
-import { Button } from "c/ui/Button";
-import { Card, CardTitle } from "c/cards/Card";
-import { Separator } from "ui/separator";
+import { Button } from "@/components/ui/Button";
+import { Card, CardTitle } from "@/components/cards/Card";
+import { Separator } from "@/components/ui-old/Separator";
 import { Link } from "@tanstack/react-router";
 
 const groups = [

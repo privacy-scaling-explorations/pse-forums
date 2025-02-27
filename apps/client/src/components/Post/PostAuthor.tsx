@@ -1,5 +1,5 @@
-import { Avatar } from "c/Avatar";
-import { TimeSince } from "c/ui/time-since";
+import { Avatar } from "@/components/Avatar";
+import { TimeSince } from "@/components/ui/TimeSince";
 import { Users as UserGroupIcon } from "lucide-react";
 
 interface PostAuthorProps {

@@ -1,4 +1,4 @@
-import { Button } from "c/ui/Button"
+import { Button } from "@/components/ui/Button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "c/cards/Card"
 
 export function OpenSessions() {

@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Avatar } from "c/Avatar";
-import { Card, CardContent, CardHeader, CardTitle } from "c/cards/Card";
+import { Avatar } from "@/components/Avatar";
+import { Card, CardTitle } from "@/components/cards/Card";
 
 const users = [
   {

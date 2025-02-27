@@ -1,4 +1,4 @@
-import { Button } from "c/ui/Button"
+import { Button } from "@/components/ui/Button"
 import { Heart } from "lucide-react"
 
 export function Upvote() {

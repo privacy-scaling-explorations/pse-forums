@@ -1,24 +1,24 @@
-import { Input } from "ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "ui/select";
-import { Tabs, TabsList, TabsTrigger } from "ui/tabs";
+} from "@/components/ui-old/select";
+import { Input } from "@/components/ui/Input";
+import { Tabs } from "@/components/ui/Tabs";
 import { useField, useForm } from "@tanstack/react-form";
-import { Content } from "c/Content";
-import { FieldInfo } from "c/FieldInfo";
-import { capitalize } from "l/format";
-import { getToken, rspc } from "l/rspc";
-import { type CreatePostSchema, createPostSchema } from "l/schemas";
+import { Content } from "@/components/Content";
+import { FieldInfo } from "@/components/FieldInfo";
+import { capitalize } from "@/lib/format";
+import { getToken, rspc } from "@/lib/rspc";
+import { type CreatePostSchema, createPostSchema } from "@/lib/schemas";
 import type { FormEvent } from "react";
-import { Textarea } from "ui/textarea";
-import { Button } from "ui/button";
-import { Route, useLoaderData } from "@tanstack/react-router";
-import { TabsContent } from "@radix-ui/react-tabs";
-import { Labels } from "c/ui/Labels";
+import { Button } from "@/components/ui/Button";
+import { useLoaderData } from "@tanstack/react-router";
+import { Labels } from "@/components/ui/Labels";
+import { Textarea } from "@/components/ui/Textarea";
+
 enum TabName {
   Write = "write",
   Preview = "preview",
@@ -115,30 +115,37 @@ export function PostForm() {
         </Button>
         */}
 
-        <Tabs defaultValue={TabName.Write}>
-          <TabsList className="grid w-[420px] grid-cols-2">
-            <TabsTrigger value={TabName.Write}>{TabName.Write}</TabsTrigger>
-            <TabsTrigger value={TabName.Preview}>{TabName.Preview}</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value={TabName.Write}>
-            <Textarea
-              id={contentField.name}
-              className="min-h-[200px]"
-              onChange={(e) => contentField.handleChange(e.target.value)}
-              value={contentField.state.value}
-            />
-            <FieldInfo field={contentField} />
-          </TabsContent>
-          <TabsContent
-            value={TabName.Preview}
-            className="p-4 border rounded-md bg-gray-50"
-          >
-            <div className="min-h-[200px] prose">
-              <Content content={contentField.state.value} />
-            </div>
-          </TabsContent>
-        </Tabs>
+        <Tabs
+          defaultValue={TabName.Write}
+          items={[
+            {
+              id: TabName.Write,
+              label: TabName.Write,
+              content: (
+                <>
+                  <Textarea
+                    id={contentField.name}
+                    className="min-h-[200px]"
+                    onChange={(e) => contentField.handleChange(e.target.value)}
+                    value={contentField.state.value}
+                  />
+                  <FieldInfo field={contentField} />
+                </>
+              ),
+            },
+            {
+              id: TabName.Preview,
+              label: TabName.Preview,
+              content: (
+                <>
+                  <div className="min-h-[200px] prose">
+                    <Content content={contentField.state.value} />
+                  </div>
+                </>
+              ),
+            },
+          ]}
+        />
       </div>
       <div className="flex justify-end gap-2">
         {/* TODO: drafts */}

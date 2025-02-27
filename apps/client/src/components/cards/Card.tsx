@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { cn } from "l/utils";
+import { cn } from "@/lib/utils";
 import { classed } from "@tw-classed/react";
 
 const Card = classed.div(

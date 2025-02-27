@@ -1,7 +1,13 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "c/cards/Card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "ui/tabs"
-import { Signin } from "./_Signin"
-import { Signup } from "./_Signup"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/cards/Card";
+import { Tabs } from "@/components/ui/Tabs";
+import { Signin } from "./_Signin";
+import { Signup } from "./_Signup";
 
 export function Login() {
   return (
@@ -14,20 +20,24 @@ export function Login() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="signup" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
-              <TabsTrigger value="signin">Sign In</TabsTrigger>
-            </TabsList>
-            <TabsContent value="signup">
-              <Signup />
-            </TabsContent>
-            <TabsContent value="signin">
-              <Signin />
-            </TabsContent>
-          </Tabs>
+          <Tabs
+            defaultValue="signup"
+            className="w-full"
+            items={[
+              {
+                id: "signup",
+                label: "Sign Up",
+                content: <Signup />,
+              },
+              {
+                id: "signin",
+                label: "Sign In",
+                content: <Signin />,
+              },
+            ]}
+          />
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

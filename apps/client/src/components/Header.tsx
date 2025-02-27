@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router"
-import { Input } from "ui/input"
+import { Input } from "@/components/ui/Input"
 import { Profile } from "./Profile"
 import { Search } from "lucide-react"
 
@@ -7,7 +7,7 @@ export function Header() {
   return (
     <nav className="bg-white border-b-[1px] border-b-gray sticky top-0 z-50">
       <div className="flex items-center justify-between px-4 py-3">
-        <Link to="/">
+        <Link to="/" className="hidden lg:flex">
           <h1 className="text-xl font-bold">
             <span className="font-space-grotesk font-bold text-black text-[26px] leading-[25px]">PSE</span>
             <span className="font-space-grotesk text-black font-normal text-[26px] leading-[25px] tracking-[-1px]">forum</span>
