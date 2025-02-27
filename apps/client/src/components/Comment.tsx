@@ -5,7 +5,7 @@ import { TimeSince } from "c/ui/time-since"
 // import { Upvote } from "c/ui/upvote";
 import { Content } from "c/Content"
 import type { CommentDto } from "l/bindings"
-import { Card, CardContent, CardFooter, CardHeader } from "ui/card"
+import { Card, CardContent, CardFooter, CardHeader } from "c/cards/Card"
 
 export function Comment({ content, createdAt, username }: CommentDto) {
   return (

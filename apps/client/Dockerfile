@@ -4,6 +4,7 @@ WORKDIR /usr/share/nginx/html
 FROM oven/bun:latest AS builder
 WORKDIR /app
 COPY . .
+COPY .env .env
 RUN bun i --frozen-lockfile
 RUN bun vite build
 

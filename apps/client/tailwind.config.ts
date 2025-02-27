@@ -5,7 +5,20 @@ const config: Config = {
   content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      boxShadow: {
+        tabs: "0px 1px 3px 0px rgba(0, 0, 0, 0.10), 0px 1px 2px 0px rgba(0, 0, 0, 0.06)",
+      },
       colors: {
+        black: "#18181B",
+        gray: "#E4E4E7",
+        white: {
+          DEFAULT: "#FFFFFF",
+          dark: "#FAFAFA",
+          light: "#F4F4F5",
+        },
+        purple: {
+          DEFAULT: "#6366F1",
+        },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: "hsl(var(--card))",
@@ -30,6 +43,11 @@ const config: Config = {
         "chart-3": "hsl(var(--chart-3))",
         "chart-4": "hsl(var(--chart-4))",
         "chart-5": "hsl(var(--chart-5))",
+      },
+
+      fontFamily: {
+        inter: ["Inter", "sans-serif"],
+        "space-grotesk": ["Space Grotesk", "sans-serif"],
       },
     },
   },

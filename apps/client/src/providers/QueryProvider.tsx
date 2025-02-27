@@ -1,5 +1,5 @@
 import { QueryClient } from "@tanstack/react-query"
-import { rspc, RspcProvider } from "l/rspc"
+import { rspc, RspcProvider } from "@/lib/rspc"
 import { type JSXElementConstructor, type ReactElement, useState } from "react"
 
 export function QueryProvider({

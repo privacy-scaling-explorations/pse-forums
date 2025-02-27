@@ -1,7 +1,7 @@
-import { useAuth } from "h/useAuth"
-import { useSignout } from "h/useSignout"
+import { useAuth } from "@/hooks/useAuth"
+import { useSignout } from "@/hooks/useSignout"
 import { LogOut } from "lucide-react"
-import { Button } from "ui/button"
+import { Button } from "@/components/ui/Button"
 
 export const Signout = () => {
   const signout = useSignout()
