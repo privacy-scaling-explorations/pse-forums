@@ -5,6 +5,7 @@ import { LucideIcon } from "lucide-react";
 
 const ButtonComponent = classed.button(
   "cursor-pointer inline-flex items-center justify-center gap-2 whitespace-nowrap font-inter rounded-md text-sm font-normal ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "focus:outline-none focus:ring-2 focus:ring-0 outline-none focus:ring-offset-0 focus:outline-none",
   {
     variants: {
       variant: {
@@ -37,13 +38,14 @@ export interface ButtonProps
     VariantProps<typeof ButtonComponent> {
   asChild?: boolean;
   icon?: LucideIcon;
+  className?: string;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, asChild = false, icon, ...props }, ref) => {
     const Icon = icon;
     return (
-      <ButtonComponent ref={ref} {...props} variant={props?.variant}>
+      <ButtonComponent ref={ref} {...props}>
         {Icon && <Icon className="size-4" />}
         {props.children}
       </ButtonComponent>

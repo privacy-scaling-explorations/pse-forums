@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Plus as PlusIcon } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Badge } from "@/components/ui/Badge";
+import { PageContent } from "@/components/PageContent";
 
 export const Route = createFileRoute("/_app/")({
   component: HomePageView,
@@ -13,7 +14,7 @@ export const Route = createFileRoute("/_app/")({
 
 function HomePageView() {
   return (
-    <div className="flex flex-col gap-6">
+    <PageContent className="flex flex-col gap-6">
       <div className="flex w-full justify-between">
         <div></div>
         <Link to="/post/create">
@@ -51,6 +52,6 @@ function HomePageView() {
           );
         })}
       </div>
-    </div>
+    </PageContent>
   );
 }

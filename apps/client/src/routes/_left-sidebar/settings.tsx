@@ -1,14 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Labels } from "@/components/ui/Labels";
+import { SettingsPage } from "@/components/sections/Settings";
 
 export const Route = createFileRoute("/_left-sidebar/settings")({
-  component: RouteComponent,
+  component: SettingsPage,
 });
-
-function RouteComponent() {
-  return (
-    <div>
-      <Labels.PageTitle>Settings</Labels.PageTitle>
-    </div>
-  );
-}

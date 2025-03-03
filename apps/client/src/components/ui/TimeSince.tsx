@@ -9,7 +9,7 @@ type TimeSinceProps = {
 }
 
 const TimeSinceBase = classed.span(
-  "italic leading-[10px] text-[10px] font-inter text-[#71717A]",
+  "italic leading-[10px] text-[10px] font-inter text-black-secondary",
 );
 
 export function TimeSince({ isoDateTime, className }: TimeSinceProps) {

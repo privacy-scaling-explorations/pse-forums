@@ -6,6 +6,7 @@ export const Route = createFileRoute("/_app")({
 });
 
 function RouteLayout() {
+  
   return (
     <MainLayout showHeader showLeftSidebar showRightSidebar>
       <Outlet />

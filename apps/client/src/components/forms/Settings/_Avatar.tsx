@@ -1,18 +1,18 @@
 import { Upload } from "lucide-react"
 import { Button } from "@/components/ui/Button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/cards/Card"
-import { Input } from "@/components/ui/Input"
+import { Card } from "@/components/cards/Card"
+import { Input } from "@/components/inputs/Input"
 
 export function AvatarSettings() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-xl">Your avatar</CardTitle>
-        <CardDescription>
+    <Card.Base>
+      <Card.Header>
+        <Card.Title className="text-xl">Your avatar</Card.Title>
+        <Card.Description>
           Your image will show up here when uploading your profile.
-        </CardDescription>
+        </Card.Description>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <Card.Content className="space-y-4">
         <div className="flex items-center gap-4">
           <div className="h-16 w-16 rounded-full bg-muted" />
           <div className="space-y-2">
@@ -23,7 +23,7 @@ export function AvatarSettings() {
             </Button>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </Card.Content>
+    </Card.Base>
   )
 }

@@ -13,7 +13,8 @@
       "@/providers/*": ["providers/*"],
       "@/providers": ["providers"],
       "@/routes/*": ["routes/*"],
-      "@/state/*": ["state/*"]
+      "@/state/*": ["state/*"],
+      "@/contexts/*": ["contexts/*"]
     },
 
     /* Bundler mode */

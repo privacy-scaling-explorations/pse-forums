@@ -18,7 +18,7 @@ export const PostAuthor = ({
 }: PostAuthorProps) => {
   return (
     <div className="flex gap-1 items-center">
-      <Avatar size="sm" hasRandomBackground avatarClassName={avatarClassName} />
+      <Avatar size="sm" hasRandomBackground className={avatarClassName} />
       <span className="text-black font-inter font-medium text-sm line-clamp-2 lg:line-clamp-1">
         {username}
       </span>

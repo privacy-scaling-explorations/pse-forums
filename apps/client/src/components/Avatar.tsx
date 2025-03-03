@@ -1,7 +1,7 @@
 import { classed } from "@tw-classed/react";
 import type { FC } from "react";
 import * as AvatarPrimitive from "@radix-ui/react-avatar";
-
+import { cn } from "@/lib/utils";
 const RandomBackgroundColors = [
   "bg-red-600",
   "bg-blue-600",
@@ -49,14 +49,14 @@ type AvatarProps = React.ComponentProps<typeof AvatarBase> & {
   src?: string;
   username?: string | null;
   hasRandomBackground?: boolean;
-  avatarClassName?: string;
+  className?: string;
 };
 
 export const Avatar: FC<AvatarProps> = ({
   src,
   username,
   hasRandomBackground,
-  avatarClassName,
+  className,
   ...props
 }) => {
   const fallbackBackground = hasRandomBackground
@@ -66,7 +66,7 @@ export const Avatar: FC<AvatarProps> = ({
     : "bg-muted";
 
   return (
-    <AvatarBase {...props} className={avatarClassName}>
+    <AvatarBase {...props} className={cn(className)}>
       <AvatarImage src={src} />
       <AvatarFallback className={fallbackBackground}>
         {username?.[0].toLocaleUpperCase() || ""}

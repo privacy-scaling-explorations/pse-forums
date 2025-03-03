@@ -1,12 +1,15 @@
-import { QueryProvider } from "./QueryProvider"
-import { RouterProvider } from "./RouterProvider"
-import { TooltipProvider } from "@/components/ui/tooltip"
+import { GlobalProvider } from "@/contexts/GlobalContext";
+import { QueryProvider } from "./QueryProvider";
+import { RouterProvider } from "./RouterProvider";
+import { TooltipProvider } from "@/components/ui/tooltip";
 export function Providers() {
   return (
     <QueryProvider>
       <TooltipProvider delayDuration={0}>
-        <RouterProvider />
+        <GlobalProvider>
+          <RouterProvider />
+        </GlobalProvider>
       </TooltipProvider>
     </QueryProvider>
-  )
+  );
 }

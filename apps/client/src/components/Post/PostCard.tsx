@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { MessageSquare as MessageSquareIcon } from 'lucide-react';
 
 
-export interface PostCardProps extends VariantProps<typeof Card> {
+export interface PostCardProps extends VariantProps<typeof Card.Base> {
   header?: ReactNode;
   title?: string;
   children?: ReactNode;
@@ -17,7 +17,7 @@ export interface PostCardProps extends VariantProps<typeof Card> {
   className?: string;
 }
 
-const PostCardBase = classed(Card, {
+const PostCardBase = classed(Card.Base, {
   defaultVariants: {
     gap: "2.5",
     spacing: "sm",
@@ -35,7 +35,7 @@ const PostCommentCount = ({ count, className }: { count: number, className?: str
   );
 };
 const PostTitle = classed.span(
-  "text-black font-inter line-clamp-2 lg:line-clamp-1",
+  "text-black font-inter line-clamp-2 lg:line-clamp-1 lg:w-full w-[90%]",
   {
     variants: {
       size: {
@@ -84,7 +84,7 @@ const PostTotalView = ({ totalViews }: { totalViews: number }) => {
   return (
     <div className="flex items-center gap-1 ">
       <EyeIcon className="size-[18px] text-black" />
-      <span className="text-sm font-inter font-medium text-[#71717A]">
+      <span className="text-sm font-inter font-medium text-black-secondary">
         {totalViews}
       </span>
     </div>

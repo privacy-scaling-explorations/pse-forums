@@ -1,11 +1,11 @@
 import { useForm } from "@tanstack/react-form"
 import { FieldInfo } from "@/components/FieldInfo" 
 import { Button } from "@/components/ui/Button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/cards/Card"
-import { Input } from "@/components/ui/Input"
+import { Card } from "@/components/cards/Card"
+import { Input } from "@/components/inputs/Input"
 import { Label } from "@/components/ui-old/Label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui-old/RadioGroup" 
-import { Textarea } from "@/components/ui/Textarea"
+import { Textarea } from "@/components/inputs/Textarea"
 import { capitalize } from "@/lib/format"
 import { getToken, rspc } from "@/lib/rspc"
 import { type CreateGroupSchema, createGroupSchema } from "@/lib/schemas"
@@ -33,12 +33,12 @@ export function CreateGroup() {
 
   return (
     <form onSubmit={(e) => handleSubmit(e)}>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">Basic Information</CardTitle>
-          <CardDescription>View and update the Group details.</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
+      <Card.Base>
+        <Card.Header>
+          <Card.Title className="text-xl">Basic Information</Card.Title>
+          <Card.Description>View and update the Group details.</Card.Description>
+        </Card.Header>
+        <Card.Content className="space-y-6">
           <createGroupForm.Field
             name="name"
             children={(field) => (
@@ -108,8 +108,8 @@ export function CreateGroup() {
               </Button>
             )}
           />
-        </CardContent>
-      </Card>
+        </Card.Content>
+      </Card.Base>
     </form>
   )
 }

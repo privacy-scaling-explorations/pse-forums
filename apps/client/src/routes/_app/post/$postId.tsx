@@ -5,6 +5,7 @@ import { PostAuthor } from "@/components/Post/PostAuthor";
 import { PostCard } from "@/components/Post/PostCard";
 import { useGetPostById } from "@/hooks/usePosts";
 import { Smile as SmileIcon, MessageSquare as MessageSquareIcon } from 'lucide-react';
+import { PageContent } from "@/components/PageContent";
 
 
 
@@ -29,7 +30,7 @@ function PostPage() {
   }
 
   return (
-    <div className="flex flex-col gap-14">
+    <PageContent className="flex flex-col gap-14">
       <PostCard
         title={postData?.title ?? "Post not found"}
         size="lg"
@@ -44,7 +45,7 @@ function PostPage() {
             <PostCard.TotalViews totalViews={postData?.totalViews ?? 0} />
           </div>
         }
-      ></PostCard>
+      />
       <PostCard>
         <div className="flex flex-col gap-6">
           {postData.replies?.map((reply, index) => {
@@ -58,17 +59,17 @@ function PostPage() {
                 <div className="flex flex-col gap-6 ml-[30px]">
                   <Content content={reply.content} />
                   <div className="flex items-center gap-2">
-                    <Card className=" align-start py-2 inline-flex w-auto" spacing="sm">
+                    <Card.Base className=" align-start py-2 inline-flex w-auto" spacing="sm">
                       <SmileIcon className="size-4" />
-                    </Card>
-                    <Card className=" align-start py-2 inline-flex w-auto" spacing="sm">
+                    </Card.Base>
+                    <Card.Base className=" align-start py-2 inline-flex w-auto" spacing="sm">
                     <div className="flex items-center gap-1">
                       <MessageSquareIcon className="size-4 text-black" />
                       <span className="text-sm font-inter font-medium text-black leading-none">
                         0
                       </span>
                     </div>
-                    </Card>
+                    </Card.Base>
                   </div>
                 </div>
 
@@ -77,6 +78,6 @@ function PostPage() {
           })}
         </div>
       </PostCard>
-    </div>
+    </PageContent>
   );
 }

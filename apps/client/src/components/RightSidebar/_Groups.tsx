@@ -1,10 +1,9 @@
 import { Avatar } from "@/components/Avatar";
 import type { FC } from "react";
 import { Button } from "@/components/ui/Button";
-import { Card, CardTitle } from "@/components/cards/Card";
-import { Separator } from "@/components/ui-old/Separator";
+import { Card } from "@/components/cards/Card";
 import { Link } from "@tanstack/react-router";
-
+import { Separator } from "@/components/ui-old/Separator";
 const groups = [
   {
     name: "Rust",
@@ -21,8 +20,8 @@ const groups = [
 ];
 
 export const Groups: FC = () => (
-  <Card className="flex flex-col gap-6" spacing="md">
-    <CardTitle className="self-start text-xs">EXPLORE GROUPS</CardTitle>
+  <Card.Base className="flex flex-col gap-6 bg-white-dark" spacing="md">
+    <Card.Title className="self-start text-xs">EXPLORE GROUPS</Card.Title>
     <div className="space-y-2">
       {groups.map(({ name, id: iid }, i) => (
         <div key={iid}>
@@ -44,5 +43,5 @@ export const Groups: FC = () => (
     <Button variant="ghost" size="sm" className="!text-xs">
       Show more
     </Button>
-  </Card>
+  </Card.Base>
 );

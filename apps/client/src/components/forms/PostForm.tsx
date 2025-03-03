@@ -4,8 +4,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui-old/select";
-import { Input } from "@/components/ui/Input";
+} from "@/components/inputs/Select";
+import { Input } from "@/components/inputs/Input";
 import { Tabs } from "@/components/ui/Tabs";
 import { useField, useForm } from "@tanstack/react-form";
 import { Content } from "@/components/Content";
@@ -17,14 +17,15 @@ import type { FormEvent } from "react";
 import { Button } from "@/components/ui/Button";
 import { useLoaderData } from "@tanstack/react-router";
 import { Labels } from "@/components/ui/Labels";
-import { Textarea } from "@/components/ui/Textarea";
+import { Textarea } from "@/components/inputs/Textarea";
+import { router } from "@/lib/router";
 
 enum TabName {
   Write = "write",
   Preview = "preview",
 }
 
-export function PostForm() {
+export const PostForm = () => {
   const groups = useLoaderData({ from: "/_app/post/create" }) ?? [];
 
   const form = useForm<CreatePostSchema>({
@@ -136,6 +137,10 @@ export function PostForm() {
             {
               id: TabName.Preview,
               label: TabName.Preview,
+              onClick: () => {
+                console.log("clicked");
+                router.navigate({ to: "/post/drafts" });
+              },
               content: (
                 <>
                   <div className="min-h-[200px] prose">

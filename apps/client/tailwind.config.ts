@@ -7,9 +7,13 @@ const config: Config = {
     extend: {
       boxShadow: {
         tabs: "0px 1px 3px 0px rgba(0, 0, 0, 0.10), 0px 1px 2px 0px rgba(0, 0, 0, 0.06)",
+        input: "0px 1px 2px 0px rgba(0, 0, 0, 0.05)",
       },
       colors: {
-        black: "#18181B",
+        black: {
+          DEFAULT: "#18181B",
+          secondary: "#71717A",
+        },
         gray: "#E4E4E7",
         white: {
           DEFAULT: "#FFFFFF",

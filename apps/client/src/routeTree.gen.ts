@@ -17,8 +17,13 @@ import { Route as AppImport } from './routes/_app'
 import { Route as AppIndexImport } from './routes/_app/index'
 import { Route as LeftSidebarSettingsImport } from './routes/_left-sidebar/settings'
 import { Route as LeftSidebarProfileImport } from './routes/_left-sidebar/profile'
+import { Route as LeftSidebarNotificationsImport } from './routes/_left-sidebar/notifications'
 import { Route as AuthLoginImport } from './routes/_auth/login'
-import { Route as AppPostCreateImport } from './routes/_app/post/create'
+import { Route as LeftSidebarCredentialsIndexImport } from './routes/_left-sidebar/credentials/index'
+import { Route as LeftSidebarCommunitiesIndexImport } from './routes/_left-sidebar/communities/index'
+import { Route as LeftSidebarPostDraftsImport } from './routes/_left-sidebar/post/drafts'
+import { Route as LeftSidebarPostCreateImport } from './routes/_left-sidebar/post/create'
+import { Route as LeftSidebarCommunitiesIdImport } from './routes/_left-sidebar/communities/$id'
 import { Route as AppPostPostIdImport } from './routes/_app/post/$postId'
 
 // Create/Update Routes
@@ -56,16 +61,48 @@ const LeftSidebarProfileRoute = LeftSidebarProfileImport.update({
   getParentRoute: () => LeftSidebarRoute,
 } as any)
 
+const LeftSidebarNotificationsRoute = LeftSidebarNotificationsImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => LeftSidebarRoute,
+} as any)
+
 const AuthLoginRoute = AuthLoginImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => AuthRoute,
 } as any)
 
-const AppPostCreateRoute = AppPostCreateImport.update({
+const LeftSidebarCredentialsIndexRoute =
+  LeftSidebarCredentialsIndexImport.update({
+    id: '/credentials/',
+    path: '/credentials/',
+    getParentRoute: () => LeftSidebarRoute,
+  } as any)
+
+const LeftSidebarCommunitiesIndexRoute =
+  LeftSidebarCommunitiesIndexImport.update({
+    id: '/communities/',
+    path: '/communities/',
+    getParentRoute: () => LeftSidebarRoute,
+  } as any)
+
+const LeftSidebarPostDraftsRoute = LeftSidebarPostDraftsImport.update({
+  id: '/post/drafts',
+  path: '/post/drafts',
+  getParentRoute: () => LeftSidebarRoute,
+} as any)
+
+const LeftSidebarPostCreateRoute = LeftSidebarPostCreateImport.update({
   id: '/post/create',
   path: '/post/create',
-  getParentRoute: () => AppRoute,
+  getParentRoute: () => LeftSidebarRoute,
+} as any)
+
+const LeftSidebarCommunitiesIdRoute = LeftSidebarCommunitiesIdImport.update({
+  id: '/communities/$id',
+  path: '/communities/$id',
+  getParentRoute: () => LeftSidebarRoute,
 } as any)
 
 const AppPostPostIdRoute = AppPostPostIdImport.update({
@@ -106,6 +143,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginImport
       parentRoute: typeof AuthImport
     }
+    '/_left-sidebar/notifications': {
+      id: '/_left-sidebar/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof LeftSidebarNotificationsImport
+      parentRoute: typeof LeftSidebarImport
+    }
     '/_left-sidebar/profile': {
       id: '/_left-sidebar/profile'
       path: '/profile'
@@ -134,12 +178,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppPostPostIdImport
       parentRoute: typeof AppImport
     }
-    '/_app/post/create': {
-      id: '/_app/post/create'
+    '/_left-sidebar/communities/$id': {
+      id: '/_left-sidebar/communities/$id'
+      path: '/communities/$id'
+      fullPath: '/communities/$id'
+      preLoaderRoute: typeof LeftSidebarCommunitiesIdImport
+      parentRoute: typeof LeftSidebarImport
+    }
+    '/_left-sidebar/post/create': {
+      id: '/_left-sidebar/post/create'
       path: '/post/create'
       fullPath: '/post/create'
-      preLoaderRoute: typeof AppPostCreateImport
-      parentRoute: typeof AppImport
+      preLoaderRoute: typeof LeftSidebarPostCreateImport
+      parentRoute: typeof LeftSidebarImport
+    }
+    '/_left-sidebar/post/drafts': {
+      id: '/_left-sidebar/post/drafts'
+      path: '/post/drafts'
+      fullPath: '/post/drafts'
+      preLoaderRoute: typeof LeftSidebarPostDraftsImport
+      parentRoute: typeof LeftSidebarImport
+    }
+    '/_left-sidebar/communities/': {
+      id: '/_left-sidebar/communities/'
+      path: '/communities'
+      fullPath: '/communities'
+      preLoaderRoute: typeof LeftSidebarCommunitiesIndexImport
+      parentRoute: typeof LeftSidebarImport
+    }
+    '/_left-sidebar/credentials/': {
+      id: '/_left-sidebar/credentials/'
+      path: '/credentials'
+      fullPath: '/credentials'
+      preLoaderRoute: typeof LeftSidebarCredentialsIndexImport
+      parentRoute: typeof LeftSidebarImport
     }
   }
 }
@@ -149,13 +221,11 @@ declare module '@tanstack/react-router' {
 interface AppRouteChildren {
   AppIndexRoute: typeof AppIndexRoute
   AppPostPostIdRoute: typeof AppPostPostIdRoute
-  AppPostCreateRoute: typeof AppPostCreateRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppIndexRoute: AppIndexRoute,
   AppPostPostIdRoute: AppPostPostIdRoute,
-  AppPostCreateRoute: AppPostCreateRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
@@ -171,13 +241,25 @@ const AuthRouteChildren: AuthRouteChildren = {
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 interface LeftSidebarRouteChildren {
+  LeftSidebarNotificationsRoute: typeof LeftSidebarNotificationsRoute
   LeftSidebarProfileRoute: typeof LeftSidebarProfileRoute
   LeftSidebarSettingsRoute: typeof LeftSidebarSettingsRoute
+  LeftSidebarCommunitiesIdRoute: typeof LeftSidebarCommunitiesIdRoute
+  LeftSidebarPostCreateRoute: typeof LeftSidebarPostCreateRoute
+  LeftSidebarPostDraftsRoute: typeof LeftSidebarPostDraftsRoute
+  LeftSidebarCommunitiesIndexRoute: typeof LeftSidebarCommunitiesIndexRoute
+  LeftSidebarCredentialsIndexRoute: typeof LeftSidebarCredentialsIndexRoute
 }
 
 const LeftSidebarRouteChildren: LeftSidebarRouteChildren = {
+  LeftSidebarNotificationsRoute: LeftSidebarNotificationsRoute,
   LeftSidebarProfileRoute: LeftSidebarProfileRoute,
   LeftSidebarSettingsRoute: LeftSidebarSettingsRoute,
+  LeftSidebarCommunitiesIdRoute: LeftSidebarCommunitiesIdRoute,
+  LeftSidebarPostCreateRoute: LeftSidebarPostCreateRoute,
+  LeftSidebarPostDraftsRoute: LeftSidebarPostDraftsRoute,
+  LeftSidebarCommunitiesIndexRoute: LeftSidebarCommunitiesIndexRoute,
+  LeftSidebarCredentialsIndexRoute: LeftSidebarCredentialsIndexRoute,
 }
 
 const LeftSidebarRouteWithChildren = LeftSidebarRoute._addFileChildren(
@@ -187,21 +269,31 @@ const LeftSidebarRouteWithChildren = LeftSidebarRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '': typeof LeftSidebarRouteWithChildren
   '/login': typeof AuthLoginRoute
+  '/notifications': typeof LeftSidebarNotificationsRoute
   '/profile': typeof LeftSidebarProfileRoute
   '/settings': typeof LeftSidebarSettingsRoute
   '/': typeof AppIndexRoute
   '/post/$postId': typeof AppPostPostIdRoute
-  '/post/create': typeof AppPostCreateRoute
+  '/communities/$id': typeof LeftSidebarCommunitiesIdRoute
+  '/post/create': typeof LeftSidebarPostCreateRoute
+  '/post/drafts': typeof LeftSidebarPostDraftsRoute
+  '/communities': typeof LeftSidebarCommunitiesIndexRoute
+  '/credentials': typeof LeftSidebarCredentialsIndexRoute
 }
 
 export interface FileRoutesByTo {
   '': typeof LeftSidebarRouteWithChildren
   '/login': typeof AuthLoginRoute
+  '/notifications': typeof LeftSidebarNotificationsRoute
   '/profile': typeof LeftSidebarProfileRoute
   '/settings': typeof LeftSidebarSettingsRoute
   '/': typeof AppIndexRoute
   '/post/$postId': typeof AppPostPostIdRoute
-  '/post/create': typeof AppPostCreateRoute
+  '/communities/$id': typeof LeftSidebarCommunitiesIdRoute
+  '/post/create': typeof LeftSidebarPostCreateRoute
+  '/post/drafts': typeof LeftSidebarPostDraftsRoute
+  '/communities': typeof LeftSidebarCommunitiesIndexRoute
+  '/credentials': typeof LeftSidebarCredentialsIndexRoute
 }
 
 export interface FileRoutesById {
@@ -210,11 +302,16 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteWithChildren
   '/_left-sidebar': typeof LeftSidebarRouteWithChildren
   '/_auth/login': typeof AuthLoginRoute
+  '/_left-sidebar/notifications': typeof LeftSidebarNotificationsRoute
   '/_left-sidebar/profile': typeof LeftSidebarProfileRoute
   '/_left-sidebar/settings': typeof LeftSidebarSettingsRoute
   '/_app/': typeof AppIndexRoute
   '/_app/post/$postId': typeof AppPostPostIdRoute
-  '/_app/post/create': typeof AppPostCreateRoute
+  '/_left-sidebar/communities/$id': typeof LeftSidebarCommunitiesIdRoute
+  '/_left-sidebar/post/create': typeof LeftSidebarPostCreateRoute
+  '/_left-sidebar/post/drafts': typeof LeftSidebarPostDraftsRoute
+  '/_left-sidebar/communities/': typeof LeftSidebarCommunitiesIndexRoute
+  '/_left-sidebar/credentials/': typeof LeftSidebarCredentialsIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -222,31 +319,46 @@ export interface FileRouteTypes {
   fullPaths:
     | ''
     | '/login'
+    | '/notifications'
     | '/profile'
     | '/settings'
     | '/'
     | '/post/$postId'
+    | '/communities/$id'
     | '/post/create'
+    | '/post/drafts'
+    | '/communities'
+    | '/credentials'
   fileRoutesByTo: FileRoutesByTo
   to:
     | ''
     | '/login'
+    | '/notifications'
     | '/profile'
     | '/settings'
     | '/'
     | '/post/$postId'
+    | '/communities/$id'
     | '/post/create'
+    | '/post/drafts'
+    | '/communities'
+    | '/credentials'
   id:
     | '__root__'
     | '/_app'
     | '/_auth'
     | '/_left-sidebar'
     | '/_auth/login'
+    | '/_left-sidebar/notifications'
     | '/_left-sidebar/profile'
     | '/_left-sidebar/settings'
     | '/_app/'
     | '/_app/post/$postId'
-    | '/_app/post/create'
+    | '/_left-sidebar/communities/$id'
+    | '/_left-sidebar/post/create'
+    | '/_left-sidebar/post/drafts'
+    | '/_left-sidebar/communities/'
+    | '/_left-sidebar/credentials/'
   fileRoutesById: FileRoutesById
 }
 
@@ -281,8 +393,7 @@ export const routeTree = rootRoute
       "filePath": "_app.tsx",
       "children": [
         "/_app/",
-        "/_app/post/$postId",
-        "/_app/post/create"
+        "/_app/post/$postId"
       ]
     },
     "/_auth": {
@@ -294,13 +405,23 @@ export const routeTree = rootRoute
     "/_left-sidebar": {
       "filePath": "_left-sidebar.tsx",
       "children": [
+        "/_left-sidebar/notifications",
         "/_left-sidebar/profile",
-        "/_left-sidebar/settings"
+        "/_left-sidebar/settings",
+        "/_left-sidebar/communities/$id",
+        "/_left-sidebar/post/create",
+        "/_left-sidebar/post/drafts",
+        "/_left-sidebar/communities/",
+        "/_left-sidebar/credentials/"
       ]
     },
     "/_auth/login": {
       "filePath": "_auth/login.tsx",
       "parent": "/_auth"
+    },
+    "/_left-sidebar/notifications": {
+      "filePath": "_left-sidebar/notifications.tsx",
+      "parent": "/_left-sidebar"
     },
     "/_left-sidebar/profile": {
       "filePath": "_left-sidebar/profile.tsx",
@@ -318,9 +439,25 @@ export const routeTree = rootRoute
       "filePath": "_app/post/$postId.tsx",
       "parent": "/_app"
     },
-    "/_app/post/create": {
-      "filePath": "_app/post/create.tsx",
-      "parent": "/_app"
+    "/_left-sidebar/communities/$id": {
+      "filePath": "_left-sidebar/communities/$id.tsx",
+      "parent": "/_left-sidebar"
+    },
+    "/_left-sidebar/post/create": {
+      "filePath": "_left-sidebar/post/create.tsx",
+      "parent": "/_left-sidebar"
+    },
+    "/_left-sidebar/post/drafts": {
+      "filePath": "_left-sidebar/post/drafts.tsx",
+      "parent": "/_left-sidebar"
+    },
+    "/_left-sidebar/communities/": {
+      "filePath": "_left-sidebar/communities/index.tsx",
+      "parent": "/_left-sidebar"
+    },
+    "/_left-sidebar/credentials/": {
+      "filePath": "_left-sidebar/credentials/index.tsx",
+      "parent": "/_left-sidebar"
     }
   }
 }

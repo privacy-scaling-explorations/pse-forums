@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Avatar } from "@/components/Avatar";
-import { Card, CardTitle } from "@/components/cards/Card";
+import { Card } from "@/components/cards/Card";
 
 const users = [
   {
@@ -70,8 +70,8 @@ const users = [
 ];
 
 export const Users = () => (
-  <Card className="bg-gray-50">
-    <CardTitle className="self-start text-xs">ACTIVE USERS</CardTitle>
+  <Card.Base className="bg-gray-50">
+    <Card.Title className="self-start text-xs">ACTIVE USERS</Card.Title>
     <div className="grid grid-cols-6 gap-2">
       {users.map(({ userId, username }) => (
         <Link to={`/user/${userId}` as any} key={userId}>
@@ -79,5 +79,5 @@ export const Users = () => (
         </Link>
       ))}
     </div>
-  </Card>
+  </Card.Base>
 );

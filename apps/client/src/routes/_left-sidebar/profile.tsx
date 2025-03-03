@@ -5,6 +5,7 @@ import { Avatar } from "@/components/Avatar";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Pen as PenIcon, LogOut as LogOutIcon } from "lucide-react";
+import { PageContent } from "@/components/PageContent";
 
 export const Route = createFileRoute("/_left-sidebar/profile")({
   component: ProfilePageView,
@@ -15,7 +16,7 @@ const InfoCard = ({ label, value, className }: { label: string; value: string, c
     <div className={cn("flex flex-col p-2 rounded-md bg-white-light text-center", className)}>
       <span className="text-sm font-inter text-black font-bold">{value}</span>
 
-      <span className="text-xs font-inter font-medium text-[#71717A]">
+      <span className="text-xs font-inter font-medium text-black-secondary">
         {label}
       </span>
     </div>
@@ -23,7 +24,7 @@ const InfoCard = ({ label, value, className }: { label: string; value: string, c
 };
 function ProfilePageView() {
   return (
-    <div className="flex flex-col gap-6">
+    <PageContent className="flex flex-col gap-6">
       <Labels.PageTitle>Profile</Labels.PageTitle>
       <div className="flex flex-col gap-4">
         <div className="flex gap-3">
@@ -33,17 +34,17 @@ function ProfilePageView() {
               John Doe
             </h2>
             <div className="flex items-center gap-1">
-              <span className="text-xs font-inter text-[#71717A]">
+              <span className="text-xs font-inter text-black-secondary">
                 Standard
               </span>
               <Badge variant="white">uid: 123</Badge>
             </div>
-            <span className="text-xs font-inter text-[#71717A]">
+            <span className="text-xs font-inter text-black-secondary">
               Created 2024-01-01
             </span>
           </div>
         </div>
-        <span className="text-sm font-inter text-[#71717A]">
+        <span className="text-sm font-inter text-black-secondary">
           Lorem ipsum dolor, sit amet consectetur adipisicing elit. Doloribus
           voluptatum quas ut in distinctio dolores dolor saepe quidem. Ullam
           illum in sint ipsum facilis odit voluptas suscipit, similique pariatur
@@ -65,6 +66,6 @@ function ProfilePageView() {
         <InfoCard label="Solos" value="123" />
         <InfoCard label="Feeds" value="123" className="col-span-2 lg:col-span-1" />
       </div>
-    </div>
+    </PageContent>
   );
 }

@@ -3,7 +3,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { classed } from "@tw-classed/react";
 
-const Card = classed.div(
+const CardBase = classed.div(
   "flex flex-col border bg-card text-card-foreground border border-[#E4E4E7]",
   {
     variants: {
@@ -39,8 +39,6 @@ const Card = classed.div(
   },
 );
 
-Card.displayName = "Card";
-
 const CardHeader = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -60,7 +58,7 @@ const CardTitle = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "text-2xl font-semibold leading-none tracking-tight",
+      "text-xl font-semibold leading-none tracking-tight text-black",
       className,
     )}
     {...props}
@@ -100,11 +98,12 @@ const CardFooter = React.forwardRef<
 ));
 CardFooter.displayName = "CardFooter";
 
-export {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+export const Card = {
+  displayName: "Card",
+  Base: CardBase,
+  Title: CardTitle,
+  Header: CardHeader,
+  Description: CardDescription,
+  Content: CardContent,
+  Footer: CardFooter,
 };

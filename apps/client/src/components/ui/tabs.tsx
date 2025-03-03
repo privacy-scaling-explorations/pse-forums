@@ -19,25 +19,30 @@ const TabsList = classed(
 
 const TabsTrigger = classed(
   TabsPrimitive.Trigger,
-  "inline-flex items-center text-black font-inter justify-center whitespace-nowrap rounded-lg px-3 py-1 text-sm ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center text-black font-inter justify-center whitespace-nowrap rounded-lg px-3 py-1 ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   "data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-tabs",
-  "data-[state=inactive]:text-[#71717A] data-[state=active]:shadow-none",
+  "data-[state=inactive]:text-black-secondary data-[state=active]:shadow-none",
   {
     variants: {
       bold: {
         true: "font-bold",
         false: "font-medium",
       },
+      size: {
+        xs: "text-xs",
+        sm: "text-sm",
+      },
     },
     defaultVariants: {
       bold: false,
+      size: "sm",
     },
   },
 );
 
 const TabsContent = classed(
   TabsPrimitive.Content,
-  "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+  "ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
 );
 
 TabsContent.displayName = TabsPrimitive.Content.displayName;
@@ -50,7 +55,8 @@ interface TabsProps extends TabsPrimitive.TabsProps {
   items: {
     id: string;
     label: string;
-    content: ReactNode;
+    content?: ReactNode;
+    onClick?: () => void;
   }[];
 }
 
@@ -61,9 +67,19 @@ export const Tabs = ({
   ...props
 }: TabsProps) => (
   <TabsPrimitive.Root defaultValue={defaultValue} {...props}>
-    <TabsList className="grid w-[420px] grid-cols-2">
+    <TabsList
+      className="grid w-fit"
+      style={{
+        gridTemplateColumns: `repeat(${items.length}, 1fr)`,
+      }}
+    >
       {items.map((item) => (
-        <TabsTrigger key={item.id} value={item.id}>
+        <TabsTrigger
+          key={item.id}
+          value={item.id}
+          size={size as any}
+          onClick={item?.onClick}
+        >
           {item.label}
         </TabsTrigger>
       ))}

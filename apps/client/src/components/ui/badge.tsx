@@ -14,6 +14,7 @@ const BadgeBase = classed.div(
       },
       rounded: {
         sm: "rounded-[6px]",
+        full: "rounded-full",
       },
     },
     defaultVariants: {
