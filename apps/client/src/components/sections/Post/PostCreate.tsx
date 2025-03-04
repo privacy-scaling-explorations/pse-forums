@@ -1,9 +1,5 @@
 import {
   Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
 } from "@/components/inputs/Select";
 import { Input } from "@/components/inputs/Input";
 import { Tabs } from "@/components/ui/Tabs";
@@ -17,7 +13,7 @@ import { Button } from "@/components/ui/Button";
 import { useLoaderData } from "@tanstack/react-router";
 import { Textarea } from "@/components/inputs/Textarea";
 import { router } from "@/lib/router";
-import { PageContent } from "../PageContent";
+import { PageContent } from "@/components/PageContent";
 
 enum TabName {
   Write = "write",
@@ -113,7 +109,7 @@ export const PostCreate = () => {
                 value: id,
                 label: name,
               }))}
-              defaultValue={groups[0]?.id?.toString()}
+              defaultValue={(groups[0] as any)?.id?.toString()}
               onValueChange={(value) => field.handleChange(Number(value))}
               value={field.state.value.toString()}
             />

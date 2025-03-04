@@ -1,11 +1,11 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import { Card } from "@/components/cards/Card";
 import { Content } from "@/components/Content";
-import { PostAuthor } from "@/components/Post/PostAuthor";
-import { PostCard } from "@/components/Post/PostCard";
 import { useGetPostById } from "@/hooks/usePosts";
 import { Smile as SmileIcon, MessageSquare as MessageSquareIcon } from 'lucide-react';
 import { PageContent } from "@/components/PageContent";
+import { PostAuthor } from "@/components/sections/Post/PostAuthor";
+import { PostCard } from "@/components/sections/Post/PostCard";
 
 
 

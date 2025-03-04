@@ -1,11 +1,10 @@
 import { ReactNode } from "react";
-import { Card } from "../cards/Card";
 import { classed, VariantProps } from "@tw-classed/react";
 import { Link } from "@tanstack/react-router";
 import { Eye as EyeIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MessageSquare as MessageSquareIcon } from 'lucide-react';
-
+import { Card } from "@/components/cards/Card";
 
 export interface PostCardProps extends VariantProps<typeof Card.Base> {
   header?: ReactNode;
@@ -15,6 +14,7 @@ export interface PostCardProps extends VariantProps<typeof Card.Base> {
   withLink?: boolean;
   postId?: string | number;
   className?: string;
+  withHover?: boolean;
 }
 
 const PostCardBase = classed(Card.Base, {

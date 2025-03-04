@@ -1,4 +1,4 @@
-import { PageContent } from "../PageContent";
+import { PageContent } from "@/components/PageContent";
 import { router } from "@/lib/router";
 import { PencilLine as PencilLineIcon } from "lucide-react";
 import { Tabs } from "@/components/ui/Tabs";

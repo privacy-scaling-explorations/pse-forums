@@ -1,7 +1,7 @@
 import { Avatar } from "@/components/Avatar";
 import { PageContent } from "@/components/PageContent";
-import { PostAuthor } from "@/components/Post/PostAuthor";
-import { PostCard } from "@/components/Post/PostCard";
+import { PostAuthor } from "@/components/sections/Post/PostAuthor";
+import { PostCard } from "@/components/sections/Post/PostCard";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Tabs } from "@/components/ui/Tabs";
