@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PostCreate } from "@/components/Post/PostCreate";
 
 export const Route = createFileRoute("/_left-sidebar/post/create")({
   component: PostCreate,
