@@ -18,7 +18,6 @@ import { Route as AppIndexImport } from './routes/_app/index'
 import { Route as LeftSidebarSettingsImport } from './routes/_left-sidebar/settings'
 import { Route as LeftSidebarProfileImport } from './routes/_left-sidebar/profile'
 import { Route as LeftSidebarNotificationsImport } from './routes/_left-sidebar/notifications'
-import { Route as AuthLoginImport } from './routes/_auth/login'
 import { Route as LeftSidebarCredentialsIndexImport } from './routes/_left-sidebar/credentials/index'
 import { Route as LeftSidebarCommunitiesIndexImport } from './routes/_left-sidebar/communities/index'
 import { Route as LeftSidebarPostDraftsImport } from './routes/_left-sidebar/post/drafts'
@@ -65,12 +64,6 @@ const LeftSidebarNotificationsRoute = LeftSidebarNotificationsImport.update({
   id: '/notifications',
   path: '/notifications',
   getParentRoute: () => LeftSidebarRoute,
-} as any)
-
-const AuthLoginRoute = AuthLoginImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => AuthRoute,
 } as any)
 
 const LeftSidebarCredentialsIndexRoute =
@@ -135,13 +128,6 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof LeftSidebarImport
       parentRoute: typeof rootRoute
-    }
-    '/_auth/login': {
-      id: '/_auth/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof AuthLoginImport
-      parentRoute: typeof AuthImport
     }
     '/_left-sidebar/notifications': {
       id: '/_left-sidebar/notifications'
@@ -230,16 +216,6 @@ const AppRouteChildren: AppRouteChildren = {
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
-interface AuthRouteChildren {
-  AuthLoginRoute: typeof AuthLoginRoute
-}
-
-const AuthRouteChildren: AuthRouteChildren = {
-  AuthLoginRoute: AuthLoginRoute,
-}
-
-const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
-
 interface LeftSidebarRouteChildren {
   LeftSidebarNotificationsRoute: typeof LeftSidebarNotificationsRoute
   LeftSidebarProfileRoute: typeof LeftSidebarProfileRoute
@@ -268,7 +244,6 @@ const LeftSidebarRouteWithChildren = LeftSidebarRoute._addFileChildren(
 
 export interface FileRoutesByFullPath {
   '': typeof LeftSidebarRouteWithChildren
-  '/login': typeof AuthLoginRoute
   '/notifications': typeof LeftSidebarNotificationsRoute
   '/profile': typeof LeftSidebarProfileRoute
   '/settings': typeof LeftSidebarSettingsRoute
@@ -283,7 +258,6 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '': typeof LeftSidebarRouteWithChildren
-  '/login': typeof AuthLoginRoute
   '/notifications': typeof LeftSidebarNotificationsRoute
   '/profile': typeof LeftSidebarProfileRoute
   '/settings': typeof LeftSidebarSettingsRoute
@@ -299,9 +273,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_app': typeof AppRouteWithChildren
-  '/_auth': typeof AuthRouteWithChildren
+  '/_auth': typeof AuthRoute
   '/_left-sidebar': typeof LeftSidebarRouteWithChildren
-  '/_auth/login': typeof AuthLoginRoute
   '/_left-sidebar/notifications': typeof LeftSidebarNotificationsRoute
   '/_left-sidebar/profile': typeof LeftSidebarProfileRoute
   '/_left-sidebar/settings': typeof LeftSidebarSettingsRoute
@@ -318,7 +291,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | ''
-    | '/login'
     | '/notifications'
     | '/profile'
     | '/settings'
@@ -332,7 +304,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | ''
-    | '/login'
     | '/notifications'
     | '/profile'
     | '/settings'
@@ -348,7 +319,6 @@ export interface FileRouteTypes {
     | '/_app'
     | '/_auth'
     | '/_left-sidebar'
-    | '/_auth/login'
     | '/_left-sidebar/notifications'
     | '/_left-sidebar/profile'
     | '/_left-sidebar/settings'
@@ -364,13 +334,13 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
-  AuthRoute: typeof AuthRouteWithChildren
+  AuthRoute: typeof AuthRoute
   LeftSidebarRoute: typeof LeftSidebarRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
-  AuthRoute: AuthRouteWithChildren,
+  AuthRoute: AuthRoute,
   LeftSidebarRoute: LeftSidebarRouteWithChildren,
 }
 
@@ -397,10 +367,7 @@ export const routeTree = rootRoute
       ]
     },
     "/_auth": {
-      "filePath": "_auth.tsx",
-      "children": [
-        "/_auth/login"
-      ]
+      "filePath": "_auth.tsx"
     },
     "/_left-sidebar": {
       "filePath": "_left-sidebar.tsx",
@@ -414,10 +381,6 @@ export const routeTree = rootRoute
         "/_left-sidebar/communities/",
         "/_left-sidebar/credentials/"
       ]
-    },
-    "/_auth/login": {
-      "filePath": "_auth/login.tsx",
-      "parent": "/_auth"
     },
     "/_left-sidebar/notifications": {
       "filePath": "_left-sidebar/notifications.tsx",
