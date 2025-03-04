@@ -2,14 +2,9 @@
 
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import * as React from "react";
+import { ReactNode } from 'react';
 
 import { classed } from "@tw-classed/react";
-
-const TooltipProvider = TooltipPrimitive.Provider;
-
-const Tooltip = TooltipPrimitive.Root;
-
-const TooltipTrigger = TooltipPrimitive.Trigger;
 
 const TooltipBase = classed(
   TooltipPrimitive.Content,
@@ -26,4 +21,29 @@ const TooltipContent = React.forwardRef<
 ));
 TooltipContent.displayName = TooltipPrimitive.Content.displayName;
 
-export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger };
+interface TooltipProps {
+  children: ReactNode;
+  content: string;
+}
+
+export const Tooltip = ({ children, content }: TooltipProps) => {
+  return (
+    <TooltipPrimitive.Provider>
+      <TooltipPrimitive.Root>
+        <TooltipPrimitive.Trigger asChild>
+          {children}
+        </TooltipPrimitive.Trigger>
+        <TooltipPrimitive.Portal>
+          <TooltipPrimitive.Content
+            className="bg-black text-white text-sm px-2 py-1 rounded"
+            sideOffset={5}
+          >
+            {content}
+            <TooltipPrimitive.Arrow className="fill-black" />
+          </TooltipPrimitive.Content>
+        </TooltipPrimitive.Portal>
+      </TooltipPrimitive.Root>
+    </TooltipPrimitive.Provider>
+  );
+}
+
