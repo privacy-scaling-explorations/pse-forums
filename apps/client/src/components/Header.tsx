@@ -2,13 +2,13 @@ import { Link } from "@tanstack/react-router";
 import { Input } from "@/components/inputs/Input";
 import { Profile } from "./Profile";
 import { Search } from "lucide-react";
-import { Button } from "./ui/Button";
+import { Button } from "@/components/ui/Button";
 import { Menu as MenuIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useGlobalContext } from "@/contexts/GlobalContext";
 
 import { X as CloseIcon } from "lucide-react";
-import { LeftSidebar } from "./LeftSidebar";
+import { LeftSidebar } from "@/components/LeftSidebar";
 
 const DesktopNav = () => {
   return (
