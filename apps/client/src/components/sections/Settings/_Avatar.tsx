@@ -1,4 +1,5 @@
 import { Card } from "@/components/cards/Card";
+import { FileUploader } from "@/components/inputs/FileUploader";
 
 export const Avatar = () => {
   return (
@@ -10,6 +11,7 @@ export const Avatar = () => {
           The image everyone will see when visiting your profile.
         </Card.Description>
       </div>
+      <FileUploader />
     </Card.Base>
   );
 };

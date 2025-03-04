@@ -108,21 +108,15 @@ export const PostCreate = () => {
           name="gid"
           children={(field) => (
             <Select
+              label="Select a Group"
+              items={groups.map(({ id, name }) => ({
+                value: id,
+                label: name,
+              }))}
               defaultValue={groups[0]?.id?.toString()}
               onValueChange={(value) => field.handleChange(Number(value))}
               value={field.state.value.toString()}
-            >
-              <SelectTrigger className="w-[200px]">
-                <SelectValue placeholder="Select a Group" />
-              </SelectTrigger>
-              <SelectContent>
-                {groups.map(({ id, name }) => (
-                  <SelectItem key={id} value={String(id)}>
-                    {name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            />
           )}
         />
       </div>

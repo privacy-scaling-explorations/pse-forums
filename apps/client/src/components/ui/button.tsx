@@ -5,7 +5,7 @@ import { LucideIcon } from "lucide-react";
 
 const ButtonComponent = classed.button(
   "cursor-pointer inline-flex items-center justify-center gap-2 whitespace-nowrap font-inter rounded-md text-sm font-normal ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
-  "focus:outline-none focus:ring-2 focus:ring-0 outline-none focus:ring-offset-0 focus:outline-none",
+  "focus:outline-none focus:ring-0 outline-none focus:ring-offset-0 focus:outline-none",
   {
     variants: {
       variant: {
@@ -18,6 +18,7 @@ const ButtonComponent = classed.button(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        error: "bg-[#FEE2E2] text-[#DC2626] hover:bg-[#FEE2E2] border border-[#DC2626]",
       },
       size: {
         default: "h-10 px-4 py-2",

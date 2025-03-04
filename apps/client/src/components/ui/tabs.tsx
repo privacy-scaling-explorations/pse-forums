@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 
 import { classed } from "@tw-classed/react";
@@ -64,11 +65,12 @@ export const Tabs = ({
   size = "sm",
   defaultValue,
   items = [],
+  className,
   ...props
 }: TabsProps) => (
   <TabsPrimitive.Root defaultValue={defaultValue} {...props}>
     <TabsList
-      className="grid w-fit"
+      className={cn("grid w-fit", className)}
       style={{
         gridTemplateColumns: `repeat(${items.length}, 1fr)`,
       }}

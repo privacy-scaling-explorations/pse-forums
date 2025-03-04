@@ -1,7 +1,7 @@
 export const membershipMocks = [
   {
     id: "1",
-    name: "lorem ipsum dolor sit amet consectetur adipisicing elit",
+    name: "Group 1",
     description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
     members: 100,
     posts: 100,
@@ -9,7 +9,7 @@ export const membershipMocks = [
   },
   {
     id: "2",
-    name: "lorem ipsum dolor sit amet consectetur adipisicing elit",
+    name: "Group 2",
     description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
     members: 100,
     posts: 100,
@@ -17,7 +17,7 @@ export const membershipMocks = [
   },
   {
     id: "3",
-    name: "lorem ipsum dolor sit amet consectetur adipisicing elit",
+    name: "Group 3",
     description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
     members: 100,
     posts: 100,

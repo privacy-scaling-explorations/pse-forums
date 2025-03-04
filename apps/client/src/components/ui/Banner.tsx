@@ -1,7 +1,35 @@
 import { classed } from "@tw-classed/react";
 
-const BannerBase= classed.div("flex items-center rounded-md justify-between px-4 py-3 bg-white-dark")
+const BannerBase = classed.div(
+  "rounded-md p-4",
+);
 
-export const Banner= classed(BannerBase, {
-    
-})
+const BannerLabel = classed.span("font-inter font-normal text-xs", {
+  variants: {
+    variant: {
+      error: "text-[#DC2626] opacity-90",
+    },
+  },
+  defaultVariants: {
+    variant: "error",
+  },
+});
+
+const BannerComponent = classed(BannerBase, {
+  variants: {
+    variant: {
+      error: "bg-[#FEE2E2] border border-[#DC2626]",
+    },
+  },
+  defaultVariants: {
+    variant: "error",
+  },
+});
+
+const Banner = {
+  displayName: "Banner",
+  Base: BannerComponent,
+  Label: BannerLabel,
+};
+
+export { Banner };

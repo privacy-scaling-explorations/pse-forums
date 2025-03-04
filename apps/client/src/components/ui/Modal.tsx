@@ -1,101 +1,105 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useEffect, useState, useRef, ReactNode } from "react"
-import { X } from "lucide-react"
-import { createPortal } from "react-dom"
+import { useEffect, useState, useRef } from "react";
+import { X } from "lucide-react";
+import { createPortal } from "react-dom";
 
 export interface ModalProps {
-  isOpen: boolean
-  setIsOpen: (open: boolean) => void
-  onOpenChange?: (open: boolean) => void
-  children?: ReactNode
-  title?: string
-  className?: string
-  forceView?: "mobile" | "desktop"
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+  children?: React.ReactNode;
+  title?: string;
+  className?: string;
+  forceView?: "mobile" | "desktop";
 }
 
-export const Modal = ({ isOpen, setIsOpen, onOpenChange, children, title, className = "", forceView }: ModalProps) => {
-  const [isMobile, setIsMobile] = useState(false)
-  const [mounted, setMounted] = useState(false)
-  const modalRef = useRef<HTMLDivElement>(null)
+export function Modal({
+  isOpen,
+  setIsOpen,
+  children,
+  title,
+  className = "",
+  forceView,
+}: ModalProps) {
+  const [isMobile, setIsMobile] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   // Handle click outside to close
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-        onOpenChange?.(false)
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node) &&
+        !forceView
+      ) {
+        setIsOpen(false);
       }
     }
 
     if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside)
+      document.addEventListener("mousedown", handleClickOutside);
     }
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [open, onOpenChange])
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen, setIsOpen, forceView]);
 
   // Handle escape key to close
   useEffect(() => {
     function handleEscapeKey(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        onOpenChange?.(false)
+      if (event.key === "Escape" && !forceView) {
+        setIsOpen(false);
       }
     }
 
     if (isOpen) {
-      document.addEventListener("keydown", handleEscapeKey)
+      document.addEventListener("keydown", handleEscapeKey);
     }
     return () => {
-      document.removeEventListener("keydown", handleEscapeKey)
-    }
-  }, [isOpen, onOpenChange])
+      document.removeEventListener("keydown", handleEscapeKey);
+    };
+  }, [isOpen, setIsOpen, forceView]);
 
-  // Check if mobile
   useEffect(() => {
     const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 768)
-    }
+      setIsMobile(window.innerWidth < 768);
+    };
 
-    // Initial check
-    checkIsMobile()
+    checkIsMobile();
 
-    // Add event listener for window resize
-    window.addEventListener("resize", checkIsMobile)
+    window.addEventListener("resize", checkIsMobile);
 
-    // Clean up event listener
-    return () => window.removeEventListener("resize", checkIsMobile)
-  }, [])
+    return () => window.removeEventListener("resize", checkIsMobile);
+  }, []);
 
-  // Handle body scroll lock
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = "hidden"
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = ""
+      document.body.style.overflow = "";
     }
     return () => {
-      document.body.style.overflow = ""
-    }
-  }, [isOpen])
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
-  // Client-side only
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    setMounted(true);
+  }, []);
 
   if (!mounted) {
-    return null
+    return null;
   }
 
   if (!isOpen) {
-    return null
+    return null;
   }
 
-  // Determine which view to show based on screen size or forced view
-  const showMobileView = forceView === "mobile" || (isMobile && forceView !== "desktop")
+  const showMobileView =
+    forceView === "mobile" || (isMobile && forceView !== "desktop");
 
   const mobileDrawer = (
     <div className="fixed inset-0 z-50 bg-black/50">
@@ -109,7 +113,7 @@ export const Modal = ({ isOpen, setIsOpen, onOpenChange, children, title, classN
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-medium">{title}</h2>
               <button
-                onClick={() => onOpenChange?.(false)}
+                onClick={() => setIsOpen(false)}
                 className="rounded-full p-1 hover:bg-gray-100"
                 aria-label="Close"
               >
@@ -121,7 +125,7 @@ export const Modal = ({ isOpen, setIsOpen, onOpenChange, children, title, classN
         </div>
       </div>
     </div>
-  )
+  );
 
   const desktopModal = (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
@@ -133,7 +137,7 @@ export const Modal = ({ isOpen, setIsOpen, onOpenChange, children, title, classN
           <div className="flex items-center justify-between p-4 border-b">
             <h2 className="text-lg font-medium">{title}</h2>
             <button
-              onClick={() => onOpenChange?.(false)}
+              onClick={() => setIsOpen(false)}
               className="rounded-full p-1 hover:bg-gray-100"
               aria-label="Close"
             >
@@ -144,8 +148,10 @@ export const Modal = ({ isOpen, setIsOpen, onOpenChange, children, title, classN
         <div className="p-4">{children}</div>
       </div>
     </div>
-  )
+  );
 
-  return createPortal(showMobileView ? mobileDrawer : desktopModal, document.body)
+  return createPortal(
+    showMobileView ? mobileDrawer : desktopModal,
+    document.body,
+  );
 }
-

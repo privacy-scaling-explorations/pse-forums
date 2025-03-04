@@ -4,8 +4,9 @@ import { PostAuthor } from "@/components/Post/PostAuthor";
 import { PostCard } from "@/components/Post/PostCard";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import { Tabs } from "@/components/ui/Tabs";
 import { createFileRoute, useParams } from "@tanstack/react-router";
-import { UserPlus as UserPlusIcon } from 'lucide-react';
+import { UserPlus as UserPlusIcon, Plus as PlusIcon } from "lucide-react";
 
 import { membershipMocks } from "mocks/membershipMocks";
 import { postMocks } from "mocks/postMocks";
@@ -29,9 +30,32 @@ function CommunityPage() {
   }
 
   return (
-    <PageContent className="!pt-0 !px-0 lg:!p-4">
+    <PageContent className="!pt-0 !px-0 lg:!pb-4 lg:!px-4">
       <div className="flex flex-col">
-        <div className="h-[180px] w-full bg-white-light"></div>
+        <div className="h-[180px] w-full bg-white-light px-4">
+          <Tabs
+            className="w-full pt-4"
+            defaultValue="all"
+            items={[
+              {
+                label: "All",
+                id: "all",
+              },
+              {
+                label: "My Community Posts",
+                id: "my-community-posts",
+              },
+              {
+                label: "Following",
+                id: "following",
+              },
+              {
+                label: community.name,
+                id: "my-posts",
+              },
+            ]}
+          ></Tabs>
+        </div>
         <div className="relative flex flex-col bg-white gap-6 -mt-4 overflow-hidden rounded-t-[24px] p-4 w-full">
           <div className="flex flex-col gap-4">
             <div className="flex w-full gap-4">
@@ -46,9 +70,12 @@ function CommunityPage() {
                   </span>
                 </div>
               </div>
-              <div className="ml-auto flex  align-baseline">
-                <Button size="sm" icon={UserPlusIcon}>
+              <div className="ml-auto flex gap-2.5  align-baseline">
+                <Button size="sm" icon={UserPlusIcon} variant="outline">
                   Join
+                </Button>
+                <Button size="sm" icon={PlusIcon}>
+                  New Post
                 </Button>
               </div>
             </div>
