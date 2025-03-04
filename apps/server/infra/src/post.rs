@@ -37,7 +37,7 @@ impl Create<CreatePost, Result<post::Data>> for PostRepository {
 
         self.0
             .post()
-            // FIXME: make it work with `create` intead of `create_unchecked`
+            // FIXME: make it work with `create` instead of `create_unchecked`
             .create_unchecked(title.into(), content.into(), extra)
             .with(post::group::fetch())
             .exec()
