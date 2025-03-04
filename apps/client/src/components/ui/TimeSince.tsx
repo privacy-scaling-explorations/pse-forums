@@ -1,8 +1,9 @@
 import { DateTime } from "luxon";
 import { useMemo } from "react";
 import { classed } from "@tw-classed/react";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/Tooltip";
+import { Tooltip } from "@/components/ui/Tooltip";
 import { cn } from "@/lib/utils";
+import { TooltipTrigger } from "@radix-ui/react-tooltip";
 type TimeSinceProps = {
   isoDateTime: string
   className?: string
@@ -20,13 +21,10 @@ export function TimeSince({ isoDateTime, className }: TimeSinceProps) {
   }, [isoDateTime])
 
   return (
-    <Tooltip>
+    <Tooltip content={isoDateTime}>
       <TooltipTrigger asChild>
         <TimeSinceBase className={cn("italic", className)}>{timeSince}</TimeSinceBase>
       </TooltipTrigger>
-      <TooltipContent align="center">
-        {isoDateTime}
-      </TooltipContent>
     </Tooltip>
   )
 }

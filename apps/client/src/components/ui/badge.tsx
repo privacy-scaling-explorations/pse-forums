@@ -27,7 +27,7 @@ const BadgeBase = classed.div(
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof BadgeBase> {}
 
-function Badge({ className, ...props }: BadgeProps) {
+const Badge = ({ className, ...props }: BadgeProps) => {
   return <BadgeBase {...props} />
 }
 
