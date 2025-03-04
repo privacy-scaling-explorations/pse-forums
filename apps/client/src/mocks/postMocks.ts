@@ -56,7 +56,7 @@ I have a bunch more but we will start there
     group: "PSE",
     totalViews: 12,
     content: `### Fusce at lacus  
-Nam at felis nec eros vestibulum tincidunt eget a libero.  
+Name at felis nec eros vestibulum tincidunt eget a libero.  
 
 \`\`\`css
 .container {
@@ -80,7 +80,7 @@ Nam at felis nec eros vestibulum tincidunt eget a libero.
     createdAt: "2025-02-26T06:00:00Z",
     content: `### Integer tristique  
 - Morbi consequat nunc ut purus  
-- Nulla facilisi vestibulum egestas  
+- Nulla facilities vestibulum egestas  
 - Etiam in turpis ac felis ultricies tincidunt  
 
 \`\`\`typescript
