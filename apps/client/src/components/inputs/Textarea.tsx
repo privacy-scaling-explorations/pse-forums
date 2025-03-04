@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { classed } from "@tw-classed/react";
-import { InputBase, InputWrapper, InputWrapperProps } from "./Input";
+import { InputBase, InputWrapper, InputWrapperProps } from "@/components/inputs/Input";
 
 const TextareaBase = classed.textarea("!py-2 !px-3", InputBase);
 

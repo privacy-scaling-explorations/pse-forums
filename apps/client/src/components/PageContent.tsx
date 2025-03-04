@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
-import { Labels } from "./ui/Labels";
+import { Labels } from "@/components/ui/Labels";
 import { LucideIcon } from "lucide-react";
-import EmptyState from "./ui/EmptyState";
+import EmptyState from "@/components/ui/EmptyState";
 import { cn } from "@/lib/utils";
 interface PageContentProps {
   title?: string;

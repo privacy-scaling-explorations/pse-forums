@@ -1,9 +1,7 @@
-import { Link } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/Button";
-import { Avatar } from "@/components/Avatar";
 import { useState } from "react";
-import { LoginModal } from "./sections/Login/LoginModal";
+import { LoginModal } from "@/components/sections/Login/LoginModal";
 
 export function Profile() {
   const { auth, setAuth } = useAuth();

@@ -51,7 +51,7 @@ TabsList.displayName = TabsPrimitive.List.displayName;
 TabsTrigger.displayName = TabsPrimitive.Trigger.displayName;
 
 interface TabsProps extends TabsPrimitive.TabsProps {
-  size?: "sm" | "lg";
+  size?: "sm" | "lg" | "xs";
   defaultValue?: string;
   items: {
     id: string;

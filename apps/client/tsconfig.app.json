@@ -14,7 +14,7 @@
       "@/providers": ["providers"],
       "@/routes/*": ["routes/*"],
       "@/state/*": ["state/*"],
-      "@/contexts/*": ["contexts/*"]
+      "@/contexts/*": ["contexts/*"],
     },
 
     /* Bundler mode */

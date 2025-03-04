@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Input } from "@/components/inputs/Input";
-import { Profile } from "./Profile";
+import { Profile } from "@/components/Profile";
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Menu as MenuIcon } from "lucide-react";

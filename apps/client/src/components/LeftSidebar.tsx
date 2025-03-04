@@ -7,11 +7,10 @@ import { Home as HomeIcon, LucideIcon, Users } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { MAIN_NAV_ITEMS } from "settings";
 import { cn } from "@/lib/utils";
-import Accordion from "./Accordion";
+import { Accordion } from "@/components/Accordion";
 import { membershipMocks } from "mocks/membershipMocks";
-import { Avatar } from "./Avatar";
-import { Badge } from "./ui/Badge";
-import { useGlobalContext } from "@/contexts/GlobalContext";
+import { Avatar } from "@/components/Avatar";
+import { Badge } from "@/components/ui/Badge";
 const renderNavItems = (
   _items: (typeof MAIN_NAV_ITEMS)[keyof typeof MAIN_NAV_ITEMS],
 ) =>

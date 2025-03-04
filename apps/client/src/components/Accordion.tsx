@@ -45,4 +45,4 @@ const Accordion = ({ items = [], className, defaultOpen = true }: AccordionItemP
   );
 };
 
-export default Accordion;
+export { Accordion };
