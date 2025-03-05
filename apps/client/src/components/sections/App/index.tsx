@@ -3,7 +3,8 @@ import { Link, PlusIcon } from "lucide-react";
 import { postMocks } from "mocks/postMocks";
 import { PostAuthor } from "@/components/sections/Post/PostAuthor";
 import { PostCard } from "@/components/sections/Post/PostCard";
-import { Badge, Button } from "@/components/index";
+import { Badge } from "@/components/Badge";
+import { Button } from "@/components/Button";
 
 export const HomePage = () => {
   return (

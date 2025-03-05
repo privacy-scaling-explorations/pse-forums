@@ -5,7 +5,7 @@ import type React from "react";
 import { useState, useRef, useEffect } from "react";
 import { Upload } from "lucide-react";
 import { classed } from "@tw-classed/react";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/Button";
 
 const ImagePreview = classed.div(
   "size-[84px] rounded-full border border-dashed border-gray duration-200 flex items-center justify-center cursor-pointer bg-white-light hover:bg-white-dark transition-colors overflow-hidden",

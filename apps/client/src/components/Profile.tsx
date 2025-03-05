@@ -1,5 +1,5 @@
 import { useAuth } from "@/hooks/useAuth";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/Button";
 import { useState } from "react";
 import { LoginModal } from "@/components/sections/Login/LoginModal";
 
