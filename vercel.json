@@ -1,5 +1,4 @@
 {
-  "rootDirectory": "apps/client",
   "builds": [
     {
       "src": "apps/client/package.json",
