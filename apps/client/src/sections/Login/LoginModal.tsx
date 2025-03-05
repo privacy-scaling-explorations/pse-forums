@@ -1,4 +1,4 @@
-import { Modal, ModalProps } from "@/components/ui/tempModal";
+import { Modal, ModalProps } from "@/components/ui/Modal";
 
 export const LoginModal = ({ isOpen, setIsOpen }: ModalProps) => {
   return (
