@@ -9,6 +9,9 @@
     "start": "vite preview",
     "tanstack-router": "tanstack-router generate"
   },
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
     "@hazae41/option": "^1.1.4",
     "@radix-ui/react-avatar": "^1.1.2",
