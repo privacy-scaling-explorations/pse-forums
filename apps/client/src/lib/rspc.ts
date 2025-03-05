@@ -1,7 +1,7 @@
 import { createClient, FetchTransport } from "@rspc/client"
 import { createReactQueryHooks } from "@rspc/react-query"
-import { config } from "l/config"
-import { AUTH_LOCAL_STORAGE_KEY, type AuthData } from "s/atoms"
+import { AUTH_LOCAL_STORAGE_KEY, type AuthData } from "@/state/atoms"
+
 import type { Procedures } from "./bindings"
 
 export const {
@@ -20,7 +20,7 @@ export const getToken = (): string | undefined => {
 }
 
 export const rspc = createClient<Procedures>({
-  transport: new FetchTransport(`${config.serverUrl}/rspc`, (input, init) => {
+  transport: new FetchTransport(`${"http://server:3000"}/rspc`, (input, init) => {
     const token = getToken()
 
     const authHeader = {

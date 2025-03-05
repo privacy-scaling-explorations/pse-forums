@@ -1,54 +1,44 @@
-import { Link } from "@tanstack/react-router"
-import { Avatar } from "c/Avatar"
-import type { FC } from "react"
-import { Button } from "ui/button"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "ui/card"
-import { Separator } from "ui/separator"
+import { Avatar } from "@/components/Avatar";
+import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/cards/Card";
+import { Link } from "@tanstack/react-router";
+import { membershipMocks } from "mocks/membershipMocks";
+import { useState } from "react";
 
-const groups = [
-  {
-    name: "Rust",
-    id: 0,
-  },
-  {
-    name: "Dev",
-    id: 1,
-  },
-  {
-    name: "PSE",
-    id: 2,
-  },
-]
+export const Groups = () => {
+  const [showAllGroups, setShowAllGroups] = useState(false);
+  
+  const displayedGroups = showAllGroups 
+    ? membershipMocks 
+    : membershipMocks.slice(0, 3);
 
-export const Groups: FC = () => (
-  <Card className="bg-gray-50">
-    <CardHeader>
-      <CardTitle className="self-start text-xs">EXPLORE GROUPS</CardTitle>
-    </CardHeader>
-    <CardContent>
-      <div className="space-y-2">
-        {groups.map(({ name, id: iid }, i) => (
+
+  return (
+    <Card.Base className="flex flex-col gap-6 bg-white-dark border border-gray" spacing="md">
+      <Card.Title className="self-start text-xs">EXPLORE COMMUNITIES</Card.Title>
+      <div className="divide-y divide-gray">
+        {displayedGroups.map(({ name, id: iid }) => (
           <div key={iid}>
-            <div key={iid} className="flex items-center justify-between">
+            <div key={iid} className="flex items-center justify-between py-3">
               <div className="flex items-center gap-1">
                 <Avatar />
-                <span className="font-bold">{name}</span>
+                <span className="font-semibold font-inter text-black line-clamp-1">{name}</span>
               </div>
-              <Link to={`/group/${iid}`}>
+              <Link to={`/group/${iid}` as any}>
                 <Button variant="outline" size="sm">
                   Join
                 </Button>
               </Link>
             </div>
-            {i < groups.length - 1 && <Separator className="mt-2" />}
           </div>
         ))}
       </div>
-    </CardContent>
-    <CardFooter>
-      <Button variant="ghost" size="sm">
-        Show more
-      </Button>
-    </CardFooter>
-  </Card>
-)
+      <button 
+        className="!text-xs text-left"
+        onClick={() => setShowAllGroups(!showAllGroups)}
+      >
+        {showAllGroups ? 'Show less' : 'Show more'}
+      </button>
+    </Card.Base>
+  );
+};

@@ -2,15 +2,13 @@ import { Option } from "@hazae41/option"
 import { useAtom } from "jotai"
 import { RESET } from "jotai/utils"
 import { useCallback, useMemo } from "react"
-import { authAtom, type AuthData } from "s/atoms"
+import { authAtom, type AuthData } from "@/state/atoms"
 
 export function useAuth() {
   const [auth, setAuthImpl] = useAtom(authAtom)
 
   const setAuth = useCallback(
-    (auth?: AuthData) => {
-      setAuthImpl(Option.wrap(auth))
-    },
+    (auth?: AuthData) => setAuthImpl(Option.wrap(auth)),
     [setAuthImpl],
   )
 

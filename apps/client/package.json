@@ -3,6 +3,15 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "start": "vite preview",
+    "tanstack-router": "tanstack-router generate"
+  },
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
     "@hazae41/option": "^1.1.4",
     "@radix-ui/react-avatar": "^1.1.2",
@@ -22,7 +31,10 @@
     "@tanstack/react-form": "^0.41.2",
     "@tanstack/react-query": "^5.62.7",
     "@tanstack/react-query-devtools": "^5.62.7",
-    "class-variance-authority": "^0.7.1",
+    "@tanstack/react-router": "^1.106.0",
+    "@tanstack/router-generator": "^1.111.7",
+    "@tanstack/start": "^1.111.7",
+    "@tw-classed/react": "^1.8.0",
     "clsx": "^2.1.1",
     "jotai": "^2.11.3",
     "lucide-react": "^0.469.0",

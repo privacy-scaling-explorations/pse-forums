@@ -1,5 +1,5 @@
-import "katex/dist/katex.min.css"
-import { detectFormat, Format } from "l/format"
+// import "katex/dist/katex.min.css"
+import { detectFormat, Format } from "@/lib/format" 
 import type { FC } from "react"
 import Latex from "react-latex-next"
 import ReactMarkdown from "react-markdown"

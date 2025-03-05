@@ -7,14 +7,15 @@
     "skipLibCheck": true,
     "baseUrl": "src",
     "paths": {
-      "c/*": ["components/*"],
-      "h/*": ["hooks/*"],
-      "l/*": ["lib/*"],
-      "p": ["providers"],
-      "p/*": ["providers/*"],
-      "r/*": ["routes/*"],
-      "s/*": ["state/*"],
-      "ui/*": ["components/ui/*"]
+      "@/components/*": ["components/*"],
+      "@/hooks/*": ["hooks/*"],
+      "@/lib/*": ["lib/*"],
+      "@/providers/*": ["providers/*"],
+      "@/providers": ["providers"],
+      "@/routes/*": ["routes/*"],
+      "@/state/*": ["state/*"],
+      "@/contexts/*": ["contexts/*"],
+      "@/sections/*": ["sections/*"],
     },
 
     /* Bundler mode */

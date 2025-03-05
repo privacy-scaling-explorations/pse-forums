@@ -1,53 +1,100 @@
-import * as TabsPrimitive from "@radix-ui/react-tabs"
-import * as React from "react"
+import { cn } from "@/lib/utils";
+import * as TabsPrimitive from "@radix-ui/react-tabs";
 
-import { cn } from "l/utils"
+import { classed } from "@tw-classed/react";
+import { ReactNode } from "react";
 
-const Tabs = TabsPrimitive.Root
+const TabsList = classed(
+  TabsPrimitive.List,
+  "inline-flex h-10 items-center justify-center rounded-lg bg-white-light p-1 text-muted-foreground",
+  {
+    variants: {
+      size: {
+        default: "h-10",
+        sm: "h-8",
+        lg: "h-12",
+      },
+    },
+  },
+);
 
-const TabsList = React.forwardRef<
-  React.ElementRef<typeof TabsPrimitive.List>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
->(({ className, ...props }, ref) => (
-  <TabsPrimitive.List
-    ref={ref}
-    className={cn(
-      "inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground",
-      className,
-    )}
-    {...props}
-  />
-))
-TabsList.displayName = TabsPrimitive.List.displayName
+const TabsTrigger = classed(
+  TabsPrimitive.Trigger,
+  "inline-flex items-center text-black font-inter justify-center whitespace-nowrap rounded-lg px-3 py-1 ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-tabs",
+  "data-[state=inactive]:text-black-secondary data-[state=active]:shadow-none",
+  {
+    variants: {
+      bold: {
+        true: "font-bold",
+        false: "font-medium",
+      },
+      size: {
+        xs: "text-xs",
+        sm: "text-sm",
+      },
+    },
+    defaultVariants: {
+      bold: false,
+      size: "sm",
+    },
+  },
+);
 
-const TabsTrigger = React.forwardRef<
-  React.ElementRef<typeof TabsPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
->(({ className, ...props }, ref) => (
-  <TabsPrimitive.Trigger
-    ref={ref}
-    className={cn(
-      "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm",
-      className,
-    )}
-    {...props}
-  />
-))
-TabsTrigger.displayName = TabsPrimitive.Trigger.displayName
+const TabsContent = classed(
+  TabsPrimitive.Content,
+  "ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+);
 
-const TabsContent = React.forwardRef<
-  React.ElementRef<typeof TabsPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content>
->(({ className, ...props }, ref) => (
-  <TabsPrimitive.Content
-    ref={ref}
-    className={cn(
-      "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-      className,
-    )}
-    {...props}
-  />
-))
-TabsContent.displayName = TabsPrimitive.Content.displayName
+TabsContent.displayName = TabsPrimitive.Content.displayName;
+TabsList.displayName = TabsPrimitive.List.displayName;
+TabsTrigger.displayName = TabsPrimitive.Trigger.displayName;
 
-export { Tabs, TabsContent, TabsList, TabsTrigger }
+interface TabsProps extends TabsPrimitive.TabsProps {
+  size?: "sm" | "lg" | "xs";
+  defaultValue?: string;
+  items: {
+    id: string;
+    label: string;
+    content?: ReactNode;
+    onClick?: () => void;
+  }[];
+}
+
+const Tabs = ({
+  size = "sm",
+  defaultValue,
+  items = [],
+  className,
+  ...props
+}: TabsProps) => (
+  <TabsPrimitive.Root defaultValue={defaultValue} {...props}>
+    <TabsList
+      className={cn("grid w-fit", className)}
+      style={{
+        gridTemplateColumns: `repeat(${items.length}, 1fr)`,
+      }}
+    >
+      {items.map((item) => (
+        <TabsTrigger
+          key={item.id}
+          value={item.id}
+          size={size as any}
+          onClick={item?.onClick}
+        >
+          {item.label}
+        </TabsTrigger>
+      ))}
+    </TabsList>
+
+    <>
+      {items.map((item) => (
+        <TabsContent key={item.id} value={item.id}>
+          {item.content}
+        </TabsContent>
+      ))}
+    </>
+  </TabsPrimitive.Root>
+);
+
+export { Tabs };

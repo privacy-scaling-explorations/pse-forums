@@ -8,358 +8,340 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
-
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as SettingsImport } from './routes/settings'
-import { Route as LogoutImport } from './routes/logout'
-import { Route as LoginImport } from './routes/login'
-import { Route as GroupsImport } from './routes/groups'
-import { Route as UserUsernameImport } from './routes/user.$username'
-import { Route as PostCreateImport } from './routes/post/create'
-import { Route as PostPidImport } from './routes/post/$pid'
-import { Route as GroupCreateImport } from './routes/group/create'
-import { Route as GroupGidImport } from './routes/group/$gid'
-
-// Create Virtual Routes
-
-const SoloLazyImport = createFileRoute('/solo')()
-const RssLazyImport = createFileRoute('/rss')()
-const NotificationsLazyImport = createFileRoute('/notifications')()
-const IndexLazyImport = createFileRoute('/')()
-const PostIndexLazyImport = createFileRoute('/post/')()
+import { Route as LeftSidebarImport } from './routes/_left-sidebar'
+import { Route as AuthImport } from './routes/_auth'
+import { Route as AppImport } from './routes/_app'
+import { Route as AppIndexImport } from './routes/_app/index'
+import { Route as LeftSidebarSettingsImport } from './routes/_left-sidebar/settings'
+import { Route as LeftSidebarProfileImport } from './routes/_left-sidebar/profile'
+import { Route as LeftSidebarNotificationsImport } from './routes/_left-sidebar/notifications'
+import { Route as LeftSidebarCredentialsIndexImport } from './routes/_left-sidebar/credentials/index'
+import { Route as LeftSidebarCommunitiesIndexImport } from './routes/_left-sidebar/communities/index'
+import { Route as LeftSidebarPostDraftsImport } from './routes/_left-sidebar/post/drafts'
+import { Route as LeftSidebarPostCreateImport } from './routes/_left-sidebar/post/create'
+import { Route as LeftSidebarCommunitiesIdImport } from './routes/_left-sidebar/communities/$id'
+import { Route as AppPostPostIdImport } from './routes/_app/post/$postId'
 
 // Create/Update Routes
 
-const SoloLazyRoute = SoloLazyImport.update({
-  id: '/solo',
-  path: '/solo',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/solo.lazy').then((d) => d.Route))
-
-const RssLazyRoute = RssLazyImport.update({
-  id: '/rss',
-  path: '/rss',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/rss.lazy').then((d) => d.Route))
-
-const NotificationsLazyRoute = NotificationsLazyImport.update({
-  id: '/notifications',
-  path: '/notifications',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/notifications.lazy').then((d) => d.Route))
-
-const SettingsRoute = SettingsImport.update({
-  id: '/settings',
-  path: '/settings',
+const LeftSidebarRoute = LeftSidebarImport.update({
+  id: '/_left-sidebar',
   getParentRoute: () => rootRoute,
 } as any)
 
-const LogoutRoute = LogoutImport.update({
-  id: '/logout',
-  path: '/logout',
+const AuthRoute = AuthImport.update({
+  id: '/_auth',
   getParentRoute: () => rootRoute,
 } as any)
 
-const LoginRoute = LoginImport.update({
-  id: '/login',
-  path: '/login',
+const AppRoute = AppImport.update({
+  id: '/_app',
   getParentRoute: () => rootRoute,
 } as any)
 
-const GroupsRoute = GroupsImport.update({
-  id: '/groups',
-  path: '/groups',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const IndexLazyRoute = IndexLazyImport.update({
+const AppIndexRoute = AppIndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
-
-const PostIndexLazyRoute = PostIndexLazyImport.update({
-  id: '/post/',
-  path: '/post/',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/post/index.lazy').then((d) => d.Route))
-
-const UserUsernameRoute = UserUsernameImport.update({
-  id: '/user/$username',
-  path: '/user/$username',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AppRoute,
 } as any)
 
-const PostCreateRoute = PostCreateImport.update({
+const LeftSidebarSettingsRoute = LeftSidebarSettingsImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => LeftSidebarRoute,
+} as any)
+
+const LeftSidebarProfileRoute = LeftSidebarProfileImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => LeftSidebarRoute,
+} as any)
+
+const LeftSidebarNotificationsRoute = LeftSidebarNotificationsImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => LeftSidebarRoute,
+} as any)
+
+const LeftSidebarCredentialsIndexRoute =
+  LeftSidebarCredentialsIndexImport.update({
+    id: '/credentials/',
+    path: '/credentials/',
+    getParentRoute: () => LeftSidebarRoute,
+  } as any)
+
+const LeftSidebarCommunitiesIndexRoute =
+  LeftSidebarCommunitiesIndexImport.update({
+    id: '/communities/',
+    path: '/communities/',
+    getParentRoute: () => LeftSidebarRoute,
+  } as any)
+
+const LeftSidebarPostDraftsRoute = LeftSidebarPostDraftsImport.update({
+  id: '/post/drafts',
+  path: '/post/drafts',
+  getParentRoute: () => LeftSidebarRoute,
+} as any)
+
+const LeftSidebarPostCreateRoute = LeftSidebarPostCreateImport.update({
   id: '/post/create',
   path: '/post/create',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => LeftSidebarRoute,
 } as any)
 
-const PostPidRoute = PostPidImport.update({
-  id: '/post/$pid',
-  path: '/post/$pid',
-  getParentRoute: () => rootRoute,
+const LeftSidebarCommunitiesIdRoute = LeftSidebarCommunitiesIdImport.update({
+  id: '/communities/$id',
+  path: '/communities/$id',
+  getParentRoute: () => LeftSidebarRoute,
 } as any)
 
-const GroupCreateRoute = GroupCreateImport.update({
-  id: '/group/create',
-  path: '/group/create',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const GroupGidRoute = GroupGidImport.update({
-  id: '/group/$gid',
-  path: '/group/$gid',
-  getParentRoute: () => rootRoute,
+const AppPostPostIdRoute = AppPostPostIdImport.update({
+  id: '/post/$postId',
+  path: '/post/$postId',
+  getParentRoute: () => AppRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexLazyImport
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AppImport
       parentRoute: typeof rootRoute
     }
-    '/groups': {
-      id: '/groups'
-      path: '/groups'
-      fullPath: '/groups'
-      preLoaderRoute: typeof GroupsImport
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthImport
       parentRoute: typeof rootRoute
     }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginImport
+    '/_left-sidebar': {
+      id: '/_left-sidebar'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof LeftSidebarImport
       parentRoute: typeof rootRoute
     }
-    '/logout': {
-      id: '/logout'
-      path: '/logout'
-      fullPath: '/logout'
-      preLoaderRoute: typeof LogoutImport
-      parentRoute: typeof rootRoute
-    }
-    '/settings': {
-      id: '/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof SettingsImport
-      parentRoute: typeof rootRoute
-    }
-    '/notifications': {
-      id: '/notifications'
+    '/_left-sidebar/notifications': {
+      id: '/_left-sidebar/notifications'
       path: '/notifications'
       fullPath: '/notifications'
-      preLoaderRoute: typeof NotificationsLazyImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof LeftSidebarNotificationsImport
+      parentRoute: typeof LeftSidebarImport
     }
-    '/rss': {
-      id: '/rss'
-      path: '/rss'
-      fullPath: '/rss'
-      preLoaderRoute: typeof RssLazyImport
-      parentRoute: typeof rootRoute
+    '/_left-sidebar/profile': {
+      id: '/_left-sidebar/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof LeftSidebarProfileImport
+      parentRoute: typeof LeftSidebarImport
     }
-    '/solo': {
-      id: '/solo'
-      path: '/solo'
-      fullPath: '/solo'
-      preLoaderRoute: typeof SoloLazyImport
-      parentRoute: typeof rootRoute
+    '/_left-sidebar/settings': {
+      id: '/_left-sidebar/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof LeftSidebarSettingsImport
+      parentRoute: typeof LeftSidebarImport
     }
-    '/group/$gid': {
-      id: '/group/$gid'
-      path: '/group/$gid'
-      fullPath: '/group/$gid'
-      preLoaderRoute: typeof GroupGidImport
-      parentRoute: typeof rootRoute
+    '/_app/': {
+      id: '/_app/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AppIndexImport
+      parentRoute: typeof AppImport
     }
-    '/group/create': {
-      id: '/group/create'
-      path: '/group/create'
-      fullPath: '/group/create'
-      preLoaderRoute: typeof GroupCreateImport
-      parentRoute: typeof rootRoute
+    '/_app/post/$postId': {
+      id: '/_app/post/$postId'
+      path: '/post/$postId'
+      fullPath: '/post/$postId'
+      preLoaderRoute: typeof AppPostPostIdImport
+      parentRoute: typeof AppImport
     }
-    '/post/$pid': {
-      id: '/post/$pid'
-      path: '/post/$pid'
-      fullPath: '/post/$pid'
-      preLoaderRoute: typeof PostPidImport
-      parentRoute: typeof rootRoute
+    '/_left-sidebar/communities/$id': {
+      id: '/_left-sidebar/communities/$id'
+      path: '/communities/$id'
+      fullPath: '/communities/$id'
+      preLoaderRoute: typeof LeftSidebarCommunitiesIdImport
+      parentRoute: typeof LeftSidebarImport
     }
-    '/post/create': {
-      id: '/post/create'
+    '/_left-sidebar/post/create': {
+      id: '/_left-sidebar/post/create'
       path: '/post/create'
       fullPath: '/post/create'
-      preLoaderRoute: typeof PostCreateImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof LeftSidebarPostCreateImport
+      parentRoute: typeof LeftSidebarImport
     }
-    '/user/$username': {
-      id: '/user/$username'
-      path: '/user/$username'
-      fullPath: '/user/$username'
-      preLoaderRoute: typeof UserUsernameImport
-      parentRoute: typeof rootRoute
+    '/_left-sidebar/post/drafts': {
+      id: '/_left-sidebar/post/drafts'
+      path: '/post/drafts'
+      fullPath: '/post/drafts'
+      preLoaderRoute: typeof LeftSidebarPostDraftsImport
+      parentRoute: typeof LeftSidebarImport
     }
-    '/post/': {
-      id: '/post/'
-      path: '/post'
-      fullPath: '/post'
-      preLoaderRoute: typeof PostIndexLazyImport
-      parentRoute: typeof rootRoute
+    '/_left-sidebar/communities/': {
+      id: '/_left-sidebar/communities/'
+      path: '/communities'
+      fullPath: '/communities'
+      preLoaderRoute: typeof LeftSidebarCommunitiesIndexImport
+      parentRoute: typeof LeftSidebarImport
+    }
+    '/_left-sidebar/credentials/': {
+      id: '/_left-sidebar/credentials/'
+      path: '/credentials'
+      fullPath: '/credentials'
+      preLoaderRoute: typeof LeftSidebarCredentialsIndexImport
+      parentRoute: typeof LeftSidebarImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface AppRouteChildren {
+  AppIndexRoute: typeof AppIndexRoute
+  AppPostPostIdRoute: typeof AppPostPostIdRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppIndexRoute: AppIndexRoute,
+  AppPostPostIdRoute: AppPostPostIdRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
+interface LeftSidebarRouteChildren {
+  LeftSidebarNotificationsRoute: typeof LeftSidebarNotificationsRoute
+  LeftSidebarProfileRoute: typeof LeftSidebarProfileRoute
+  LeftSidebarSettingsRoute: typeof LeftSidebarSettingsRoute
+  LeftSidebarCommunitiesIdRoute: typeof LeftSidebarCommunitiesIdRoute
+  LeftSidebarPostCreateRoute: typeof LeftSidebarPostCreateRoute
+  LeftSidebarPostDraftsRoute: typeof LeftSidebarPostDraftsRoute
+  LeftSidebarCommunitiesIndexRoute: typeof LeftSidebarCommunitiesIndexRoute
+  LeftSidebarCredentialsIndexRoute: typeof LeftSidebarCredentialsIndexRoute
+}
+
+const LeftSidebarRouteChildren: LeftSidebarRouteChildren = {
+  LeftSidebarNotificationsRoute: LeftSidebarNotificationsRoute,
+  LeftSidebarProfileRoute: LeftSidebarProfileRoute,
+  LeftSidebarSettingsRoute: LeftSidebarSettingsRoute,
+  LeftSidebarCommunitiesIdRoute: LeftSidebarCommunitiesIdRoute,
+  LeftSidebarPostCreateRoute: LeftSidebarPostCreateRoute,
+  LeftSidebarPostDraftsRoute: LeftSidebarPostDraftsRoute,
+  LeftSidebarCommunitiesIndexRoute: LeftSidebarCommunitiesIndexRoute,
+  LeftSidebarCredentialsIndexRoute: LeftSidebarCredentialsIndexRoute,
+}
+
+const LeftSidebarRouteWithChildren = LeftSidebarRoute._addFileChildren(
+  LeftSidebarRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
-  '/': typeof IndexLazyRoute
-  '/groups': typeof GroupsRoute
-  '/login': typeof LoginRoute
-  '/logout': typeof LogoutRoute
-  '/settings': typeof SettingsRoute
-  '/notifications': typeof NotificationsLazyRoute
-  '/rss': typeof RssLazyRoute
-  '/solo': typeof SoloLazyRoute
-  '/group/$gid': typeof GroupGidRoute
-  '/group/create': typeof GroupCreateRoute
-  '/post/$pid': typeof PostPidRoute
-  '/post/create': typeof PostCreateRoute
-  '/user/$username': typeof UserUsernameRoute
-  '/post': typeof PostIndexLazyRoute
+  '': typeof LeftSidebarRouteWithChildren
+  '/notifications': typeof LeftSidebarNotificationsRoute
+  '/profile': typeof LeftSidebarProfileRoute
+  '/settings': typeof LeftSidebarSettingsRoute
+  '/': typeof AppIndexRoute
+  '/post/$postId': typeof AppPostPostIdRoute
+  '/communities/$id': typeof LeftSidebarCommunitiesIdRoute
+  '/post/create': typeof LeftSidebarPostCreateRoute
+  '/post/drafts': typeof LeftSidebarPostDraftsRoute
+  '/communities': typeof LeftSidebarCommunitiesIndexRoute
+  '/credentials': typeof LeftSidebarCredentialsIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexLazyRoute
-  '/groups': typeof GroupsRoute
-  '/login': typeof LoginRoute
-  '/logout': typeof LogoutRoute
-  '/settings': typeof SettingsRoute
-  '/notifications': typeof NotificationsLazyRoute
-  '/rss': typeof RssLazyRoute
-  '/solo': typeof SoloLazyRoute
-  '/group/$gid': typeof GroupGidRoute
-  '/group/create': typeof GroupCreateRoute
-  '/post/$pid': typeof PostPidRoute
-  '/post/create': typeof PostCreateRoute
-  '/user/$username': typeof UserUsernameRoute
-  '/post': typeof PostIndexLazyRoute
+  '': typeof LeftSidebarRouteWithChildren
+  '/notifications': typeof LeftSidebarNotificationsRoute
+  '/profile': typeof LeftSidebarProfileRoute
+  '/settings': typeof LeftSidebarSettingsRoute
+  '/': typeof AppIndexRoute
+  '/post/$postId': typeof AppPostPostIdRoute
+  '/communities/$id': typeof LeftSidebarCommunitiesIdRoute
+  '/post/create': typeof LeftSidebarPostCreateRoute
+  '/post/drafts': typeof LeftSidebarPostDraftsRoute
+  '/communities': typeof LeftSidebarCommunitiesIndexRoute
+  '/credentials': typeof LeftSidebarCredentialsIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexLazyRoute
-  '/groups': typeof GroupsRoute
-  '/login': typeof LoginRoute
-  '/logout': typeof LogoutRoute
-  '/settings': typeof SettingsRoute
-  '/notifications': typeof NotificationsLazyRoute
-  '/rss': typeof RssLazyRoute
-  '/solo': typeof SoloLazyRoute
-  '/group/$gid': typeof GroupGidRoute
-  '/group/create': typeof GroupCreateRoute
-  '/post/$pid': typeof PostPidRoute
-  '/post/create': typeof PostCreateRoute
-  '/user/$username': typeof UserUsernameRoute
-  '/post/': typeof PostIndexLazyRoute
+  '/_app': typeof AppRouteWithChildren
+  '/_auth': typeof AuthRoute
+  '/_left-sidebar': typeof LeftSidebarRouteWithChildren
+  '/_left-sidebar/notifications': typeof LeftSidebarNotificationsRoute
+  '/_left-sidebar/profile': typeof LeftSidebarProfileRoute
+  '/_left-sidebar/settings': typeof LeftSidebarSettingsRoute
+  '/_app/': typeof AppIndexRoute
+  '/_app/post/$postId': typeof AppPostPostIdRoute
+  '/_left-sidebar/communities/$id': typeof LeftSidebarCommunitiesIdRoute
+  '/_left-sidebar/post/create': typeof LeftSidebarPostCreateRoute
+  '/_left-sidebar/post/drafts': typeof LeftSidebarPostDraftsRoute
+  '/_left-sidebar/communities/': typeof LeftSidebarCommunitiesIndexRoute
+  '/_left-sidebar/credentials/': typeof LeftSidebarCredentialsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
-    | '/groups'
-    | '/login'
-    | '/logout'
-    | '/settings'
+    | ''
     | '/notifications'
-    | '/rss'
-    | '/solo'
-    | '/group/$gid'
-    | '/group/create'
-    | '/post/$pid'
+    | '/profile'
+    | '/settings'
+    | '/'
+    | '/post/$postId'
+    | '/communities/$id'
     | '/post/create'
-    | '/user/$username'
-    | '/post'
+    | '/post/drafts'
+    | '/communities'
+    | '/credentials'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
-    | '/groups'
-    | '/login'
-    | '/logout'
-    | '/settings'
+    | ''
     | '/notifications'
-    | '/rss'
-    | '/solo'
-    | '/group/$gid'
-    | '/group/create'
-    | '/post/$pid'
+    | '/profile'
+    | '/settings'
+    | '/'
+    | '/post/$postId'
+    | '/communities/$id'
     | '/post/create'
-    | '/user/$username'
-    | '/post'
+    | '/post/drafts'
+    | '/communities'
+    | '/credentials'
   id:
     | '__root__'
-    | '/'
-    | '/groups'
-    | '/login'
-    | '/logout'
-    | '/settings'
-    | '/notifications'
-    | '/rss'
-    | '/solo'
-    | '/group/$gid'
-    | '/group/create'
-    | '/post/$pid'
-    | '/post/create'
-    | '/user/$username'
-    | '/post/'
+    | '/_app'
+    | '/_auth'
+    | '/_left-sidebar'
+    | '/_left-sidebar/notifications'
+    | '/_left-sidebar/profile'
+    | '/_left-sidebar/settings'
+    | '/_app/'
+    | '/_app/post/$postId'
+    | '/_left-sidebar/communities/$id'
+    | '/_left-sidebar/post/create'
+    | '/_left-sidebar/post/drafts'
+    | '/_left-sidebar/communities/'
+    | '/_left-sidebar/credentials/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexLazyRoute: typeof IndexLazyRoute
-  GroupsRoute: typeof GroupsRoute
-  LoginRoute: typeof LoginRoute
-  LogoutRoute: typeof LogoutRoute
-  SettingsRoute: typeof SettingsRoute
-  NotificationsLazyRoute: typeof NotificationsLazyRoute
-  RssLazyRoute: typeof RssLazyRoute
-  SoloLazyRoute: typeof SoloLazyRoute
-  GroupGidRoute: typeof GroupGidRoute
-  GroupCreateRoute: typeof GroupCreateRoute
-  PostPidRoute: typeof PostPidRoute
-  PostCreateRoute: typeof PostCreateRoute
-  UserUsernameRoute: typeof UserUsernameRoute
-  PostIndexLazyRoute: typeof PostIndexLazyRoute
+  AppRoute: typeof AppRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  LeftSidebarRoute: typeof LeftSidebarRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexLazyRoute: IndexLazyRoute,
-  GroupsRoute: GroupsRoute,
-  LoginRoute: LoginRoute,
-  LogoutRoute: LogoutRoute,
-  SettingsRoute: SettingsRoute,
-  NotificationsLazyRoute: NotificationsLazyRoute,
-  RssLazyRoute: RssLazyRoute,
-  SoloLazyRoute: SoloLazyRoute,
-  GroupGidRoute: GroupGidRoute,
-  GroupCreateRoute: GroupCreateRoute,
-  PostPidRoute: PostPidRoute,
-  PostCreateRoute: PostCreateRoute,
-  UserUsernameRoute: UserUsernameRoute,
-  PostIndexLazyRoute: PostIndexLazyRoute,
+  AppRoute: AppRouteWithChildren,
+  AuthRoute: AuthRoute,
+  LeftSidebarRoute: LeftSidebarRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -372,63 +354,73 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
-        "/groups",
-        "/login",
-        "/logout",
-        "/settings",
-        "/notifications",
-        "/rss",
-        "/solo",
-        "/group/$gid",
-        "/group/create",
-        "/post/$pid",
-        "/post/create",
-        "/user/$username",
-        "/post/"
+        "/_app",
+        "/_auth",
+        "/_left-sidebar"
       ]
     },
-    "/": {
-      "filePath": "index.lazy.tsx"
+    "/_app": {
+      "filePath": "_app.tsx",
+      "children": [
+        "/_app/",
+        "/_app/post/$postId"
+      ]
     },
-    "/groups": {
-      "filePath": "groups.tsx"
+    "/_auth": {
+      "filePath": "_auth.tsx"
     },
-    "/login": {
-      "filePath": "login.tsx"
+    "/_left-sidebar": {
+      "filePath": "_left-sidebar.tsx",
+      "children": [
+        "/_left-sidebar/notifications",
+        "/_left-sidebar/profile",
+        "/_left-sidebar/settings",
+        "/_left-sidebar/communities/$id",
+        "/_left-sidebar/post/create",
+        "/_left-sidebar/post/drafts",
+        "/_left-sidebar/communities/",
+        "/_left-sidebar/credentials/"
+      ]
     },
-    "/logout": {
-      "filePath": "logout.tsx"
+    "/_left-sidebar/notifications": {
+      "filePath": "_left-sidebar/notifications.tsx",
+      "parent": "/_left-sidebar"
     },
-    "/settings": {
-      "filePath": "settings.tsx"
+    "/_left-sidebar/profile": {
+      "filePath": "_left-sidebar/profile.tsx",
+      "parent": "/_left-sidebar"
     },
-    "/notifications": {
-      "filePath": "notifications.lazy.tsx"
+    "/_left-sidebar/settings": {
+      "filePath": "_left-sidebar/settings.tsx",
+      "parent": "/_left-sidebar"
     },
-    "/rss": {
-      "filePath": "rss.lazy.tsx"
+    "/_app/": {
+      "filePath": "_app/index.tsx",
+      "parent": "/_app"
     },
-    "/solo": {
-      "filePath": "solo.lazy.tsx"
+    "/_app/post/$postId": {
+      "filePath": "_app/post/$postId.tsx",
+      "parent": "/_app"
     },
-    "/group/$gid": {
-      "filePath": "group/$gid.tsx"
+    "/_left-sidebar/communities/$id": {
+      "filePath": "_left-sidebar/communities/$id.tsx",
+      "parent": "/_left-sidebar"
     },
-    "/group/create": {
-      "filePath": "group/create.tsx"
+    "/_left-sidebar/post/create": {
+      "filePath": "_left-sidebar/post/create.tsx",
+      "parent": "/_left-sidebar"
     },
-    "/post/$pid": {
-      "filePath": "post/$pid.tsx"
+    "/_left-sidebar/post/drafts": {
+      "filePath": "_left-sidebar/post/drafts.tsx",
+      "parent": "/_left-sidebar"
     },
-    "/post/create": {
-      "filePath": "post/create.tsx"
+    "/_left-sidebar/communities/": {
+      "filePath": "_left-sidebar/communities/index.tsx",
+      "parent": "/_left-sidebar"
     },
-    "/user/$username": {
-      "filePath": "user.$username.tsx"
-    },
-    "/post/": {
-      "filePath": "post/index.lazy.tsx"
+    "/_left-sidebar/credentials/": {
+      "filePath": "_left-sidebar/credentials/index.tsx",
+      "parent": "/_left-sidebar"
     }
   }
 }

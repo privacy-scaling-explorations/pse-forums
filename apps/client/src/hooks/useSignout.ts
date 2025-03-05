@@ -1,5 +1,5 @@
 import { useNavigate } from "@tanstack/react-router"
-import { useAuth } from "h/useAuth"
+import { useAuth } from "@/hooks/useAuth"
 import { useCallback } from "react"
 
 export const useSignout = () => {

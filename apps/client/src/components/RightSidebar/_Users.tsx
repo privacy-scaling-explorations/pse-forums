@@ -1,6 +1,6 @@
-import { Link } from "@tanstack/react-router"
-import { Avatar } from "c/Avatar"
-import { Card, CardContent, CardHeader, CardTitle } from "ui/card"
+import { Link } from "@tanstack/react-router";
+import { Avatar } from "@/components/Avatar";
+import { Card } from "@/components/cards/Card";
 
 const users = [
   {
@@ -67,21 +67,17 @@ const users = [
     username: "p",
     userId: 16,
   },
-]
+];
 
 export const Users = () => (
-  <Card className="bg-gray-50">
-    <CardHeader>
-      <CardTitle className="self-start text-xs">ACTIVE USERS</CardTitle>
-    </CardHeader>
-    <CardContent>
-      <div className="grid grid-cols-6 gap-2">
-        {users.map(({ userId, username }) => (
-          <Link to={`/user/${userId}`} key={userId}>
-            <Avatar username={username} />
-          </Link>
-        ))}
-      </div>
-    </CardContent>
-  </Card>
-)
+  <Card.Base className="bg-white-dark border border-gray" rounded="md">
+    <Card.Title className="self-start text-xs">ACTIVE USERS</Card.Title>
+    <div className="grid grid-cols-4 gap-2 ">
+      {users.map(({ userId, username }) => (
+        <Link to={`/user/${userId}` as any} key={userId}>
+          <Avatar username={username} className="w-full aspect-square size-10" />
+        </Link>
+      ))}
+    </div>
+  </Card.Base>
+);

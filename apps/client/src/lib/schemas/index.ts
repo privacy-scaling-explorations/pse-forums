@@ -1,9 +1,9 @@
-import { aboutSchema, descriptionSchema } from "l/schemas/about"
-import { contentSchema } from "l/schemas/content"
-import { passwordSchema } from "l/schemas/password"
-import { nameSchema, titleSchema } from "l/schemas/title"
-import { urlSchema } from "l/schemas/url"
-import { usernameSchema } from "l/schemas/username"
+import { aboutSchema, descriptionSchema } from "@/lib/schemas/about"
+import { contentSchema } from "@/lib/schemas/content"
+import { passwordSchema } from "@/lib/schemas/password"
+import { nameSchema, titleSchema } from "@/lib/schemas/title"
+import { urlSchema } from "@/lib/schemas/url"
+import { usernameSchema } from "@/lib/schemas/username"
 import { z } from "zod"
 
 export const basicInfoSchema = z
