@@ -61,7 +61,7 @@ interface TabsProps extends TabsPrimitive.TabsProps {
   }[];
 }
 
-export const Tabs = ({
+const Tabs = ({
   size = "sm",
   defaultValue,
   items = [],
@@ -96,3 +96,5 @@ export const Tabs = ({
     </>
   </TabsPrimitive.Root>
 );
+
+export { Tabs };

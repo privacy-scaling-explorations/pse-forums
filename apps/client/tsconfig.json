@@ -15,7 +15,6 @@
       "@/routes/*": ["routes/*"],
       "@/state/*": ["state/*"],
       "@/contexts/*": ["contexts/*"],
-      "@/ui/*": ["components/ui/*"]
     }
   }
 }

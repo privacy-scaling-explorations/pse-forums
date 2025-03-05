@@ -1,7 +1,7 @@
 import { classed } from "@tw-classed/react";
 import { type VariantProps } from "class-variance-authority";
 import { LucideIcon } from "lucide-react";
-import { ReactNode } from "react";
+import { forwardRef, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 export interface InputWrapperProps {
@@ -51,7 +51,7 @@ interface InputProps extends VariantProps<typeof InputBase>, InputWrapperProps {
   className?: string;
 }
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
+const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ icon, label, description, containerClassName, className, ...props }, ref) => {
     const Icon = icon;
     return (
