@@ -1,11 +1,11 @@
 import { PageContent } from "@/components/PageContent";
-import { Link, PlusIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import { postMocks } from "mocks/postMocks";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { PostAuthor } from "@/sections/Post/PostAuthor";
 import { PostCard } from "@/sections/Post/PostCard";
-
+import { Link } from "@tanstack/react-router";
 export const HomePage = () => {
   return (
     <PageContent className="flex flex-col gap-6">
