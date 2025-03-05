@@ -1,5 +1,5 @@
 import { PageContent } from "@/components/PageContent";
-import { Button } from "@/components/ui/tempButton";
+import { Button } from "@/components/ui/Button";
 import { Avatar } from "@radix-ui/react-avatar";
 import { useParams } from "@tanstack/react-router";
 import { UserPlusIcon, PlusIcon, Badge } from "lucide-react";
@@ -7,7 +7,7 @@ import { membershipMocks } from "mocks/membershipMocks";
 import { postMocks } from "mocks/postMocks";
 import { PostAuthor } from "../Post/PostAuthor";
 import { PostCard } from "../Post/PostCard";
-import { Tabs } from "@/components/ui/tempTabs";
+import { Tabs } from "@/components/ui/Tabs";
 
 export const CommunityPage = () => {
     const communityParams = useParams({ from: "/_left-sidebar/communities/$id" });

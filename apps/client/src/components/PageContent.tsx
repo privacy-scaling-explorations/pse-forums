@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Labels } from "@/components/ui/tempLabels";
+import { Labels } from "@/components/ui/Labels";
 import { LucideIcon } from "lucide-react";
 import EmptyState from "@/components/ui/EmptyState";
 import { cn } from "@/lib/utils";

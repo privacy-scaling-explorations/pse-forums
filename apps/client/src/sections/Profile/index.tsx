@@ -1,11 +1,11 @@
 import { cn } from "@/lib/utils";
-import { Labels } from "@/components/ui/tempLabels";
+import { Labels } from "@/components/ui/Labels";
 import { Avatar } from "@/components/Avatar";
-import { Badge } from "@/components/ui/tempBadge";
-import { Button } from "@/components/ui/tempButton";
+import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { Pen as PenIcon, LogOut as LogOutIcon } from "lucide-react";
 import { PageContent } from "@/components/PageContent";
-import { Banner } from "@/components/ui/tempBanner";
+import { Banner } from "@/components/ui/Banner";
 
 const InfoCard = ({
   label,

@@ -1,5 +1,5 @@
 import { PageContent } from "@/components/PageContent";
-import { Tabs } from "@/components/ui/tempTabs";
+import { Tabs } from "@/components/ui/Tabs";
 import { AllCommunities } from "./_AllCommunities";
 
 enum CommunityTabs {
