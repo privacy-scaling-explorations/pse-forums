@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { PostAuthor } from "@/sections/Post/PostAuthor";
 import { PostCard } from "@/sections/Post/PostCard";
 import { Link } from "@tanstack/react-router";
+
 export const HomePage = () => {
   return (
     <PageContent className="flex flex-col gap-6">
