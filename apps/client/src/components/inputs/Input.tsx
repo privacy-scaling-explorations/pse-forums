@@ -48,10 +48,11 @@ export const InputBase = classed.input(
 interface InputProps extends VariantProps<typeof InputBase>, InputWrapperProps {
   icon?: LucideIcon;
   className?: string;
+  placeholder?: string;
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ icon, label, description, containerClassName, className, ...props }, ref) => {
+  ({ icon, label, description, containerClassName, className, placeholder, ...props }, ref) => {
     const Icon = icon;
     return (
       <InputWrapper
@@ -59,7 +60,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         description={description}
         containerClassName={containerClassName}
       >
-        <InputBase ref={ref} {...props} withIcon={!!icon} />
+        <InputBase ref={ref} {...props} withIcon={!!icon} placeholder={placeholder} />
         {Icon && (
           <Icon className="absolute left-2 top-2.5 h-4 w-4 text-black-secondary" />
         )}

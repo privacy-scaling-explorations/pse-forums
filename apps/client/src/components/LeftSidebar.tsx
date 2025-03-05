@@ -4,13 +4,13 @@ import { Signout } from "@/components/Signout";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@/lib/rspc";
 import { Home as HomeIcon, LucideIcon, Users } from "lucide-react";
-import { Button } from "@/components/Button";
+import { Button } from "@/components/ui/Button";
 import { MAIN_NAV_ITEMS } from "settings";
 import { cn } from "@/lib/utils";
 import { Accordion } from "@/components/Accordion";
 import { membershipMocks } from "mocks/membershipMocks";
 import { Avatar } from "@/components/Avatar";
-import { Badge } from "@/components/Badge";
+import { Badge } from "@/components/ui/Badge";
 const renderNavItems = (
   _items: (typeof MAIN_NAV_ITEMS)[keyof typeof MAIN_NAV_ITEMS],
 ) =>

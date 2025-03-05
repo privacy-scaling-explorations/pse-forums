@@ -15,6 +15,7 @@
       "@/routes/*": ["routes/*"],
       "@/state/*": ["state/*"],
       "@/contexts/*": ["contexts/*"],
+      "@/sections/*": ["sections/*"],
     }
   }
 }

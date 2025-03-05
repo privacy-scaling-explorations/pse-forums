@@ -1,4 +1,4 @@
-import { Button } from "@/components/Button";
+import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/cards/Card";
 import { classed } from "@tw-classed/react";
 

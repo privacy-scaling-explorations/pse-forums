@@ -1,5 +1,5 @@
 import { PageContent } from "@/components/PageContent";
-import { Button } from "@/components/Button";
+import { Button } from "@/components/ui/Button";
 import { Avatar } from "@radix-ui/react-avatar";
 import { useParams } from "@tanstack/react-router";
 import { UserPlusIcon, PlusIcon, Badge } from "lucide-react";

@@ -9,7 +9,7 @@ import { capitalize } from "@/lib/format";
 import { getToken, rspc } from "@/lib/rspc";
 import { type CreatePostSchema, createPostSchema } from "@/lib/schemas";
 import type { FormEvent } from "react";
-import { Button } from "@/components/Button";
+import { Button } from "@/components/ui/Button";
 import { useLoaderData } from "@tanstack/react-router";
 import { Textarea } from "@/components/inputs/Textarea";
 import { router } from "@/lib/router";

@@ -4,8 +4,8 @@ import { Content } from "@/components/Content";
 import { useGetPostById } from "@/hooks/usePosts";
 import { Smile as SmileIcon, MessageSquare as MessageSquareIcon } from 'lucide-react';
 import { PageContent } from "@/components/PageContent";
-import { PostAuthor } from "@/components/sections/Post/PostAuthor";
-import { PostCard } from "@/components/sections/Post/PostCard";
+import { PostAuthor } from "@/sections/Post/PostAuthor";
+import { PostCard } from "@/sections/Post/PostCard";
 
 
 

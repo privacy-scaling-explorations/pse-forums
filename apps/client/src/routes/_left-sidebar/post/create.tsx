@@ -1,4 +1,4 @@
-import { PostCreate } from "@/components/sections/Post/PostCreate";
+import { PostCreate } from "@/sections/Post/PostCreate";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_left-sidebar/post/create")({

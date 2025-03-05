@@ -1,4 +1,4 @@
-import { CommunityPage } from "@/components/sections/Communities/CommunityPage";
+import { CommunityPage } from "@/sections/Communities/CommunityPage";
 
 import { createFileRoute } from "@tanstack/react-router";
 

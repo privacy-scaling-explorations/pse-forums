@@ -1,7 +1,7 @@
 import { useAuth } from "@/hooks/useAuth";
-import { Button } from "@/components/Button";
+import { Button } from "@/components/ui/Button";
 import { useState } from "react";
-import { LoginModal } from "@/components/sections/Login/LoginModal";
+import { LoginModal } from "@/sections/Login/LoginModal";
 
 export function Profile() {
   const { auth, setAuth } = useAuth();

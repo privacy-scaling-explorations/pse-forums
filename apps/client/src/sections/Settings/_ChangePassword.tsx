@@ -1,12 +1,12 @@
 import { Card } from "@/components/cards/Card";
 import { Input } from "@/components/inputs/Input";
-import { Button } from "@/components/Button";
+import { Button } from "@/components/ui/Button";
 
-export const RecoveryCode = () => {
+export const ChangePassword = () => {
   return (
     <Card.Base className="flex flex-col gap-6">
       <div className="flex flex-col gap-1">
-        <Card.Title>Recovery code</Card.Title>
+        <Card.Title>Change password</Card.Title>
 
         <Card.Description>
           Update your password to keep your account secure.
@@ -14,12 +14,20 @@ export const RecoveryCode = () => {
       </div>
       <div className="flex flex-col gap-4">
         <Input
-          label="Password"
-          description="You must input your password to generate or reset your recovery code."
+          label="Old password"
+          placeholder="Enter your current password."
+        />
+        <Input
+          label="New password"
+          placeholder="Choose a strong new password."
+        />
+        <Input
+          label="Re-enter password"
+          placeholder="Confirm your new password."
         />
       </div>
       <div className="py-4 flex justify-end">
-        <Button>Generate recovery code</Button>
+        <Button>Save</Button>
       </div>
     </Card.Base>
   );

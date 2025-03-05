@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils";
 import { Labels } from "@/components/ui/Labels";
 import { Avatar } from "@/components/Avatar";
-import { Badge } from "@/components/Badge";
-import { Button } from "@/components/Button";
+import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { Pen as PenIcon, LogOut as LogOutIcon } from "lucide-react";
 import { PageContent } from "@/components/PageContent";
 import { Banner } from "@/components/ui/Banner";

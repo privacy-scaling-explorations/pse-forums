@@ -1,4 +1,4 @@
-import { CommunitiesPage } from '@/components/sections/Communities'
+import { CommunitiesPage } from '@/sections/Communities'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_left-sidebar/communities/')({
