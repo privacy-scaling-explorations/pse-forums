@@ -1,7 +1,7 @@
 import { PageContent } from "@/components/PageContent";
 import { router } from "@/lib/router";
 import { PencilLine as PencilLineIcon } from "lucide-react";
-import { Tabs } from "@/components/ui/Tabs";
+import { Tabs } from "@/components/ui/tempTabs";
 
 export const PostDrafts = () => {
   return (

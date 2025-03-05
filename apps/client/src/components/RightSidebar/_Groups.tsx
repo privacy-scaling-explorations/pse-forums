@@ -1,5 +1,5 @@
 import { Avatar } from "@/components/Avatar";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/tempButton";
 import { Card } from "@/components/cards/Card";
 import { Link } from "@tanstack/react-router";
 import { membershipMocks } from "mocks/membershipMocks";

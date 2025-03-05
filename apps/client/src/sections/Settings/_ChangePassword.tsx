@@ -1,6 +1,6 @@
 import { Card } from "@/components/cards/Card";
 import { Input } from "@/components/inputs/Input";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/tempButton";
 
 export const ChangePassword = () => {
   return (

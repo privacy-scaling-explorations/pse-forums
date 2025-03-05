@@ -2,7 +2,7 @@ import { Card } from "@/components/cards/Card";
 import { Input } from "@/components/inputs/Input";
 import { Select } from "@/components/inputs/Select";
 import { Textarea } from "@/components/inputs/Textarea";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/tempButton";
 
 export const BasicInfo = () => {
   return (

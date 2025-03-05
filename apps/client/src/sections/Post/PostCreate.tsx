@@ -2,14 +2,14 @@ import {
   Select,
 } from "@/components/inputs/Select";
 import { Input } from "@/components/inputs/Input";
-import { Tabs } from "@/components/ui/Tabs";
+import { Tabs } from "@/components/ui/tempTabs";
 import { useField, useForm } from "@tanstack/react-form";
 import { FieldInfo } from "@/components/FieldInfo";
 import { capitalize } from "@/lib/format";
 import { getToken, rspc } from "@/lib/rspc";
 import { type CreatePostSchema, createPostSchema } from "@/lib/schemas";
 import type { FormEvent } from "react";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/tempButton";
 import { useLoaderData } from "@tanstack/react-router";
 import { Textarea } from "@/components/inputs/Textarea";
 import { router } from "@/lib/router";
