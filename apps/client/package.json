@@ -7,8 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "start": "vite preview",
-    "tanstack-router": "tanstack-router generate",
-    "postinstall": "pnpm rebuild @swc/core"
+    "tanstack-router": "tanstack-router generate"
   },
   "engines": {
     "node": ">=20"
