@@ -1,7 +1,7 @@
 import { type VariantProps } from "class-variance-authority";
 import { classed } from "@tw-classed/react";
-import * as React from "react";
 import { LucideIcon } from "lucide-react";
+import { ButtonHTMLAttributes, forwardRef } from "react";
 
 const ButtonComponent = classed.button(
   "cursor-pointer inline-flex items-center justify-center gap-2 whitespace-nowrap font-inter rounded-md text-sm font-normal ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
@@ -35,14 +35,14 @@ const ButtonComponent = classed.button(
 );
 
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof ButtonComponent> {
   asChild?: boolean;
   icon?: LucideIcon;
   className?: string;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, asChild = false, icon, ...props }, ref) => {
     const Icon = icon;
     return (

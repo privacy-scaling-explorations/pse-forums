@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import { useMemo } from "react";
 import { classed } from "@tw-classed/react";
-import { Tooltip } from "@/components/ui/Tooltip";
+import { Tooltip } from "@/components/ui/Tooltips";
 import { cn } from "@/lib/utils";
 import { TooltipTrigger } from "@radix-ui/react-tooltip";
 type TimeSinceProps = {

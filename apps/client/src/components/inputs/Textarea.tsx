@@ -1,13 +1,13 @@
-import * as React from "react";
 
 import { classed } from "@tw-classed/react";
 import { InputBase, InputWrapper, InputWrapperProps } from "@/components/inputs/Input";
+import { ComponentPropsWithoutRef, forwardRef } from "react";
 
 const TextareaBase = classed.textarea("!py-2 !px-3", InputBase);
 
-const Textarea = React.forwardRef<
+const Textarea = forwardRef<
   HTMLTextAreaElement,
-  React.ComponentProps<"textarea"> & InputWrapperProps
+  ComponentPropsWithoutRef<"textarea"> & InputWrapperProps
 >(({ label, containerClassName, rows = 4, ...props }, ref) => {
   return (
     <InputWrapper label={label} containerClassName={containerClassName}>
