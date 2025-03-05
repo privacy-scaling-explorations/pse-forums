@@ -1,5 +1,3 @@
-import * as React from "react"
-
 import { classed, VariantProps } from "@tw-classed/react"
 
 const BadgeBase = classed.div(

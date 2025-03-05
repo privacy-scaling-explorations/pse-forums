@@ -1,5 +1,3 @@
-import * as React from "react";
-
 import { classed } from "@tw-classed/react";
 import { type VariantProps } from "class-variance-authority";
 import { LucideIcon } from "lucide-react";
