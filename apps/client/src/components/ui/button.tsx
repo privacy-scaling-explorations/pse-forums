@@ -1,5 +1,4 @@
-import { type VariantProps } from "class-variance-authority";
-import { classed } from "@tw-classed/react";
+import { classed, VariantProps } from "@tw-classed/react";
 import { LucideIcon } from "lucide-react";
 import { ButtonHTMLAttributes, forwardRef } from "react";
 

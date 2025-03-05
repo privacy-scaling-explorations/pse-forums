@@ -36,7 +36,6 @@
     "@tanstack/router-generator": "^1.111.7",
     "@tanstack/start": "^1.111.7",
     "@tw-classed/react": "^1.8.0",
-    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "jotai": "^2.11.3",
     "lucide-react": "^0.469.0",
