@@ -14,7 +14,8 @@
       "@/providers": ["providers"],
       "@/routes/*": ["routes/*"],
       "@/state/*": ["state/*"],
-      "@/contexts/*": ["contexts/*"]
+      "@/contexts/*": ["contexts/*"],
+      "@/ui/*": ["components/ui/*"]
     }
   }
 }

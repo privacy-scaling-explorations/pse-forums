@@ -8,6 +8,7 @@
     "baseUrl": "src",
     "paths": {
       "@/components/*": ["components/*"],
+      "@/ui/*": ["components/ui/*"],
       "@/hooks/*": ["hooks/*"],
       "@/lib/*": ["lib/*"],
       "@/providers/*": ["providers/*"],
