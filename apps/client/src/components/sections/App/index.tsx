@@ -1,10 +1,9 @@
 import { PageContent } from "@/components/PageContent";
-import { Button } from "@/components/ui/Button";
 import { Link, PlusIcon } from "lucide-react";
 import { postMocks } from "mocks/postMocks";
 import { PostAuthor } from "@/components/sections/Post/PostAuthor";
 import { PostCard } from "@/components/sections/Post/PostCard";
-import { Badge } from "@/components/ui/Badge";
+import { Badge, Button } from "@/components/index";
 
 export const HomePage = () => {
   return (
