@@ -1,5 +1,5 @@
 import { PageContent } from "@/components/PageContent";
-import { Button } from "@/components/ui/Button";
+import { Button } from "./../../ui/Button";
 import { Link, PlusIcon } from "lucide-react";
 import { postMocks } from "mocks/postMocks";
 import { PostAuthor } from "@/components/sections/Post/PostAuthor";
