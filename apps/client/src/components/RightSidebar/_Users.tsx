@@ -70,7 +70,7 @@ const users = [
 ];
 
 export const Users = () => (
-  <Card.Base className="bg-white-dark border border-gray" rounded="md">
+  <Card.Base className="bg-sidebar-background border border-sidebar-border" rounded="md">
     <Card.Title className="self-start text-xs">ACTIVE USERS</Card.Title>
     <div className="grid grid-cols-4 gap-2 ">
       {users.map(({ userId, username }) => (

@@ -4,21 +4,26 @@ const BannerBase = classed.div(
   "rounded-md p-4",
 );
 
-const BannerLabel = classed.span("font-inter font-normal text-xs", {
+const BannerLabel = classed.span("font-inter font-normal ", {
   variants: {
     variant: {
-      error: "text-[#DC2626] opacity-90",
+      error: "text-banner-error opacity-90",
     },
+    size: {
+      xs: "text-xs",
+      sm: "text-sm",
+    }
   },
   defaultVariants: {
     variant: "error",
+    size: "xs",
   },
 });
 
 const BannerComponent = classed(BannerBase, {
   variants: {
     variant: {
-      error: "bg-[#FEE2E2] border border-[#DC2626]",
+      error: "bg-banner-error-foreground border border-banner-error",
     },
   },
   defaultVariants: {

@@ -40,9 +40,10 @@ export type CreateGroupSchema = z.infer<typeof createGroupSchema>
 
 export const createPostSchema = z.object({
   content: contentSchema,
-  gid: z.number().int().positive(),
+  gid: z.number().int().positive().nullable(),
   title: titleSchema,
-  // tags: z.array(z.string()).min(1), // TODO
+  tags: z.array(z.string()).min(0), 
+  postAsAnonymous: z.boolean().optional(),
 })
 export type CreatePostSchema = z.infer<typeof createPostSchema>
 

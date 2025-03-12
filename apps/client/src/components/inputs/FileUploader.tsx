@@ -17,7 +17,6 @@ export const FileUploader = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    // Clean up the object URL when component unmounts or when a new file is selected
     return () => {
       if (previewUrl) {
         URL.revokeObjectURL(previewUrl);
@@ -30,12 +29,10 @@ export const FileUploader = () => {
       const file = e.target.files[0];
       setSelectedFile(file);
 
-      // Clean up previous preview URL if it exists
       if (previewUrl) {
         URL.revokeObjectURL(previewUrl);
       }
 
-      // Create a preview URL for image files
       if (file.type.startsWith("image/")) {
         const url = URL.createObjectURL(file);
         setPreviewUrl(url);
@@ -51,7 +48,6 @@ export const FileUploader = () => {
       return;
     }
 
-    // Here you would typically handle the file upload to your server
     console.log("Uploading file:", selectedFile);
 
     // Example implementation:
@@ -69,7 +65,6 @@ export const FileUploader = () => {
 
   return (
     <div className="flex items-center gap-4">
-      {/* Circular upload area with image preview */}
       <ImagePreview onClick={handleCircleClick}>
         {previewUrl ? (
           <img
@@ -96,8 +91,8 @@ export const FileUploader = () => {
             htmlFor="file-upload"
             className="flex items-center w-full px-3 py-1 text-sm rounded-md border border-[#E4E4E7] cursor-pointer gap-2 lg:min-w-[370px]"
           >
-            <span className="font-medium text-black">Choose file</span>
-            <span className="text-black font-normal">
+            <span className="font-medium text-base-foreground">Choose file</span>
+            <span className="text-base-foreground font-normal">
               {selectedFile ? selectedFile.name : "No file chosen"}
             </span>
           </label>
@@ -107,7 +102,6 @@ export const FileUploader = () => {
           <Button icon={Upload} onClick={handleUpload}>
             Upload
           </Button>
-
         </div>
       </div>
     </div>

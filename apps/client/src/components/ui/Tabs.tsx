@@ -6,7 +6,7 @@ import { ReactNode } from "react";
 
 const TabsList = classed(
   TabsPrimitive.List,
-  "inline-flex h-10 items-center justify-center rounded-lg bg-white-light p-1 text-muted-foreground",
+  "inline-flex min-h-10 items-center justify-center rounded-lg bg-base-muted p-1 text-base-muted-foreground",
   {
     variants: {
       size: {
@@ -21,8 +21,8 @@ const TabsList = classed(
 const TabsTrigger = classed(
   TabsPrimitive.Trigger,
   "inline-flex items-center text-black font-inter justify-center whitespace-nowrap rounded-lg px-3 py-1 ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-  "data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-tabs",
-  "data-[state=inactive]:text-black-secondary data-[state=active]:shadow-none",
+  "data-[state=active]:bg-base-background data-[state=active]:text-base-foreground data-[state=active]:shadow-tabs",
+  "data-[state=inactive]:text-base-muted-foreground data-[state=active]:shadow-none",
   {
     variants: {
       bold: {
@@ -59,6 +59,7 @@ interface TabsProps extends TabsPrimitive.TabsProps {
     content?: ReactNode;
     onClick?: () => void;
   }[];
+  minWidth?: number;
 }
 
 const Tabs = ({
@@ -66,6 +67,7 @@ const Tabs = ({
   defaultValue,
   items = [],
   className,
+  minWidth,
   ...props
 }: TabsProps) => (
   <TabsPrimitive.Root defaultValue={defaultValue} {...props}>
@@ -81,6 +83,9 @@ const Tabs = ({
           value={item.id}
           size={size as any}
           onClick={item?.onClick}
+          style={{
+            minWidth: minWidth ? `${minWidth}px` : undefined,
+          }}
         >
           {item.label}
         </TabsTrigger>

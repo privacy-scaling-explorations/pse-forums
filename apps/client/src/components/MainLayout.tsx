@@ -18,21 +18,20 @@ export const MainLayout = ({
   showLeftSidebar = false,
   showRightSidebar = false,
 }: MainLayoutProps) => {
-  const { isMenuOpen, setIsMenuOpen } = useGlobalContext();
+  const { isMenuOpen, setIsMenuOpen, isDarkMode } = useGlobalContext();
 
   const router = useRouter();
 
   const pathname = router?.latestLocation?.href;  
-  console.log("router", pathname);
 
   useEffect(() => {
     setIsMenuOpen(false);
   }, [pathname]);
 
   return (
-    <div className="h-screen">
+    <div className={cn("h-screen", isDarkMode ? "dark" : "")}>
       {showHeader && <Header />}
-      <main className="bg-white h-[calc(100vh-65px)] flex justify-between overflow-hidden">
+      <main className="bg-base-background h-[calc(100vh-65px)] flex justify-between overflow-hidden">
         {showLeftSidebar && <LeftSidebar />}
         {children && (
           <div

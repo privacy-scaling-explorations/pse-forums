@@ -4,6 +4,11 @@ function isEnvVarDefined(name: string, value: unknown) {
   }
 }
 
+export const LOCAL_STORAGE_KEYS = {
+  APP_ID: "pse-form",
+  POST_DRAFT: "post-draft",
+}
+
 function getEnvVar<T extends string>(name: T) {
   const value = import.meta.env[name] ?? ""
   isEnvVarDefined(name, value)

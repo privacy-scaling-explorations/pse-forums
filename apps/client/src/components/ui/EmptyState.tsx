@@ -14,10 +14,10 @@ const EmptyState: React.FC<EmptyStateProps> = ({
   const Icon = icon;
   return (
     <div className="flex flex-col items-center justify-center text-center gap-2.5 max-w-[310px] m-auto">
-      {Icon && <Icon className="size-6 text-black" />}
-      <h2 className="text-sm font-medium text-black font-inter">{title}</h2>
+      {Icon && <Icon className="size-6 text-base-primary" />}
+      <h2 className="text-sm font-medium text-base-primary font-inter">{title}</h2>
       {description && (
-        <span className="text-gray-500 text-xs text-black-secondary font-inter">{description}</span>
+        <span className="text-xs text-base-muted-foreground font-inter">{description}</span>
       )}
     </div>
   );

@@ -5,7 +5,7 @@ export const membershipMocks = [
     description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
     members: 100,
     posts: 100,
-    logo: "https://file.notion.so/f/f/56f3d122-cf5c-44f7-badf-6384ac445e55/8ed25d3d-52b8-4edb-a4cc-936019840333/Github-profile-icon.png?table=block&id=22adcc31-2358-4f35-9f34-28cc953219c8&spaceId=56f3d122-cf5c-44f7-badf-6384ac445e55&expirationTimestamp=1740763992523&signature=4RTA4PRl19wKDNkMoVslR95w-HuZqDnO0Es_QDTY_fw&downloadName=Github-profile-icon.png",
+    logo: "https://pse.dev/logos/pse-logo-bg.svg",
   },
   {
     id: "2",

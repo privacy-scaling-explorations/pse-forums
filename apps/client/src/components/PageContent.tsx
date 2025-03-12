@@ -28,7 +28,7 @@ export const PageContent = ({
         "h-full": showEmptyState,
       })}
     >
-      {title && <Labels.PageTitle>{title}</Labels.PageTitle>}
+      {title && <Labels.PageTitle className="">{title}</Labels.PageTitle>}
       {children}
       {showEmptyState && emptyState && (
         <EmptyState

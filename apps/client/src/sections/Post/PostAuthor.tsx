@@ -1,37 +1,44 @@
 import { Avatar } from "@/components/Avatar";
 import { TimeSince } from "@/components/ui/TimeSince";
 import { Users as UserGroupIcon } from "lucide-react";
+import { ReactNode } from "react";
 
 interface PostAuthorProps {
   username: string;
-  group?: string;
   createdAt?: string;
   titleSize?: "sm" | "lg";
+  badges?: {
+    label: string;
+    icon: ReactNode;
+  }[];
   avatarClassName?: string;
 }
 
 export const PostAuthor = ({
   username,
-  group,
   createdAt,
   avatarClassName,
+  badges = [],
 }: PostAuthorProps) => {
   return (
     <div className="flex gap-1 items-center">
-      <Avatar size="sm" hasRandomBackground className={avatarClassName} />
-      <span className="text-black font-inter font-medium text-sm line-clamp-2 lg:line-clamp-1">
+      <Avatar
+        size="sm"
+        hasRandomBackground
+        className={avatarClassName}
+        username={username}
+      />
+      <span className="text-card-foreground font-inter font-medium text-sm line-clamp-2 lg:line-clamp-1">
         {username}
       </span>
-      {group && (
+      {badges?.length > 0 && (
         <>
+          {badges.map((badge) => (
+            <span key={badge.label}>{badge.icon}</span>
+          ))}
           <span>·</span>
-          <UserGroupIcon className="size-[14px] text-purple" />
-          <span className="text-purple font-inter font-semibold text-sm">
-            {group}
-          </span>
         </>
       )}
-      <span>·</span>
       {createdAt && <TimeSince isoDateTime={createdAt} />}
     </div>
   );

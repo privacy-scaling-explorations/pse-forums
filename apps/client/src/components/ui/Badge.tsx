@@ -5,8 +5,8 @@ const BadgeBase = classed.div(
   {
     variants: {
       variant: {
-        black: "border-transparent bg-primary text-primary-foreground hover:bg-primary/80 group-hover:bg-primary/80",
-        white: "border-transparent bg-white-light text-secondary-foreground group-hover:bg-[#71717A] group-hover:text-white",
+        primary: "border-transparent bg-base-primary text-primary-foreground hover:bg-base-primary/80 group-hover:bg-base-primary/80",
+        secondary: "border-transparent bg-base-secondary text-base-secondary-foreground hover:text-base-primary-foreground hover:bg-base-muted-foreground group-hover:bg-base-muted-foreground group-hover:text-base-primary-foreground",
         destructive: "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
         outline: "text-foreground",
       },
@@ -16,7 +16,7 @@ const BadgeBase = classed.div(
       },
     },
     defaultVariants: {
-      variant: "black",
+      variant: "secondary",
       rounded: "sm",
     },
   },

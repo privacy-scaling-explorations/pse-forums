@@ -12,10 +12,10 @@ export const AllCommunities = () => {
             <div className="flex gap-3 items-center">
               <Avatar className="!size-[50px]" src={community.logo} />
               <div className="flex flex-col">
-                <h3 className="text-base lg:text-lg font-semibold text-black font-inter">
+                <h3 className="text-base lg:text-lg font-semibold text-card-foreground font-inter">
                   {community.name}
                 </h3>
-                <span className=" text-black-secondary text-xs font-medium line-clamp-1">
+                <span className=" text-base-muted-foreground text-xs font-medium line-clamp-1">
                   Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni
                   aperiam vero dolores, sunt consequuntur in laborum fugit!
                   Molestias, expedita quaerat?

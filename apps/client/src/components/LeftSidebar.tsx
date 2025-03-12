@@ -11,6 +11,9 @@ import { Accordion } from "@/components/Accordion";
 import { membershipMocks } from "mocks/membershipMocks";
 import { Avatar } from "@/components/Avatar";
 import { Badge } from "@/components/ui/Badge";
+import { Switch } from "./inputs/Switch";
+import { useGlobalContext } from "@/contexts/GlobalContext";
+import { AuthWrapper } from "./AuthWrapper";
 const renderNavItems = (
   _items: (typeof MAIN_NAV_ITEMS)[keyof typeof MAIN_NAV_ITEMS],
 ) =>
@@ -45,13 +48,13 @@ const NavItem = ({
       to={to}
       key={title}
       className={cn(
-        "text-sm font-inter font-medium leading-5 text-black-secondary cursor-pointer outline-none focus:outline-none focus:ring-0 focus:ring-offset-0",
-        "duration-200 hover:bg-white-light hover:text-black",
+        "text-sm font-inter font-medium leading-5 text-base-muted-foreground cursor-pointer outline-none focus:outline-none focus:ring-0 focus:ring-offset-0",
+        "duration-200 hover:bg-muted hover:text-base-primary",
         "flex items-center gap-2 rounded-md h-9 py-2 w-full p-2",
       )}
     >
       <div className="flex items-center gap-2">
-        <Icon className="text-black text-base" size={16} />
+        <Icon className=" text-base" size={16} />
         <span>{title}</span>
       </div>
       {badge && (
@@ -75,14 +78,13 @@ const SidebarContent = () => {
   return (
     <nav
       aria-label="Sidebar Navigation"
-      className="flex flex-col divide-y-[1px] divide-[#E5E7EB]"
+      className="flex flex-col divide-y-[1px] divide-sidebar-border"
     >
       <div className="space-y-1 py-6">
         <NavItem title="Home" to="/" icon={HomeIcon} />
         {renderStartItems()}
         {auth?.mapSync(renderStartItems)}
       </div>
-
       <Accordion
         className="py-6"
         items={[
@@ -98,8 +100,8 @@ const SidebarContent = () => {
                     params={{ id: `${id}` }}
                   >
                     <Avatar className="!size-[32px] !rounded-lg" src={logo} />
-                    <span className="font-semibold font-inter text-sm text-[#3F3F46] line-clamp-1">
-                      {name}
+                    <span className="font-semibold font-inter text-sm text-sidebar-foreground line-clamp-1">
+                      {name} ss
                     </span>
                   </Link>
                 ))}
@@ -108,6 +110,7 @@ const SidebarContent = () => {
           },
         ]}
       />
+
       {user !== undefined && (
         <div className="space-y-2 py-6">
           <div className="w-full justify-start flex items-center space-x-3 text-sm">
@@ -147,44 +150,52 @@ const LeftSidebar = () => {
   const { data: user } = useQuery(["user.read", auth?.inner?.username], {
     enabled: auth?.isSome(),
   });
+  const { isDarkMode, setIsDarkMode } = useGlobalContext();
 
   return (
-    <aside className="w-[264px] p-6 bg-white-dark hidden flex-col sticky top-[60px] z-[49] lg:flex ">
+    <aside className="w-[264px] p-6 bg-sidebar-background hidden flex-col sticky top-[60px] z-[49] lg:flex ">
       <nav
         aria-label="Sidebar Navigation"
-        className="flex flex-col divide-y-[1px] divide-[#E5E7EB]"
+        className="flex flex-col divide-y-[1px] divide-sidebar-border"
       >
         <div className="space-y-1 py-6">
           <NavItem title="Home" to="/" icon={HomeIcon} />
-          {renderStartItems()}
-          {auth?.mapSync(renderStartItems)}
+          <AuthWrapper>
+            {renderStartItems()}
+            {/* auth?.mapSync(renderStartItems) */}
+          </AuthWrapper>
         </div>
 
-        <Accordion
-          className="py-6"
-          items={[
-            {
-              label: "MY COMMUNITIES",
-              children: (
-                <div className="flex flex-col">
-                  {membershipMocks.map(({ id, name, logo }) => (
-                    <Link
-                      key={id}
-                      to="/communities/$id"
-                      className="flex gap-2 items-center py-2 px-3"
-                      params={{ id: `${id}` }}
-                    >
-                      <Avatar className="!size-[32px] !rounded-lg" src={logo} />
-                      <span className="font-semibold font-inter text-sm text-[#3F3F46] line-clamp-1">
-                        {name}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              ),
-            },
-          ]}
-        />
+        <AuthWrapper>
+          <Accordion
+            className="py-6"
+            items={[
+              {
+                label: "MY COMMUNITIES",
+                children: (
+                  <div className="flex flex-col">
+                    {membershipMocks.map(({ id, name, logo }) => (
+                      <Link
+                        key={id}
+                        to="/communities/$id"
+                        className="flex gap-2 items-center py-2 px-3"
+                        params={{ id: `${id}` }}
+                      >
+                        <Avatar
+                          className="!size-[32px] !rounded-lg"
+                          src={logo}
+                        />
+                        <span className="font-semibold font-inter text-sm text-sidebar-foreground line-clamp-1">
+                          {name}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                ),
+              },
+            ]}
+          />
+        </AuthWrapper>
         {user !== undefined && (
           <div className="space-y-2 py-6">
             <div className="w-full justify-start flex items-center space-x-3 text-sm">
