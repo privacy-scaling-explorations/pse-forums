@@ -3,11 +3,12 @@ import { classed } from "@tw-classed/react";
 import { forwardRef } from "react";
 
 const CardBase = classed.div(
-  "flex flex-col border bg-card text-card-foreground border border-[#E4E4E7]",
+  "flex flex-col",
   {
     variants: {
-      background: {
-        default: "bg-[#FAFAFA]",
+      variant: {
+        base: "bg-base-background border border-base-border",
+        secondary: "bg-sidebar-background",
       },
       rounded: {
         none: "rounded-none",
@@ -22,16 +23,17 @@ const CardBase = classed.div(
         6: "gap-6",
         4: "gap-4",
         "2.5": "gap-[10px]",
+        1: "gap-1",
       },
       withHover: {  
-        true: "hover:bg-white-light duration-200",
+        true: "hover:bg-card-hover duration-200",
         false: "",
       },
     },
     defaultVariants: {
       rounded: "sm",
       spacing: "md",
-      background: "default",
+      variant: "base",
       gap: "6",
       withHover: false,
     },
@@ -57,7 +59,7 @@ const CardTitle = forwardRef<
   <div
     ref={ref}
     className={cn(
-      "text-xl font-semibold leading-none tracking-tight text-black",
+      "text-xl font-semibold leading-none tracking-tight text-base-foreground",
       className,
     )}
     {...props}
@@ -71,7 +73,7 @@ const CardDescription = forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("text-sm text-muted-foreground", className)}
+    className={cn("text-sm text-base-muted-foreground", className)}
     {...props}
   />
 ));

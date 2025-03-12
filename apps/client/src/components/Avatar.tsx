@@ -59,18 +59,17 @@ export const Avatar: FC<AvatarProps> = ({
   className,
   ...props
 }) => {
-  const fallbackBackground = hasRandomBackground
-    ? RandomBackgroundColors[
-        Math.floor(Math.random() * RandomBackgroundColors.length)
-      ]
-    : "bg-muted";
+  const fallbackBackground =
+    hasRandomBackground && username
+      ? RandomBackgroundColors[
+          username.charCodeAt(0) % RandomBackgroundColors.length
+        ]
+      : "bg-base-muted";
 
   return (
     <AvatarBase {...props} className={cn(className)}>
       <AvatarImage src={src} />
-      <AvatarFallback className={fallbackBackground}>
-        {username?.[0].toLocaleUpperCase() || ""}
-      </AvatarFallback>
+      <AvatarFallback className={fallbackBackground} />
     </AvatarBase>
   );
 };

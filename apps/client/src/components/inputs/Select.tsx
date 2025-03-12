@@ -1,21 +1,38 @@
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { Check, ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { ComponentPropsWithoutRef, ElementRef, forwardRef, ReactNode } from "react";
+import {
+  ComponentPropsWithoutRef,
+  ElementRef,
+  forwardRef,
+  ReactNode,
+} from "react";
+import { FieldApi } from "@tanstack/react-form";
 
 const SelectBase = SelectPrimitive.Root;
 
-const SelectValue = SelectPrimitive.Value;
+const SelectValue = forwardRef<
+  ElementRef<typeof SelectPrimitive.Value>,
+  ComponentPropsWithoutRef<typeof SelectPrimitive.Value>
+>(({ className, ...props }, ref) => (
+  <SelectPrimitive.Value ref={ref} className={cn(className)} {...props} />
+));
+SelectValue.displayName = SelectPrimitive.Value.displayName;
 
 const SelectTrigger = forwardRef<
   ElementRef<typeof SelectPrimitive.Trigger>,
-  ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
+  ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & {
+    field?: FieldApi<any, any, any, any>;
+  }
+>(({ className, children, field, ...props }, ref) => (
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+      "flex h-10 font-inter text-base-foreground font-normal text-sm w-full items-center justify-between rounded-md border bg-base-background px-3 py-2 ring-offset-background placeholder:text-base-muted-foreground focus:outline-none focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
       className,
+      field?.state.meta.isTouched && field?.state.meta.errors.length
+        ? "border-error"
+        : "border-base-input",
     )}
     {...props}
   >
@@ -113,7 +130,7 @@ const SelectItem = forwardRef<
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "relative flex gap-2 w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       className,
     )}
     {...props}
@@ -145,28 +162,47 @@ const Select = ({
   label,
   items,
   children = null,
+  defaultValue,
+  value,
+  field,
+  header = null,
+  forcePlaceholder = false,
   ...props
 }: ComponentPropsWithoutRef<typeof SelectBase> & {
+  header?: ReactNode;
   label: string;
   children?: ReactNode;
   items: {
     value?: any;
-    label: string;
+    label: ReactNode;
   }[];
-}) => (
-  <SelectBase {...props}>
-    <SelectTrigger>
-      <SelectValue placeholder={label} />
-    </SelectTrigger>
-    <SelectContent>
-      {items.map((item) => (
-        <SelectItem key={item.value} value={item.value}>
-          {item.label}
-        </SelectItem>
-      ))}
-    </SelectContent>
-  </SelectBase>
-);
+  field?: FieldApi<any, any, any, any>;
+  forcePlaceholder?: boolean;
+}) => {
+  const isEmpty = !("value" in props ? value : defaultValue);
+
+  return (
+    <div className="flex flex-col gap-3">
+      {header}
+      <SelectBase {...props} defaultValue={defaultValue} value={value}>
+        <SelectTrigger field={field}>
+          {forcePlaceholder ? (
+            <SelectValue placeholder={label}>{label}</SelectValue>
+          ) : (
+            <SelectValue placeholder={isEmpty ? label : undefined} />
+          )}
+        </SelectTrigger>
+        <SelectContent>
+          {items.map((item) => (
+            <SelectItem key={item.value} value={item.value}>
+              {item.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </SelectBase>
+    </div>
+  );
+};
 
 Select.displayName = "Select";
 Select.Item = SelectItem;

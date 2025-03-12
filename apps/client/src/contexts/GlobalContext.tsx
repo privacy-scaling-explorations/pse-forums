@@ -4,16 +4,33 @@ interface GlobalContextType {
   isMenuOpen: boolean;
   setIsMenuOpen: (value: boolean) => void;
   children?: ReactNode;
+  isDarkMode: boolean;
+  setIsDarkMode: (value: boolean) => void;
+  user?: any;
+  isLoggedIn: boolean;
+  setIsLoggedIn: (value: boolean) => void;
 }
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
 
 export function GlobalProvider({ children }: { children: ReactNode }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const user = {
+    name: "John Doe",
+    username: "john_doe",
+    avatar: "https://pse.dev/logos/pse-logo-bg.svg",
+  }
 
   const value = {
     isMenuOpen,
     setIsMenuOpen,
+    isDarkMode,
+    setIsDarkMode,
+    user,
+    isLoggedIn,
+    setIsLoggedIn,
   };
 
   return (

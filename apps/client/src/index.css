@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .inter-font {
   font-family: "Inter", serif;
   font-optical-sizing: auto;
@@ -17,62 +16,91 @@
   font-style: normal;
 }
 
-html {
+html, body {
   text-rendering: geometricPrecision !important;
+  @apply font-inter;
 }
+
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
-    --radius: 0.5rem;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    --logo-base: #000;
+    --accent: #f4f4f5;
+    --accent-foreground: #18181b;
+    --background: #ffffff;
+    --border: #e4e4e7;
+    --card: #ffffff;
+    --card-hover: #f4f4f5;
+    --card-foreground: #18181b;
+    --destructive: #dc2626;
+    --destructive-foreground: #fef2f2;
+    --error: #DC2626;
+    --foreground: #18181b;
+    --link: #0EA5E9;
+    --input: #e4e4e7;
+    --muted: #f4f4f5;
+    --muted-foreground: #71717a;
+    --popover: #ffffff;
+    --popover-foreground: #18181b;
+    --primary: #18181b;
+    --primary-foreground: #f4f4f5;
+    --ring: #18181b;
+    --ring-offset: #ffffff;
+    --secondary: #f4f4f5;
+    --secondary-foreground: #18181b;
+    --chart-1: #2A9D90;
+    --chart-2: #E76E50;
+    --chart-3: #274754;
+    --chart-4: #E8C468;
+    --chart-5: #F4A462;
+    --sidebar-primary-foreground: #18181b;
+    --sidebar-primary: #ffffff;
+    --sidebar-foreground: #3f3f46;
+    --sidebar-background: #FAFAFA;
+    --sidebar-accent: #f4f4f5;
+    --sidebar-accent-foreground: #18181b;
+    --sidebar-border: #E5E7EB;
+    --banner-error: #DC2626;
+    --banner-error-foreground: #FEE2E2;
   }
-
+  
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --logo-base: #50C3E0;
+    --accent: #27272a;
+    --accent-foreground: #f8fafc;
+    --background: #09090B;
+    --border: #27272a;
+    --card: #18181b;
+    --card-hover: #27272a;
+    --card-foreground: #f8fafc;
+    --destructive: #7f1d1d;
+    --destructive-foreground: #fef2f2;
+    --foreground: #FAFAFA;
+    --input: #27272A;
+    --muted: #27272a;
+    --muted-foreground: #a1a1aa;
+    --popover: #18181b;
+    --popover-foreground: #f8fafc;
+    --primary: #FAFAFA;
+    --primary-foreground: #18181b;
+    --ring: #d4d4d8;
+    --ring-offset: #ffffff;
+    --secondary: #27272a;
+    --secondary-foreground: #f8fafc;
+    --chart-1: #2662D9;
+    --chart-2: #E23670;
+    --chart-3: #E88C30;
+    --chart-4: #AF57DB;
+    --chart-5: #2EB88A;
+    --sidebar-primary-foreground: #f8fafc;
+    --sidebar-primary: #2563eb;
+    --sidebar-foreground: #F4F4F5;
+    --sidebar-background: #18181b;
+    --sidebar-accent: #27272a;
+    --sidebar-accent-foreground: #f8fafc;
+    --sidebar-border: #27272A;
+    --banner-error: #7F1D1D;
+    --banner-error-foreground: transparent;
+    --error: #DC2626;
+    --link: #0EA5E9;
   }
 }

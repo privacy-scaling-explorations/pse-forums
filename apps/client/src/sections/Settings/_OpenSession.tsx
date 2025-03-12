@@ -33,11 +33,11 @@ export const OpenSession = () => {
         </Card.Description>
       </div>
       <div className="flex flex-col">
-        <SessionTableWrapper className="border-b border-b-gray">
-          <span className="text-sm font-medium text-black-secondary">
+        <SessionTableWrapper className="border-b border-base-border">
+          <span className="text-sm font-medium text-base-muted-foreground">
             Session
           </span>
-          <span className="text-sm font-medium text-black-secondary">
+          <span className="text-sm font-medium text-base-muted-foreground">
             Device
           </span>
           <span></span>
@@ -45,12 +45,12 @@ export const OpenSession = () => {
         {sessionMockData.map((session) => (
           <SessionTableWrapper
             key={session.id}
-            className="border-b border-b-gray h-[52px]"
+            className="border-b border-base-border h-[52px]"
           >
-            <span className="text-sm text-black font-medium">
+            <span className="text-sm text-base-foreground font-medium">
               {session.key}
             </span>
-            <span className="text-sm text-black">{session.status}</span>
+            <span className="text-sm text-base-foreground">{session.status}</span>
             <div>
               <Button variant="outline" className="!flex !w-full">
                 Sign Out

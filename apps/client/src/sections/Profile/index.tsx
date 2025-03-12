@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/Button";
 import { Pen as PenIcon, LogOut as LogOutIcon } from "lucide-react";
 import { PageContent } from "@/components/PageContent";
 import { Banner } from "@/components/ui/Banner";
-
+import { useGlobalContext } from "@/contexts/GlobalContext";
+import { useNavigate } from "@tanstack/react-router";
 const InfoCard = ({
   label,
   value,
@@ -19,13 +20,15 @@ const InfoCard = ({
   return (
     <div
       className={cn(
-        "flex flex-col p-2 rounded-md bg-white-light text-center",
+        "flex flex-col p-2 rounded-md bg-accent text-center",
         className,
       )}
     >
-      <span className="text-sm font-inter text-black font-bold">{value}</span>
+      <span className="text-sm font-inter text-base-foreground font-bold">
+        {value}
+      </span>
 
-      <span className="text-xs font-inter font-medium text-black-secondary">
+      <span className="text-xs font-inter font-medium text-base-muted-foreground">
         {label}
       </span>
     </div>
@@ -33,6 +36,8 @@ const InfoCard = ({
 };
 
 export const ProfilePage = () => {
+  const { user, setIsLoggedIn } = useGlobalContext();
+  const navigate = useNavigate();
   return (
     <PageContent className="flex flex-col gap-6">
       <Labels.PageTitle>Profile</Labels.PageTitle>
@@ -42,21 +47,23 @@ export const ProfilePage = () => {
           not be able to recover your account.
         </Banner.Label>
         <div className="ml-auto">
-          <Button variant="error" className="font-medium">Generate recovery code</Button>
+          <Button variant="error" className="font-medium">
+            Generate recovery code
+          </Button>
         </div>
       </Banner.Base>
       <div className="flex flex-col gap-4">
         <div className="flex gap-3">
-          <Avatar size="xl" />
+          <Avatar size="xl" src={user?.avatar} />
           <div className="flex flex-col gap-1">
-            <h2 className="text-2xl font-semibold font-inter text-black">
+            <h2 className="text-2xl font-semibold font-inter text-base-foreground">
               John Doe
             </h2>
             <div className="flex items-center gap-1">
               <span className="text-xs font-inter text-black-secondary">
                 Standard
               </span>
-              <Badge variant="white">uid: 123</Badge>
+              <Badge variant="secondary">uid: 123</Badge>
             </div>
             <span className="text-xs font-inter text-black-secondary">
               Created 2024-01-01
@@ -73,7 +80,14 @@ export const ProfilePage = () => {
           <Button icon={PenIcon} variant="outline">
             Edit Profile
           </Button>
-          <Button icon={LogOutIcon} variant="outline">
+          <Button
+            icon={LogOutIcon}
+            variant="outline"
+            onClick={() => {
+              setIsLoggedIn(false);
+              navigate({ to: "/" });
+            }}
+          >
             Sign Out
           </Button>
         </div>

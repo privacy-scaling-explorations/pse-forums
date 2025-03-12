@@ -1,7 +1,7 @@
 import { classed } from "@tw-classed/react";
 
 const PageTitle = classed.h1(
-  "font-inter text-[24px] lg:text-[30px] lg:leading-[36px] text-black font-bold",
+  "font-inter text-[24px] lg:text-[30px] lg:leading-[36px] text-foreground font-bold",
 );
 
 

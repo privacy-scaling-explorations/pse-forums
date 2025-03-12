@@ -131,11 +131,11 @@ export function Modal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div
         ref={modalRef}
-        className={`bg-white rounded-lg shadow-lg max-w-md w-full max-h-[90vh] overflow-auto ${className}`}
+        className={`flex flex-col gap-6 bg-white rounded-lg shadow-lg max-w-md w-full max-h-[90vh] overflow-auto p-6 ${className}`}
       >
         {title && (
-          <div className="flex items-center justify-between p-4 border-b">
-            <h2 className="text-lg font-medium">{title}</h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-bold text-base-foreground">{title}</h2>
             <button
               onClick={() => setIsOpen(false)}
               className="rounded-full p-1 hover:bg-gray-100"
@@ -145,7 +145,7 @@ export function Modal({
             </button>
           </div>
         )}
-        <div className="p-4">{children}</div>
+        <div className="">{children}</div>
       </div>
     </div>
   );

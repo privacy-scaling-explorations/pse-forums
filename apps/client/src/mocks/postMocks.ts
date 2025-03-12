@@ -6,17 +6,7 @@ export const postMocks = [
     createdAt: "2025-02-26T10:00:00Z",
     group: "PSE",
     totalViews: 100,
-    content: `## Lorem Ipsum Dolor  
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.  
-
-### Code Example  
-\`\`\`javascript
-function helloWorld() {
-  console.log("Hello, world!");
-}
-\`\`\`
-
-**Nunc finibus nisi nec magna ullamcorper dapibus.**`,
+    content: `Security in multi-party applications faces key challenges: trust assumptions, scalability trade-offs, and real-world attack surfaces. While cryptographic tools like MPC and ZKPs help, key management and usability remain weak points. Solving this requires better cryptographic UX, modular security primitives, and hybrid architectures. What's missing?`,
     replies: [
       {
         id: 101,

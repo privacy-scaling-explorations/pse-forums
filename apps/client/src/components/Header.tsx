@@ -12,13 +12,13 @@ import { LeftSidebar } from "@/components/LeftSidebar";
 
 const DesktopNav = () => {
   return (
-    <div className="hidden lg:flex items-center justify-between gap-5 lg:gap-0 px-4 py-3">
+    <div className="hidden lg:flex items-center justify-between gap-5 lg:gap-0 px-5 py-3">
       <Link to="/" className="hidden lg:flex">
         <h1>
-          <span className="font-space-grotesk font-bold text-black text-[26px] leading-[25px]">
+          <span className="font-space-grotesk font-bold text-base-logo text-[26px] leading-[25px]">
             PSE
           </span>
-          <span className="font-space-grotesk text-black font-normal text-[26px] leading-[25px] tracking-[-1px]">
+          <span className="font-space-grotesk text-base-logo font-normal text-[26px] leading-[25px] tracking-[-1px]">
             forum
           </span>
         </h1>
@@ -48,7 +48,7 @@ const MobileNav = () => {
       />
       <div
         className={cn(
-          "fixed inset-y-0 p-6 left-0 z-50 w-[320px] bg-white transform transition-transform duration-300 ease-in-out lg:hidden",
+          "fixed inset-y-0 p-6 left-0 z-50 w-[320px] bg-base-background transform transition-transform duration-300 ease-in-out lg:hidden",
           isMenuOpen ? "translate-x-0" : "-translate-x-full",
         )}
       >
@@ -56,10 +56,10 @@ const MobileNav = () => {
           <div className="flex items-center justify-between">
             <Link to="/">
               <h1 className="flex gap-1">
-                <span className="font-space-grotesk font-bold text-black text-xl leading-[20px]">
+                <span className="font-space-grotesk font-bold text-logo-base text-xl leading-[20px]">
                   PSE
                 </span>
-                <span className="font-space-grotesk text-black font-normal text-base leading-[18px] tracking-[-1px] mt-auto">
+                <span className="font-space-grotesk text-logo-base font-normal text-base leading-[18px] tracking-[-1px] mt-auto">
                   forum
                 </span>
               </h1>
@@ -99,7 +99,7 @@ const MobileNav = () => {
 
 export function Header() {
   return (
-    <nav className="bg-white border-b-[1px] border-b-gray sticky top-0 z-50">
+    <nav className="bg-base-background border-b-[1px] border-b-base-border sticky top-0 z-50">
       <DesktopNav />
       <MobileNav />
     </nav>
