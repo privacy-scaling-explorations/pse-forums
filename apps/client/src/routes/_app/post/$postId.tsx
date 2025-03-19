@@ -24,7 +24,6 @@ import { Button } from "@/components/ui/Button";
 import { AuthWrapper } from "@/components/AuthWrapper";
 export const Route = createFileRoute("/_app/post/$postId")({
   component: PostPage,
-  //loader: async ({ params: { postId } }) => rspc.query(["post.read", Number.parseInt(postId)]),
   loader: async ({ params: { postId } }) => {
     return {
       postId: Number.parseInt(postId),
@@ -37,9 +36,9 @@ function PostPage() {
   const { user } = useGlobalContext();
   const [replyTo, setReplyTo] = useState<string | number | null>(null);
 
-  const form = useForm<any>();
-
   const { data: postData } = useGetPostById(postId);
+
+  const form = useForm<any>();
 
   if (!postData) {
     return <div>Post not found</div>;
@@ -54,7 +53,7 @@ function PostPage() {
           header={
             <div className="flex items-center justify-between">
               <PostAuthor
-                username={postData.author}
+                author={postData.author}
                 createdAt={postData.createdAt}
                 avatarClassName="!size-[30px]"
               />
@@ -88,11 +87,11 @@ function PostPage() {
         />
       </div>
       <div className="flex flex-col gap-6">
-        {postData.replies?.map((reply, index) => {
+        {postData?.replies?.map((reply: any, index: any) => {
           return (
             <div className="flex flex-col gap-2" key={index}>
               <PostAuthor
-                username={reply.author}
+                author={reply.author}
                 createdAt={reply.createdAt}
                 avatarClassName="!size-6 mr-1"
               />

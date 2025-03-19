@@ -1,13 +1,20 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { postMocks } from "mocks/postMocks"
 import { useStorage } from "./useStorage"
 import { LOCAL_STORAGE_KEYS } from "@/lib/config"
+import { PostSchema } from "@/shared/schemas/post"
+
+export const useGetPosts = () => {
+  return useQuery({
+    queryKey: ["getPosts"],
+    queryFn: (): Promise<PostSchema[]> => fetch("http://localhost:3001/api/posts").then((res) => res.json()),
+  });
+};
 
 export const useGetPostById = (postId: number) => {
   return useQuery({
     queryKey: ["post.read", postId],
     queryFn: () => {
-      const postById = postMocks.find((post) => post?.id === postId)
+      const postById = fetch(`http://localhost:3001/api/posts/${postId}`).then((res) => res.json())
       if (!postById) {
         throw new Error("Post not found")
       }

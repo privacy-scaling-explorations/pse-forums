@@ -1,10 +1,10 @@
 import { Avatar } from "@/components/Avatar";
 import { TimeSince } from "@/components/ui/TimeSince";
-import { Users as UserGroupIcon } from "lucide-react";
+import { AuthorSchema } from "@/shared/schemas/post";
 import { ReactNode } from "react";
 
 interface PostAuthorProps {
-  username: string;
+  author: AuthorSchema;
   createdAt?: string;
   titleSize?: "sm" | "lg";
   badges?: {
@@ -15,7 +15,7 @@ interface PostAuthorProps {
 }
 
 export const PostAuthor = ({
-  username,
+  author,
   createdAt,
   avatarClassName,
   badges = [],
@@ -26,10 +26,10 @@ export const PostAuthor = ({
         size="sm"
         hasRandomBackground
         className={avatarClassName}
-        username={username}
+        username={author.username}
       />
       <span className="text-card-foreground font-inter font-medium text-sm line-clamp-2 lg:line-clamp-1">
-        {username}
+        {author.username}
       </span>
       {badges?.length > 0 && (
         <>
