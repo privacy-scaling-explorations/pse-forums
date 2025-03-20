@@ -1,12 +1,19 @@
 import { z } from "zod"
 
-const badgeSchema = z.object({
+
+export const postReactionSchema = z.object({
+  emoji: z.string(),
+  count: z.number().int().default(0),
+  userIds: z.array(z.string()).optional().default([]), // TODO:  probably not needed remove as we need to consider when someone is anon
+})
+
+export const badgeSchema = z.object({
   label: z.string(),
   icon: z.any().optional(),
   tooltip: z.string().optional(),
 })
 
-const authorSchema = z
+export const postAuthorSchema = z
   .object({
     username: z.string().nullable(),
     avatar: z.string(),
@@ -21,14 +28,14 @@ const authorSchema = z
     },
   )
 
-const postReplySchema = z.object({
+export const postReplySchema = z.object({
   id: z.number(),
   content: z.string().optional(),
-  author: authorSchema,
+  author: postAuthorSchema,
   createdAt: z.string().optional(),
 })
 
-export const schemaPost = z.object({
+export const postSchema = z.object({
   id: z.number(),
   title: z.string(),
   content: z.string(),
@@ -40,12 +47,14 @@ export const schemaPost = z.object({
       }),
     ),
   ),
-  author: authorSchema,
+  author: postAuthorSchema,
   createdAt: z.string().optional(),
   totalViews: z.number().optional(),
   isAnon: z.boolean().optional().default(false),
+  reactions: z.record(z.string(), postReactionSchema).optional(),
 })
 
-export type PostSchema = z.infer<typeof schemaPost>
-export type AuthorSchema = z.infer<typeof authorSchema>
-export type BadgeSchema = z.infer<typeof badgeSchema>
+export type PostSchema = z.infer<typeof postSchema>
+export type PostAuthorSchema = z.infer<typeof postAuthorSchema>
+export type PostBadgeSchema = z.infer<typeof badgeSchema>
+export type PostReactionSchema = z.infer<typeof postReactionSchema>

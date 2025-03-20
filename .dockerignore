@@ -11,8 +11,13 @@ bun.lockb
 bunfig.toml
 fly*
 node_modules
+**/node_modules
 package.json
 README.md
 supabase
 target
 yarn.lock
+.git
+**/dist
+**/.next
+**/.turbo

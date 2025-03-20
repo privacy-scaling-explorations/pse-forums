@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { postsRouter } from './modules/posts/posts.routes';
 import { meRouter } from './modules/me/me.routes';
+import { badgesRouter } from './modules/badges/badges.routes';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -17,6 +18,7 @@ app.get('/health', (req, res) => {
 // Routes
 app.use('/api/posts', postsRouter);
 app.use('/api/me', meRouter);
+app.use('/api/badges', badgesRouter);
 
 // Error handling
 app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {

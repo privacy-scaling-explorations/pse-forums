@@ -1,15 +1,9 @@
-FROM nginx:alpine AS base
-WORKDIR /usr/share/nginx/html
+FROM node:18-alpine
 
-FROM oven/bun:latest AS builder
-WORKDIR /app
-COPY . .
-COPY .env .env
-RUN bun i --frozen-lockfile
-RUN bun vite build
+WORKDIR /workspace/apps/client
 
-FROM base AS runtime
-RUN rm -fr ./*
-COPY --from=builder /app/dist ./
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+COPY package*.json ./
+
+RUN npm install
+
+CMD ["npm", "run", "dev"]

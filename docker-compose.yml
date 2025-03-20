@@ -1,133 +1,46 @@
 services:
-  bandada:
-    # https://github.com/bandada-infra/bandada/blob/f92d71681f9f268e46ce1ab41b11c9e5622fb29c/docker-compose.prod.yml#L9C16-L9C75
-    container_name: pse-forum-bandada
-    depends_on:
-      migrate:
-        condition: service_completed_successfully
-      postgres:
-        condition: service_healthy
-    environment:
-      API_URL: http://localhost:3000
-      DB_SCHEMA: bandada
-      DB_TYPE: postgres
-      DB_URL: postgres://postgres:postgres@postgres:5432/postgres
-      IRON_SESSION_PASSWORD: thirty-two-characters-long-random-string
-    healthcheck:
-      test: ["CMD", "pgrep", "-f", "node"]
-      interval: 1s
-      start_period: 3s
-      timeout: 5s
-    image: ghcr.io/sripwoud/bandada-api:latest
-    ports: ["3001:3000"]
-    restart: unless-stopped
-
   client:
     container_name: pse-forum-client
-    #depends_on:
-    #  server:
-    #    condition: service_healthy
+    build:
+      context: ./apps/client
+      dockerfile: Dockerfile
     environment:
-      VITE_SERVER_URL: http://server:3000
-    image: ghcr.io/privacy-scaling-explorations/pse-forums-client:latest
-    ports: ["80:80"]
-
-  # used during local development only
-  mail:
-    container_name: pse-forum-mail
-    image: inbucket/inbucket:stable
-    ports: ["9000:9000", "2500:2500", "1100:1100"]
-    restart: unless-stopped
-
-  migrate:
-    container_name: pse-forum-migrate
-    depends_on:
-      postgres:
-        condition: service_healthy
-    entrypoint: ["/bin/sh", "-c", "/migrate.sh"]
-    environment:
-      # env var used by psql and pg_isready (not postgres server which uses POSTGRES_PASSWORD)
-      PGHOST: postgres
-      PGUSER: postgres
-      PGPASSWORD: postgres
-      PGDATABASE: postgres
-    image: postgres:latest
-    restart: "no"
+      - VITE_API_URL=http://localhost:3001
+      - NODE_ENV=development
+    ports: 
+      - "3000:3000"
     volumes:
-      [
-        "./apps/server/db/migrations:/migrations",
-        "./apps/server/db/migrate.sh:/migrate.sh",
-      ]
-
-  server:
-    container_name: pse-forum-server
+      - ./apps/client:/workspace/apps/client
+      - ./apps/shared:/workspace/apps/shared
+      - /workspace/apps/client/node_modules
+    working_dir: /workspace/apps/client
+    command: npm run dev
     depends_on:
-      bandada:
-        condition: service_healthy
-      migrate:
-        condition: service_completed_successfully
-      postgres:
-        condition: service_healthy
+      - api
+
+  api:
+    container_name: pse-forum-api
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
     environment:
-      BANDADA_URL: http://bandada:3000
-      CLIENT_URL: "${EXT_CLIENT_URL:-https://ui.aforum.click}" # must be url on external network (not docker's), with docker compose the client is served with nginx on port 80
-      DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
-      EMAIL_FROM: "${EMAIL_FROM:-pse-forum@noreply.com}"
-      EMAIL_HOST: pse-forum-mail # mail service container name if using inbucket
-      EMAIL_PORT: "${EMAIL_PORT:-2500}"
-      JWT_SECRET: "${JWT_SECRET:-secret}"
-      LOKI_URL: http://loki:3100
-      USE_INBUCKET: "${USE_INBUCKET:-false}"
-      VITE_SERVER_URL: "${VITE_SERVER_URL:-http://localhost:3000}"
-    image: ghcr.io/privacy-scaling-explorations/pse-forums-server:latest
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
-      interval: 5s
-      retries: 3
-      start_period: 10s
-      timeout: 3s
-    ports: ["3000:3000"]
-
-  postgres:
-    container_name: pse-forum-postgres
-    environment:
-      PGUSER: postgres # used by pg_isready
-      POSTGRES_PASSWORD: postgres
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-    image: postgres:latest
-    restart: unless-stopped
-    ports: ["5432:5432"]
-    volumes: [bandada:/var/lib/postgresql/data]
-
-  loki:
-    container_name: pse-forum-loki
-    command: -config.file=/etc/loki/config.yaml
-    image: grafana/loki:latest
-    ports: ["3100:3100"]
-    volumes: [./loki-config.yaml:/etc/loki/config.yaml]
-
-  grafana:
-    container_name: pse-forum-grafana
-    depends_on: [loki]
-    environment:
-      GF_SECURITY_ADMIN_PASSWORD: admin
-      GF_SECURITY_ADMIN_USER: admin
-    image: grafana/grafana:latest
-    ports: ["3002:3000"]
-    volumes: [grafana:/var/lib/grafana]
-
-  promtail:
-    container_name: pse-forum-promtail
-    command: -config.file=/etc/promtail/config.yaml
-    depends_on: [loki]
-    image: grafana/promtail:latest
-    volumes: [
-      ./promtail-config.yaml:/etc/promtail/config.yaml,
-      /var/lib/promtail:/var/lib/promtail,
-      /var/run/docker.sock:/var/run/docker.sock, # allow access to docker logs
-    ]
+      - PORT=3001
+      - NODE_ENV=development
+      - HOST=0.0.0.0
+    ports: 
+      - "3001:3001"
+    volumes:
+      - ./apps/api:/workspace/apps/api
+      - ./apps/shared:/workspace/apps/shared
+      - /workspace/apps/api/node_modules
+    working_dir: /workspace/apps/api
+    command: sh -c "cd ../shared && npm install && npm run build && cd ../api && npm install && npm run dev"
 
 volumes:
-  bandada:
-  grafana:
+  client_modules:
+  api_modules:
+  shared_modules:
+
+networks:
+  default:
+    name: pse-forum-network

@@ -1,5 +1,4 @@
-import { Mail as MailIcon, User as PersonIcon } from 'lucide-react';
-import { PostSchema } from '../schemas/post';
+import { PostSchema } from "../schemas/post.schema"
 
 const AVAILABLE_BADGES = [
   {
@@ -21,8 +20,8 @@ const AVAILABLE_BADGES = [
     label: "+18 years old",
     icon: null,
     tooltip: "Verified by",
-  }
-];
+  },
+]
 
 const LOREM_REPLIES = [
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.`,
@@ -33,8 +32,8 @@ const LOREM_REPLIES = [
 
   `Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.`,
 
-  `At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.`
-];
+  `At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.`,
+]
 
 export const postMocks: PostSchema[] = [
   {
@@ -71,9 +70,8 @@ export const postMocks: PostSchema[] = [
             },
             id: 1011,
             content: LOREM_REPLIES[0],
-            
-          }
-        ] 
+          },
+        ],
       },
       {
         id: 102,
@@ -96,9 +94,21 @@ export const postMocks: PostSchema[] = [
         },
         content: LOREM_REPLIES[2],
         createdAt: "2024-03-10T13:30:00Z",
-      }
+      },
     ],
     isAnon: false,
+    reactions: {
+      "👍": {
+        emoji: "👍",
+        count: 4,
+        userIds: ["1", "2"],
+      },
+      "❤️": {
+        emoji: "❤️",
+        count: 1,
+        userIds: ["1"],
+      },
+    },
   },
   {
     id: 2,
@@ -124,7 +134,7 @@ export const postMocks: PostSchema[] = [
         },
         content: LOREM_REPLIES[3],
         createdAt: "2024-03-09T16:00:00Z",
-      }
+      },
     ],
     isAnon: false,
   },
@@ -161,7 +171,7 @@ export const postMocks: PostSchema[] = [
         },
         content: LOREM_REPLIES[0],
         createdAt: "2024-03-08T11:30:00Z",
-      }
+      },
     ],
     totalViews: 1567,
     createdAt: "2024-03-08T09:15:00Z",
@@ -238,7 +248,7 @@ export const postMocks: PostSchema[] = [
         },
         content: LOREM_REPLIES[4],
         createdAt: "2024-03-06T15:15:00Z",
-      }
+      },
     ],
     totalViews: 789,
     createdAt: "2024-03-06T11:30:00Z",
@@ -282,7 +292,7 @@ export const postMocks: PostSchema[] = [
         },
         content: "Great analysis on recent exploits...",
         createdAt: "2024-03-04T14:20:00Z",
-      }
+      },
     ],
     totalViews: 1123,
     createdAt: "2024-03-04T13:20:00Z",

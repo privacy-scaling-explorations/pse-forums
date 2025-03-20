@@ -16,7 +16,6 @@ export interface SwitchWrapperProps {
   tooltip?: string;
 }
 
-
 const SwitchWrapper = ({
   header,
   label,
@@ -33,18 +32,20 @@ const SwitchWrapper = ({
       {header && <div>{header}</div>}
 
       <div className="flex items-center gap-5 justify-between">
-        <div className="flex items-center gap-2">
-          {tooltip && (
-            <Tooltip content={tooltip}>
-              <InfoIcon className="h-4 w-4" />
-            </Tooltip>
-          )}
-          {label && (
-            <span className="text-base font-medium text-base-foreground font-inter">
-              {label}
-            </span>
-          )}
-        </div>
+        {(tooltip || label) && (
+          <div className="flex items-center gap-2">
+            {tooltip && (
+              <Tooltip content={tooltip}>
+                <InfoIcon className="h-4 w-4" />
+              </Tooltip>
+            )}
+            {label && (
+              <span className="text-base font-medium text-base-foreground font-inter">
+                {label}
+              </span>
+            )}
+          </div>
+        )}
         {children}
       </div>
 
@@ -71,9 +72,7 @@ const SwitchBase = classed.input(
   "bg-base-input",
   "[&:checked]:bg-base-primary",
   "after:absolute after:top-0.5 after:left-0.5 after:h-4 after:w-4 after:rounded-full after:bg-white after:shadow-md after:transition-transform after:duration-200 [&:checked]:after:translate-x-[16px]",
-
 );
-
 
 interface SwitchProps
   extends Omit<React.ComponentProps<typeof SwitchBase>, "type">,
@@ -83,7 +82,10 @@ interface SwitchProps
 }
 
 const Switch = forwardRef<HTMLInputElement, SwitchProps>(
-  ({ label, description, containerClassName, field, tooltip, ...props }, ref) => {
+  (
+    { label, description, containerClassName, field, tooltip, ...props },
+    ref,
+  ) => {
     const error =
       field?.state.meta.isTouched && field?.state.meta.errors.length
         ? field.state.meta.errors.join(", ")
@@ -100,7 +102,7 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
         <SwitchBase ref={ref} type="checkbox" {...props} />
       </SwitchWrapper>
     );
-  }
+  },
 );
 
 Switch.displayName = "Switch";
