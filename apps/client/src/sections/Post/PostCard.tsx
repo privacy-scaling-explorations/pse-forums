@@ -15,6 +15,7 @@ export interface PostCardProps extends VariantProps<typeof Card.Base> {
   postId?: string | number;
   className?: string;
   withHover?: boolean;
+  content?: string;
 }
 
 const PostCardBase = classed(Card.Base, {
@@ -69,6 +70,7 @@ const PostCard = ({
   postId,
   withHover = false,
   className,
+  content = "",
 }: PostCardProps) => {
   return (
     <PostCardBase
@@ -91,6 +93,11 @@ const PostCard = ({
             ) : (
               <PostTitle size={size}>{title}</PostTitle>
             ))}
+          {content?.length > 0 && (
+            <span className="text-sm font-inter font-normal text-base-foreground line-clamp-3">
+              {content}
+            </span>
+          )}
         </div>
       )}
       {children}

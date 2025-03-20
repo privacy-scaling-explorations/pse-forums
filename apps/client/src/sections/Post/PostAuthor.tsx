@@ -1,42 +1,53 @@
 import { Avatar } from "@/components/Avatar";
 import { TimeSince } from "@/components/ui/TimeSince";
-import { Users as UserGroupIcon } from "lucide-react";
-import { ReactNode } from "react";
+import { PostAuthorSchema, PostBadgeSchema } from "@/shared/schemas/post.schema";
+import { VenetianMask as Mask } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface PostAuthorProps {
-  username: string;
+  author: PostAuthorSchema;
   createdAt?: string;
   titleSize?: "sm" | "lg";
-  badges?: {
-    label: string;
-    icon: ReactNode;
-  }[];
   avatarClassName?: string;
+  className?: string;
+  badges?: PostBadgeSchema[];
 }
 
 export const PostAuthor = ({
-  username,
+  author,
   createdAt,
   avatarClassName,
+  className = "",
   badges = [],
 }: PostAuthorProps) => {
   return (
-    <div className="flex gap-1 items-center">
+    <div className={cn("flex gap-1 items-center", className)}>
       <Avatar
         size="sm"
-        hasRandomBackground
+        hasRandomBackground={!author.isAnon}
         className={avatarClassName}
-        username={username}
+        username={author.isAnon ? null : author.username}
+        icon={author.isAnon ? Mask : undefined}
       />
-      <span className="text-card-foreground font-inter font-medium text-sm line-clamp-2 lg:line-clamp-1">
-        {username}
-      </span>
+      {author?.username && (
+        <span className="text-card-foreground font-inter font-medium text-sm line-clamp-2 lg:line-clamp-1">
+          {author.username}
+        </span>
+      )}
       {badges?.length > 0 && (
         <>
-          {badges.map((badge) => (
-            <span key={badge.label}>{badge.icon}</span>
-          ))}
           <span>·</span>
+          {badges?.map((badge: PostBadgeSchema) => (
+            <div
+              className="flex gap-1 items-center bg-sidebar-background px-[10px] py-0.5 rounded-xl border border-base-border"
+              key={badge.label}
+            >
+              {badge?.icon}
+              <span className="text-xs font-inter font-medium text-base-foreground">
+                {badge?.label}
+              </span>
+            </div>
+          ))}
         </>
       )}
       {createdAt && <TimeSince isoDateTime={createdAt} />}

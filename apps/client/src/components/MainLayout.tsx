@@ -5,6 +5,7 @@ import { useGlobalContext } from "@/contexts/GlobalContext";
 import { cn } from "@/lib/utils";
 import { useRouter } from "@tanstack/react-router";
 import { useEffect } from "react";
+import { VersionDetail } from "./VersionDetail";
 interface MainLayoutProps {
   children: React.ReactNode;
   showHeader?: boolean;
@@ -28,6 +29,8 @@ export const MainLayout = ({
     setIsMenuOpen(false);
   }, [pathname]);
 
+  const hasBothSidebars = showLeftSidebar && showRightSidebar;
+
   return (
     <div className={cn("h-screen", isDarkMode ? "dark" : "")}>
       {showHeader && <Header />}
@@ -36,16 +39,18 @@ export const MainLayout = ({
         {children && (
           <div
             className={cn(
-              "flex-1 ",
+              "flex-1",
               isMenuOpen ? "overflow-y-hidden" : "overflow-y-scroll",
             )}
           >
             {children}
+            {!hasBothSidebars && <VersionDetail />}
           </div>
         )}
         {showRightSidebar && (
           <div className="mr-6 pt-6 hidden lg:block">
             <RightSidebar />
+            {!hasBothSidebars && <VersionDetail />}
           </div>
         )}
       </main>

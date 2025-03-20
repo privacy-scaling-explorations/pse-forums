@@ -7,13 +7,12 @@ import { getToken, rspc } from "@/lib/rspc";
 import { type CreatePostSchema, createPostSchema } from "@/lib/schemas";
 import type { FormEvent } from "react";
 import { Button } from "@/components/ui/Button";
-import { useLoaderData, useParams, useSearch } from "@tanstack/react-router";
+import { useLoaderData, useSearch } from "@tanstack/react-router";
 import { Textarea } from "@/components/inputs/Textarea";
 import { router } from "@/lib/router";
 import { PageContent } from "@/components/PageContent";
-import { membershipMocks } from "mocks/membershipMocks";
-import { useCreateDraftMutation } from "@/hooks/usePosts";
-import { badgesMocks } from "mocks/badgesMocks";
+// import { communityMocks } from "@/shared/mocks/community.mocks";
+import { useCreateDraftMutation, useGetBadges } from "@/hooks/usePosts";
 import { FileBadge } from "lucide-react";
 import { Card } from "@/components/cards/Card";
 import { Switch } from "@/components/inputs/Switch";
@@ -27,6 +26,7 @@ enum TabName {
 }
 
 export const PostCreate = () => {
+  const communityMocks = [] as any[];
   const groups = useLoaderData({ from: "/_left-sidebar/post/create" }) ?? [];
 
   const createDraftMutation = useCreateDraftMutation();
@@ -47,6 +47,8 @@ export const PostCreate = () => {
     },
     validators: { onChange: createPostSchema },
   });
+
+  const { data: badges } = useGetBadges();
 
   const contentField = useField<CreatePostSchema, "content">({
     form,
@@ -88,7 +90,7 @@ export const PostCreate = () => {
                 children={(field) => (
                   <Select
                     label="Select a community"
-                    items={membershipMocks.map(({ id, name }) => ({
+                    items={communityMocks.map(({ id, name }) => ({
                       value: id,
                       label: name,
                     }))}
@@ -138,7 +140,7 @@ export const PostCreate = () => {
                       </div>
                     }
                     label="Add badges"
-                    items={badgesMocks.map(({ id, name }) => ({
+                    items={badges?.map(({ id, name }: any) => ({
                       value: id,
                       label: (
                         <div className="flex items-center gap-1">
@@ -164,7 +166,7 @@ export const PostCreate = () => {
                   return (
                     <Tag key={tag} onRemove={() => {}}>
                       <MailIcon className="size-4" />
-                      {badgesMocks.find(({ id }) => id === tag)?.name}
+                      {badges?.find(({ id }: any) => id === tag)?.name}
                     </Tag>
                   );
                 })}

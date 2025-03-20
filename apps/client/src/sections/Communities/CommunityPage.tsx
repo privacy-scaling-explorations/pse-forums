@@ -2,20 +2,21 @@ import { PageContent } from "@/components/PageContent";
 import { Button } from "@/components/ui/Button";
 import { useParams, Link } from "@tanstack/react-router";
 import { UserPlusIcon, PlusIcon } from "lucide-react";
-import { membershipMocks } from "mocks/membershipMocks";
-import { postMocks } from "mocks/postMocks";
 import { PostAuthor } from "../Post/PostAuthor";
 import { PostCard } from "../Post/PostCard";
 import { Tabs } from "@/components/ui/Tabs";
 import { Badge } from "@/components/ui/Badge";
 import { Avatar } from "@/components/Avatar";
+import { useGetPosts } from "@/hooks/usePosts";
+import { communityMocks } from "@/shared/mocks/community.mocks";
 
 export const CommunityPage = () => {
   const communityParams = useParams({ from: "/_left-sidebar/communities/$id" });
 
   const communityId = communityParams.id;
 
-  const community = membershipMocks.find(
+  const { data: posts } = useGetPosts();
+  const community = ([] as any[])?.find(
     (community) => community.id?.toString() === communityId?.toString(),
   );
 
@@ -83,7 +84,7 @@ export const CommunityPage = () => {
             </span>
           </div>
           <div className="flex flex-col gap-4">
-            {postMocks?.map((post, index) => {
+            {posts?.map((post, index) => {
               const hasComments = post.replies.length > 0;
               return (
                 <div className="flex flex-col gap-14">
@@ -101,8 +102,7 @@ export const CommunityPage = () => {
                       />
                     )}
                     <PostAuthor
-                      username={post.author}
-                      group="PSE"
+                      author={post.author}
                       createdAt={post.createdAt}
                     />
                     <div className=" flex items-center gap-2">

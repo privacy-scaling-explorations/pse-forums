@@ -1,12 +1,13 @@
 import { Avatar } from "@/components/Avatar";
 import { Card } from "@/components/cards/Card";
 import { Link } from "@tanstack/react-router";
-import { membershipMocks } from "mocks/membershipMocks";
+// import { communityMocks } from "@/shared/mocks/community.mocks";
 
 export const AllCommunities = () => {
+  const communityMocks = [] as any[];
   return (
     <div className="flex flex-col gap-4">
-      {membershipMocks?.map((community) => (
+      {communityMocks?.map((community) => (
         <Link key={community.id} to={`/communities/${community.id}`}>
           <Card.Base key={community.id} withHover>
             <div className="flex gap-3 items-center">
