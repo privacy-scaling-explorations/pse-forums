@@ -7,14 +7,16 @@ services:
     environment:
       - VITE_API_URL=http://localhost:3001
       - NODE_ENV=development
+      - BROWSER=none
+      - DISABLE_OPEN=true
     ports: 
-      - "3000:3000"
+      - "5173:5173"
     volumes:
       - ./apps/client:/workspace/apps/client
       - ./apps/shared:/workspace/apps/shared
       - /workspace/apps/client/node_modules
     working_dir: /workspace/apps/client
-    command: npm run dev
+    command: npm run dev -- --host 0.0.0.0
     depends_on:
       - api
 

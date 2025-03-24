@@ -88,6 +88,8 @@ const SidebarContent = () => {
     enabled: auth?.isSome(),
   });
 
+  const communityMocks = [] as any[];
+
   return (
     <nav
       aria-label="Sidebar Navigation"

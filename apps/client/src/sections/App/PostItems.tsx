@@ -15,7 +15,7 @@ export const PostItems = () => {
     <div className="flex flex-col gap-4">
       {posts?.map((post, index) => {
         return (
-          <div className="flex flex-col gap-14">
+          <div className="flex flex-col gap-14 mx-auto w-full">
             <PostCard
               className="relative !gap-[14px]"
               header={

@@ -4,7 +4,7 @@ import { z } from "zod"
 export const postReactionSchema = z.object({
   emoji: z.string(),
   count: z.number().int().default(0),
-  userIds: z.array(z.string()).optional().default([]), // TODO:  probably not needed remove as we need to consider when someone is anon
+  userIds: z.array(z.string()).optional().default([]),
 })
 
 export const badgeSchema = z.object({

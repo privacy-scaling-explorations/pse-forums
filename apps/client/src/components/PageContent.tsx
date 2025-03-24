@@ -3,6 +3,7 @@ import { Labels } from "@/components/ui/Labels";
 import { LucideIcon } from "lucide-react";
 import EmptyState from "@/components/ui/EmptyState";
 import { cn } from "@/lib/utils";
+
 interface PageContentProps {
   title?: string;
   children?: ReactNode;
@@ -24,7 +25,7 @@ export const PageContent = ({
 }: PageContentProps) => {
   return (
     <div
-      className={cn("flex flex-col gap-6 p-4 lg:p-6", className, {
+      className={cn("flex flex-col gap-6 p-4 lg:p-6 lg:max-w-[1200px] mx-auto", className, {
         "h-full": showEmptyState,
       })}
     >

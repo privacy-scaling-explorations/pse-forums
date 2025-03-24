@@ -20,7 +20,7 @@ import { useGlobalContext } from "@/contexts/GlobalContext";
 import { TimeSince } from "@/components/ui/TimeSince";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/_app/post/$postId")({
+export const Route = createFileRoute("/_app/posts/$postId")({
   component: PostPage,
   loader: async ({ params: { postId } }) => {
     return {
@@ -30,7 +30,7 @@ export const Route = createFileRoute("/_app/post/$postId")({
 });
 
 function PostPage() {
-  const { postId } = useLoaderData({ from: "/_app/post/$postId" });
+  const { postId } = useLoaderData({ from: "/_app/posts/$postId" });
   const { user } = useGlobalContext();
   const [replyTo, setReplyTo] = useState<string | number | null>(null);
   const [mainReply, setMainReply] = useState<boolean>(false);
@@ -44,11 +44,12 @@ function PostPage() {
   }
 
   return (
-    <PageContent className="flex flex-col gap-10">
+    <PageContent className="flex flex-col gap-10 lg:max-w-[1200px] mx-auto w-full">
       <div className="flex flex-col gap-3">
         <PostCard
           title={postData?.title ?? "Post not found"}
           size="lg"
+          clampTitle={false}
           header={
             <div className="flex flex-col gap-4 pb-3">
               <div className="flex items-center gap-2 justify-between">

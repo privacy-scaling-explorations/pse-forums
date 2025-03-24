@@ -23,7 +23,7 @@ import { Route as LeftSidebarCommunitiesIndexImport } from './routes/_left-sideb
 import { Route as LeftSidebarPostDraftsImport } from './routes/_left-sidebar/post/drafts'
 import { Route as LeftSidebarPostCreateImport } from './routes/_left-sidebar/post/create'
 import { Route as LeftSidebarCommunitiesIdImport } from './routes/_left-sidebar/communities/$id'
-import { Route as AppPostPostIdImport } from './routes/_app/post/$postId'
+import { Route as AppPostsPostIdImport } from './routes/_app/posts/$postId'
 
 // Create/Update Routes
 
@@ -98,9 +98,9 @@ const LeftSidebarCommunitiesIdRoute = LeftSidebarCommunitiesIdImport.update({
   getParentRoute: () => LeftSidebarRoute,
 } as any)
 
-const AppPostPostIdRoute = AppPostPostIdImport.update({
-  id: '/post/$postId',
-  path: '/post/$postId',
+const AppPostsPostIdRoute = AppPostsPostIdImport.update({
+  id: '/posts/$postId',
+  path: '/posts/$postId',
   getParentRoute: () => AppRoute,
 } as any)
 
@@ -157,11 +157,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexImport
       parentRoute: typeof AppImport
     }
-    '/_app/post/$postId': {
-      id: '/_app/post/$postId'
-      path: '/post/$postId'
-      fullPath: '/post/$postId'
-      preLoaderRoute: typeof AppPostPostIdImport
+    '/_app/posts/$postId': {
+      id: '/_app/posts/$postId'
+      path: '/posts/$postId'
+      fullPath: '/posts/$postId'
+      preLoaderRoute: typeof AppPostsPostIdImport
       parentRoute: typeof AppImport
     }
     '/_left-sidebar/communities/$id': {
@@ -206,12 +206,12 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteChildren {
   AppIndexRoute: typeof AppIndexRoute
-  AppPostPostIdRoute: typeof AppPostPostIdRoute
+  AppPostsPostIdRoute: typeof AppPostsPostIdRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppIndexRoute: AppIndexRoute,
-  AppPostPostIdRoute: AppPostPostIdRoute,
+  AppPostsPostIdRoute: AppPostsPostIdRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
@@ -248,7 +248,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof LeftSidebarProfileRoute
   '/settings': typeof LeftSidebarSettingsRoute
   '/': typeof AppIndexRoute
-  '/post/$postId': typeof AppPostPostIdRoute
+  '/posts/$postId': typeof AppPostsPostIdRoute
   '/communities/$id': typeof LeftSidebarCommunitiesIdRoute
   '/post/create': typeof LeftSidebarPostCreateRoute
   '/post/drafts': typeof LeftSidebarPostDraftsRoute
@@ -262,7 +262,7 @@ export interface FileRoutesByTo {
   '/profile': typeof LeftSidebarProfileRoute
   '/settings': typeof LeftSidebarSettingsRoute
   '/': typeof AppIndexRoute
-  '/post/$postId': typeof AppPostPostIdRoute
+  '/posts/$postId': typeof AppPostsPostIdRoute
   '/communities/$id': typeof LeftSidebarCommunitiesIdRoute
   '/post/create': typeof LeftSidebarPostCreateRoute
   '/post/drafts': typeof LeftSidebarPostDraftsRoute
@@ -279,7 +279,7 @@ export interface FileRoutesById {
   '/_left-sidebar/profile': typeof LeftSidebarProfileRoute
   '/_left-sidebar/settings': typeof LeftSidebarSettingsRoute
   '/_app/': typeof AppIndexRoute
-  '/_app/post/$postId': typeof AppPostPostIdRoute
+  '/_app/posts/$postId': typeof AppPostsPostIdRoute
   '/_left-sidebar/communities/$id': typeof LeftSidebarCommunitiesIdRoute
   '/_left-sidebar/post/create': typeof LeftSidebarPostCreateRoute
   '/_left-sidebar/post/drafts': typeof LeftSidebarPostDraftsRoute
@@ -295,7 +295,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/settings'
     | '/'
-    | '/post/$postId'
+    | '/posts/$postId'
     | '/communities/$id'
     | '/post/create'
     | '/post/drafts'
@@ -308,7 +308,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/settings'
     | '/'
-    | '/post/$postId'
+    | '/posts/$postId'
     | '/communities/$id'
     | '/post/create'
     | '/post/drafts'
@@ -323,7 +323,7 @@ export interface FileRouteTypes {
     | '/_left-sidebar/profile'
     | '/_left-sidebar/settings'
     | '/_app/'
-    | '/_app/post/$postId'
+    | '/_app/posts/$postId'
     | '/_left-sidebar/communities/$id'
     | '/_left-sidebar/post/create'
     | '/_left-sidebar/post/drafts'
@@ -363,7 +363,7 @@ export const routeTree = rootRoute
       "filePath": "_app.tsx",
       "children": [
         "/_app/",
-        "/_app/post/$postId"
+        "/_app/posts/$postId"
       ]
     },
     "/_auth": {
@@ -398,8 +398,8 @@ export const routeTree = rootRoute
       "filePath": "_app/index.tsx",
       "parent": "/_app"
     },
-    "/_app/post/$postId": {
-      "filePath": "_app/post/$postId.tsx",
+    "/_app/posts/$postId": {
+      "filePath": "_app/posts/$postId.tsx",
       "parent": "/_app"
     },
     "/_left-sidebar/communities/$id": {

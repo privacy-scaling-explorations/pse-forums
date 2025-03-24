@@ -1,4 +1,5 @@
 import { PostSchema } from "../schemas/post.schema"
+import { generateLoremIpsum } from "../utils/lorem"
 
 const AVAILABLE_BADGES = [
   {
@@ -38,8 +39,8 @@ const LOREM_REPLIES = [
 export const postMocks: PostSchema[] = [
   {
     id: 1,
-    title: "Security Challenges in Multi-party Applications",
-    content: `Security in multi-party applications faces key challenges: trust assumptions, scalability trade-offs, and real-world attack surfaces. While cryptographic tools like MPC and ZKPs help, key management and usability remain weak points.`,
+    title: generateLoremIpsum(1, 20),
+    content: generateLoremIpsum(50, 200),
     author: {
       username: "crypto_expert",
       avatar: "https://github.com/shadcn.png",
@@ -112,8 +113,8 @@ export const postMocks: PostSchema[] = [
   },
   {
     id: 2,
-    title: "Zero Knowledge Proofs: A Comprehensive Guide",
-    content: `Understanding ZKPs from first principles. This guide covers the basics to advanced implementations...`,
+    title: generateLoremIpsum(1, 15),
+    content: generateLoremIpsum(50, 200),
     author: {
       username: "zkp_master",
       avatar: "https://github.com/shadcn.png",
@@ -140,8 +141,8 @@ export const postMocks: PostSchema[] = [
   },
   {
     id: 3,
-    title: "Ethereum Layer 2 Scaling Solutions Compared",
-    content: `Detailed comparison of different L2 solutions including Optimistic Rollups, ZK Rollups, and Validiums...`,
+    title: generateLoremIpsum(1, 15),
+    content: generateLoremIpsum(50, 200),
     author: {
       username: "l2_researcher",
       avatar: "https://github.com/shadcn.png",
@@ -179,8 +180,8 @@ export const postMocks: PostSchema[] = [
   },
   {
     id: 4,
-    title: "Privacy-Preserving Machine Learning",
-    content: `Exploring the intersection of ML and privacy-preserving techniques...`,
+    title: generateLoremIpsum(20, 50),
+    content: generateLoremIpsum(50, 200),
     author: {
       username: null,
       avatar: "https://github.com/shadcn.png",
@@ -195,8 +196,8 @@ export const postMocks: PostSchema[] = [
   },
   {
     id: 5,
-    title: "The Future of Decentralized Identity",
-    content: `Examining the evolution of DID standards and implementations...`,
+    title: generateLoremIpsum(20, 50),
+    content: generateLoremIpsum(50, 200),
     author: {
       username: "identity_expert",
       avatar: "https://github.com/shadcn.png",
@@ -256,8 +257,8 @@ export const postMocks: PostSchema[] = [
   },
   {
     id: 6,
-    title: "Smart Contract Security Best Practices",
-    content: `Essential security considerations for smart contract development...`,
+    title: generateLoremIpsum(20, 50),
+    content: generateLoremIpsum(50, 200),
     author: {
       username: "smart_contract_dev",
       avatar: "https://github.com/shadcn.png",
@@ -272,8 +273,8 @@ export const postMocks: PostSchema[] = [
   },
   {
     id: 7,
-    title: "Cross-Chain Bridge Security",
-    content: `Analysis of recent bridge hacks and security measures...`,
+    title: generateLoremIpsum(20, 50),
+    content: generateLoremIpsum(50, 200),
     author: {
       username: "bridge_security",
       avatar: "https://github.com/shadcn.png",
@@ -300,8 +301,8 @@ export const postMocks: PostSchema[] = [
   },
   {
     id: 8,
-    title: "MEV Protection Strategies",
-    content: `Understanding and mitigating MEV in DeFi protocols...`,
+    title: generateLoremIpsum(20, 50),
+    content: generateLoremIpsum(50, 200),
     author: {
       username: "mev_researcher",
       avatar: "https://github.com/shadcn.png",
@@ -316,8 +317,8 @@ export const postMocks: PostSchema[] = [
   },
   {
     id: 9,
-    title: "Quantum Resistance in Cryptography",
-    content: `Preparing cryptographic systems for the quantum era...`,
+    title: generateLoremIpsum(20, 50),
+    content: generateLoremIpsum(50, 200),
     author: {
       username: "quantum_crypto",
       avatar: "https://github.com/shadcn.png",
