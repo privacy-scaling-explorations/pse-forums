@@ -2,7 +2,7 @@ import { PostSchema } from "../schemas/post.schema"
 import { generateLoremIpsum } from "../utils/lorem"
 import { badgesMocks } from "./badges.mocks"
 import { usersMocks } from "./users.mocks"
-
+import { communityMocks } from "./community.mocks"
 const LOREM_REPLIES = [
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.`,
 
@@ -21,7 +21,6 @@ export const postMocks: PostSchema[] = [
     title: generateLoremIpsum(1, 20),
     content: generateLoremIpsum(50, 200),
     author: usersMocks[0],
-    group: "PSE",
     createdAt: "2024-03-10T10:00:00Z",
     totalViews: 1205,
     replies: [
@@ -73,6 +72,7 @@ export const postMocks: PostSchema[] = [
     ],
     isAnon: false,
     reactions: {},
+    community: communityMocks[0].id,
   },
   {
     id: 2,
@@ -84,7 +84,6 @@ export const postMocks: PostSchema[] = [
       badges: [badgesMocks[2]],
       isAnon: false,
     },
-    group: "ZKP",
     createdAt: "2024-03-09T15:00:00Z",
     totalViews: 892,
     replies: [
@@ -101,6 +100,7 @@ export const postMocks: PostSchema[] = [
       },
     ],
     isAnon: false,
+    community: communityMocks[0].id,
   },
   {
     id: 3,
@@ -112,7 +112,6 @@ export const postMocks: PostSchema[] = [
       badges: [badgesMocks[2]],
       isAnon: false,
     },
-    group: "Scaling",
     replies: [
       {
         id: 105,
@@ -140,6 +139,7 @@ export const postMocks: PostSchema[] = [
     totalViews: 1567,
     createdAt: "2024-03-08T09:15:00Z",
     isAnon: false,
+    community: communityMocks[2].id,
   },
   {
     id: 4,
@@ -151,11 +151,11 @@ export const postMocks: PostSchema[] = [
       badges: [badgesMocks[3]],
       isAnon: true,
     },
-    group: "Privacy",
     replies: [],
     totalViews: 445,
     createdAt: "2024-03-07T14:20:00Z",
     isAnon: true,
+    community: communityMocks[0].id,
   },
   {
     id: 5,
@@ -167,7 +167,6 @@ export const postMocks: PostSchema[] = [
       badges: [badgesMocks[0]],
       isAnon: false,
     },
-    group: "Identity",
     replies: [
       {
         id: 107,
@@ -217,6 +216,7 @@ export const postMocks: PostSchema[] = [
     totalViews: 789,
     createdAt: "2024-03-06T11:30:00Z",
     isAnon: false,
+    community: communityMocks[3].id,
   },
   {
     id: 6,
@@ -228,11 +228,11 @@ export const postMocks: PostSchema[] = [
       badges: [badgesMocks[0]],
       isAnon: false,
     },
-    group: "Security",
     replies: [],
     totalViews: 2341,
     createdAt: "2024-03-05T16:45:00Z",
     isAnon: false,
+    community: communityMocks[0].id,
   },
   {
     id: 7,
@@ -244,7 +244,6 @@ export const postMocks: PostSchema[] = [
       badges: [badgesMocks[2]],
       isAnon: false,
     },
-    group: "Security",
     replies: [
       {
         id: 102,
@@ -261,6 +260,7 @@ export const postMocks: PostSchema[] = [
     totalViews: 1123,
     createdAt: "2024-03-04T13:20:00Z",
     isAnon: false,
+    community: communityMocks[0].id,
   },
   {
     id: 8,
@@ -272,11 +272,11 @@ export const postMocks: PostSchema[] = [
       badges: [badgesMocks[2]],
       isAnon: false,
     },
-    group: "MEV",
     replies: [],
     totalViews: 567,
     createdAt: "2024-03-03T10:10:00Z",
     isAnon: false,
+    community: communityMocks[0].id,
   },
   {
     id: 9,
@@ -288,11 +288,11 @@ export const postMocks: PostSchema[] = [
       badges: [badgesMocks[2]],
       isAnon: false,
     },
-    group: "Cryptography",
     replies: [],
     totalViews: 890,
     createdAt: "2024-03-02T09:30:00Z",
     isAnon: false,
+    community: communityMocks[0].id,
   },
   {
     id: 10,
@@ -304,10 +304,10 @@ export const postMocks: PostSchema[] = [
       badges: [badgesMocks[1]],
       isAnon: false,
     },
-    group: "Development",
     replies: [],
     totalViews: 1432,
     createdAt: "2024-03-01T15:45:00Z",
     isAnon: false,
+    community: communityMocks[0].id,
   },
 ]

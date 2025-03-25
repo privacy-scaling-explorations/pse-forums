@@ -1,5 +1,5 @@
-import { UserSchema } from "../schemas/user.schema";
-
+import { UserSchema } from "../schemas/user.schema"
+import { badgesMocks } from "./badges.mocks"
 export const usersMocks: UserSchema[] = [
   {
     id: 1,
@@ -9,22 +9,7 @@ export const usersMocks: UserSchema[] = [
     email: "kali@example.com",
     website: "https://example.com",
     bio: "lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
-    badges: [
-        {
-            id: 1,
-            name: "Badge 1",
-            description: "Badge 1 description",
-            imageUrl: "https://pse.dev/logos/pse-logo-bg.svg",
-            createdAt: "2021-01-01",
-        },
-        {
-            id: 2,
-            name: "Badge 2",
-            description: "Badge 2 description",
-            imageUrl: "https://pse.dev/logos/pse-logo-bg.svg",
-            createdAt: "2021-01-01",
-        },
-    ],
+    badges: [badgesMocks[0], badgesMocks[1]],
   },
   {
     id: 2,
@@ -34,7 +19,7 @@ export const usersMocks: UserSchema[] = [
     email: "mario.rossi@example.com",
     website: "https://example.com",
     bio: "lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
-    badges: [],
+    badges: [badgesMocks[0]],
   },
   {
     id: 3,
@@ -45,4 +30,4 @@ export const usersMocks: UserSchema[] = [
     website: "https://example.com",
     bio: "lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
   },
-];
+]

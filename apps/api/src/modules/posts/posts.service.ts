@@ -13,9 +13,19 @@ export async function findAllPosts(): Promise<PostSchema[]> {
         u.username,
         u.avatar,
         u.badges,
-        u.is_anon as user_is_anon
+        u.is_anon as user_is_anon,
+        c.id as community_id,
+        c.name as community_name,
+        c.description as community_description,
+        c.avatar as community_avatar,
+        c.banner as community_banner,
+        c.required_badges as community_required_badges,
+        c.members as community_members,
+        c.created_at as community_created_at,
+        c.updated_at as community_updated_at
       FROM posts p
       JOIN users u ON p.author_id = u.id
+      LEFT JOIN communities c ON p.community_id = c.id
       ORDER BY p.created_at DESC
     `);
 
@@ -56,9 +66,19 @@ export async function findPostById(
         u.username,
         u.avatar,
         u.badges,
-        u.is_anon as user_is_anon
+        u.is_anon as user_is_anon,
+        c.id as community_id,
+        c.name as community_name,
+        c.description as community_description,
+        c.avatar as community_avatar,
+        c.banner as community_banner,
+        c.required_badges as community_required_badges,
+        c.members as community_members,
+        c.created_at as community_created_at,
+        c.updated_at as community_updated_at
       FROM posts p
       JOIN users u ON p.author_id = u.id
+      LEFT JOIN communities c ON p.community_id = c.id
       WHERE p.id = $1
     `, [id]);
 

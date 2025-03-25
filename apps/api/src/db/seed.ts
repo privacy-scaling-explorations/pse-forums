@@ -167,14 +167,13 @@ async function seedDatabase() {
 
         // Create post
         const { rows: [createdPost] } = await client.query(
-          `INSERT INTO posts (title, content, author_id, "group", community_id, total_views, reactions, is_anon, created_at, updated_at)
-           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $9)
+          `INSERT INTO posts (title, content, author_id, community_id, total_views, reactions, is_anon, created_at, updated_at)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $8)
            RETURNING id`,
           [
             mockPost.title,
             mockPost.content,
             author.id,
-            mockPost.group,
             communityId,
             mockPost.totalViews || 0,
             JSON.stringify(mockPost.reactions || {}),

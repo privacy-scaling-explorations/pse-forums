@@ -8,32 +8,9 @@ import { PageContent } from "@/components/PageContent";
 import { Banner } from "@/components/ui/Banner";
 import { useGlobalContext } from "@/contexts/GlobalContext";
 import { useNavigate } from "@tanstack/react-router";
-const InfoCard = ({
-  label,
-  value,
-  className,
-}: {
-  label: string;
-  value: string;
-  className?: string;
-}) => {
-  return (
-    <div
-      className={cn(
-        "flex flex-col p-2 rounded-md bg-accent text-center",
-        className,
-      )}
-    >
-      <span className="text-sm font-inter text-base-foreground font-bold">
-        {value}
-      </span>
+import { InfoCard } from "@/components/ui/InfoCard";
 
-      <span className="text-xs font-inter font-medium text-base-muted-foreground">
-        {label}
-      </span>
-    </div>
-  );
-};
+
 
 export const ProfilePage = () => {
   const { user, setIsLoggedIn } = useGlobalContext();

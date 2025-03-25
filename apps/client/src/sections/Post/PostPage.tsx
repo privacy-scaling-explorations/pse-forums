@@ -10,7 +10,7 @@ import {
 } from "@/hooks/usePosts";
 import { cn } from "@/lib/utils";
 import { useForm } from "@tanstack/react-form";
-import { useLoaderData } from "@tanstack/react-router";
+import { Link, useLoaderData } from "@tanstack/react-router";
 import { useState } from "react";
 import { PostAuthor } from "./PostAuthor";
 import { PostCard } from "./PostCard";
@@ -62,9 +62,11 @@ export const PostPage = () => {
               <div className="flex items-center gap-2 justify-between">
                 <div className="flex items-center gap-1">
                   <UserGroupIcon className="size-[14px] text-purple" />
-                  <span className="text-purple font-inter font-semibold text-sm">
-                    {postData.group}
-                  </span>
+                  <Link to={`/communities/${postData.communityData?.id}`}>
+                    <span className="text-purple font-inter font-semibold text-sm">
+                      {postData.communityData?.name}
+                    </span>
+                  </Link>
                 </div>
                 <TimeSince isoDateTime={postData.createdAt} />
               </div>

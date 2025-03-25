@@ -34,7 +34,6 @@ export const postSchema = z.object({
   id: z.union([z.number(), z.string()]),
   title: z.string(),
   content: z.string(),
-  group: z.string(),
   replies: z.array(
     postReplySchema.and(
       z.object({
@@ -49,6 +48,7 @@ export const postSchema = z.object({
   isAnon: z.boolean().optional().default(false),
   reactions: z.record(z.string(), postReactionSchema).optional(),
   community: z.union([z.number(), z.string()]).optional(),
+  communityData: communitySchema.optional(),
 })
 
 export type PostSchema = z.infer<typeof postSchema>

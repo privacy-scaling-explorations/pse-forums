@@ -8,6 +8,7 @@ import { Tag } from "@/components/ui/Tag";
 import { EmojiButton } from "@/components/ui/EmojiButton";
 import { usersMocks } from "../../../../shared/src/mocks/users.mocks";
 import { PostReactions } from "@/components/ui/PostReactions";
+import { Link } from "@tanstack/react-router";
 
 export const PostItems = () => {
   const { data: posts = [], refetch: refetchPosts } = useGetPosts();
@@ -33,9 +34,11 @@ export const PostItems = () => {
                 <div className="flex items-center gap-2 justify-between">
                   <div className="flex items-center gap-1">
                     <UserGroupIcon className="size-[14px] text-purple" />
-                    <span className="text-purple font-inter font-semibold text-sm">
-                      {post.group}
-                    </span>
+                    <Link to={`/communities/${post.communityData?.id}` as any}>
+                      <span className="text-purple font-inter font-semibold text-sm">
+                        {post.communityData?.name}
+                      </span>
+                    </Link>
                   </div>
                   <TimeSince isoDateTime={post?.createdAt ?? ""} />
                 </div>

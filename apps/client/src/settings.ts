@@ -13,3 +13,5 @@ export const MAIN_NAV_ITEMS: Record<
   ],
   end: [{ title: "Settings", to: "/settings", icon: Settings, requiresAuth: true }],
 };
+
+export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';

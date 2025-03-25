@@ -64,7 +64,6 @@ const createTables = `
     title TEXT NOT NULL,
     content TEXT NOT NULL,
     author_id UUID REFERENCES users(id) ON DELETE CASCADE NOT NULL,
-    "group" TEXT NOT NULL,
     community_id UUID REFERENCES communities(id) ON DELETE SET NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -111,7 +110,6 @@ const createTables = `
   
   -- Indexes for performance
   CREATE INDEX IF NOT EXISTS idx_posts_author ON posts(author_id);
-  CREATE INDEX IF NOT EXISTS idx_posts_group ON posts("group");
   CREATE INDEX IF NOT EXISTS idx_posts_community ON posts(community_id);
   CREATE INDEX IF NOT EXISTS idx_replies_post ON replies(post_id);
   CREATE INDEX IF NOT EXISTS idx_replies_author ON replies(author_id);

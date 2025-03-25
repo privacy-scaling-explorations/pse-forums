@@ -37,17 +37,42 @@ const formatPostReplies = (repliesRows: any[]) => {
 export const formatPostDbRow = (post: any, repliesRows: any[]): PostSchema => {
   const topLevelReplies = formatPostReplies(repliesRows)
 
+  // Format community if available
+  let community = null;
+  let communityData = null;
+  
+  if (post.community_id) {
+    community = post.community_id;
+    
+    // Create full community object
+    communityData = {
+      id: post.community_id,
+      name: post.community_name || "",
+      description: post.community_description || "",
+      avatar: post.community_avatar || "",
+      banner: post.community_banner || "",
+      requiredBadges: Array.isArray(post.community_required_badges) 
+        ? post.community_required_badges 
+        : [],
+      members: Array.isArray(post.community_members) 
+        ? post.community_members 
+        : [],
+      createdAt: post.community_created_at || new Date().toISOString(),
+      updatedAt: post.community_updated_at || new Date().toISOString()
+    };
+  }
+
   const formattedPost = {
     id: post.id,
     title: post.title || "",
     content: post.content || "",
-    group: post.group || "",
     createdAt: post.created_at || new Date().toISOString(),
     updatedAt: post.updated_at || new Date().toISOString(),
     totalViews: typeof post.total_views === 'number' ? post.total_views : 0,
     reactions: typeof post.reactions === 'object' ? post.reactions : {},
     isAnon: !!post.is_anon,
-    community: post.community_id || null,
+    community: community,
+    communityData: communityData,
     author: {
       username: post.user_is_anon ? null : (post.username || ""),
       avatar: post.avatar || "",

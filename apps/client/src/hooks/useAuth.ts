@@ -3,8 +3,9 @@ import { useAtom } from "jotai"
 import { RESET } from "jotai/utils"
 import { useCallback, useMemo } from "react"
 import { authAtom, type AuthData } from "@/state/atoms"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { useGlobalContext } from "@/contexts/GlobalContext"
+import { API_URL } from "../settings"
 
 export function useAuth() {
   const [auth, setAuthImpl] = useAtom(authAtom)
@@ -40,6 +41,16 @@ export function useMockAuth({ onSuccess }: { onSuccess?: () => void } = {}) {
           onSuccess?.()
         }, 1000)
       })
+    },
+  })
+}
+
+export function useGetUser() {
+  return useQuery({
+    queryKey: ["getUser"],
+    queryFn: async () => {
+      const response = await fetch(`${API_URL}/api/me`)
+      return response.json()
     },
   })
 }

@@ -2,12 +2,13 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import { useStorage } from "./useStorage"
 import { LOCAL_STORAGE_KEYS } from "@/lib/config"
 import { PostSchema } from "@/shared/schemas/post.schema"
+import { API_URL } from "../settings"
 
 export const useGetPosts = () => {
   return useQuery({
     queryKey: ["getPosts"],
     queryFn: (): Promise<PostSchema[]> =>
-      fetch("http://localhost:3001/api/posts").then((res) => res.json()),
+      fetch(`${API_URL}/api/posts`).then((res) => res.json()),
   })
 }
 
@@ -15,7 +16,7 @@ export const useGetBadges = () => {
   return useQuery({
     queryKey: ["getBadges"],
     queryFn: () =>
-      fetch("http://localhost:3001/api/badges").then((res) => res.json()),
+      fetch(`${API_URL}/api/badges`).then((res) => res.json()),
   })
 }
 
@@ -47,7 +48,7 @@ export const useTogglePostReaction = () => {
       userId: string
     }): Promise<PostSchema> => {
       const post = await fetch(
-        `http://localhost:3001/api/posts/${postId}/reactions`,
+        `${API_URL}/api/posts/${postId}/reactions`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
