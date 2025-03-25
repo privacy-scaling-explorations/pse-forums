@@ -1,16 +1,15 @@
 import { z } from "zod";
-import { badgeSchema, postSchema } from "./post.schema";
-import { userSchema } from "./user.schema";
 
 export const communitySchema = z.object({
-  id: z.number(),
+  id: z.union([z.number(), z.string()]),
   name: z.string(),
-  requiredBadges: z.array(badgeSchema),
+  requiredBadges: z.array(z.union([z.number(), z.string()])),
   description: z.string(),
   avatar: z.string().optional(),
   banner: z.string().optional(),
-  members: z.array(userSchema),
-  posts: z.array(postSchema),
+  members: z.array(z.union([z.number(), z.string()])),
   createdAt: z.string(),
   updatedAt: z.string(),
 });
+
+export type CommunitySchema = z.infer<typeof communitySchema>;

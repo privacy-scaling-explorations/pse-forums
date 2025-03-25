@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { badgeSchema } from "./post.schema";
+import { badgeSchema } from "./badge.schema";
 
 export const userSchema = z.object({
-  id: z.number(),
-  username: z.string().optional(),
+  id: z.union([z.number(), z.string()]),
+  username: z.string(),
   email: z.string().optional(),
   website: z.string().optional(),
   bio: z.string().optional(),

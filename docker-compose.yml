@@ -29,6 +29,7 @@ services:
       - PORT=3001
       - NODE_ENV=development
       - HOST=0.0.0.0
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/pse_forum
     ports: 
       - "3001:3001"
     volumes:
@@ -36,12 +37,33 @@ services:
       - ./apps/shared:/workspace/apps/shared
       - /workspace/apps/api/node_modules
     working_dir: /workspace/apps/api
-    command: sh -c "cd ../shared && npm install && npm run build && cd ../api && npm install && npm run dev"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    container_name: pse-forum-postgres
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=pse_forum
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   client_modules:
   api_modules:
   shared_modules:
+  postgres_data:
 
 networks:
   default:

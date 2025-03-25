@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { ZodError } from "zod"
-import { postReactionSchema } from "@shared/schemas/post.schema"
+import { postReactionSchema } from "@/shared/schemas/post.schema"
 import {
   findAllPosts,
   findPostById,
@@ -32,25 +32,42 @@ export async function getPostById(req: Request, res: Response) {
   }
 }
 
-export async function addReaction(req: Request, res: Response) {
+export async function toggleReaction(req: Request, res: Response) {
   try {
     const { id } = req.params
-
+    const { emoji, userId } = req.body
     
-    const validatedData = postReactionSchema.parse(req.body)
-    console.log("Request params:", req.params, req.body);
+    if (!id || !emoji || !userId) {
+      return res.status(400).json({ 
+        error: "Missing required fields", 
+        details: "Post ID, emoji, and userId are required" 
+      })
+    }
 
-    const post = await addPostReaction(
-      id,
-      validatedData.emoji,
-      validatedData.userIds ?? [],
-    )
-
-    if (!post) {
+    // Get current post to check existing reactions
+    const currentPost = await findPostById(id)
+    if (!currentPost) {
       return res.status(404).json({ error: "Post not found" })
     }
+
+    // Check if user has already reacted with this emoji
+    const hasReacted = currentPost.reactions?.[emoji]?.userIds?.includes(userId)
+    
+    let updatedPost
+    
+    if (hasReacted) {
+      // User already reacted - remove the reaction
+      updatedPost = await removePostReaction(id, emoji, [userId])
+    } else {
+      // User hasn't reacted yet - add the reaction
+      updatedPost = await addPostReaction(id, emoji, [userId])
+    }
+
+    if (!updatedPost) {
+      return res.status(500).json({ error: "Failed to update reaction" })
+    }
   
-    return res.status(200).json(post)
+    return res.status(200).json(updatedPost)
   } catch (error) {
     if (error instanceof ZodError) {
       return res.status(400).json({
@@ -60,27 +77,9 @@ export async function addReaction(req: Request, res: Response) {
     }
     return res
       .status(500)
-      .json({ error: "Failed to add reaction", details: error, post: req.body })
-  }
-}
-
-export async function removeReaction(req: Request, res: Response) {
-  try {
-    const { id, emoji } = req.params
-    const { userIds } = req.body
-
-    if (!userIds) {
-      return res.status(400).json({ error: "userIds is required" })
-    }
-
-    const post = await removePostReaction(id, emoji, userIds)
-
-    if (!post) {
-      return res.status(404).json({ error: "Post not found" })
-    }
-
-    return res.status(200).json(post)
-  } catch (error) {
-    return res.status(500).json({ error: "Failed to remove reaction" })
+      .json({ 
+        error: "Failed to toggle reaction", 
+        details: error instanceof Error ? error.message : String(error) 
+      })
   }
 }

@@ -3,7 +3,8 @@ import { TimeSince } from "@/components/ui/TimeSince";
 import { PostAuthorSchema, PostBadgeSchema } from "@/shared/schemas/post.schema";
 import { VenetianMask as Mask } from "lucide-react";
 import { cn } from "@/lib/utils";
-
+import { Link } from "@tanstack/react-router";
+import { Mail as MailIcon } from "lucide-react";
 interface PostAuthorProps {
   author: PostAuthorSchema;
   createdAt?: string;
@@ -30,9 +31,11 @@ export const PostAuthor = ({
         icon={author.isAnon ? Mask : undefined}
       />
       {author?.username && (
+        <Link to={`/user/${author.username}`}> 
         <span className="text-card-foreground font-inter font-medium text-sm line-clamp-2 lg:line-clamp-1">
           {author.username}
         </span>
+        </Link>
       )}
       {badges?.length > 0 && (
         <>
@@ -40,11 +43,13 @@ export const PostAuthor = ({
           {badges?.map((badge: PostBadgeSchema) => (
             <div
               className="flex gap-1 items-center bg-sidebar-background px-[10px] py-0.5 rounded-xl border border-base-border"
-              key={badge.label}
+              key={badge.id}
             >
-              {badge?.icon}
-              <span className="text-xs font-inter font-medium text-base-foreground">
-                {badge?.label}
+              <MailIcon
+                className="size-2.5 text-base-muted-foreground"
+              />
+              <span className="text-sm font-inter font-medium text-base-foreground">
+                {badge?.name}
               </span>
             </div>
           ))}

@@ -19,7 +19,7 @@ export const useGetBadges = () => {
   })
 }
 
-export const useGetPostById = (postId: number) => {
+export const useGetPostById = (postId: string | number) => {
   return useQuery({
     queryKey: ["getPostById", postId],
     queryFn: () => {
@@ -34,21 +34,24 @@ export const useGetPostById = (postId: number) => {
   })
 }
 
-export const useAddPostReaction = () => {
+export const useTogglePostReaction = () => {
   return useMutation({
+    mutationKey: ["togglePostReaction"],
     mutationFn: async ({
       postId,
       emoji,
+      userId,
     }: {
       postId: string | number
       emoji: string
+      userId: string
     }): Promise<PostSchema> => {
       const post = await fetch(
         `http://localhost:3001/api/posts/${postId}/reactions`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ emoji }),
+          body: JSON.stringify({ emoji, userId }),
         },
       ).then((res) => res.json())
 

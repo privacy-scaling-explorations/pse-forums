@@ -14,7 +14,7 @@
     "baseUrl": "../..",
     "paths": {
       "@/*": ["apps/api/src/*"],
-      "@shared/*": ["apps/shared/src/*"]
+      "@/shared/*": ["apps/shared/src/*"]
     },
     "composite": true,
     "declaration": true,

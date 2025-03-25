@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const badgeSchema = z.object({
-  id: z.string(),
+  id: z.union([z.number(), z.string()]),
   name: z.string(),
   description: z.string(),
   imageUrl: z.string(),

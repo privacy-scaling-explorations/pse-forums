@@ -1,5 +1,6 @@
 import { z } from "zod"
-
+import { badgeSchema } from "./badge.schema"
+import { communitySchema } from "./community.schema"
 
 export const postReactionSchema = z.object({
   emoji: z.string(),
@@ -7,18 +8,12 @@ export const postReactionSchema = z.object({
   userIds: z.array(z.string()).optional().default([]),
 })
 
-export const badgeSchema = z.object({
-  label: z.string(),
-  icon: z.any().optional(),
-  tooltip: z.string().optional(),
-})
-
 export const postAuthorSchema = z
   .object({
     username: z.string().nullable(),
     avatar: z.string(),
     isAnon: z.boolean().optional(),
-    badges: z.array(badgeSchema),
+    badges: z.array(badgeSchema).optional(),
   })
   .refine(
     (data) => (data.isAnon ? data.username === null : data.username !== null),
@@ -29,14 +24,14 @@ export const postAuthorSchema = z
   )
 
 export const postReplySchema = z.object({
-  id: z.number(),
+  id: z.union([z.number(), z.string()]),
   content: z.string().optional(),
   author: postAuthorSchema,
   createdAt: z.string().optional(),
 })
 
 export const postSchema = z.object({
-  id: z.number(),
+  id: z.union([z.number(), z.string()]),
   title: z.string(),
   content: z.string(),
   group: z.string(),
@@ -49,9 +44,11 @@ export const postSchema = z.object({
   ),
   author: postAuthorSchema,
   createdAt: z.string().optional(),
+  updatedAt: z.string().optional(),
   totalViews: z.number().optional(),
   isAnon: z.boolean().optional().default(false),
   reactions: z.record(z.string(), postReactionSchema).optional(),
+  community: z.union([z.number(), z.string()]).optional(),
 })
 
 export type PostSchema = z.infer<typeof postSchema>

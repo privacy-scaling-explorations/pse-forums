@@ -20,6 +20,7 @@ import { Route as LeftSidebarProfileImport } from './routes/_left-sidebar/profil
 import { Route as LeftSidebarNotificationsImport } from './routes/_left-sidebar/notifications'
 import { Route as LeftSidebarCredentialsIndexImport } from './routes/_left-sidebar/credentials/index'
 import { Route as LeftSidebarCommunitiesIndexImport } from './routes/_left-sidebar/communities/index'
+import { Route as LeftSidebarUserUsernameImport } from './routes/_left-sidebar/user/$username'
 import { Route as LeftSidebarPostDraftsImport } from './routes/_left-sidebar/post/drafts'
 import { Route as LeftSidebarPostCreateImport } from './routes/_left-sidebar/post/create'
 import { Route as LeftSidebarCommunitiesIdImport } from './routes/_left-sidebar/communities/$id'
@@ -79,6 +80,12 @@ const LeftSidebarCommunitiesIndexRoute =
     path: '/communities/',
     getParentRoute: () => LeftSidebarRoute,
   } as any)
+
+const LeftSidebarUserUsernameRoute = LeftSidebarUserUsernameImport.update({
+  id: '/user/$username',
+  path: '/user/$username',
+  getParentRoute: () => LeftSidebarRoute,
+} as any)
 
 const LeftSidebarPostDraftsRoute = LeftSidebarPostDraftsImport.update({
   id: '/post/drafts',
@@ -185,6 +192,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LeftSidebarPostDraftsImport
       parentRoute: typeof LeftSidebarImport
     }
+    '/_left-sidebar/user/$username': {
+      id: '/_left-sidebar/user/$username'
+      path: '/user/$username'
+      fullPath: '/user/$username'
+      preLoaderRoute: typeof LeftSidebarUserUsernameImport
+      parentRoute: typeof LeftSidebarImport
+    }
     '/_left-sidebar/communities/': {
       id: '/_left-sidebar/communities/'
       path: '/communities'
@@ -223,6 +237,7 @@ interface LeftSidebarRouteChildren {
   LeftSidebarCommunitiesIdRoute: typeof LeftSidebarCommunitiesIdRoute
   LeftSidebarPostCreateRoute: typeof LeftSidebarPostCreateRoute
   LeftSidebarPostDraftsRoute: typeof LeftSidebarPostDraftsRoute
+  LeftSidebarUserUsernameRoute: typeof LeftSidebarUserUsernameRoute
   LeftSidebarCommunitiesIndexRoute: typeof LeftSidebarCommunitiesIndexRoute
   LeftSidebarCredentialsIndexRoute: typeof LeftSidebarCredentialsIndexRoute
 }
@@ -234,6 +249,7 @@ const LeftSidebarRouteChildren: LeftSidebarRouteChildren = {
   LeftSidebarCommunitiesIdRoute: LeftSidebarCommunitiesIdRoute,
   LeftSidebarPostCreateRoute: LeftSidebarPostCreateRoute,
   LeftSidebarPostDraftsRoute: LeftSidebarPostDraftsRoute,
+  LeftSidebarUserUsernameRoute: LeftSidebarUserUsernameRoute,
   LeftSidebarCommunitiesIndexRoute: LeftSidebarCommunitiesIndexRoute,
   LeftSidebarCredentialsIndexRoute: LeftSidebarCredentialsIndexRoute,
 }
@@ -252,6 +268,7 @@ export interface FileRoutesByFullPath {
   '/communities/$id': typeof LeftSidebarCommunitiesIdRoute
   '/post/create': typeof LeftSidebarPostCreateRoute
   '/post/drafts': typeof LeftSidebarPostDraftsRoute
+  '/user/$username': typeof LeftSidebarUserUsernameRoute
   '/communities': typeof LeftSidebarCommunitiesIndexRoute
   '/credentials': typeof LeftSidebarCredentialsIndexRoute
 }
@@ -266,6 +283,7 @@ export interface FileRoutesByTo {
   '/communities/$id': typeof LeftSidebarCommunitiesIdRoute
   '/post/create': typeof LeftSidebarPostCreateRoute
   '/post/drafts': typeof LeftSidebarPostDraftsRoute
+  '/user/$username': typeof LeftSidebarUserUsernameRoute
   '/communities': typeof LeftSidebarCommunitiesIndexRoute
   '/credentials': typeof LeftSidebarCredentialsIndexRoute
 }
@@ -283,6 +301,7 @@ export interface FileRoutesById {
   '/_left-sidebar/communities/$id': typeof LeftSidebarCommunitiesIdRoute
   '/_left-sidebar/post/create': typeof LeftSidebarPostCreateRoute
   '/_left-sidebar/post/drafts': typeof LeftSidebarPostDraftsRoute
+  '/_left-sidebar/user/$username': typeof LeftSidebarUserUsernameRoute
   '/_left-sidebar/communities/': typeof LeftSidebarCommunitiesIndexRoute
   '/_left-sidebar/credentials/': typeof LeftSidebarCredentialsIndexRoute
 }
@@ -299,6 +318,7 @@ export interface FileRouteTypes {
     | '/communities/$id'
     | '/post/create'
     | '/post/drafts'
+    | '/user/$username'
     | '/communities'
     | '/credentials'
   fileRoutesByTo: FileRoutesByTo
@@ -312,6 +332,7 @@ export interface FileRouteTypes {
     | '/communities/$id'
     | '/post/create'
     | '/post/drafts'
+    | '/user/$username'
     | '/communities'
     | '/credentials'
   id:
@@ -327,6 +348,7 @@ export interface FileRouteTypes {
     | '/_left-sidebar/communities/$id'
     | '/_left-sidebar/post/create'
     | '/_left-sidebar/post/drafts'
+    | '/_left-sidebar/user/$username'
     | '/_left-sidebar/communities/'
     | '/_left-sidebar/credentials/'
   fileRoutesById: FileRoutesById
@@ -378,6 +400,7 @@ export const routeTree = rootRoute
         "/_left-sidebar/communities/$id",
         "/_left-sidebar/post/create",
         "/_left-sidebar/post/drafts",
+        "/_left-sidebar/user/$username",
         "/_left-sidebar/communities/",
         "/_left-sidebar/credentials/"
       ]
@@ -412,6 +435,10 @@ export const routeTree = rootRoute
     },
     "/_left-sidebar/post/drafts": {
       "filePath": "_left-sidebar/post/drafts.tsx",
+      "parent": "/_left-sidebar"
+    },
+    "/_left-sidebar/user/$username": {
+      "filePath": "_left-sidebar/user/$username.tsx",
       "parent": "/_left-sidebar"
     },
     "/_left-sidebar/communities/": {

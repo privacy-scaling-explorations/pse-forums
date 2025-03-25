@@ -1,5 +1,5 @@
-import { BadgeSchema } from "@shared/schemas/badge.schema";
-import { badgesMocks } from "@shared/mocks/badges.mocks";
+import { BadgeSchema } from "@/shared/schemas/badge.schema";
+import { badgesMocks } from "@/shared/mocks/badges.mocks";
 
 export class BadgesService {
   private badges: BadgeSchema[] = [];

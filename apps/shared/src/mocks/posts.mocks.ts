@@ -1,28 +1,7 @@
 import { PostSchema } from "../schemas/post.schema"
 import { generateLoremIpsum } from "../utils/lorem"
-
-const AVAILABLE_BADGES = [
-  {
-    label: "@pse.dev",
-    icon: null,
-    tooltip: "Verified by",
-  },
-  {
-    label: "@ethereum.org",
-    icon: null,
-    tooltip: "Verified by",
-  },
-  {
-    label: "zksync.io",
-    icon: null,
-    tooltip: "Verified by",
-  },
-  {
-    label: "+18 years old",
-    icon: null,
-    tooltip: "Verified by",
-  },
-]
+import { badgesMocks } from "./badges.mocks"
+import { usersMocks } from "./users.mocks"
 
 const LOREM_REPLIES = [
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.`,
@@ -41,12 +20,7 @@ export const postMocks: PostSchema[] = [
     id: 1,
     title: generateLoremIpsum(1, 20),
     content: generateLoremIpsum(50, 200),
-    author: {
-      username: "crypto_expert",
-      avatar: "https://github.com/shadcn.png",
-      badges: [AVAILABLE_BADGES[0], AVAILABLE_BADGES[1]],
-      isAnon: false,
-    },
+    author: usersMocks[0],
     group: "PSE",
     createdAt: "2024-03-10T10:00:00Z",
     totalViews: 1205,
@@ -56,7 +30,7 @@ export const postMocks: PostSchema[] = [
         author: {
           username: "security_researcher",
           avatar: "https://github.com/shadcn.png",
-          badges: [AVAILABLE_BADGES[2]],
+          badges: [badgesMocks[2]],
           isAnon: false,
         },
         content: LOREM_REPLIES[0],
@@ -66,7 +40,7 @@ export const postMocks: PostSchema[] = [
             author: {
               username: null,
               avatar: "",
-              badges: [AVAILABLE_BADGES[2]],
+              badges: [badgesMocks[2]],
               isAnon: true,
             },
             id: 1011,
@@ -79,7 +53,7 @@ export const postMocks: PostSchema[] = [
         author: {
           username: "crypto_analyst",
           avatar: "https://github.com/shadcn.png",
-          badges: [AVAILABLE_BADGES[1]],
+          badges: [badgesMocks[1]],
           isAnon: false,
         },
         content: LOREM_REPLIES[1],
@@ -90,7 +64,7 @@ export const postMocks: PostSchema[] = [
         author: {
           username: "privacy_expert",
           avatar: "https://github.com/shadcn.png",
-          badges: [AVAILABLE_BADGES[0]],
+          badges: [badgesMocks[0]],
           isAnon: false,
         },
         content: LOREM_REPLIES[2],
@@ -98,18 +72,7 @@ export const postMocks: PostSchema[] = [
       },
     ],
     isAnon: false,
-    reactions: {
-      "👍": {
-        emoji: "👍",
-        count: 4,
-        userIds: ["1", "2"],
-      },
-      "❤️": {
-        emoji: "❤️",
-        count: 1,
-        userIds: ["1"],
-      },
-    },
+    reactions: {},
   },
   {
     id: 2,
@@ -118,7 +81,7 @@ export const postMocks: PostSchema[] = [
     author: {
       username: "zkp_master",
       avatar: "https://github.com/shadcn.png",
-      badges: [AVAILABLE_BADGES[2]],
+      badges: [badgesMocks[2]],
       isAnon: false,
     },
     group: "ZKP",
@@ -130,7 +93,7 @@ export const postMocks: PostSchema[] = [
         author: {
           username: "zkp_enthusiast",
           avatar: "https://github.com/shadcn.png",
-          badges: [AVAILABLE_BADGES[2]],
+          badges: [badgesMocks[2]],
           isAnon: false,
         },
         content: LOREM_REPLIES[3],
@@ -146,7 +109,7 @@ export const postMocks: PostSchema[] = [
     author: {
       username: "l2_researcher",
       avatar: "https://github.com/shadcn.png",
-      badges: [AVAILABLE_BADGES[2]],
+      badges: [badgesMocks[2]],
       isAnon: false,
     },
     group: "Scaling",
@@ -156,7 +119,7 @@ export const postMocks: PostSchema[] = [
         author: {
           username: "l2_expert",
           avatar: "https://github.com/shadcn.png",
-          badges: [AVAILABLE_BADGES[1]],
+          badges: [badgesMocks[1]],
           isAnon: false,
         },
         content: LOREM_REPLIES[4],
@@ -167,7 +130,7 @@ export const postMocks: PostSchema[] = [
         author: {
           username: "scaling_researcher",
           avatar: "https://github.com/shadcn.png",
-          badges: [AVAILABLE_BADGES[0]],
+          badges: [badgesMocks[0]],
           isAnon: false,
         },
         content: LOREM_REPLIES[0],
@@ -185,7 +148,7 @@ export const postMocks: PostSchema[] = [
     author: {
       username: null,
       avatar: "https://github.com/shadcn.png",
-      badges: [AVAILABLE_BADGES[3]],
+      badges: [badgesMocks[3]],
       isAnon: true,
     },
     group: "Privacy",
@@ -201,7 +164,7 @@ export const postMocks: PostSchema[] = [
     author: {
       username: "identity_expert",
       avatar: "https://github.com/shadcn.png",
-      badges: [AVAILABLE_BADGES[0]],
+      badges: [badgesMocks[0]],
       isAnon: false,
     },
     group: "Identity",
@@ -211,7 +174,7 @@ export const postMocks: PostSchema[] = [
         author: {
           username: "identity_researcher",
           avatar: "https://github.com/shadcn.png",
-          badges: [AVAILABLE_BADGES[2]],
+          badges: [badgesMocks[2]],
           isAnon: false,
         },
         content: LOREM_REPLIES[1],
@@ -222,7 +185,7 @@ export const postMocks: PostSchema[] = [
         author: {
           username: "did_expert",
           avatar: "https://github.com/shadcn.png",
-          badges: [AVAILABLE_BADGES[1]],
+          badges: [badgesMocks[1]],
           isAnon: false,
         },
         content: LOREM_REPLIES[2],
@@ -233,7 +196,7 @@ export const postMocks: PostSchema[] = [
         author: {
           username: "web3_identity",
           avatar: "https://github.com/shadcn.png",
-          badges: [AVAILABLE_BADGES[0]],
+          badges: [badgesMocks[0]],
           isAnon: false,
         },
         content: LOREM_REPLIES[3],
@@ -244,7 +207,7 @@ export const postMocks: PostSchema[] = [
         author: {
           username: null,
           avatar: "https://github.com/shadcn.png",
-          badges: [AVAILABLE_BADGES[3]],
+          badges: [badgesMocks[3]],
           isAnon: true,
         },
         content: LOREM_REPLIES[4],
@@ -262,7 +225,7 @@ export const postMocks: PostSchema[] = [
     author: {
       username: "smart_contract_dev",
       avatar: "https://github.com/shadcn.png",
-      badges: [AVAILABLE_BADGES[0]],
+      badges: [badgesMocks[0]],
       isAnon: false,
     },
     group: "Security",
@@ -278,7 +241,7 @@ export const postMocks: PostSchema[] = [
     author: {
       username: "bridge_security",
       avatar: "https://github.com/shadcn.png",
-      badges: [AVAILABLE_BADGES[2]],
+      badges: [badgesMocks[2]],
       isAnon: false,
     },
     group: "Security",
@@ -288,7 +251,7 @@ export const postMocks: PostSchema[] = [
         author: {
           username: null,
           avatar: "https://github.com/shadcn.png",
-          badges: [AVAILABLE_BADGES[4]],
+          badges: [badgesMocks[4]],
           isAnon: true,
         },
         content: "Great analysis on recent exploits...",
@@ -306,7 +269,7 @@ export const postMocks: PostSchema[] = [
     author: {
       username: "mev_researcher",
       avatar: "https://github.com/shadcn.png",
-      badges: [AVAILABLE_BADGES[2]],
+      badges: [badgesMocks[2]],
       isAnon: false,
     },
     group: "MEV",
@@ -322,7 +285,7 @@ export const postMocks: PostSchema[] = [
     author: {
       username: "quantum_crypto",
       avatar: "https://github.com/shadcn.png",
-      badges: [AVAILABLE_BADGES[2]],
+      badges: [badgesMocks[2]],
       isAnon: false,
     },
     group: "Cryptography",
@@ -338,7 +301,7 @@ export const postMocks: PostSchema[] = [
     author: {
       username: "aa_developer",
       avatar: "https://github.com/shadcn.png",
-      badges: [AVAILABLE_BADGES[1]],
+      badges: [badgesMocks[1]],
       isAnon: false,
     },
     group: "Development",

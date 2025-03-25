@@ -1,4 +1,4 @@
-import { useGetPosts, useAddPostReaction } from "@/hooks/usePosts";
+import { useGetPosts, useTogglePostReaction } from "@/hooks/usePosts";
 import { TimeSince } from "@/components/ui/TimeSince";
 import { MessageSquareIcon } from "lucide-react";
 import { PostAuthor } from "../Post/PostAuthor";
@@ -6,16 +6,27 @@ import { PostCard } from "../Post/PostCard";
 import { User as UserGroupIcon } from "lucide-react";
 import { Tag } from "@/components/ui/Tag";
 import { EmojiButton } from "@/components/ui/EmojiButton";
+import { usersMocks } from "../../../../shared/src/mocks/users.mocks";
+import { PostReactions } from "@/components/ui/PostReactions";
 
 export const PostItems = () => {
   const { data: posts = [], refetch: refetchPosts } = useGetPosts();
-  const addPostReaction = useAddPostReaction();
+  const togglePostReaction = useTogglePostReaction();
+
+  const onToggleReaction = async (postId: number | string, emoji: string) => {
+    await togglePostReaction.mutateAsync({
+      postId: postId.toString(),
+      emoji,
+      userId: usersMocks?.[0].id.toString(),
+    });
+    await refetchPosts();
+  };
 
   return (
     <div className="flex flex-col gap-4">
-      {posts?.map((post, index) => {
+      {posts?.map((post) => {
         return (
-          <div className="flex flex-col gap-14 mx-auto w-full">
+          <div key={post.id} className="flex flex-col gap-14 mx-auto w-full">
             <PostCard
               className="relative !gap-[14px]"
               header={
@@ -29,7 +40,6 @@ export const PostItems = () => {
                   <TimeSince isoDateTime={post?.createdAt ?? ""} />
                 </div>
               }
-              key={index}
               title={post.title}
               content={post.content}
               postId={post.id}
@@ -48,19 +58,17 @@ export const PostItems = () => {
                 <EmojiButton
                   size="sm"
                   onClick={async (emoji) => {
-                    await addPostReaction.mutateAsync({
-                      postId: post.id,
-                      emoji,
-                    });
-                    await refetchPosts();
+                    await onToggleReaction(post.id, emoji);
                   }}
                 />
 
-                {Object.entries(post.reactions ?? {}).map(([emoji]) => (
-                  <Tag size="sm">
-                    <span>{emoji}</span>
-                  </Tag>
-                ))}
+                <PostReactions
+                  reactions={post.reactions ?? {}}
+                  onToggleReaction={async (emoji) => {
+                    await onToggleReaction(post.id, emoji);
+                  }}
+                />
+
               </div>
             </PostCard>
           </div>
