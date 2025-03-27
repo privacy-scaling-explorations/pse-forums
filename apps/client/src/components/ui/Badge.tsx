@@ -10,6 +10,7 @@ const BadgeBase = classed.div(
         destructive: "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
         outline: "text-foreground",
         success: "border-base-border border bg-base-secondary text-chart-1 hover:bg-base-primary/80 group-hover:bg-base-primary/80",
+        error: "border-base-border border bg-base-secondary text-banner-error hover:bg-base-primary/80 group-hover:bg-base-primary/80",
       },
       rounded: {
         sm: "rounded-[6px]",

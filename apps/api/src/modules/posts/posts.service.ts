@@ -1,51 +1,111 @@
-import { PostSchema, postSchema } from '@/shared/schemas/post.schema';
+import { PostSchema, PostAuthorSchema, postReplySchema } from '@/shared/schemas/post.schema';
 import { query } from '../../config/database';
-import { postMocks } from '@/shared/mocks/posts.mocks';
+import { formatPostDbRow, formatReplyDbRow } from './posts.helpers';
 import { z } from 'zod';
-import { formatPostDbRow } from './posts.helpers';
+
+// Define the reply type to match PostSchema's replies structure
+type PostReply = {
+  id: string;
+  content: string;
+  author: PostAuthorSchema;
+  createdAt: string;
+  updatedAt: string;
+  isAnon: boolean;
+  parentId: string | null;
+  replies: PostReply[];
+};
+
+// Helper function to safely parse JSON (add this if not already present)
+function safeJsonParse(jsonString: any, defaultValue: any) {
+  if (!jsonString) return defaultValue;
+  
+  // If already an object, return as is
+  if (typeof jsonString === 'object') return jsonString;
+  
+  try {
+    return JSON.parse(jsonString);
+  } catch (error) {
+    console.error('Error parsing JSON:', error, 'Value was:', jsonString);
+    return defaultValue;
+  }
+}
 
 export async function findAllPosts(): Promise<PostSchema[]> {
   try {
     const result = await query(`
       SELECT 
-        p.*,
-        u.id as user_id,
-        u.username,
-        u.avatar,
-        u.badges,
-        u.is_anon as user_is_anon,
+        p.id as post_id,
+        p.title as post_title,
+        p.content as post_content,
+        p.created_at as post_created_at,
+        p.updated_at as post_updated_at,
+        p.author_id as post_author_id,
+        p.is_anon as post_is_anon,
+        p.total_views as post_total_views,
+        p.reactions as post_reactions,
+        p.community_id as post_community_id,
+        u.username as user_username,
+        u.avatar as user_avatar,
+        u.badges as user_badges,
         c.id as community_id,
         c.name as community_name,
         c.description as community_description,
-        c.avatar as community_avatar,
-        c.banner as community_banner,
-        c.required_badges as community_required_badges,
-        c.members as community_members,
         c.created_at as community_created_at,
         c.updated_at as community_updated_at
       FROM posts p
-      JOIN users u ON p.author_id = u.id
+      LEFT JOIN users u ON p.author_id = u.id
       LEFT JOIN communities c ON p.community_id = c.id
       ORDER BY p.created_at DESC
     `);
 
-    const posts: PostSchema[] = await Promise.all(result.rows.map(async (post) => {
+    const posts = await Promise.all(result.rows.map(async (postRow) => {
       // Fetch replies for each post
       const repliesResult = await query(`
         SELECT 
-          r.*,
-          u.id as user_id,
-          u.username,
-          u.avatar,
-          u.badges,
-          u.is_anon as user_is_anon
+          r.id as reply_id,
+          r.content as reply_content,
+          r.created_at as reply_created_at,
+          r.updated_at as reply_updated_at,
+          r.author_id as reply_author_id,
+          r.is_anon as reply_is_anon,
+          r.parent_id as reply_parent_id,
+          u.username as reply_user_username,
+          u.avatar as reply_user_avatar,
+          u.badges as reply_user_badges
         FROM replies r
-        JOIN users u ON r.author_id = u.id
+        LEFT JOIN users u ON r.author_id = u.id
         WHERE r.post_id = $1
         ORDER BY r.created_at ASC
-      `, [post.id]);
+      `, [postRow.post_id]);
 
-      return formatPostDbRow(post, repliesResult.rows);
+      const post = formatPostDbRow(postRow);
+      
+      // Format and organize replies
+      const formattedReplies = repliesResult.rows.map((reply) => 
+        formatReplyDbRow(reply)
+      );
+      
+      // Organize replies into a hierarchy
+      const replyMap = new Map<string, PostReply>();
+      const topLevelReplies: PostReply[] = [];
+      
+      formattedReplies.forEach(reply => {
+        replyMap.set(reply.id, { ...reply, replies: [] } as PostReply);
+      });
+      
+      formattedReplies.forEach(reply => {
+        if (reply.parentId) {
+          const parentReply = replyMap.get(reply.parentId);
+          if (parentReply) {
+            parentReply.replies.push(replyMap.get(reply.id) as PostReply);
+          }
+        } else {
+          topLevelReplies.push(replyMap.get(reply.id) as PostReply);
+        }
+      });
+      
+      post.replies = topLevelReplies as any[];
+      return post as unknown as PostSchema;
     }));
 
     return posts;
@@ -61,23 +121,26 @@ export async function findPostById(
   try {
     const result = await query(`
       SELECT 
-        p.*,
-        u.id as user_id,
-        u.username,
-        u.avatar,
-        u.badges,
-        u.is_anon as user_is_anon,
+        p.id as post_id,
+        p.title as post_title,
+        p.content as post_content,
+        p.created_at as post_created_at,
+        p.updated_at as post_updated_at,
+        p.author_id as post_author_id,
+        p.is_anon as post_is_anon,
+        p.total_views as post_total_views,
+        p.reactions as post_reactions,
+        p.community_id as post_community_id,
+        u.username as user_username,
+        u.avatar as user_avatar,
+        u.badges as user_badges,
         c.id as community_id,
         c.name as community_name,
         c.description as community_description,
-        c.avatar as community_avatar,
-        c.banner as community_banner,
-        c.required_badges as community_required_badges,
-        c.members as community_members,
         c.created_at as community_created_at,
         c.updated_at as community_updated_at
       FROM posts p
-      JOIN users u ON p.author_id = u.id
+      LEFT JOIN users u ON p.author_id = u.id
       LEFT JOIN communities c ON p.community_id = c.id
       WHERE p.id = $1
     `, [id]);
@@ -87,24 +150,55 @@ export async function findPostById(
       return undefined;
     }
 
-    const post = result.rows[0];
+    const postRow = result.rows[0];
 
     // Fetch replies for the post
     const repliesResult = await query(`
       SELECT 
-        r.*,
-        u.id as user_id,
-        u.username,
-        u.avatar,
-        u.badges,
-        u.is_anon as user_is_anon
+        r.id as reply_id,
+        r.content as reply_content,
+        r.created_at as reply_created_at,
+        r.updated_at as reply_updated_at,
+        r.author_id as reply_author_id,
+        r.is_anon as reply_is_anon,
+        r.parent_id as reply_parent_id,
+        u.username as reply_user_username,
+        u.avatar as reply_user_avatar,
+        u.badges as reply_user_badges
       FROM replies r
-      JOIN users u ON r.author_id = u.id
+      LEFT JOIN users u ON r.author_id = u.id
       WHERE r.post_id = $1
       ORDER BY r.created_at ASC
-    `, [post.id]);
+    `, [postRow.post_id]);
 
-    return formatPostDbRow(post, repliesResult.rows);
+    const post = formatPostDbRow(postRow);
+    
+    // Format and organize replies
+    const formattedReplies = repliesResult.rows.map((reply) => 
+      formatReplyDbRow(reply)
+    );
+    
+    // Organize replies into a hierarchy
+    const replyMap = new Map<string, PostReply>();
+    const topLevelReplies: PostReply[] = [];
+    
+    formattedReplies.forEach(reply => {
+      replyMap.set(reply.id, { ...reply, replies: [] } as PostReply);
+    });
+    
+    formattedReplies.forEach(reply => {
+      if (reply.parentId) {
+        const parentReply = replyMap.get(reply.parentId);
+        if (parentReply) {
+          parentReply.replies.push(replyMap.get(reply.id) as PostReply);
+        }
+      } else {
+        topLevelReplies.push(replyMap.get(reply.id) as PostReply);
+      }
+    });
+    
+    post.replies = topLevelReplies as any[];
+    return post as unknown as PostSchema;
   } catch (error) {
     console.error(`Error fetching post with id ${id}:`, error);
     return undefined;
@@ -120,14 +214,21 @@ export async function addPostReaction(
     // Get current post with reactions
     const postResult = await query(`
       SELECT 
-        p.*,
-        u.id as user_id,
-        u.username,
-        u.avatar,
-        u.badges,
-        u.is_anon as user_is_anon
+        p.id as post_id,
+        p.title as post_title,
+        p.content as post_content,
+        p.created_at as post_created_at,
+        p.updated_at as post_updated_at,
+        p.author_id as post_author_id,
+        p.is_anon as post_is_anon,
+        p.total_views as post_total_views,
+        p.reactions as post_reactions,
+        p.community_id as post_community_id,
+        u.username as user_username,
+        u.avatar as user_avatar,
+        u.badges as user_badges
       FROM posts p
-      JOIN users u ON p.author_id = u.id
+      LEFT JOIN users u ON p.author_id = u.id
       WHERE p.id = $1
     `, [postId]);
 
@@ -135,8 +236,8 @@ export async function addPostReaction(
       return undefined;
     }
 
-    const post = postResult.rows[0];
-    const currentReactions = post.reactions || {};
+    const postRow = postResult.rows[0];
+    const currentReactions = safeJsonParse(postRow.post_reactions, {});
     
     let reaction = currentReactions[emoji];
     if (!reaction) {
@@ -145,6 +246,11 @@ export async function addPostReaction(
         count: 0,
         userIds: []
       };
+    }
+
+    // Ensure userIds is an array
+    if (!Array.isArray(reaction.userIds)) {
+      reaction.userIds = [];
     }
 
     const newUserIds = userIds.filter(id => !reaction.userIds.includes(id));
@@ -165,21 +271,8 @@ export async function addPostReaction(
       WHERE id = $2
     `, [JSON.stringify(currentReactions), postId]);
     
-    const repliesResult = await query(`
-      SELECT 
-        r.*,
-        u.id as user_id,
-        u.username,
-        u.avatar,
-        u.badges,
-        u.is_anon as user_is_anon
-      FROM replies r
-      JOIN users u ON r.author_id = u.id
-      WHERE r.post_id = $1
-      ORDER BY r.created_at ASC
-    `, [postId]);
-    
-    return formatPostDbRow(post, repliesResult.rows);
+    // Fetch the updated post
+    return findPostById(postId);
   } catch (error) {
     console.error(`Error adding reaction to post ${postId}:`, error);
     return undefined;
@@ -195,14 +288,21 @@ export async function removePostReaction(
     // Get current post with reactions
     const postResult = await query(`
       SELECT 
-        p.*,
-        u.id as user_id,
-        u.username,
-        u.avatar,
-        u.badges,
-        u.is_anon as user_is_anon
+        p.id as post_id,
+        p.title as post_title,
+        p.content as post_content,
+        p.created_at as post_created_at,
+        p.updated_at as post_updated_at,
+        p.author_id as post_author_id,
+        p.is_anon as post_is_anon,
+        p.total_views as post_total_views,
+        p.reactions as post_reactions,
+        p.community_id as post_community_id,
+        u.username as user_username,
+        u.avatar as user_avatar,
+        u.badges as user_badges
       FROM posts p
-      JOIN users u ON p.author_id = u.id
+      LEFT JOIN users u ON p.author_id = u.id
       WHERE p.id = $1
     `, [postId]);
 
@@ -210,12 +310,18 @@ export async function removePostReaction(
       return undefined;
     }
 
-    const post = postResult.rows[0];
-    const currentReactions = post.reactions || {};
+    const postRow = postResult.rows[0];
+    const currentReactions = safeJsonParse(postRow.post_reactions, {});
     
     let reaction = currentReactions[emoji];
     if (!reaction) {
-      return formatPostDbRow(post, []);
+      return findPostById(postId);
+    }
+    
+    // Ensure userIds is an array
+    if (!Array.isArray(reaction.userIds)) {
+      reaction.userIds = [];
+      return findPostById(postId);
     }
     
     reaction.userIds = reaction.userIds.filter((id: string) => !userIds.includes(id));
@@ -235,22 +341,8 @@ export async function removePostReaction(
       WHERE id = $2
     `, [JSON.stringify(currentReactions), postId]);
     
-    // Fetch replies for complete post data
-    const repliesResult = await query(`
-      SELECT 
-        r.*,
-        u.id as user_id,
-        u.username,
-        u.avatar,
-        u.badges,
-        u.is_anon as user_is_anon
-      FROM replies r
-      JOIN users u ON r.author_id = u.id
-      WHERE r.post_id = $1
-      ORDER BY r.created_at ASC
-    `, [postId]);
-    
-    return formatPostDbRow(post, repliesResult.rows);
+    // Fetch the updated post
+    return findPostById(postId);
   } catch (error) {
     console.error(`Error removing reaction from post ${postId}:`, error);
     return undefined;

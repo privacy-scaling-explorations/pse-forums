@@ -57,16 +57,37 @@ export const pool = new Pool(
 // Query helper function
 export async function query(text: string, params?: any[]) {
   const start = Date.now();
-  const client = await pool.connect();
+  let client;
   
   try {
+    client = await pool.connect();
     const result = await client.query(text, params);
     const duration = Date.now() - start;
+    
     if (duration > 100) {
-      console.log('Long query:', { text, duration, rowCount: result.rowCount });
+      // Only log relevant information to avoid circular references
+      console.log('Long query:', { 
+        text, 
+        duration, 
+        rowCount: result.rowCount,
+        params: params ? '[provided]' : '[none]'
+      });
     }
+    
     return result;
+  } catch (error) {
+    const duration = Date.now() - start;
+    // Safely log error without possible circular references
+    console.error('Query error:', { 
+      text, 
+      duration,
+      error: error instanceof Error ? error.message : 'Unknown error',
+      params: params ? '[provided]' : '[none]'
+    });
+    throw error;
   } finally {
-    client.release();
+    if (client) {
+      client.release();
+    }
   }
 } 

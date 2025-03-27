@@ -4,14 +4,19 @@ import { useGlobalContext } from "@/contexts/GlobalContext";
 interface AuthWrapperProps {
   children?: ReactNode;
   fallback?: ReactNode;
+  showLoginModal?: boolean;
 }
 
-export const AuthWrapper = ({ children, fallback }: AuthWrapperProps) => {
-  const { isLoggedIn } = useGlobalContext();
+export const AuthWrapper = ({
+  children,
+  fallback,
+  showLoginModal = false,
+}: AuthWrapperProps) => {
+  const { isLoggedIn, setShowLoginModal } = useGlobalContext();
 
-  if (!isLoggedIn) {
+  if (!isLoggedIn && !showLoginModal) {
     return fallback ?? null;
   }
 
-  return <>{children}</>;
+  return <div onClick={() => setShowLoginModal(true)}>{children}</div>;
 };

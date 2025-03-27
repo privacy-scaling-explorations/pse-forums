@@ -1,11 +1,11 @@
-import { CommunitySchema } from "../schemas/community.schema";
-import { usersMocks } from "./users.mocks";
-import { postMocks } from "./posts.mocks";
+import { CommunitySchema } from "../schemas/community.schema"
+import { usersMocks } from "./users.mocks"
+import { postMocks } from "./posts.mocks"
 
 export const communityMocks: CommunitySchema[] = [
   {
     id: "1",
-    name: "Group 1",
+    name: "Privacy + Scaling Explorations",
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
     members: usersMocks.map((user) => user.id),
@@ -17,7 +17,7 @@ export const communityMocks: CommunitySchema[] = [
   },
   {
     id: "2",
-    name: "Group 2",
+    name: "Test 2",
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
     members: usersMocks.map((user) => user.id),
@@ -29,7 +29,7 @@ export const communityMocks: CommunitySchema[] = [
   },
   {
     id: "3",
-    name: "Group 3",
+    name: "Test 3",
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
     members: usersMocks.map((user) => user.id),
@@ -41,7 +41,7 @@ export const communityMocks: CommunitySchema[] = [
   },
   {
     id: "4",
-    name: "lorem ipsum dolor sit amet consectetur adipisicing elit",
+    name: "Test 4",
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
     members: usersMocks.map((user) => user.id),

@@ -31,8 +31,8 @@ export const PostAuthor = ({
         icon={author.isAnon ? Mask : undefined}
       />
       {author?.username && (
-        <Link to={`/user/${author.username}`}> 
-        <span className="text-card-foreground font-inter font-medium text-sm line-clamp-2 lg:line-clamp-1">
+        <Link to={`/user/${author.username}` as any}>
+        <span className="text-card-foreground font-inter font-medium text-sm line-clamp-2 lg:line-clamp-1 hover:underline">
           {author.username}
         </span>
         </Link>

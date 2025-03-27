@@ -1,4 +1,5 @@
-import { PostSchema, postSchema } from "@/shared/schemas/post.schema"
+import { PostSchema, PostAuthorSchema, postSchema } from "@/shared/schemas/post.schema"
+import { CommunitySchema } from "@/shared/schemas/community.schema";
 import { z } from "zod";
 
 const formatPostReplies = (repliesRows: any[]) => {
@@ -12,11 +13,10 @@ const formatPostReplies = (repliesRows: any[]) => {
           content: childReply.content || "",
           createdAt: childReply.created_at,
           author: {
-            username: childReply.user_is_anon ? null : childReply.username,
-            avatar: childReply.avatar || "",
-            badges: Array.isArray(childReply.badges) ? childReply.badges : [],
+            id: childReply.user_is_anon ? null : childReply.user_id,
             isAnon: !!childReply.user_is_anon,
-          },
+            badges: Array.isArray(childReply.badges) ? childReply.badges : []
+          }
         }))
 
       return {
@@ -24,81 +24,109 @@ const formatPostReplies = (repliesRows: any[]) => {
         content: reply.content || "",
         createdAt: reply.created_at,
         author: {
-          username: reply.user_is_anon ? null : reply.username,
-          avatar: reply.avatar || "",
-          badges: Array.isArray(reply.badges) ? reply.badges : [],
+          id: reply.user_is_anon ? null : reply.user_id,
           isAnon: !!reply.user_is_anon,
+          badges: Array.isArray(reply.badges) ? reply.badges : []
         },
         replies: childReplies,
       }
     })
 }
 
-export const formatPostDbRow = (post: any, repliesRows: any[]): PostSchema => {
-  const topLevelReplies = formatPostReplies(repliesRows)
-
-  // Format community if available
+export function formatPostDbRow(row: any): Partial<PostSchema> {
+  // Format community and communityData if present
   let community = null;
-  let communityData = null;
+  let communityData: CommunitySchema | undefined = undefined;
   
-  if (post.community_id) {
-    community = post.community_id;
-    
-    // Create full community object
+  if (row.community_id) {
+    community = row.community_id;
     communityData = {
-      id: post.community_id,
-      name: post.community_name || "",
-      description: post.community_description || "",
-      avatar: post.community_avatar || "",
-      banner: post.community_banner || "",
-      requiredBadges: Array.isArray(post.community_required_badges) 
-        ? post.community_required_badges 
-        : [],
-      members: Array.isArray(post.community_members) 
-        ? post.community_members 
-        : [],
-      createdAt: post.community_created_at || new Date().toISOString(),
-      updatedAt: post.community_updated_at || new Date().toISOString()
+      id: row.community_id,
+      name: row.community_name || "",
+      description: row.community_description || "",
+      createdAt: row.community_created_at || new Date().toISOString(),
+      updatedAt: row.community_updated_at || new Date().toISOString(),
+      requiredBadges: [],
+      members: [],
+      avatar: '',
+      banner: '',
+    } as CommunitySchema;
+  }
+
+  // Format author
+  let author: PostAuthorSchema = {
+    id: null,
+    isAnon: row.post_is_anon,
+    badges: [],
+    username: null,
+  };
+
+  if (row.post_author_id && !row.post_is_anon) {
+    author = {
+      id: row.post_author_id,
+      isAnon: row.post_is_anon,
+      badges: safeJsonParse(row.user_badges, []),
+      username: row.user_username,
     };
   }
 
-  const formattedPost = {
-    id: post.id,
-    title: post.title || "",
-    content: post.content || "",
-    createdAt: post.created_at || new Date().toISOString(),
-    updatedAt: post.updated_at || new Date().toISOString(),
-    totalViews: typeof post.total_views === 'number' ? post.total_views : 0,
-    reactions: typeof post.reactions === 'object' ? post.reactions : {},
-    isAnon: !!post.is_anon,
-    community: community,
-    communityData: communityData,
-    author: {
-      username: post.user_is_anon ? null : (post.username || ""),
-      avatar: post.avatar || "",
-      badges: Array.isArray(post.badges) ? post.badges : [],
-      isAnon: !!post.user_is_anon,
-    },
-    replies: topLevelReplies,
+  return {
+    id: row.post_id,
+    title: row.post_title,
+    content: row.post_content,
+    createdAt: row.post_created_at,
+    updatedAt: row.post_updated_at,
+    author,
+    isAnon: row.post_is_anon,
+    totalViews: row.post_total_views,
+    reactions: safeJsonParse(row.post_reactions, {}),
+    community,
+    communityData,
+    replies: [] as any[],
+  };
+}
+
+export function formatReplyDbRow(row: any): any {
+  // Format author
+  let author: PostAuthorSchema = {
+    id: null,
+    isAnon: row.reply_is_anon,
+    badges: [],
+    username: null,
   };
 
-  // Validate against schema
+  if (row.reply_author_id && !row.reply_is_anon) {
+    author = {
+      id: row.reply_author_id,
+      isAnon: row.reply_is_anon,
+      badges: safeJsonParse(row.reply_user_badges, []),
+      username: row.reply_user_username,
+    };
+  }
+
+  return {
+    id: row.reply_id,
+    content: row.reply_content,
+    createdAt: row.reply_created_at,
+    updatedAt: row.reply_updated_at,
+    author,
+    isAnon: row.reply_is_anon,
+    parentId: row.reply_parent_id,
+    replies: [],
+  };
+}
+
+// Helper function to safely parse JSON
+function safeJsonParse(jsonString: any, defaultValue: any) {
+  if (!jsonString) return defaultValue;
+  
+  // If already an object, return as is
+  if (typeof jsonString === 'object') return jsonString;
+  
   try {
-    return postSchema.parse(formattedPost);
+    return JSON.parse(jsonString);
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      console.error("Post schema validation error:", JSON.stringify(error.errors, null, 2));
-      console.error("Post data:", JSON.stringify({
-        id: post.id,
-        title: post.title?.substring(0, 30) + '...' || '(empty title)',
-      }, null, 2));
-      
-      // Try to fix common validation issues
-      if (error.errors.some(e => e.path.includes('replies'))) {
-        formattedPost.replies = [];
-      }
-    }
-    // Return the best attempt at formatting, even if it doesn't strictly validate
-    return formattedPost as PostSchema;
+    console.error('Error parsing JSON:', error, 'Value was:', jsonString);
+    return defaultValue;
   }
 }

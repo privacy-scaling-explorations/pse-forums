@@ -36,37 +36,37 @@ export async function toggleReaction(req: Request, res: Response) {
   try {
     const { id } = req.params
     const { emoji, userId } = req.body
-    
+
     if (!id || !emoji || !userId) {
-      return res.status(400).json({ 
-        error: "Missing required fields", 
-        details: "Post ID, emoji, and userId are required" 
+      return res.status(400).json({
+        error: "Missing required fields",
+        details: "Post ID, emoji, and userId are required",
       })
     }
 
-    // Get current post to check existing reactions
     const currentPost = await findPostById(id)
     if (!currentPost) {
       return res.status(404).json({ error: "Post not found" })
     }
 
-    // Check if user has already reacted with this emoji
-    const hasReacted = currentPost.reactions?.[emoji]?.userIds?.includes(userId)
-    
+    const reactions = currentPost.reactions || {}
+    const currentEmojiReaction = reactions[emoji] || { userIds: [] }
+    const hasReacted =
+      Array.isArray(currentEmojiReaction.userIds) &&
+      currentEmojiReaction.userIds.includes(userId)
+
     let updatedPost
-    
+
     if (hasReacted) {
-      // User already reacted - remove the reaction
       updatedPost = await removePostReaction(id, emoji, [userId])
     } else {
-      // User hasn't reacted yet - add the reaction
       updatedPost = await addPostReaction(id, emoji, [userId])
     }
 
     if (!updatedPost) {
       return res.status(500).json({ error: "Failed to update reaction" })
     }
-  
+
     return res.status(200).json(updatedPost)
   } catch (error) {
     if (error instanceof ZodError) {
@@ -75,11 +75,12 @@ export async function toggleReaction(req: Request, res: Response) {
         details: error.errors,
       })
     }
-    return res
-      .status(500)
-      .json({ 
-        error: "Failed to toggle reaction", 
-        details: error instanceof Error ? error.message : String(error) 
-      })
+
+    console.error("Error toggling reaction:", error)
+
+    return res.status(500).json({
+      error: "Failed to toggle reaction",
+      details: error instanceof Error ? error.message : String(error),
+    })
   }
 }

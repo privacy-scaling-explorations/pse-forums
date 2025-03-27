@@ -10,16 +10,16 @@ export const postReactionSchema = z.object({
 
 export const postAuthorSchema = z
   .object({
-    username: z.string().nullable(),
-    avatar: z.string(),
-    isAnon: z.boolean().optional(),
-    badges: z.array(badgeSchema).optional(),
+    id: z.string().nullable(),
+    username: z.string().nullable().optional(),
+    isAnon: z.boolean().default(false),
+    badges: z.array(z.number()).optional(),
   })
   .refine(
-    (data) => (data.isAnon ? data.username === null : data.username !== null),
+    (data) => (data?.isAnon ? data?.id === null : data?.id !== null),
     {
-      message: "Username must be null when isAnon is true.",
-      path: ["username"],
+      message: "Id must be null when isAnon is true.",
+      path: ["id"],
     },
   )
 
@@ -28,6 +28,7 @@ export const postReplySchema = z.object({
   content: z.string().optional(),
   author: postAuthorSchema,
   createdAt: z.string().optional(),
+  postMention: z.union([z.number(), z.string()]).optional().nullable(),
 })
 
 export const postSchema = z.object({
@@ -49,6 +50,7 @@ export const postSchema = z.object({
   reactions: z.record(z.string(), postReactionSchema).optional(),
   community: z.union([z.number(), z.string()]).optional(),
   communityData: communitySchema.optional(),
+  isPrivate: z.boolean().optional().default(false),
 })
 
 export type PostSchema = z.infer<typeof postSchema>

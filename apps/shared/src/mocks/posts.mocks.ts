@@ -20,27 +20,32 @@ export const postMocks: PostSchema[] = [
     id: 1,
     title: generateLoremIpsum(1, 20),
     content: generateLoremIpsum(50, 200),
-    author: usersMocks[0],
+    author: {
+      id: String(usersMocks[0].id),
+      username: usersMocks[0].username,
+      isAnon: false,
+      badges: []
+    },
     createdAt: "2024-03-10T10:00:00Z",
     totalViews: 1205,
     replies: [
       {
         id: 101,
         author: {
-          username: "security_researcher",
-          avatar: "https://github.com/shadcn.png",
-          badges: [badgesMocks[2]],
+          id: String(badgesMocks[2].id),
+          username: `Badge_${badgesMocks[2].name}`,
           isAnon: false,
+          badges: []
         },
         content: LOREM_REPLIES[0],
         createdAt: "2024-03-10T11:30:00Z",
         replies: [
           {
             author: {
-              username: null,
-              avatar: "",
-              badges: [badgesMocks[2]],
-              isAnon: true,
+              id: String(badgesMocks[2].id),
+              username: `Badge_${badgesMocks[2].name}`,
+              isAnon: false,
+              badges: []
             },
             id: 1011,
             content: LOREM_REPLIES[0],
@@ -50,10 +55,10 @@ export const postMocks: PostSchema[] = [
       {
         id: 102,
         author: {
-          username: "crypto_analyst",
-          avatar: "https://github.com/shadcn.png",
-          badges: [badgesMocks[1]],
+          id: String(badgesMocks[1].id),
+          username: `Badge_${badgesMocks[1].name}`,
           isAnon: false,
+          badges: []
         },
         content: LOREM_REPLIES[1],
         createdAt: "2024-03-10T12:30:00Z",
@@ -61,10 +66,10 @@ export const postMocks: PostSchema[] = [
       {
         id: 103,
         author: {
-          username: "privacy_expert",
-          avatar: "https://github.com/shadcn.png",
-          badges: [badgesMocks[0]],
+          id: String(badgesMocks[0].id),
+          username: `Badge_${badgesMocks[0].name}`,
           isAnon: false,
+          badges: []
         },
         content: LOREM_REPLIES[2],
         createdAt: "2024-03-10T13:30:00Z",
@@ -79,10 +84,10 @@ export const postMocks: PostSchema[] = [
     title: generateLoremIpsum(1, 15),
     content: generateLoremIpsum(50, 200),
     author: {
-      username: "zkp_master",
-      avatar: "https://github.com/shadcn.png",
-      badges: [badgesMocks[2]],
+      id: String(usersMocks[0].id),
+      username: usersMocks[0].username,
       isAnon: false,
+      badges: []
     },
     createdAt: "2024-03-09T15:00:00Z",
     totalViews: 892,
@@ -90,10 +95,10 @@ export const postMocks: PostSchema[] = [
       {
         id: 104,
         author: {
-          username: "zkp_enthusiast",
-          avatar: "https://github.com/shadcn.png",
-          badges: [badgesMocks[2]],
+          id: String(usersMocks[2].id),
+          username: usersMocks[2].username,
           isAnon: false,
+          badges: []
         },
         content: LOREM_REPLIES[3],
         createdAt: "2024-03-09T16:00:00Z",
@@ -107,19 +112,19 @@ export const postMocks: PostSchema[] = [
     title: generateLoremIpsum(1, 15),
     content: generateLoremIpsum(50, 200),
     author: {
-      username: "l2_researcher",
-      avatar: "https://github.com/shadcn.png",
-      badges: [badgesMocks[2]],
+      id: String(badgesMocks[2].id),
+      username: `Badge_${badgesMocks[2].name}`,
       isAnon: false,
+      badges: []
     },
     replies: [
       {
         id: 105,
         author: {
-          username: "l2_expert",
-          avatar: "https://github.com/shadcn.png",
-          badges: [badgesMocks[1]],
+          id: String(badgesMocks[1].id),
+          username: `Badge_${badgesMocks[1].name}`,
           isAnon: false,
+          badges: []
         },
         content: LOREM_REPLIES[4],
         createdAt: "2024-03-08T10:15:00Z",
@@ -127,10 +132,10 @@ export const postMocks: PostSchema[] = [
       {
         id: 106,
         author: {
-          username: "scaling_researcher",
-          avatar: "https://github.com/shadcn.png",
-          badges: [badgesMocks[0]],
+          id: String(badgesMocks[0].id),
+          username: `Badge_${badgesMocks[0].name}`,
           isAnon: false,
+          badges: []
         },
         content: LOREM_REPLIES[0],
         createdAt: "2024-03-08T11:30:00Z",
@@ -146,10 +151,10 @@ export const postMocks: PostSchema[] = [
     title: generateLoremIpsum(20, 50),
     content: generateLoremIpsum(50, 200),
     author: {
+      id: null,
       username: null,
-      avatar: "https://github.com/shadcn.png",
-      badges: [badgesMocks[3]],
       isAnon: true,
+      badges: []
     },
     replies: [],
     totalViews: 445,
@@ -162,41 +167,43 @@ export const postMocks: PostSchema[] = [
     title: generateLoremIpsum(20, 50),
     content: generateLoremIpsum(50, 200),
     author: {
-      username: "identity_expert",
-      avatar: "https://github.com/shadcn.png",
-      badges: [badgesMocks[0]],
+      id: String(usersMocks[2].id),
+      username: usersMocks[2].username,
       isAnon: false,
+      badges: []
     },
     replies: [
       {
         id: 107,
         author: {
-          username: "identity_researcher",
-          avatar: "https://github.com/shadcn.png",
-          badges: [badgesMocks[2]],
+          id: String(usersMocks[2].id),
+          username: usersMocks[2].username,
           isAnon: false,
+          badges: []
         },
         content: LOREM_REPLIES[1],
         createdAt: "2024-03-06T12:30:00Z",
+        postMention: null,
       },
       {
         id: 108,
         author: {
-          username: "did_expert",
-          avatar: "https://github.com/shadcn.png",
-          badges: [badgesMocks[1]],
+          id: String(usersMocks[1].id),
+          username: usersMocks[1].username,
           isAnon: false,
+          badges: []
         },
         content: LOREM_REPLIES[2],
         createdAt: "2024-03-06T13:45:00Z",
+        postMention: null,
       },
       {
         id: 109,
         author: {
-          username: "web3_identity",
-          avatar: "https://github.com/shadcn.png",
-          badges: [badgesMocks[0]],
+          id: String(usersMocks[0].id),
+          username: usersMocks[0].username,
           isAnon: false,
+          badges: []
         },
         content: LOREM_REPLIES[3],
         createdAt: "2024-03-06T14:30:00Z",
@@ -204,10 +211,10 @@ export const postMocks: PostSchema[] = [
       {
         id: 110,
         author: {
-          username: null,
-          avatar: "https://github.com/shadcn.png",
-          badges: [badgesMocks[3]],
-          isAnon: true,
+          id: String(usersMocks[4]?.id),
+          username: usersMocks[4]?.username,
+          isAnon: false,
+          badges: []
         },
         content: LOREM_REPLIES[4],
         createdAt: "2024-03-06T15:15:00Z",
@@ -223,10 +230,10 @@ export const postMocks: PostSchema[] = [
     title: generateLoremIpsum(20, 50),
     content: generateLoremIpsum(50, 200),
     author: {
-      username: "smart_contract_dev",
-      avatar: "https://github.com/shadcn.png",
-      badges: [badgesMocks[0]],
+      id: String(usersMocks[0].id),
+      username: usersMocks[0].username,
       isAnon: false,
+      badges: []
     },
     replies: [],
     totalViews: 2341,
@@ -239,19 +246,19 @@ export const postMocks: PostSchema[] = [
     title: generateLoremIpsum(20, 50),
     content: generateLoremIpsum(50, 200),
     author: {
-      username: "bridge_security",
-      avatar: "https://github.com/shadcn.png",
-      badges: [badgesMocks[2]],
+      id: String(usersMocks[0].id),
+      username: usersMocks[0].username,
       isAnon: false,
+      badges: []
     },
     replies: [
       {
         id: 102,
         author: {
-          username: null,
-          avatar: "https://github.com/shadcn.png",
-          badges: [badgesMocks[4]],
-          isAnon: true,
+          id: String(usersMocks[4].id),
+          username: usersMocks[4]?.username,
+          isAnon: false,
+          badges: []
         },
         content: "Great analysis on recent exploits...",
         createdAt: "2024-03-04T14:20:00Z",
@@ -267,10 +274,10 @@ export const postMocks: PostSchema[] = [
     title: generateLoremIpsum(20, 50),
     content: generateLoremIpsum(50, 200),
     author: {
-      username: "mev_researcher",
-      avatar: "https://github.com/shadcn.png",
-      badges: [badgesMocks[2]],
+      id: String(usersMocks[0].id),
+      username: usersMocks[0].username,
       isAnon: false,
+      badges: []
     },
     replies: [],
     totalViews: 567,
@@ -283,10 +290,10 @@ export const postMocks: PostSchema[] = [
     title: generateLoremIpsum(20, 50),
     content: generateLoremIpsum(50, 200),
     author: {
-      username: "quantum_crypto",
-      avatar: "https://github.com/shadcn.png",
-      badges: [badgesMocks[2]],
+      id: String(usersMocks[0].id),
+      username: usersMocks[0].username,
       isAnon: false,
+      badges: []
     },
     replies: [],
     totalViews: 890,
@@ -299,10 +306,10 @@ export const postMocks: PostSchema[] = [
     title: "Account Abstraction Implementation",
     content: `Step-by-step guide to implementing account abstraction...`,
     author: {
-      username: "aa_developer",
-      avatar: "https://github.com/shadcn.png",
-      badges: [badgesMocks[1]],
+      id: String(usersMocks[0].id),
+      username: usersMocks[0].username,
       isAnon: false,
+      badges: []
     },
     replies: [],
     totalViews: 1432,

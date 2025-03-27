@@ -1,7 +1,9 @@
 import { postMocks } from '@/shared/mocks/posts.mocks';
 import { communityMocks } from '@/shared/mocks/community.mocks';
+import { usersMocks } from '@/shared/mocks/users.mocks';
 import { postSchema } from '@/shared/schemas/post.schema';
 import { communitySchema } from '@/shared/schemas/community.schema';
+import { userSchema } from '@/shared/schemas/user.schema';
 import { pool, query } from '../config/database';
 import { z } from 'zod';
 import { v4 as uuidv4 } from 'uuid';
@@ -75,6 +77,34 @@ async function seedDatabase() {
         console.warn(`${invalidCommunities.length} mock communities failed validation, but will continue with seeding`);
         console.warn("Invalid communities:", JSON.stringify(invalidCommunities, null, 2));
       }
+
+      // Add validation for users
+      const userValidationResults = usersMocks.map((user, index) => {
+        try {
+          userSchema.parse(user);
+          return { valid: true, index };
+        } catch (error) {
+          if (error instanceof z.ZodError) {
+            return { 
+              valid: false, 
+              index,
+              errors: error.errors,
+              id: user.id,
+              username: user.username 
+            };
+          }
+          return { valid: false, index, error };
+        }
+      });
+
+      const invalidUsers = userValidationResults.filter(result => !result.valid);
+      
+      if (invalidUsers.length === 0) {
+        console.log("All mock users validated against schema");
+      } else {
+        console.warn(`${invalidUsers.length} mock users failed validation, but will continue with seeding`);
+        console.warn("Invalid users:", JSON.stringify(invalidUsers, null, 2));
+      }
     } catch (error) {
       console.error("Mock data validation error:", error);
       console.warn("Continuing with seeding despite validation errors");
@@ -100,7 +130,33 @@ async function seedDatabase() {
     try {
       await client.query('BEGIN');
 
-      // Step 1: Seed communities
+      // Step 1: Seed users first
+      console.log('Seeding users...');
+      for (const mockUser of usersMocks) {
+        const userKey = mockUser.username.toLowerCase();
+        
+        const { rows: [createdUser] } = await client.query(
+          `INSERT INTO users (username, avatar, badges, is_anon, email, uuid, website, bio)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+           RETURNING id`,
+          [
+            mockUser.username,
+            mockUser.avatar || '',
+            JSON.stringify(mockUser.badges || []),
+            false, // isAnon
+            mockUser.email || `${mockUser.username}@example.com`,
+            mockUser.uuid || uuidv4(),
+            mockUser.website || null,
+            mockUser.bio || null
+          ]
+        );
+        
+        createdUsers.set(userKey, createdUser);
+        createdUsers.set(String(mockUser.id), createdUser); // Also map by ID
+        console.log(`Created user: ${mockUser.username} (${createdUser.id})`);
+      }
+
+      // Step 2: Seed communities
       console.log('Seeding communities...');
       for (const mockCommunity of communityMocks) {
         const { rows: [createdCommunity] } = await client.query(
@@ -124,34 +180,43 @@ async function seedDatabase() {
         console.log(`Created community: ${mockCommunity.name} (${createdCommunity.id})`);
       }
 
-      // Step 2: Seed posts and their related data
+      // Step 3: Seed posts and their related data
       console.log('Seeding posts...');
       for (const mockPost of postMocks) {
-        // Create or get author
-        let author;
-        const authorUsername = mockPost.author.username || 'anon';
-        const authorKey = authorUsername.toLowerCase();
+        // Handle author
+        let authorId = null;
+        let authorUsername = null;
         
-        if (createdUsers.has(authorKey)) {
-          author = createdUsers.get(authorKey);
-        } else {
-          const { rows: [newAuthor] } = await client.query(
-            `INSERT INTO users (username, avatar, badges, is_anon, email, uuid)
-             VALUES ($1, $2, $3, $4, $5, $6)
-             RETURNING id`,
-            [
-              mockPost.author.username || 'anonymous',
-              mockPost.author.avatar || '',
-              JSON.stringify(mockPost.author.badges || []),
-              mockPost.author.isAnon || false,
-              `${authorUsername}@example.com`,
-              uuidv4() // Generate a UUID for each user
-            ]
-          );
-          author = newAuthor;
-          createdUsers.set(authorKey, author);
-          console.log(`Created user: ${authorUsername} (${author.id})`);
+        // If post is not anonymous and has an author with an ID
+        if (!mockPost.isAnon && mockPost.author && mockPost.author.id) {
+          const authorIdStr = String(mockPost.author.id);
+          authorUsername = mockPost.author.username || `user_${authorIdStr}`;
+          
+          // Check if this author ID exists in our already created users
+          if (createdUsers.has(authorIdStr)) {
+            const author = createdUsers.get(authorIdStr);
+            authorId = author.id;
+          } else {
+            // Create a default user if needed
+            const { rows: [newAuthor] } = await client.query(
+              `INSERT INTO users (username, avatar, badges, is_anon, email, uuid)
+               VALUES ($1, $2, $3, $4, $5, $6)
+               RETURNING id`,
+              [
+                authorUsername,
+                'https://github.com/shadcn.png',
+                JSON.stringify(mockPost.author.badges || []),
+                false,
+                `${authorUsername.toLowerCase().replace(/\s+/g, '_')}@example.com`,
+                uuidv4()
+              ]
+            );
+            authorId = newAuthor.id;
+            createdUsers.set(authorIdStr, newAuthor);
+            console.log(`Created default user for author ID: ${authorIdStr} (${authorId})`);
+          }
         }
+        // If isAnon is true, authorId and authorUsername remain null
 
         // Find community if associated
         let communityId = null;
@@ -173,7 +238,7 @@ async function seedDatabase() {
           [
             mockPost.title,
             mockPost.content,
-            author.id,
+            authorId, // Will be null for anonymous posts
             communityId,
             mockPost.totalViews || 0,
             JSON.stringify(mockPost.reactions || {}),
@@ -186,30 +251,39 @@ async function seedDatabase() {
         // Create replies
         if (mockPost.replies?.length) {
           for (const mockReply of mockPost.replies) {
-            // Create or get reply author
-            let replyAuthor;
-            const replyAuthorUsername = mockReply.author.username || 'anon';
-            const replyAuthorKey = replyAuthorUsername.toLowerCase();
-
-            if (createdUsers.has(replyAuthorKey)) {
-              replyAuthor = createdUsers.get(replyAuthorKey);
-            } else {
-              const { rows: [newReplyAuthor] } = await client.query(
-                `INSERT INTO users (username, avatar, badges, is_anon, email, uuid)
-                 VALUES ($1, $2, $3, $4, $5, $6)
-                 RETURNING id`,
-                [
-                  replyAuthorUsername === 'anon' ? 'anonymous' : replyAuthorUsername,
-                  mockReply.author.avatar || '',
-                  JSON.stringify(mockReply.author.badges || []),
-                  mockReply.author.isAnon || false,
-                  `${replyAuthorUsername}@example.com`,
-                  uuidv4() // Generate a UUID for each user
-                ]
-              );
-              replyAuthor = newReplyAuthor;
-              createdUsers.set(replyAuthorKey, replyAuthor);
+            // Handle reply author
+            let replyAuthorId = null;
+            let replyUsername = null;
+            
+            // If reply has an author with an ID and is not anonymous
+            if (mockReply.author && mockReply.author.id && !mockReply.author.isAnon) {
+              const replyAuthorIdStr = String(mockReply.author.id);
+              replyUsername = mockReply.author.username || `reply_author_${replyAuthorIdStr}`;
+              
+              // Check if this author ID exists in our already created users
+              if (createdUsers.has(replyAuthorIdStr)) {
+                const replyAuthor = createdUsers.get(replyAuthorIdStr);
+                replyAuthorId = replyAuthor.id;
+              } else {
+                // Create a default user if needed
+                const { rows: [newReplyAuthor] } = await client.query(
+                  `INSERT INTO users (username, avatar, badges, is_anon, email, uuid)
+                   VALUES ($1, $2, $3, $4, $5, $6)
+                   RETURNING id`,
+                  [
+                    replyUsername,
+                    'https://github.com/shadcn.png',
+                    JSON.stringify(mockReply.author.badges || []),
+                    false,
+                    `${replyUsername.toLowerCase().replace(/\s+/g, '_')}@example.com`,
+                    uuidv4()
+                  ]
+                );
+                replyAuthorId = newReplyAuthor.id;
+                createdUsers.set(replyAuthorIdStr, newReplyAuthor);
+              }
             }
+            // If author is anonymous, replyAuthorId and replyUsername remain null
 
             // Create reply
             const { rows: [createdReply] } = await client.query(
@@ -219,8 +293,8 @@ async function seedDatabase() {
               [
                 mockReply.content || '',
                 createdPost.id,
-                replyAuthor.id,
-                mockReply.author.isAnon || false,
+                replyAuthorId,
+                mockReply.author?.isAnon || false,
                 new Date(mockReply.createdAt || new Date().toISOString())
               ]
             );
@@ -228,29 +302,39 @@ async function seedDatabase() {
             // Handle nested replies
             if (mockReply.replies?.length) {
               for (const nestedReply of mockReply.replies) {
-                let nestedAuthor;
-                const nestedAuthorUsername = nestedReply.author.username || 'anon';
-                const nestedAuthorKey = nestedAuthorUsername.toLowerCase();
-
-                if (createdUsers.has(nestedAuthorKey)) {
-                  nestedAuthor = createdUsers.get(nestedAuthorKey);
-                } else {
-                  const { rows: [newNestedAuthor] } = await client.query(
-                    `INSERT INTO users (username, avatar, badges, is_anon, email, uuid)
-                     VALUES ($1, $2, $3, $4, $5, $6)
-                     RETURNING id`,
-                    [
-                      nestedAuthorUsername === 'anon' ? 'anonymous' : nestedAuthorUsername,
-                      nestedReply.author.avatar || '',
-                      JSON.stringify(nestedReply.author.badges || []),
-                      nestedReply.author.isAnon || false,
-                      `${nestedAuthorUsername}@example.com`,
-                      uuidv4() // Generate a UUID for each user
-                    ]
-                  );
-                  nestedAuthor = newNestedAuthor;
-                  createdUsers.set(nestedAuthorKey, nestedAuthor);
+                // Handle nested reply author
+                let nestedAuthorId = null;
+                let nestedUsername = null;
+                
+                // If nested reply has an author with an ID and is not anonymous
+                if (nestedReply.author && nestedReply.author.id && !nestedReply.author.isAnon) {
+                  const nestedAuthorIdStr = String(nestedReply.author.id);
+                  nestedUsername = nestedReply.author.username || `nested_reply_author_${nestedAuthorIdStr}`;
+                  
+                  // Check if this author ID exists in our already created users
+                  if (createdUsers.has(nestedAuthorIdStr)) {
+                    const nestedAuthor = createdUsers.get(nestedAuthorIdStr);
+                    nestedAuthorId = nestedAuthor.id;
+                  } else {
+                    // Create a default user if needed
+                    const { rows: [newNestedAuthor] } = await client.query(
+                      `INSERT INTO users (username, avatar, badges, is_anon, email, uuid)
+                       VALUES ($1, $2, $3, $4, $5, $6)
+                       RETURNING id`,
+                      [
+                        nestedUsername,
+                        'https://github.com/shadcn.png',
+                        JSON.stringify(nestedReply.author.badges || []),
+                        false,
+                        `${nestedUsername.toLowerCase().replace(/\s+/g, '_')}@example.com`,
+                        uuidv4()
+                      ]
+                    );
+                    nestedAuthorId = newNestedAuthor.id;
+                    createdUsers.set(nestedAuthorIdStr, newNestedAuthor);
+                  }
                 }
+                // If author is anonymous, nestedAuthorId and nestedUsername remain null
 
                 await client.query(
                   `INSERT INTO replies (content, post_id, author_id, parent_id, is_anon, created_at, updated_at)
@@ -258,9 +342,9 @@ async function seedDatabase() {
                   [
                     nestedReply.content || '',
                     createdPost.id,
-                    nestedAuthor.id,
+                    nestedAuthorId,
                     createdReply.id,
-                    nestedReply.author.isAnon || false,
+                    nestedReply.author?.isAnon || false,
                     new Date(nestedReply.createdAt || new Date().toISOString())
                   ]
                 );
@@ -270,7 +354,7 @@ async function seedDatabase() {
         }
       }
 
-      // Step 3: Add community members
+      // Step 4: Add community members
       console.log('Adding community members...');
       for (const mockCommunity of communityMocks) {
         const community = createdCommunities.get(String(mockCommunity.id));

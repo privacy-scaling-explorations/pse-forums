@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { badgeSchema } from "./badge.schema";
+import { z } from "zod"
+import { badgeSchema } from "./badge.schema"
 
 export const userSchema = z.object({
   id: z.union([z.number(), z.string()]),
@@ -10,7 +10,13 @@ export const userSchema = z.object({
   uuid: z.string(),
   avatar: z.string(),
   isAnon: z.boolean().optional(),
-  badges: z.array(badgeSchema).optional(),
-});
+  badges: z
+    .array(
+      badgeSchema.extend({
+        expiresAt: z.string().optional().nullable(),
+      }),
+    )
+    .optional(),
+})
 
-export type UserSchema = z.infer<typeof userSchema>;
+export type UserSchema = z.infer<typeof userSchema>

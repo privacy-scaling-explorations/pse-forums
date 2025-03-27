@@ -2,16 +2,17 @@ import { Avatar } from "@/components/Avatar";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/cards/Card";
 import { Link } from "@tanstack/react-router";
-// import { communityMocks } from "@/shared/mocks/community.mocks";
 import { useState } from "react";
-
+import { useGetCommunities } from "@/hooks/useCommunities";
+import { CommunitySchema } from "@/shared/schemas/community.schema";
 export const Groups = () => {
   const [showAllGroups, setShowAllGroups] = useState(false);
-  const communityMocks = [] as any[];
+
+  const { data: communities } = useGetCommunities();
 
   const displayedGroups = showAllGroups
-    ? communityMocks
-    : communityMocks.slice(0, 3);
+    ? communities
+    : communities?.slice(0, 3);
 
   return (
     <Card.Base
@@ -22,11 +23,11 @@ export const Groups = () => {
         EXPLORE COMMUNITIES
       </Card.Title>
       <div className="divide-y divide-sidebar-border">
-        {displayedGroups.map(({ name, id: iid }) => (
+        {displayedGroups?.map(({ name, id: iid, avatar }: CommunitySchema) => (
           <div key={iid}>
             <div key={iid} className="flex items-center justify-between py-3">
               <div className="flex items-center gap-1">
-                <Avatar />
+                <Avatar src={avatar} />
                 <span className="font-semibold font-inter text-base-primary line-clamp-1">
                   {name}
                 </span>

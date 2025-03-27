@@ -3,8 +3,8 @@ import { badgesMocks } from "./badges.mocks"
 export const usersMocks: UserSchema[] = [
   {
     id: 1,
-    username: "kali",
     uuid: "123e4567-e89b-12d3-a456-426614174000",
+    username: "kali",
     avatar: "https://pse.dev/logos/pse-logo-bg.svg",
     email: "kali@example.com",
     website: "https://example.com",
@@ -23,11 +23,25 @@ export const usersMocks: UserSchema[] = [
   },
   {
     id: 3,
-    username: "John Doe",
+    username: "Mario Bianchi",
     uuid: "123e4567-e89b-12d3-a456-426614174002",
     avatar: "https://pse.dev/logos/pse-logo-bg.svg",
     email: "john.doe@example.com",
     website: "https://example.com",
     bio: "lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
+  },
+  {
+    id: 4,
+    username: "Mario Neri",
+    uuid: "123e4567-e89b-12d3-a456-426614174002",
+    avatar: "https://pse.dev/logos/pse-logo-bg.svg",
+    email: "john.doe@example.com",
+  },
+  {
+    id: 5,
+    username: "Mario Verdi",
+    uuid: "123e4567-e89b-12d3-a456-426614174002",
+    avatar: "https://pse.dev/logos/pse-logo-bg.svg",
+    email: "john.doe@example.com",
   },
 ]

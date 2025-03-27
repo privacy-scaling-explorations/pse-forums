@@ -1,10 +1,10 @@
-import { query } from '../../config/database';
-
+import { usersMocks } from '@/shared/mocks/users.mocks';
+import { query } from '../../config/database';  
 export async function getUser() {
   try {
     const result = await query(
-      `SELECT * FROM users WHERE id = $1`,
-      ['525b5277-9a64-4080-9498-503b6abd69cd'] // TODO: Get the user id from the session
+      `SELECT * FROM users WHERE uuid = $1`,
+      [usersMocks[0].uuid] // TODO: Get the user id from the session
     );
     
     if (result.rows.length === 0) {
