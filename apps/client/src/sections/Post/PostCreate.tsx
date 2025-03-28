@@ -1,25 +1,27 @@
 import { Select } from "@/components/inputs/Select";
 import { Input } from "@/components/inputs/Input";
 import { Tabs } from "@/components/ui/Tabs";
-import { useField, useForm } from "@tanstack/react-form";
+import { useForm } from "@tanstack/react-form";
 import { capitalize } from "@/lib/format";
-import { getToken, rspc } from "@/lib/rspc";
-import { type CreatePostSchema, createPostSchema } from "@/lib/schemas";
 import type { FormEvent } from "react";
 import { Button } from "@/components/ui/Button";
 import { useSearch } from "@tanstack/react-router";
 import { Textarea } from "@/components/inputs/Textarea";
 import { router } from "@/lib/router";
 import { PageContent } from "@/components/PageContent";
-import { useCreateDraftMutation, useGetBadges } from "@/hooks/usePosts";
+import {
+  useCreateDraftMutation,
+  useGetBadges,
+  useCreatePostMutation,
+} from "@/hooks/usePosts";
 import { FileBadge } from "lucide-react";
 import { Card } from "@/components/cards/Card";
 import { Switch } from "@/components/inputs/Switch";
-import { useGlobalContext } from "@/contexts/GlobalContext";
 import { Mail as MailIcon } from "lucide-react";
 import { Tag } from "@/components/ui/Tag";
-import { useGetCommunities } from "@/hooks/useCommunities";
-import { useMemo, useState, useCallback } from "react";
+import { useMemo, useCallback, useState } from "react";
+import { type CreatePostSchema } from "@/shared/schemas/post.schema";
+import { useGetUser } from "@/hooks/useAuth";
 
 enum TabName {
   Write = "write",
@@ -28,17 +30,29 @@ enum TabName {
 
 export const PostCreate = () => {
   const createDraftMutation = useCreateDraftMutation();
-  const { user } = useGlobalContext();
+  const createPostMutation = useCreatePostMutation();
+  const [selectedBadge, setSelectedBadge] = useState<string[] | undefined>([]);
+  const { data: user } = useGetUser();
 
   const search = useSearch({ from: "/_left-sidebar/post/create" });
 
-  const { data: communities = [] } = useGetCommunities();
   const { data: badges = [] } = useGetBadges();
 
-  // Create a separate state to manage tags to avoid form update conflicts
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const communities =
+    user?.communities?.map(({ id, name }: any) => ({
+      value: id,
+      label: name,
+    })) ?? [];
 
-  // Memoize badge lookup for performance
+  const userBadges = useMemo(() => {
+    return (
+      user?.badges?.map(({ id, name }: any) => ({
+        value: id,
+        label: name,
+      })) ?? []
+    );
+  }, [user]);
+
   const badgeMap = useMemo(() => {
     const map = new Map();
     if (badges) {
@@ -49,7 +63,6 @@ export const PostCreate = () => {
     return map;
   }, [badges]);
 
-  // Get badge name by id
   const getBadgeName = useCallback(
     (badgeId: string) => {
       return badgeMap.get(badgeId) || "Unknown";
@@ -57,41 +70,54 @@ export const PostCreate = () => {
     [badgeMap],
   );
 
-  // Create the form with CreatePostSchema
   const form = useForm<CreatePostSchema>({
     defaultValues: {
-      content: "",
       title: "",
-      gid: search?.community ? Number(search.community) : null,
-      tags: [],
-      postAsAnonymous: false,
+      content: "",
+      author: {
+        id: user?.id?.toString() || null,
+        username: user?.username || null,
+        isAnon: false,
+        badges: userBadges,
+      },
+      isAnon: false,
+      community: search?.community ? String(search.community) : undefined,
     },
     onSubmit: async ({ value }) => {
-      // Ensure tags from separate state are included in submission
       const submissionData = {
         ...value,
-        tags: selectedTags,
+        author: {
+          id: user?.id?.toString() || null,
+          username: user?.username || null,
+          isAnon: value?.isAnon ?? false,
+          badges: selectedBadge || [],
+        },
       };
-      getToken();
-      await rspc.mutation(["post.create", submissionData]);
+      const res = await createPostMutation.mutateAsync(submissionData);
+      console.log(res);
+      router.navigate({ to: `/posts/${res.id}` });
     },
-    validators: { onChange: createPostSchema },
   });
 
-  // No need to use a separate content field since we're using form.Field directly now
-
-  const handleAddTag = useCallback((tagId: string) => {
-    setSelectedTags((prev) => {
-      if (!prev.includes(tagId)) {
-        return [...prev, tagId];
+  const handleAddTag = useCallback(
+    (tagId: string) => {
+      if (selectedBadge?.includes(tagId)) {
+        setSelectedBadge((prev) => prev?.filter((id) => id !== tagId));
+      } else {
+        setSelectedBadge((prev) => [...(prev || []), tagId]);
       }
-      return prev;
-    });
-  }, []);
+    },
+    [selectedBadge],
+  );
 
-  const handleRemoveTag = useCallback((tagToRemove: string) => {
-    setSelectedTags((prev) => prev.filter((tag) => tag !== tagToRemove));
-  }, []);
+  const handleRemoveTag = useCallback(
+    (tagToRemove: string) => {
+      form.setFieldValue("tags", (prev) =>
+        (prev || []).filter((tag) => tag !== tagToRemove),
+      );
+    },
+    [form],
+  );
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -122,18 +148,15 @@ export const PostCreate = () => {
 
         <div className="space-y-8">
           <div className="space-y-4">
-            <div className="lg:w-1/5 w-full">
+            <div className="lg:w-1/4 w-full">
               <form.Field
-                name="gid"
+                name="community"
                 children={(field) => (
                   <Select
                     label="Select a community"
-                    items={communities?.map(({ id, name }: any) => ({
-                      value: id,
-                      label: name,
-                    }))}
-                    onValueChange={(value) => field.handleChange(Number(value))}
-                    value={field.state.value?.toString() || ""}
+                    items={communities}
+                    onValueChange={(value) => field.handleChange(value)}
+                    value={field.state.value || ""}
                     field={field}
                   />
                 )}
@@ -143,16 +166,14 @@ export const PostCreate = () => {
             <form.Field
               name="title"
               children={(field) => (
-                <>
-                  <Input
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    maxLength={200}
-                    placeholder={capitalize(field.name)}
-                    value={field.state.value}
-                    field={field}
-                    showCounter
-                  />
-                </>
+                <Input
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  maxLength={200}
+                  placeholder={capitalize(field.name)}
+                  value={field.state.value || ""}
+                  field={field}
+                  showCounter={false}
+                />
               )}
             />
 
@@ -163,7 +184,7 @@ export const PostCreate = () => {
                   id={field.name}
                   rows={4}
                   onChange={(e) => field.handleChange(e.target.value)}
-                  value={field.state.value}
+                  value={field.state.value || ""}
                   placeholder="Have something on your mind? Write it here!"
                   field={field}
                 />
@@ -172,7 +193,6 @@ export const PostCreate = () => {
           </div>
           <div className="flex flex-col gap-6">
             <div className="lg:w-1/4 w-full">
-              {/* Badge selection without using form.Field */}
               <Select
                 header={
                   <div className="flex items-center gap-[6px] text-base-muted-foreground">
@@ -181,22 +201,14 @@ export const PostCreate = () => {
                   </div>
                 }
                 label="Add badges"
-                items={badges?.map(({ id, name }: any) => ({
-                  value: id,
-                  label: (
-                    <div className="flex items-center gap-1">
-                      <MailIcon className="size-4" />
-                      <span>{name}</span>
-                    </div>
-                  ),
-                }))}
+                items={userBadges}
                 onValueChange={handleAddTag}
                 value=""
               />
             </div>
-            {selectedTags.length > 0 && (
+            {(selectedBadge ?? [])?.length > 0 && (
               <div className="flex gap-2.5 flex-wrap">
-                {selectedTags.map((tag) => (
+                {(selectedBadge ?? []).map((tag) => (
                   <Tag key={tag} onRemove={() => handleRemoveTag(tag)}>
                     <MailIcon className="size-4" />
                     {getBadgeName(tag)}
@@ -210,16 +222,16 @@ export const PostCreate = () => {
         <Card.Base variant="secondary" className="mt-auto">
           <div className="flex justify-end gap-2.5">
             <form.Field
-              name="postAsAnonymous"
+              name="isAnon"
               children={(field) => (
                 <Switch
                   label="Post as anonymous?"
                   description={
                     field.state.value
                       ? "Your name will not be displayed"
-                      : `You are posting as ${user?.name}`
+                      : `You are posting as ${user?.username}`
                   }
-                  checked={!!field.state.value}
+                  checked={field.state.value || false}
                   onChange={(e) => field.handleChange(e.target.checked)}
                   field={field}
                 />
@@ -232,8 +244,8 @@ export const PostCreate = () => {
               type="button"
               onClick={() => {
                 createDraftMutation.mutate({
-                  content: form.state.values.content,
-                  title: form.state.values.title,
+                  content: form.state.values.content || "",
+                  title: form.state.values.title || "",
                 });
               }}
             >

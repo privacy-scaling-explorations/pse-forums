@@ -18,8 +18,8 @@ import { Route as AppIndexImport } from './routes/_app/index'
 import { Route as LeftSidebarSettingsImport } from './routes/_left-sidebar/settings'
 import { Route as LeftSidebarProfileImport } from './routes/_left-sidebar/profile'
 import { Route as LeftSidebarNotificationsImport } from './routes/_left-sidebar/notifications'
-import { Route as LeftSidebarCredentialsIndexImport } from './routes/_left-sidebar/credentials/index'
 import { Route as LeftSidebarCommunitiesIndexImport } from './routes/_left-sidebar/communities/index'
+import { Route as LeftSidebarBadgesIndexImport } from './routes/_left-sidebar/badges/index'
 import { Route as LeftSidebarUserUsernameImport } from './routes/_left-sidebar/user/$username'
 import { Route as LeftSidebarPostDraftsImport } from './routes/_left-sidebar/post/drafts'
 import { Route as LeftSidebarPostCreateImport } from './routes/_left-sidebar/post/create'
@@ -67,19 +67,18 @@ const LeftSidebarNotificationsRoute = LeftSidebarNotificationsImport.update({
   getParentRoute: () => LeftSidebarRoute,
 } as any)
 
-const LeftSidebarCredentialsIndexRoute =
-  LeftSidebarCredentialsIndexImport.update({
-    id: '/credentials/',
-    path: '/credentials/',
-    getParentRoute: () => LeftSidebarRoute,
-  } as any)
-
 const LeftSidebarCommunitiesIndexRoute =
   LeftSidebarCommunitiesIndexImport.update({
     id: '/communities/',
     path: '/communities/',
     getParentRoute: () => LeftSidebarRoute,
   } as any)
+
+const LeftSidebarBadgesIndexRoute = LeftSidebarBadgesIndexImport.update({
+  id: '/badges/',
+  path: '/badges/',
+  getParentRoute: () => LeftSidebarRoute,
+} as any)
 
 const LeftSidebarUserUsernameRoute = LeftSidebarUserUsernameImport.update({
   id: '/user/$username',
@@ -199,18 +198,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LeftSidebarUserUsernameImport
       parentRoute: typeof LeftSidebarImport
     }
+    '/_left-sidebar/badges/': {
+      id: '/_left-sidebar/badges/'
+      path: '/badges'
+      fullPath: '/badges'
+      preLoaderRoute: typeof LeftSidebarBadgesIndexImport
+      parentRoute: typeof LeftSidebarImport
+    }
     '/_left-sidebar/communities/': {
       id: '/_left-sidebar/communities/'
       path: '/communities'
       fullPath: '/communities'
       preLoaderRoute: typeof LeftSidebarCommunitiesIndexImport
-      parentRoute: typeof LeftSidebarImport
-    }
-    '/_left-sidebar/credentials/': {
-      id: '/_left-sidebar/credentials/'
-      path: '/credentials'
-      fullPath: '/credentials'
-      preLoaderRoute: typeof LeftSidebarCredentialsIndexImport
       parentRoute: typeof LeftSidebarImport
     }
   }
@@ -238,8 +237,8 @@ interface LeftSidebarRouteChildren {
   LeftSidebarPostCreateRoute: typeof LeftSidebarPostCreateRoute
   LeftSidebarPostDraftsRoute: typeof LeftSidebarPostDraftsRoute
   LeftSidebarUserUsernameRoute: typeof LeftSidebarUserUsernameRoute
+  LeftSidebarBadgesIndexRoute: typeof LeftSidebarBadgesIndexRoute
   LeftSidebarCommunitiesIndexRoute: typeof LeftSidebarCommunitiesIndexRoute
-  LeftSidebarCredentialsIndexRoute: typeof LeftSidebarCredentialsIndexRoute
 }
 
 const LeftSidebarRouteChildren: LeftSidebarRouteChildren = {
@@ -250,8 +249,8 @@ const LeftSidebarRouteChildren: LeftSidebarRouteChildren = {
   LeftSidebarPostCreateRoute: LeftSidebarPostCreateRoute,
   LeftSidebarPostDraftsRoute: LeftSidebarPostDraftsRoute,
   LeftSidebarUserUsernameRoute: LeftSidebarUserUsernameRoute,
+  LeftSidebarBadgesIndexRoute: LeftSidebarBadgesIndexRoute,
   LeftSidebarCommunitiesIndexRoute: LeftSidebarCommunitiesIndexRoute,
-  LeftSidebarCredentialsIndexRoute: LeftSidebarCredentialsIndexRoute,
 }
 
 const LeftSidebarRouteWithChildren = LeftSidebarRoute._addFileChildren(
@@ -269,8 +268,8 @@ export interface FileRoutesByFullPath {
   '/post/create': typeof LeftSidebarPostCreateRoute
   '/post/drafts': typeof LeftSidebarPostDraftsRoute
   '/user/$username': typeof LeftSidebarUserUsernameRoute
+  '/badges': typeof LeftSidebarBadgesIndexRoute
   '/communities': typeof LeftSidebarCommunitiesIndexRoute
-  '/credentials': typeof LeftSidebarCredentialsIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -284,8 +283,8 @@ export interface FileRoutesByTo {
   '/post/create': typeof LeftSidebarPostCreateRoute
   '/post/drafts': typeof LeftSidebarPostDraftsRoute
   '/user/$username': typeof LeftSidebarUserUsernameRoute
+  '/badges': typeof LeftSidebarBadgesIndexRoute
   '/communities': typeof LeftSidebarCommunitiesIndexRoute
-  '/credentials': typeof LeftSidebarCredentialsIndexRoute
 }
 
 export interface FileRoutesById {
@@ -302,8 +301,8 @@ export interface FileRoutesById {
   '/_left-sidebar/post/create': typeof LeftSidebarPostCreateRoute
   '/_left-sidebar/post/drafts': typeof LeftSidebarPostDraftsRoute
   '/_left-sidebar/user/$username': typeof LeftSidebarUserUsernameRoute
+  '/_left-sidebar/badges/': typeof LeftSidebarBadgesIndexRoute
   '/_left-sidebar/communities/': typeof LeftSidebarCommunitiesIndexRoute
-  '/_left-sidebar/credentials/': typeof LeftSidebarCredentialsIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -319,8 +318,8 @@ export interface FileRouteTypes {
     | '/post/create'
     | '/post/drafts'
     | '/user/$username'
+    | '/badges'
     | '/communities'
-    | '/credentials'
   fileRoutesByTo: FileRoutesByTo
   to:
     | ''
@@ -333,8 +332,8 @@ export interface FileRouteTypes {
     | '/post/create'
     | '/post/drafts'
     | '/user/$username'
+    | '/badges'
     | '/communities'
-    | '/credentials'
   id:
     | '__root__'
     | '/_app'
@@ -349,8 +348,8 @@ export interface FileRouteTypes {
     | '/_left-sidebar/post/create'
     | '/_left-sidebar/post/drafts'
     | '/_left-sidebar/user/$username'
+    | '/_left-sidebar/badges/'
     | '/_left-sidebar/communities/'
-    | '/_left-sidebar/credentials/'
   fileRoutesById: FileRoutesById
 }
 
@@ -401,8 +400,8 @@ export const routeTree = rootRoute
         "/_left-sidebar/post/create",
         "/_left-sidebar/post/drafts",
         "/_left-sidebar/user/$username",
-        "/_left-sidebar/communities/",
-        "/_left-sidebar/credentials/"
+        "/_left-sidebar/badges/",
+        "/_left-sidebar/communities/"
       ]
     },
     "/_left-sidebar/notifications": {
@@ -441,12 +440,12 @@ export const routeTree = rootRoute
       "filePath": "_left-sidebar/user/$username.tsx",
       "parent": "/_left-sidebar"
     },
-    "/_left-sidebar/communities/": {
-      "filePath": "_left-sidebar/communities/index.tsx",
+    "/_left-sidebar/badges/": {
+      "filePath": "_left-sidebar/badges/index.tsx",
       "parent": "/_left-sidebar"
     },
-    "/_left-sidebar/credentials/": {
-      "filePath": "_left-sidebar/credentials/index.tsx",
+    "/_left-sidebar/communities/": {
+      "filePath": "_left-sidebar/communities/index.tsx",
       "parent": "/_left-sidebar"
     }
   }

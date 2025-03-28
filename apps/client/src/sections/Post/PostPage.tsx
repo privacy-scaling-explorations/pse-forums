@@ -9,13 +9,11 @@ import {
   useTogglePostReaction,
 } from "@/hooks/usePosts";
 import { cn } from "@/lib/utils";
-import { useForm } from "@tanstack/react-form";
 import { Link, useLoaderData } from "@tanstack/react-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { PostAuthor } from "./PostAuthor";
 import { PostCard } from "./PostCard";
 import {
-  Smile as SmileIcon,
   MessageSquare as MessageSquareIcon,
   Reply as ReplyIcon,
   Link as LinkIcon,
@@ -25,7 +23,6 @@ import { Tag } from "@/components/ui/Tag";
 import { Content } from "@/components/Content";
 import { PostReactions } from "@/components/ui/PostReactions";
 import { usersMocks } from "../../../../shared/src/mocks/users.mocks";
-
 export const PostPage = () => {
   const { postId } = useLoaderData({ from: "/_app/posts/$postId" });
   const { user } = useGlobalContext();
@@ -35,7 +32,11 @@ export const PostPage = () => {
   const { data: badges } = useGetBadges();
   const togglePostReaction = useTogglePostReaction();
 
-  const form = useForm<any>();
+  const userBadges = useMemo(() => {
+    return badges?.filter((badge: any) =>
+      postData?.author.badges?.includes(badge.id),
+    );
+  }, [badges, postData]);
 
   const onToggleReaction = async (postId: number | string, emoji: string) => {
     await togglePostReaction.mutateAsync({
@@ -45,6 +46,8 @@ export const PostPage = () => {
     });
     await refetchPost();
   };
+
+  console.log("badge", postData, badges);
 
   if (!postData) {
     return <div>Post not found</div>;
@@ -73,6 +76,7 @@ export const PostPage = () => {
               <PostAuthor
                 author={postData.author}
                 avatarClassName="!size-[30px]"
+                badges={userBadges}
               />
             </div>
           }

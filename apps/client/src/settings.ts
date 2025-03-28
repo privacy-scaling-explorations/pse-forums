@@ -6,7 +6,7 @@ export const MAIN_NAV_ITEMS: Record<
   Array<{ title: string; to: string; icon: LucideIcon; requiresAuth: boolean; badge?: string }>
 > = {
   start: [
-    { title: "My Credentials", to: "/credentials", icon: Settings, requiresAuth: true },
+    { title: "My Badges", to: "/badges", icon: Settings, requiresAuth: true },
     { title: "Communities", to: "/communities", icon: Users, requiresAuth: true },
     { title: "Notifications", to: "/notifications", icon: Bell, requiresAuth: true, badge: "10" },
     { title: "Profile", to: "/profile", icon: User, requiresAuth: true },

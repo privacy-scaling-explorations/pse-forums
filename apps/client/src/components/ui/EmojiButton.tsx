@@ -6,6 +6,7 @@ interface EmojiButtonProps {
   onClick?: (emoji: string) => void;
   size?: "sm" | "md";
   tooltip?: string;
+  disabled?: boolean;
 }
 
 const emojiList = ["👍", "❤️", "😂", "😮", "😢", "🔥"];
@@ -14,12 +15,13 @@ export const EmojiButton = ({
   onClick,
   size = "sm",
   tooltip = "React",
+  disabled = false,
 }: EmojiButtonProps) => {
   const [showPopup, setShowPopup] = useState(false);
   const popupRef = useRef<HTMLDivElement>(null);
 
-  // Close popup when clicking outside
   useEffect(() => {
+    if (disabled) return;
     const handleClickOutside = (event: MouseEvent) => {
       if (
         popupRef.current &&
@@ -35,7 +37,10 @@ export const EmojiButton = ({
   return (
     <div className="relative inline-block">
       <Tag
-        onClick={() => setShowPopup(!showPopup)}
+        onClick={() => {
+          if (disabled) return;
+          setShowPopup(!showPopup);
+        }}
         size={size}
         tooltip={tooltip}
       >
@@ -51,6 +56,7 @@ export const EmojiButton = ({
             <button
               key={emoji}
               onClick={() => {
+                if (disabled) return;
                 setShowPopup(false);
                 if (onClick) onClick(emoji);
               }}

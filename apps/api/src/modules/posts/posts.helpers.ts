@@ -2,6 +2,16 @@ import { PostSchema, PostAuthorSchema, postSchema } from "@/shared/schemas/post.
 import { CommunitySchema } from "@/shared/schemas/community.schema";
 import { z } from "zod";
 
+interface PostReply {
+  id: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  parentId?: string;
+  author: PostAuthorSchema;
+  replies: PostReply[];
+}
+
 const formatPostReplies = (repliesRows: any[]) => {
   return repliesRows
     .filter((reply) => !reply.parent_id)
@@ -33,13 +43,11 @@ const formatPostReplies = (repliesRows: any[]) => {
     })
 }
 
-export function formatPostDbRow(row: any): Partial<PostSchema> {
-  // Format community and communityData if present
-  let community = null;
+export function formatPostDbRow(row: any): any {
+  // Format community data if present
   let communityData: CommunitySchema | undefined = undefined;
   
   if (row.community_id) {
-    community = row.community_id;
     communityData = {
       id: row.community_id,
       name: row.community_name || "",
@@ -53,66 +61,52 @@ export function formatPostDbRow(row: any): Partial<PostSchema> {
     } as CommunitySchema;
   }
 
-  // Format author
-  let author: PostAuthorSchema = {
-    id: null,
-    isAnon: row.post_is_anon,
-    badges: [],
-    username: null,
-  };
-
-  if (row.post_author_id && !row.post_is_anon) {
-    author = {
-      id: row.post_author_id,
-      isAnon: row.post_is_anon,
-      badges: safeJsonParse(row.user_badges, []),
-      username: row.user_username,
-    };
-  }
-
   return {
     id: row.post_id,
     title: row.post_title,
     content: row.post_content,
     createdAt: row.post_created_at,
     updatedAt: row.post_updated_at,
-    author,
-    isAnon: row.post_is_anon,
     totalViews: row.post_total_views,
-    reactions: safeJsonParse(row.post_reactions, {}),
-    community,
+    reactions: row.post_reactions || {},
+    isAnon: row.post_is_anon,
+    community: row.post_community_id,
     communityData,
-    replies: [] as any[],
+    author: row.post_author_id ? {
+      id: row.post_author_id,
+      username: row.user_username,
+      isAnon: row.post_is_anon,
+      badges: row.post_author_badges || []
+    } : {
+      id: null,
+      username: null,
+      isAnon: true,
+      badges: []
+    },
+    replies: []
   };
 }
 
 export function formatReplyDbRow(row: any): any {
-  // Format author
-  let author: PostAuthorSchema = {
-    id: null,
-    isAnon: row.reply_is_anon,
-    badges: [],
-    username: null,
-  };
-
-  if (row.reply_author_id && !row.reply_is_anon) {
-    author = {
-      id: row.reply_author_id,
-      isAnon: row.reply_is_anon,
-      badges: safeJsonParse(row.reply_user_badges, []),
-      username: row.reply_user_username,
-    };
-  }
-
   return {
     id: row.reply_id,
     content: row.reply_content,
     createdAt: row.reply_created_at,
     updatedAt: row.reply_updated_at,
-    author,
-    isAnon: row.reply_is_anon,
     parentId: row.reply_parent_id,
-    replies: [],
+    isAnon: row.reply_is_anon,
+    author: row.reply_author_id ? {
+      id: row.reply_author_id,
+      username: row.reply_user_username,
+      isAnon: row.reply_is_anon,
+      badges: row.reply_author_badges || []
+    } : {
+      id: null,
+      username: null,
+      isAnon: true,
+      badges: []
+    },
+    replies: []
   };
 }
 

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { findAllCommunities, findCommunityById, getPostsByCommunityId, joinCommunity } from './communities.service';
+import { findAllCommunities, findCommunityById, getPostsByCommunityId, joinCommunity, getUserCommunities } from './communities.service';
 
 export async function getAllCommunities(req: Request, res: Response) {
   try {
@@ -66,5 +66,21 @@ export async function joinCommunityController(req: Request, res: Response) {
       success: false, 
       message: 'Failed to join community' 
     });
+  }
+}
+
+export async function getUserCommunitiesController(req: Request, res: Response) {
+  try {
+    const { userId } = req.params;
+    
+    if (!userId) {
+      return res.status(400).json({ error: 'User ID is required' });
+    }
+    
+    const communities = await getUserCommunities(userId);
+    return res.status(200).json(communities);
+  } catch (error) {
+    console.error('Error fetching user communities:', error);
+    return res.status(500).json({ error: 'Failed to fetch user communities' });
   }
 }

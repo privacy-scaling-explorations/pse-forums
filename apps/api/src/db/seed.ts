@@ -232,8 +232,8 @@ async function seedDatabase() {
 
         // Create post
         const { rows: [createdPost] } = await client.query(
-          `INSERT INTO posts (title, content, author_id, community_id, total_views, reactions, is_anon, created_at, updated_at)
-           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $8)
+          `INSERT INTO posts (title, content, author_id, community_id, total_views, reactions, is_anon, author_badges, created_at, updated_at)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $9)
            RETURNING id`,
           [
             mockPost.title,
@@ -243,6 +243,7 @@ async function seedDatabase() {
             mockPost.totalViews || 0,
             JSON.stringify(mockPost.reactions || {}),
             mockPost.isAnon || false,
+            JSON.stringify(mockPost.author?.badges || []),
             new Date(mockPost.createdAt || new Date().toISOString())
           ]
         );
@@ -287,14 +288,15 @@ async function seedDatabase() {
 
             // Create reply
             const { rows: [createdReply] } = await client.query(
-              `INSERT INTO replies (content, post_id, author_id, is_anon, created_at, updated_at)
-               VALUES ($1, $2, $3, $4, $5, $5)
+              `INSERT INTO replies (content, post_id, author_id, is_anon, author_badges, created_at, updated_at)
+               VALUES ($1, $2, $3, $4, $5, $6, $6)
                RETURNING id`,
               [
                 mockReply.content || '',
                 createdPost.id,
                 replyAuthorId,
                 mockReply.author?.isAnon || false,
+                JSON.stringify(mockReply.author?.badges || []),
                 new Date(mockReply.createdAt || new Date().toISOString())
               ]
             );
@@ -337,14 +339,15 @@ async function seedDatabase() {
                 // If author is anonymous, nestedAuthorId and nestedUsername remain null
 
                 await client.query(
-                  `INSERT INTO replies (content, post_id, author_id, parent_id, is_anon, created_at, updated_at)
-                   VALUES ($1, $2, $3, $4, $5, $6, $6)`,
+                  `INSERT INTO replies (content, post_id, author_id, parent_id, is_anon, author_badges, created_at, updated_at)
+                   VALUES ($1, $2, $3, $4, $5, $6, $7, $7)`,
                   [
                     nestedReply.content || '',
                     createdPost.id,
                     nestedAuthorId,
                     createdReply.id,
                     nestedReply.author?.isAnon || false,
+                    JSON.stringify(nestedReply.author?.badges || []),
                     new Date(nestedReply.createdAt || new Date().toISOString())
                   ]
                 );
@@ -392,7 +395,7 @@ async function seedDatabase() {
               createdUsers.set(memberIdStr, member);
             }
 
-            if (member) {
+            /*if (member) {
               // Add member to community
               await client.query(
                 `INSERT INTO community_members (community_id, user_id, joined_at)
@@ -405,7 +408,7 @@ async function seedDatabase() {
                 ]
               );
               console.log(`Added member ${member.id} to community ${community.id}`);
-            }
+            }*/
           }
         }
       }

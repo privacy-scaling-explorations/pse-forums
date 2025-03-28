@@ -1,4 +1,4 @@
-import { useGetPosts, useTogglePostReaction } from "@/hooks/usePosts";
+import { useGetBadges, useGetPosts, useTogglePostReaction } from "@/hooks/usePosts";
 import { TimeSince } from "@/components/ui/TimeSince";
 import { MessageSquareIcon } from "lucide-react";
 import { PostAuthor } from "../Post/PostAuthor";
@@ -9,9 +9,14 @@ import { EmojiButton } from "@/components/ui/EmojiButton";
 import { usersMocks } from "../../../../shared/src/mocks/users.mocks";
 import { PostReactions } from "@/components/ui/PostReactions";
 import { Link } from "@tanstack/react-router";
+import { AuthWrapper } from "@/components/AuthWrapper";
+import { useGlobalContext } from "@/contexts/GlobalContext";
+import { useMemo } from "react";
 
 export const PostItems = () => {
   const { data: posts = [], refetch: refetchPosts } = useGetPosts();
+  const { data: badges } = useGetBadges();
+  const { isLoggedIn } = useGlobalContext();
   const togglePostReaction = useTogglePostReaction();
 
   const onToggleReaction = async (postId: number | string, emoji: string) => {
@@ -21,6 +26,12 @@ export const PostItems = () => {
       userId: usersMocks?.[0].id.toString(),
     });
     await refetchPosts();
+  };
+
+  const getUserBadges = (post: any) => {
+    return badges?.filter((badge: any) =>
+      post?.author.badges?.includes(+badge.id),
+    );
   };
 
   return (
@@ -49,8 +60,11 @@ export const PostItems = () => {
               withHover
             >
               <PostAuthor
-                author={post.author}
-                badges={post.author.badges ?? []}
+                author={{
+                  ...post.author,
+                  isAnon: post.isAnon,
+                }}
+                badges={getUserBadges(post)}
               />
               <div className=" flex items-center gap-2">
                 <Tag size="sm">
@@ -58,12 +72,15 @@ export const PostItems = () => {
                   <span>{post.replies.length}</span>
                 </Tag>
 
-                <EmojiButton
-                  size="sm"
-                  onClick={async (emoji) => {
-                    await onToggleReaction(post.id, emoji);
-                  }}
-                />
+                <AuthWrapper requireLogin={!isLoggedIn}>
+                  <EmojiButton
+                    disabled={!isLoggedIn}
+                    size="sm"
+                    onClick={async (emoji) => {
+                      await onToggleReaction(post.id, emoji);
+                    }}
+                  />
+                </AuthWrapper>
 
                 <PostReactions
                   reactions={post.reactions ?? {}}
@@ -71,7 +88,6 @@ export const PostItems = () => {
                     await onToggleReaction(post.id, emoji);
                   }}
                 />
-
               </div>
             </PostCard>
           </div>

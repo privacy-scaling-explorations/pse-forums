@@ -1,4 +1,4 @@
-import { PostSchema, PostAuthorSchema, postReplySchema } from '@/shared/schemas/post.schema';
+import { PostSchema, PostAuthorSchema, postReplySchema, createPostSchema } from '@/shared/schemas/post.schema';
 import { query } from '../../config/database';
 import { formatPostDbRow, formatReplyDbRow } from './posts.helpers';
 import { z } from 'zod';
@@ -44,9 +44,9 @@ export async function findAllPosts(): Promise<PostSchema[]> {
         p.total_views as post_total_views,
         p.reactions as post_reactions,
         p.community_id as post_community_id,
+        p.author_badges as post_author_badges,
         u.username as user_username,
         u.avatar as user_avatar,
-        u.badges as user_badges,
         c.id as community_id,
         c.name as community_name,
         c.description as community_description,
@@ -69,9 +69,9 @@ export async function findAllPosts(): Promise<PostSchema[]> {
           r.author_id as reply_author_id,
           r.is_anon as reply_is_anon,
           r.parent_id as reply_parent_id,
+          r.author_badges as reply_author_badges,
           u.username as reply_user_username,
-          u.avatar as reply_user_avatar,
-          u.badges as reply_user_badges
+          u.avatar as reply_user_avatar
         FROM replies r
         LEFT JOIN users u ON r.author_id = u.id
         WHERE r.post_id = $1
@@ -90,21 +90,25 @@ export async function findAllPosts(): Promise<PostSchema[]> {
       const topLevelReplies: PostReply[] = [];
       
       formattedReplies.forEach(reply => {
-        replyMap.set(reply.id, { ...reply, replies: [] } as PostReply);
+        replyMap.set(reply.id, { ...reply, replies: [] });
       });
       
       formattedReplies.forEach(reply => {
         if (reply.parentId) {
           const parentReply = replyMap.get(reply.parentId);
-          if (parentReply) {
-            parentReply.replies.push(replyMap.get(reply.id) as PostReply);
+          const replyObj = replyMap.get(reply.id);
+          if (parentReply && replyObj) {
+            parentReply.replies.push(replyObj);
           }
         } else {
-          topLevelReplies.push(replyMap.get(reply.id) as PostReply);
+          const replyObj = replyMap.get(reply.id);
+          if (replyObj) {
+            topLevelReplies.push(replyObj);
+          }
         }
       });
       
-      post.replies = topLevelReplies as any[];
+      post.replies = topLevelReplies;
       return post as unknown as PostSchema;
     }));
 
@@ -131,9 +135,9 @@ export async function findPostById(
         p.total_views as post_total_views,
         p.reactions as post_reactions,
         p.community_id as post_community_id,
+        p.author_badges as post_author_badges,
         u.username as user_username,
         u.avatar as user_avatar,
-        u.badges as user_badges,
         c.id as community_id,
         c.name as community_name,
         c.description as community_description,
@@ -162,9 +166,9 @@ export async function findPostById(
         r.author_id as reply_author_id,
         r.is_anon as reply_is_anon,
         r.parent_id as reply_parent_id,
+        r.author_badges as reply_author_badges,
         u.username as reply_user_username,
-        u.avatar as reply_user_avatar,
-        u.badges as reply_user_badges
+        u.avatar as reply_user_avatar
       FROM replies r
       LEFT JOIN users u ON r.author_id = u.id
       WHERE r.post_id = $1
@@ -183,22 +187,26 @@ export async function findPostById(
     const topLevelReplies: PostReply[] = [];
     
     formattedReplies.forEach(reply => {
-      replyMap.set(reply.id, { ...reply, replies: [] } as PostReply);
+      replyMap.set(reply.id, { ...reply, replies: [] });
     });
     
     formattedReplies.forEach(reply => {
       if (reply.parentId) {
         const parentReply = replyMap.get(reply.parentId);
-        if (parentReply) {
-          parentReply.replies.push(replyMap.get(reply.id) as PostReply);
+        const replyObj = replyMap.get(reply.id);
+        if (parentReply && replyObj) {
+          parentReply.replies.push(replyObj);
         }
       } else {
-        topLevelReplies.push(replyMap.get(reply.id) as PostReply);
+        const replyObj = replyMap.get(reply.id);
+        if (replyObj) {
+          topLevelReplies.push(replyObj);
+        }
       }
     });
     
-    post.replies = topLevelReplies as any[];
-    return post as unknown as PostSchema;
+    post.replies = topLevelReplies;
+    return post;
   } catch (error) {
     console.error(`Error fetching post with id ${id}:`, error);
     return undefined;
@@ -346,5 +354,68 @@ export async function removePostReaction(
   } catch (error) {
     console.error(`Error removing reaction from post ${postId}:`, error);
     return undefined;
+  }
+}
+
+export async function createPost(postData: z.infer<typeof createPostSchema>): Promise<PostSchema> {
+  try {
+    if (!postData.title?.trim()) {
+      throw new Error('Title is required');
+    }
+    if (!postData.content?.trim()) {
+      throw new Error('Content is required');
+    }
+    if (!postData.author?.id) {
+      throw new Error('Author ID is required');
+    }
+
+    const author = {
+      id: postData.author.id,
+      username: postData.author.username || null,
+      isAnon: postData.author.isAnon || false,
+      badges: postData.author.badges?.map(badge => 
+        typeof badge === 'string' ? parseInt(badge, 10) : badge
+      ) || []
+    };
+
+    const result = await query(`
+      INSERT INTO posts (
+        title,
+        content,
+        author_id,
+        is_anon,
+        community_id,
+        author_badges,
+        created_at,
+        updated_at
+      ) VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW())
+      RETURNING 
+        id as post_id,
+        title as post_title,
+        content as post_content,
+        created_at as post_created_at,
+        updated_at as post_updated_at,
+        author_id as post_author_id,
+        is_anon as post_is_anon,
+        total_views as post_total_views,
+        reactions as post_reactions,
+        community_id as post_community_id,
+        author_badges as post_author_badges
+    `, [
+      postData.title.trim(),
+      postData.content.trim(),
+      author.id,
+      postData.isAnon,
+      postData.community,
+      JSON.stringify(author.badges),
+    ]);
+
+    const postRow = result.rows[0];
+    const post = formatPostDbRow(postRow);
+    post.replies = [];
+    return post as unknown as PostSchema;
+  } catch (error) {
+    console.error('Error creating post:', error);
+    throw error instanceof Error ? error : new Error('Failed to create post');
   }
 }

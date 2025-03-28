@@ -8,7 +8,8 @@
     "start": "node dist/index.js",
     "db:migrate": "ts-node -r tsconfig-paths/register src/db/migrate.ts",
     "db:seed": "ts-node -r tsconfig-paths/register src/db/seed.ts",
-    "db:reset": "ts-node -r tsconfig-paths/register src/db/migrate.ts && ts-node -r tsconfig-paths/register src/db/seed.ts"
+    "db:reset": "ts-node -r tsconfig-paths/register src/db/migrate.ts && ts-node -r tsconfig-paths/register src/db/seed.ts",
+    "db:setup": "cd ../server && npm run migrate && cd ../api && npm run seed"
   },
   "dependencies": {
     "cors": "^2.8.5",

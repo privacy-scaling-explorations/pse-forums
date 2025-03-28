@@ -228,3 +228,31 @@ export async function joinCommunity(userId: string, communityId: string): Promis
     throw new Error('Failed to join community');
   }
 } 
+
+export async function getUserCommunities(userId: string): Promise<CommunitySchema[]> {
+  try {
+    const result = await query(`
+      SELECT 
+        c.*,
+        cm.joined_at
+      FROM communities c
+      JOIN community_members cm ON c.id = cm.community_id
+      WHERE cm.user_id = $1
+      ORDER BY cm.joined_at DESC
+    `, [userId]);
+
+    const communities = await Promise.all(result.rows.map(async (community) => {
+      const membersResult = await query(`
+        SELECT user_id FROM community_members
+        WHERE community_id = $1
+      `, [community.id]);
+      
+      return formatCommunityFromDb(community, membersResult.rows);
+    }));
+
+    return communities;
+  } catch (error) {
+    console.error(`Error fetching communities for user ${userId}:`, error);
+    return [];
+  }
+} 

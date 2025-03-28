@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { useRouter } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { VersionDetail } from "./VersionDetail";
+import { LoginModal } from "@/sections/Login/LoginModal";
 interface MainLayoutProps {
   children: React.ReactNode;
   showHeader?: boolean;
@@ -19,11 +20,11 @@ export const MainLayout = ({
   showLeftSidebar = false,
   showRightSidebar = false,
 }: MainLayoutProps) => {
-  const { isMenuOpen, setIsMenuOpen, isDarkMode } = useGlobalContext();
+  const { isMenuOpen, setIsMenuOpen, isDarkMode, showLoginModal, setShowLoginModal } = useGlobalContext();
 
   const router = useRouter();
 
-  const pathname = router?.latestLocation?.href;  
+  const pathname = router?.latestLocation?.href;
 
   useEffect(() => {
     setIsMenuOpen(false);
@@ -33,6 +34,7 @@ export const MainLayout = ({
 
   return (
     <div className={cn("h-screen", isDarkMode ? "dark" : "")}>
+      <LoginModal isOpen={showLoginModal} setIsOpen={setShowLoginModal} />
       {showHeader && <Header />}
       <main className="bg-base-background h-[calc(100vh-65px)] flex justify-between overflow-hidden">
         {showLeftSidebar && <LeftSidebar />}

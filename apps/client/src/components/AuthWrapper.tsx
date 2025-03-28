@@ -1,22 +1,37 @@
-import { ReactNode } from "react";
+import { ReactNode, forwardRef } from "react";
 import { useGlobalContext } from "@/contexts/GlobalContext";
-
+import { cn } from "@/lib/utils";
 interface AuthWrapperProps {
   children?: ReactNode;
   fallback?: ReactNode;
-  showLoginModal?: boolean;
+  requireLogin?: boolean;
+  action?: () => Promise<void> | void;
+  className?: string;
 }
 
-export const AuthWrapper = ({
-  children,
-  fallback,
-  showLoginModal = false,
-}: AuthWrapperProps) => {
-  const { isLoggedIn, setShowLoginModal } = useGlobalContext();
+export const AuthWrapper = forwardRef<HTMLDivElement, AuthWrapperProps>(
+  ({ children, fallback, requireLogin = false, className }, ref) => {
+    const { isLoggedIn, setShowLoginModal } = useGlobalContext();
 
-  if (!isLoggedIn && !showLoginModal) {
-    return fallback ?? null;
-  }
+    if (!isLoggedIn && !requireLogin) {
+      return fallback ?? null;
+    }
 
-  return <div onClick={() => setShowLoginModal(true)}>{children}</div>;
-};
+    return (
+      <div
+        ref={ref}
+        className={cn(className)}
+        onClick={(e) => {
+          e.preventDefault();
+          if (!isLoggedIn) {
+            setShowLoginModal(true);
+          }
+        }}
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
+AuthWrapper.displayName = "AuthWrapper";

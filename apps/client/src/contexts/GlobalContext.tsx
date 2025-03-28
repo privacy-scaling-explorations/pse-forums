@@ -40,7 +40,6 @@ export function GlobalProvider({ children }: { children: ReactNode }) {
 
   return (
     <GlobalContext.Provider value={value}>
-      <LoginModal isOpen={showLoginModal} setIsOpen={setShowLoginModal} />
       {children}
     </GlobalContext.Provider>
   );

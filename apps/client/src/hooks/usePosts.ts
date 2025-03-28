@@ -1,11 +1,12 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useStorage } from "./useStorage"
 import { LOCAL_STORAGE_KEYS } from "@/lib/config"
-import { PostSchema } from "@/shared/schemas/post.schema"
+import { CreatePostSchema, PostSchema } from "@/shared/schemas/post.schema"
 import { API_URL } from "../settings"
 
 export const useGetPosts = () => {
   return useQuery({
+    staleTime: 0,
     queryKey: ["getPosts"],
     queryFn: (): Promise<PostSchema[]> =>
       fetch(`${API_URL}/api/posts`).then((res) => res.json()),
@@ -14,14 +15,15 @@ export const useGetPosts = () => {
 
 export const useGetBadges = () => {
   return useQuery({
+    staleTime: 0,
     queryKey: ["getBadges"],
-    queryFn: () =>
-      fetch(`${API_URL}/api/badges`).then((res) => res.json()),
+    queryFn: () => fetch(`${API_URL}/api/badges`).then((res) => res.json()),
   })
 }
 
 export const useGetPostById = (postId: string | number) => {
   return useQuery({
+    staleTime: 0,
     queryKey: ["getPostById", postId],
     queryFn: () => {
       const postById = fetch(`http://localhost:3001/api/posts/${postId}`).then(
@@ -47,20 +49,29 @@ export const useTogglePostReaction = () => {
       emoji: string
       userId: string
     }): Promise<PostSchema> => {
-      const post = await fetch(
-        `${API_URL}/api/posts/${postId}/reactions`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ emoji, userId }),
-        },
-      ).then((res) => res.json())
+      const post = await fetch(`${API_URL}/api/posts/${postId}/reactions`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ emoji, userId }),
+      }).then((res) => res.json())
 
       if (!post) {
         throw new Error("Post not found")
       }
 
       return post
+    },
+  })
+}
+
+export const useCreatePostMutation = () => {
+  return useMutation({
+    mutationFn: (post: CreatePostSchema) => {
+      return fetch(`${API_URL}/api/posts`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(post),
+      }).then((res) => res.json())
     },
   })
 }

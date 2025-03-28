@@ -10,6 +10,7 @@ export const communitySchema = z.object({
   members: z.array(z.union([z.number(), z.string()])),
   createdAt: z.string(),
   updatedAt: z.string(),
+  isPrivate: z.boolean().default(false).optional(),
 });
 
 export type CommunitySchema = z.infer<typeof communitySchema>;

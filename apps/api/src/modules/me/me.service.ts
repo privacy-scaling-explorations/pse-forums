@@ -1,5 +1,7 @@
 import { usersMocks } from '@/shared/mocks/users.mocks';
-import { query } from '../../config/database';  
+import { query } from '../../config/database';
+import { getUserCommunities } from '../communities/communities.service';
+ 
 export async function getUser() {
   try {
     const result = await query(
@@ -12,6 +14,7 @@ export async function getUser() {
     }
     
     const userData = result.rows[0];
+    const communities = await getUserCommunities(userData.id);
     
     return {
       id: userData.id,
@@ -22,7 +25,8 @@ export async function getUser() {
       uuid: userData.uuid,
       avatar: userData.avatar,
       isAnon: userData.is_anon || false,
-      badges: Array.isArray(userData.badges) ? userData.badges : []
+      badges: Array.isArray(userData.badges) ? userData.badges : [],
+      communities
     };
   } catch (error) {
     console.error('Error fetching user:', error);

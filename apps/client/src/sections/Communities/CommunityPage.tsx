@@ -7,6 +7,7 @@ import {
   PencilLine as PencilIcon,
   FileBadge as FileBadgeIcon,
   Check as CheckIcon,
+  X as XIcon,
 } from "lucide-react";
 import { PostAuthor } from "../Post/PostAuthor";
 import { PostCard } from "../Post/PostCard";
@@ -23,27 +24,54 @@ import { useGetBadges } from "@/hooks/useBadges";
 import { useGetUser } from "@/hooks/useAuth";
 import { useGlobalContext } from "@/contexts/GlobalContext";
 import { Banner } from "@/components/ui/Banner";
+import { AuthWrapper } from "@/components/AuthWrapper";
+import { useState } from "react";
 
 export const CommunityPage = () => {
+  const [forceReloadTimestamp, setForceReloadTimestamp] = useState(0);
   const communityParams = useParams({ from: "/_left-sidebar/communities/$id" });
 
   const communityId = communityParams.id;
 
   const { isLoggedIn } = useGlobalContext();
 
-  const { data: community } = useGetCommunityById(communityId);
-  const { data: badges } = useGetBadges();
-  const { data: user } = useGetUser();
+  const { data: community, refetch: refetchCommunity } =
+    useGetCommunityById(communityId);
+  const { data: badges, refetch: refetchBadges } = useGetBadges();
+  const { data: user, refetch: refetchUser } = useGetUser();
   const { data: posts } = useGetCommunityPosts(communityId);
   const joinCommunityMutation = useJoinCommunity();
 
-  console.log("joinCommunityMutation", joinCommunityMutation);
   const joinCommunityFails = joinCommunityMutation.data?.success === false;
-  console.log("joinCommunityFails", joinCommunityFails);
+  const hasRequiredBadges = community?.requiredBadges?.every((badge: any) =>
+    user?.badges?.some(
+      (userBadge: any) => Number(userBadge.id) === Number(badge),
+    ),
+  );
+
+  const userIsMember =
+    community?.members?.find((member: any) => member === user?.id) &&
+    hasRequiredBadges;
+
+  const onJoinCommunity = async () => {
+    if (!isLoggedIn) return;
+    await joinCommunityMutation.mutateAsync({
+      id: communityId,
+      userId: user?.id,
+      onSuccess: () => {
+        refetchCommunity();
+        refetchUser();
+        refetchBadges();
+        setForceReloadTimestamp(Date.now());
+      },
+    });
+  };
 
   if (!community) {
     return <div>Community not found {`${communityId}`}</div>;
   }
+
+  console.log("userIsMember", userIsMember, hasRequiredBadges);
 
   return (
     <PageContent className="!pt-0 !px-0 lg:!pb-4 lg:!px-4">
@@ -64,25 +92,35 @@ export const CommunityPage = () => {
                 </div>
               </div>
               <div className="ml-auto flex gap-2.5  align-baseline">
-                <Button
-                  size="sm"
-                  icon={UserPlusIcon}
-                  variant="outline"
-                  loading={joinCommunityMutation.isPending}
-                  onClick={async () => {
-                    await joinCommunityMutation.mutateAsync({
-                      id: communityId,
-                      userId: user?.id,
-                    });
-                  }}
-                >
-                  Join
-                </Button>
-                <Link to="/post/create" search={{ community: community.id }}>
-                  <Button size="sm" icon={PlusIcon}>
-                    New Post
-                  </Button>
-                </Link>
+                {!userIsMember && (
+                  <AuthWrapper
+                    requireLogin={!isLoggedIn}
+                    action={onJoinCommunity}
+                  >
+                    <Button
+                      size="sm"
+                      icon={UserPlusIcon}
+                      variant="outline"
+                      loading={joinCommunityMutation.isPending}
+                      onClick={onJoinCommunity}
+                    >
+                      Join
+                    </Button>
+                  </AuthWrapper>
+                )}
+
+                {userIsMember && (
+                  <AuthWrapper>
+                    <Link
+                      to="/post/create"
+                      search={{ community: community.id }}
+                    >
+                      <Button size="sm" icon={PlusIcon}>
+                        New Post
+                      </Button>
+                    </Link>
+                  </AuthWrapper>
+                )}
               </div>
             </div>
             <div className="flex flex-col gap-5">
@@ -139,8 +177,17 @@ export const CommunityPage = () => {
                           {userHasBadge && (
                             <CheckIcon className="size-4 text-chart-1" />
                           )}
+                          {!userHasBadge && joinCommunityFails && (
+                            <XIcon className="size-4 text-error" />
+                          )}
                           <Badge
-                            variant={userHasBadge ? "success" : "secondary"}
+                            variant={
+                              userHasBadge
+                                ? "success"
+                                : joinCommunityFails
+                                  ? "error"
+                                  : "secondary"
+                            }
                             rounded="md"
                           >
                             {badge?.name}
@@ -167,10 +214,9 @@ export const CommunityPage = () => {
           <div className="flex flex-col gap-4">
             {posts?.map((post: any, index: any) => {
               return (
-                <div className="flex flex-col gap-14">
+                <div className="flex flex-col gap-14" key={index}>
                   <PostCard
                     className="relative"
-                    key={index}
                     title={post.title}
                     postId={post.id}
                     withHover

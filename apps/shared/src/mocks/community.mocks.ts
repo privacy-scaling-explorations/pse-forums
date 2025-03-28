@@ -14,6 +14,7 @@ export const communityMocks: CommunitySchema[] = [
     requiredBadges: [1, 2, 3, 4],
     createdAt: "2024-03-10T10:00:00Z",
     updatedAt: "2024-03-10T10:00:00Z",
+    isPrivate: false,
   },
   {
     id: "2",
@@ -26,6 +27,7 @@ export const communityMocks: CommunitySchema[] = [
     requiredBadges: [1],
     createdAt: "2024-03-10T10:00:00Z",
     updatedAt: "2024-03-10T10:00:00Z",
+    isPrivate: true,
   },
   {
     id: "3",

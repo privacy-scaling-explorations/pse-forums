@@ -69,7 +69,8 @@ const createTables = `
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     total_views INTEGER DEFAULT 0,
     reactions JSONB DEFAULT '{}',
-    is_anon BOOLEAN DEFAULT FALSE
+    is_anon BOOLEAN DEFAULT FALSE,
+    author_badges JSONB DEFAULT '[]'::jsonb
   );
 
   -- Replies table (based on post.schema.ts postReplySchema)
@@ -81,7 +82,8 @@ const createTables = `
     parent_id UUID REFERENCES replies(id) ON DELETE CASCADE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    is_anon BOOLEAN DEFAULT FALSE
+    is_anon BOOLEAN DEFAULT FALSE,
+    author_badges JSONB DEFAULT '[]'::jsonb
   );
 
   -- Community members (many-to-many relationship)

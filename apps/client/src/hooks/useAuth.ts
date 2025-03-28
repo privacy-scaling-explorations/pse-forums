@@ -46,7 +46,9 @@ export function useMockAuth({ onSuccess }: { onSuccess?: () => void } = {}) {
 }
 
 export function useGetUser() {
+  const { isLoggedIn } = useGlobalContext();
   return useQuery({
+    enabled: isLoggedIn,
     queryKey: ["getUser"],
     queryFn: async () => {
       const response = await fetch(`${API_URL}/api/me`)

@@ -1,11 +1,12 @@
 import { Request, Response } from "express"
 import { ZodError } from "zod"
-import { postReactionSchema } from "@/shared/schemas/post.schema"
+import { postReactionSchema, createPostSchema } from "@/shared/schemas/post.schema"
 import {
   findAllPosts,
   findPostById,
   addPostReaction,
   removePostReaction,
+  createPost,
 } from "./posts.service"
 
 export async function getAllPosts(req: Request, res: Response) {
@@ -82,5 +83,28 @@ export async function toggleReaction(req: Request, res: Response) {
       error: "Failed to toggle reaction",
       details: error instanceof Error ? error.message : String(error),
     })
+  }
+}
+
+export async function createPostController(req: Request, res: Response) {
+  try {
+    const validatedData = createPostSchema.parse(req.body);
+    
+    const post = await createPost(validatedData);
+    
+    return res.status(201).json(post);
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        error: "Invalid post data",
+        details: error.errors,
+      });
+    }
+
+    console.error("Error creating post:", error);
+    return res.status(500).json({
+      error: "Failed to create post",
+      details: error instanceof Error ? error.message : String(error),
+    });
   }
 }

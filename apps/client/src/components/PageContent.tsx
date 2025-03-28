@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 
 interface PageContentProps {
   title?: string;
+  description?: string;
   children?: ReactNode;
   showEmptyState?: boolean;
   className?: string;
@@ -18,6 +19,7 @@ interface PageContentProps {
 
 export const PageContent = ({
   title,
+  description,
   children,
   showEmptyState = false,
   emptyState,
@@ -25,11 +27,22 @@ export const PageContent = ({
 }: PageContentProps) => {
   return (
     <div
-      className={cn("flex flex-col gap-6 p-4 lg:p-6 lg:max-w-[1200px] mx-auto", className, {
-        "h-full": showEmptyState,
-      })}
+      className={cn(
+        "flex flex-col gap-6 p-4 lg:p-6 lg:max-w-[1200px] mx-auto",
+        className,
+        {
+          "h-full": showEmptyState,
+        },
+      )}
     >
-      {title && <Labels.PageTitle className="">{title}</Labels.PageTitle>}
+      <div className="flex flex-col gap-2">
+        {title && <Labels.PageTitle className="">{title}</Labels.PageTitle>}
+        {description && (
+          <Labels.PageDescription className="">
+            {description}
+          </Labels.PageDescription>
+        )}
+      </div>
       {children}
       {showEmptyState && emptyState && (
         <EmptyState

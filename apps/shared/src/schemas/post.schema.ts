@@ -50,10 +50,26 @@ export const postSchema = z.object({
   reactions: z.record(z.string(), postReactionSchema).optional(),
   community: z.union([z.number(), z.string()]).optional(),
   communityData: communitySchema.optional(),
-  isPrivate: z.boolean().optional().default(false),
+  tags: z.array(z.string()).optional(),
 })
+
+export const createPostFormSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  content: z.string().min(1, "Content is required"),
+  author: z.object({
+    id: z.string().nullable(),
+    username: z.string().nullable().optional(),
+    isAnon: z.boolean(),
+    badges: z.array(z.string()).optional(),
+  }),
+  isAnon: z.boolean(),
+  community: z.string().optional(),
+})
+
+export const createPostSchema = createPostFormSchema
 
 export type PostSchema = z.infer<typeof postSchema>
 export type PostAuthorSchema = z.infer<typeof postAuthorSchema>
 export type PostBadgeSchema = z.infer<typeof badgeSchema>
 export type PostReactionSchema = z.infer<typeof postReactionSchema>
+export type CreatePostSchema = z.infer<typeof createPostSchema>
