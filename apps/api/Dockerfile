@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:20-alpine
 
 WORKDIR /workspace/apps/api
 
@@ -16,3 +16,9 @@ RUN npm install
 
 # Use entrypoint script
 ENTRYPOINT ["./entrypoint.sh"] 
+
+COPY . .
+
+EXPOSE 3001
+
+CMD ["npm", "run", "dev"] 
