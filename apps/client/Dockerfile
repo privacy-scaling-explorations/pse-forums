@@ -4,6 +4,6 @@ WORKDIR /workspace/apps/client
 
 COPY package*.json ./
 
-RUN npm install
+RUN yarn install
 
-CMD ["npm", "run", "dev"]
+CMD ["yarn", "dev"]
