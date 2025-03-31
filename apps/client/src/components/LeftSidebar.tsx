@@ -11,7 +11,7 @@ import {
   Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { MAIN_NAV_ITEMS } from "settings";
+import { MAIN_NAV_ITEMS } from "../settings";
 import { cn } from "@/lib/utils";
 import { Accordion } from "@/components/Accordion";
 import { Avatar } from "@/components/Avatar";
