@@ -1,0 +1,86 @@
+_format_version: "2.1"
+_transform: true
+
+services:
+  - name: auth-v1
+    url: http://auth:9999/verify
+    routes:
+      - name: auth-v1-route
+        paths:
+          - /auth/v1/verify
+    plugins:
+      - name: cors
+      - name: key-auth
+        config:
+          key_names:
+            - apikey
+          hide_credentials: true
+
+  - name: rest-v1
+    url: http://rest:3000
+    routes:
+      - name: rest-v1-route
+        paths:
+          - /rest/v1
+    plugins:
+      - name: cors
+      - name: key-auth
+        config:
+          key_names:
+            - apikey
+          hide_credentials: true
+
+  - name: realtime-v1
+    url: http://realtime:4000
+    routes:
+      - name: realtime-v1-route
+        paths:
+          - /realtime/v1
+    plugins:
+      - name: cors
+      - name: key-auth
+        config:
+          key_names:
+            - apikey
+          hide_credentials: true
+
+  - name: storage-v1
+    url: http://storage:5000
+    routes:
+      - name: storage-v1-route
+        paths:
+          - /storage/v1
+    plugins:
+      - name: cors
+      - name: key-auth
+        config:
+          key_names:
+            - apikey
+          hide_credentials: true
+
+plugins:
+  - name: cors
+    config:
+      origins:
+        - "*"
+      methods:
+        - GET
+        - POST
+        - PUT
+        - PATCH
+        - DELETE
+        - OPTIONS
+      headers:
+        - Accept
+        - Accept-Version
+        - Content-Length
+        - Content-MD5
+        - Content-Type
+        - Date
+        - apikey
+        - Authorization
+      exposed_headers:
+        - Content-Length
+        - Content-Range
+      credentials: true
+      max_age: 3600 

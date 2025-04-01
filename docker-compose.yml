@@ -9,16 +9,19 @@ services:
       - NODE_ENV=development
       - BROWSER=none
       - DISABLE_OPEN=true
+      - VITE_SUPABASE_URL=http://localhost:54321
+      - VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMmYTn_I0
     ports: 
       - "5173:5173"
     volumes:
-      - ./apps/client:/workspace/apps/client
+      - ./apps/client:/app
       - ./apps/shared:/workspace/apps/shared
-      - /workspace/apps/client/node_modules
-    working_dir: /workspace/apps/client
+      - /app/node_modules
+    working_dir: /app
     command: npm run dev -- --host 0.0.0.0
     depends_on:
       - api
+      - supabase
 
   api:
     container_name: pse-forum-api
@@ -29,33 +32,104 @@ services:
       - PORT=3001
       - NODE_ENV=development
       - HOST=0.0.0.0
-      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/pse_forum
+      - SUPABASE_URL=http://localhost:54321
+      - SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RZxLm5pZbSbXYXzNhRwQsc2dlIvmPl8AFV6Ek
     ports: 
       - "3001:3001"
     volumes:
-      - ./apps/api:/workspace/apps/api
+      - ./apps/api:/app
       - ./apps/shared:/workspace/apps/shared
-      - /workspace/apps/api/node_modules
-    working_dir: /workspace/apps/api
+      - /app/node_modules
+    working_dir: /app
     depends_on:
-      postgres:
+      supabase:
         condition: service_healthy
 
   postgres:
     container_name: pse-forum-postgres
-    image: postgres:16
+    image: postgres:15.1
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=pse_forum
     ports:
-      - "5433:5432"
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
+      timeout: 5s
+      retries: 5
+
+  supabase:
+    container_name: pse-forum-supabase
+    image: supabase/studio:latest
+    environment:
+      - STUDIO_PG_META_URL=http://meta:8080
+      - POSTGRES_PASSWORD=postgres
+      - DEFAULT_ORGANIZATION=Default Organization
+      - DEFAULT_PROJECT=Default Project
+      - SUPABASE_PUBLIC_URL=http://localhost:54321
+      - SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMmYTn_I0
+      - SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RZxLm5pZbSbXYXzNhRwQsc2dlIvmPl8AFV6Ek
+    ports:
+      - "54323:54323"
+    volumes:
+      - ./supabase:/supabase
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kong:
+        condition: service_started
+      meta:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:54323/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  kong:
+    container_name: pse-forum-kong
+    image: kong:2.8.1
+    environment:
+      - KONG_DATABASE=off
+      - KONG_DECLARATIVE_CONFIG=/var/lib/kong/kong.yml
+      - KONG_DNS_ORDER=LAST,A,CNAME
+      - KONG_PLUGINS=request-transformer,cors,key-auth
+    ports:
+      - "54321:8000"
+    volumes:
+      - ./supabase/kong.yml:/var/lib/kong/kong.yml
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "kong", "health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  meta:
+    container_name: pse-forum-meta
+    image: supabase/postgres-meta:latest
+    environment:
+      - PG_META_PORT=8080
+      - PG_META_DB_HOST=postgres
+      - PG_META_DB_PORT=5432
+      - PG_META_DB_NAME=pse_forum
+      - PG_META_DB_USER=postgres
+      - PG_META_DB_PASSWORD=postgres
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
       timeout: 5s
       retries: 5
 

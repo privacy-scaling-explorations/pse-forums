@@ -5,13 +5,10 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only -r tsconfig-paths/register src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js",
-    "db:migrate": "ts-node -r tsconfig-paths/register src/db/migrate.ts",
-    "db:seed": "ts-node -r tsconfig-paths/register src/db/seed.ts",
-    "db:reset": "ts-node -r tsconfig-paths/register src/db/migrate.ts && ts-node -r tsconfig-paths/register src/db/seed.ts",
-    "db:setup": "cd ../server && npm run migrate && cd ../api && npm run seed"
+    "start": "node dist/index.js"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.39.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.18.2",
