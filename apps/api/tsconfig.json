@@ -31,7 +31,7 @@
   ],
   "references": [
     {
-      "path": "../shared"
+      "path": "apps/shared"
     }
   ]
 } 
