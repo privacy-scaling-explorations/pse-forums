@@ -1,5 +1,4 @@
 import { Avatar } from "@/components/Avatar";
-import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/cards/Card";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
@@ -26,15 +25,12 @@ export const Groups = () => {
         {displayedGroups?.map(({ name, id: iid, avatar }: CommunitySchema) => (
           <div key={iid}>
             <div key={iid} className="flex items-center justify-between py-3">
-              <div className="flex items-center gap-1">
+              <Link to={`/communities/${iid}` as any} className="flex items-center gap-2">
                 <Avatar src={avatar} />
                 <span className="font-semibold font-inter text-base-primary line-clamp-1">
                   {name}
                 </span>
-              </div>
-              <Link to={`/group/${iid}` as any}>
-                <Button size="sm">Join</Button>
-              </Link>
+                </Link>
             </div>
           </div>
         ))}

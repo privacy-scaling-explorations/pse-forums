@@ -7,8 +7,8 @@ import { PostItems } from "./PostItems";
 
 export const HomePage = () => {
   return (
-    <PageContent className="flex flex-col gap-6">
-      <AuthWrapper>
+    <PageContent className="flex flex-col gap-0">
+      {/* <AuthWrapper>
         <div className="flex w-full justify-between">
           <Link
             className="ml-auto"
@@ -18,7 +18,7 @@ export const HomePage = () => {
             <Button icon={PlusIcon}>New Post</Button>
           </Link>
         </div>
-      </AuthWrapper>
+      </AuthWrapper> */}
       <PostItems />
     </PageContent>
   );

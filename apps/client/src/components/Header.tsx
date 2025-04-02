@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Input } from "@/components/inputs/Input";
 import { Profile } from "@/components/Profile";
-import { Search } from "lucide-react";
+import { PlusIcon, Search } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Menu as MenuIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -9,6 +9,7 @@ import { useGlobalContext } from "@/contexts/GlobalContext";
 
 import { X as CloseIcon } from "lucide-react";
 import { LeftSidebar } from "@/components/LeftSidebar";
+import { AuthWrapper } from "./AuthWrapper";
 
 const DesktopNav = () => {
   return (
@@ -29,8 +30,18 @@ const DesktopNav = () => {
           <Input placeholder="Search..." icon={Search} />
         </div>
       </div>
-
-      <Profile />
+      <div className="flex flex-row gap-5 items-center">
+        <AuthWrapper>
+            <Link
+              className="ml-auto"
+              to="/post/create"
+              search={{ community: undefined }}
+            >
+              <Button icon={PlusIcon} variant="outline">New Post</Button>
+            </Link>
+        </AuthWrapper>
+        <Profile />
+      </div>
     </div>
   );
 };
@@ -90,6 +101,15 @@ const MobileNav = () => {
         </div>
 
         <div className="flex gap-2 ml-auto">
+        <AuthWrapper>
+          <Link
+            className="ml-auto"
+            to="/post/create"
+            search={{ community: undefined }}
+          >
+            <Button icon={PlusIcon} variant="outline"></Button>
+          </Link>
+      </AuthWrapper>
           <Profile />
         </div>
       </div>
