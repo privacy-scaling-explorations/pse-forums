@@ -26,7 +26,7 @@ export const useGetPostById = (postId: string | number) => {
     staleTime: 0,
     queryKey: ["getPostById", postId],
     queryFn: () => {
-      const postById = fetch(`http://localhost:3001/api/posts/${postId}`).then(
+      const postById = fetch(`${API_URL}/api/posts/${postId}`).then(
         (res) => res.json(),
       )
       if (!postById) {

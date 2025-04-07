@@ -54,8 +54,8 @@ export const postSchema = z.object({
 })
 
 export const createPostFormSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  content: z.string().min(1, "Content is required"),
+  title: z.string().min(10, "A title is required to continue."),
+  content: z.string().min(10, "A content is required to continue."),
   author: z.object({
     id: z.string().nullable(),
     username: z.string().nullable().optional(),
@@ -63,13 +63,12 @@ export const createPostFormSchema = z.object({
     badges: z.array(z.string()).optional(),
   }),
   isAnon: z.boolean(),
-  community: z.string().optional(),
+  community: z.string().min(1, "Please select a community before posting."),
 })
 
-export const createPostSchema = createPostFormSchema
 
 export type PostSchema = z.infer<typeof postSchema>
 export type PostAuthorSchema = z.infer<typeof postAuthorSchema>
 export type PostBadgeSchema = z.infer<typeof badgeSchema>
 export type PostReactionSchema = z.infer<typeof postReactionSchema>
-export type CreatePostSchema = z.infer<typeof createPostSchema>
+export type CreatePostSchema = z.infer<typeof createPostFormSchema>

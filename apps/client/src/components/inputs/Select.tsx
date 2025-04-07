@@ -24,7 +24,7 @@ const SelectTrigger = forwardRef<
   ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & {
     field?: FieldApi<any, any, any, any>;
   }
->(({ className, children, field, ...props }, ref) => (
+>(({ className, children, field, disabled = false, ...props }, ref) => (
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
@@ -35,6 +35,7 @@ const SelectTrigger = forwardRef<
         : "border-base-input",
     )}
     {...props}
+    disabled={disabled}
   >
     {children}
     <SelectPrimitive.Icon asChild>

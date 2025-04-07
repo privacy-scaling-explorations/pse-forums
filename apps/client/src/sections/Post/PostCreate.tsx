@@ -93,9 +93,18 @@ export const PostCreate = () => {
           badges: selectedBadge || [],
         },
       };
-      const res = await createPostMutation.mutateAsync(submissionData);
-      console.log(res);
-      router.navigate({ to: `/posts/${res.id}` });
+     
+      try {
+        const res = await createPostMutation.mutateAsync(submissionData);
+        if (res.id) {
+          router.navigate({ to: `/posts/${res.id}` });
+        }
+      } catch(err) {
+        console.log("err", err);
+      }
+    },
+    validators: {
+      onChange: undefined
     },
   });
 
@@ -112,8 +121,8 @@ export const PostCreate = () => {
 
   const handleRemoveTag = useCallback(
     (tagToRemove: string) => {
-      form.setFieldValue("tags", (prev) =>
-        (prev || []).filter((tag) => tag !== tagToRemove),
+      form.setFieldValue("tags", (prev: string[] | undefined) =>
+        (prev || []).filter((tag: string) => tag !== tagToRemove),
       );
     },
     [form],
@@ -158,6 +167,7 @@ export const PostCreate = () => {
                     onValueChange={(value) => field.handleChange(value)}
                     value={field.state.value || ""}
                     field={field}
+                    disabled={user?.communities?.length === 0}
                   />
                 )}
               />

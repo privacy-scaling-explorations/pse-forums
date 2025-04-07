@@ -1,7 +1,7 @@
 import { Card } from "@/components/cards/Card";
 import { PageContent } from "@/components/PageContent";
 import { Button } from "@/components/ui/Button";
-import { Tag } from "@/components/ui/Tag";
+import { Link } from "@tanstack/react-router";
 import { classed } from "@tw-classed/react";
 import { PlusIcon } from "lucide-react";
 
@@ -30,10 +30,12 @@ export const MyBadgesPage = () => {
             </span>
             <span className="text-sm font-medium text-base-muted-foreground"></span>
           </RowSection>
+          <Link to="/badges/new">
+            <Button icon={PlusIcon} className="w-fit">
+              Add new badge
+            </Button>
+          </Link>
         </Card.Base>
-        <Button icon={PlusIcon} className="w-fit" disabled>
-          Add new badge
-        </Button>
       </div>
     </PageContent>
   );

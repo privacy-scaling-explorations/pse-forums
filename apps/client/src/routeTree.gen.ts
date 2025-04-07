@@ -24,6 +24,7 @@ import { Route as LeftSidebarUserUsernameImport } from './routes/_left-sidebar/u
 import { Route as LeftSidebarPostDraftsImport } from './routes/_left-sidebar/post/drafts'
 import { Route as LeftSidebarPostCreateImport } from './routes/_left-sidebar/post/create'
 import { Route as LeftSidebarCommunitiesIdImport } from './routes/_left-sidebar/communities/$id'
+import { Route as LeftSidebarBadgesNewImport } from './routes/_left-sidebar/badges/new'
 import { Route as AppPostsPostIdImport } from './routes/_app/posts/$postId'
 
 // Create/Update Routes
@@ -104,6 +105,12 @@ const LeftSidebarCommunitiesIdRoute = LeftSidebarCommunitiesIdImport.update({
   getParentRoute: () => LeftSidebarRoute,
 } as any)
 
+const LeftSidebarBadgesNewRoute = LeftSidebarBadgesNewImport.update({
+  id: '/badges/new',
+  path: '/badges/new',
+  getParentRoute: () => LeftSidebarRoute,
+} as any)
+
 const AppPostsPostIdRoute = AppPostsPostIdImport.update({
   id: '/posts/$postId',
   path: '/posts/$postId',
@@ -170,6 +177,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppPostsPostIdImport
       parentRoute: typeof AppImport
     }
+    '/_left-sidebar/badges/new': {
+      id: '/_left-sidebar/badges/new'
+      path: '/badges/new'
+      fullPath: '/badges/new'
+      preLoaderRoute: typeof LeftSidebarBadgesNewImport
+      parentRoute: typeof LeftSidebarImport
+    }
     '/_left-sidebar/communities/$id': {
       id: '/_left-sidebar/communities/$id'
       path: '/communities/$id'
@@ -233,6 +247,7 @@ interface LeftSidebarRouteChildren {
   LeftSidebarNotificationsRoute: typeof LeftSidebarNotificationsRoute
   LeftSidebarProfileRoute: typeof LeftSidebarProfileRoute
   LeftSidebarSettingsRoute: typeof LeftSidebarSettingsRoute
+  LeftSidebarBadgesNewRoute: typeof LeftSidebarBadgesNewRoute
   LeftSidebarCommunitiesIdRoute: typeof LeftSidebarCommunitiesIdRoute
   LeftSidebarPostCreateRoute: typeof LeftSidebarPostCreateRoute
   LeftSidebarPostDraftsRoute: typeof LeftSidebarPostDraftsRoute
@@ -245,6 +260,7 @@ const LeftSidebarRouteChildren: LeftSidebarRouteChildren = {
   LeftSidebarNotificationsRoute: LeftSidebarNotificationsRoute,
   LeftSidebarProfileRoute: LeftSidebarProfileRoute,
   LeftSidebarSettingsRoute: LeftSidebarSettingsRoute,
+  LeftSidebarBadgesNewRoute: LeftSidebarBadgesNewRoute,
   LeftSidebarCommunitiesIdRoute: LeftSidebarCommunitiesIdRoute,
   LeftSidebarPostCreateRoute: LeftSidebarPostCreateRoute,
   LeftSidebarPostDraftsRoute: LeftSidebarPostDraftsRoute,
@@ -264,6 +280,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof LeftSidebarSettingsRoute
   '/': typeof AppIndexRoute
   '/posts/$postId': typeof AppPostsPostIdRoute
+  '/badges/new': typeof LeftSidebarBadgesNewRoute
   '/communities/$id': typeof LeftSidebarCommunitiesIdRoute
   '/post/create': typeof LeftSidebarPostCreateRoute
   '/post/drafts': typeof LeftSidebarPostDraftsRoute
@@ -279,6 +296,7 @@ export interface FileRoutesByTo {
   '/settings': typeof LeftSidebarSettingsRoute
   '/': typeof AppIndexRoute
   '/posts/$postId': typeof AppPostsPostIdRoute
+  '/badges/new': typeof LeftSidebarBadgesNewRoute
   '/communities/$id': typeof LeftSidebarCommunitiesIdRoute
   '/post/create': typeof LeftSidebarPostCreateRoute
   '/post/drafts': typeof LeftSidebarPostDraftsRoute
@@ -297,6 +315,7 @@ export interface FileRoutesById {
   '/_left-sidebar/settings': typeof LeftSidebarSettingsRoute
   '/_app/': typeof AppIndexRoute
   '/_app/posts/$postId': typeof AppPostsPostIdRoute
+  '/_left-sidebar/badges/new': typeof LeftSidebarBadgesNewRoute
   '/_left-sidebar/communities/$id': typeof LeftSidebarCommunitiesIdRoute
   '/_left-sidebar/post/create': typeof LeftSidebarPostCreateRoute
   '/_left-sidebar/post/drafts': typeof LeftSidebarPostDraftsRoute
@@ -314,6 +333,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/'
     | '/posts/$postId'
+    | '/badges/new'
     | '/communities/$id'
     | '/post/create'
     | '/post/drafts'
@@ -328,6 +348,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/'
     | '/posts/$postId'
+    | '/badges/new'
     | '/communities/$id'
     | '/post/create'
     | '/post/drafts'
@@ -344,6 +365,7 @@ export interface FileRouteTypes {
     | '/_left-sidebar/settings'
     | '/_app/'
     | '/_app/posts/$postId'
+    | '/_left-sidebar/badges/new'
     | '/_left-sidebar/communities/$id'
     | '/_left-sidebar/post/create'
     | '/_left-sidebar/post/drafts'
@@ -396,6 +418,7 @@ export const routeTree = rootRoute
         "/_left-sidebar/notifications",
         "/_left-sidebar/profile",
         "/_left-sidebar/settings",
+        "/_left-sidebar/badges/new",
         "/_left-sidebar/communities/$id",
         "/_left-sidebar/post/create",
         "/_left-sidebar/post/drafts",
@@ -423,6 +446,10 @@ export const routeTree = rootRoute
     "/_app/posts/$postId": {
       "filePath": "_app/posts/$postId.tsx",
       "parent": "/_app"
+    },
+    "/_left-sidebar/badges/new": {
+      "filePath": "_left-sidebar/badges/new.tsx",
+      "parent": "/_left-sidebar"
     },
     "/_left-sidebar/communities/$id": {
       "filePath": "_left-sidebar/communities/$id.tsx",
