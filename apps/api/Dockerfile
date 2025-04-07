@@ -12,7 +12,8 @@ COPY package*.json ./
 COPY entrypoint.sh ./
 RUN chmod +x ./entrypoint.sh
 
-RUN npm install
+# Install dependencies with increased timeout
+RUN npm install --network-timeout 600000
 
 # Use entrypoint script
 ENTRYPOINT ["./entrypoint.sh"] 

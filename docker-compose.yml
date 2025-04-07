@@ -15,10 +15,12 @@ services:
       - ./apps/client:/workspace/apps/client
       - ./apps/shared:/workspace/apps/shared
       - /workspace/apps/client/node_modules
+      - client_modules:/workspace/apps/client/node_modules
     working_dir: /workspace/apps/client
-    command: npm run dev -- --host 0.0.0.0
+    command: yarn dev --host 0.0.0.0
     depends_on:
       - api
+    restart: unless-stopped
 
   api:
     container_name: pse-forum-api
@@ -36,10 +38,13 @@ services:
       - ./apps/api:/workspace/apps/api
       - ./apps/shared:/workspace/apps/shared
       - /workspace/apps/api/node_modules
+      - api_modules:/workspace/apps/api/node_modules
+      - shared_modules:/workspace/apps/shared/node_modules
     working_dir: /workspace/apps/api
     depends_on:
       postgres:
         condition: service_healthy
+    restart: unless-stopped
 
   postgres:
     container_name: pse-forum-postgres
@@ -55,9 +60,10 @@ services:
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
+      interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 10s
 
 volumes:
   client_modules:
