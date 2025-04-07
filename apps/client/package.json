@@ -5,12 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "NODE_OPTIONS=--no-experimental-fetch vite build",
+    "build": "ROLLUP_SKIP_NATIVES=true NODE_OPTIONS=--no-experimental-fetch vite build",
     "start": "vite preview",
     "tanstack-router": "tanstack-router generate"
   },
   "engines": {
-    "node": ">=20"
+    "node": "20.x"
   },
   "dependencies": {
     "@hazae41/option": "^1.1.4",
@@ -65,5 +65,8 @@
     "typescript": "^5.5.3",
     "vite": "^5.4.1",
     "vite-tsconfig-paths": "^5.1.4"
+  },
+  "resolutions": {
+    "rollup": "3.29.4"
   }
 }

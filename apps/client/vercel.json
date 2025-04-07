@@ -1,10 +1,13 @@
 {
+  "version": 2,
   "builds": [
     {
       "src": "package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "dist"
+        "distDir": "dist",
+        "installCommand": "yarn install --ignore-optional --network-timeout 1000000",
+        "buildCommand": "ROLLUP_SKIP_NATIVES=true NODE_OPTIONS=--no-experimental-fetch yarn build"
       }
     }
   ],
@@ -13,5 +16,9 @@
       "src": "/(.*)",
       "dest": "/$1"
     }
-  ]
+  ],
+  "env": {
+    "NODE_OPTIONS": "--no-experimental-fetch",
+    "ROLLUP_SKIP_NATIVES": "true"
+  }
 }
