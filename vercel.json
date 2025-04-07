@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "buildCommand": "./.vercel/build.sh",
+  "outputDirectory": "apps/client/dist",
+  "framework": "vite",
+  "installCommand": "echo 'Using custom build script instead'",
+  "github": {
+    "silent": true
+  }
+} 
