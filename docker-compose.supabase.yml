@@ -1,0 +1,101 @@
+services:
+  studio:
+    container_name: supabase-studio
+    image: supabase/studio:latest
+    restart: unless-stopped
+    environment:
+      STUDIO_PG_META_URL: http://meta:8080
+      POSTGRES_PASSWORD: postgres
+      DEFAULT_ORGANIZATION_NAME: Default Organization
+      DEFAULT_PROJECT_NAME: Default Project
+      SUPABASE_URL: http://kong:8000
+      SUPABASE_PUBLIC_URL: http://localhost:8000
+      SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0
+      SUPABASE_SERVICE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU
+      DASHBOARD_USERNAME: supabase
+      DASHBOARD_PASSWORD: this_password_is_insecure_and_should_be_updated
+    depends_on:
+      - kong
+      - meta
+    networks:
+      - pse-forum-network
+
+  kong:
+    container_name: supabase-kong
+    image: kong:2.8.1
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./volumes/api/kong.yml:/var/lib/kong/kong.yml:ro
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /var/lib/kong/kong.yml
+      KONG_DNS_ORDER: LAST,A,CNAME
+      KONG_PLUGINS: request-transformer,cors,key-auth,acl,basic-auth
+      KONG_NGINX_PROXY_PROXY_BUFFER_SIZE: 160k
+      KONG_NGINX_PROXY_PROXY_BUFFERS: 64 160k
+      SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0
+      SUPABASE_SERVICE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU
+      DASHBOARD_USERNAME: supabase
+      DASHBOARD_PASSWORD: this_password_is_insecure_and_should_be_updated
+    networks:
+      - pse-forum-network
+
+  rest:
+    container_name: supabase-rest
+    image: postgrest/postgrest:v12.0.1
+    restart: unless-stopped
+    depends_on:
+      - pse-forum-postgres
+    environment:
+      PGRST_DB_URI: postgres://postgres:postgres@pse-forum-postgres:5432/pse_forum
+      PGRST_DB_SCHEMAS: public,storage
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
+      PGRST_DB_USE_LEGACY_GUCS: "false"
+    networks:
+      - pse-forum-network
+
+  storage:
+    container_name: supabase-storage
+    image: supabase/storage-api:v0.40.4
+    restart: unless-stopped
+    volumes:
+      - ./volumes/storage:/var/lib/storage
+    environment:
+      ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0
+      SERVICE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU
+      TENANT_ID: stub
+      REGION: stub
+      GLOBAL_S3_BUCKET: storage
+      POSTGREST_URL: http://rest:3000
+      PGRST_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
+      DATABASE_URL: postgres://postgres:postgres@pse-forum-postgres:5432/pse_forum
+      FILE_SIZE_LIMIT: 52428800
+      STORAGE_BACKEND: file
+      FILE_STORAGE_BACKEND_PATH: /var/lib/storage
+    depends_on:
+      - rest
+    networks:
+      - pse-forum-network
+
+  meta:
+    container_name: supabase-meta
+    image: supabase/postgres-meta:v0.68.0
+    restart: unless-stopped
+    environment:
+      PG_META_PORT: 8080
+      PG_META_DB_HOST: pse-forum-postgres
+      PG_META_DB_PORT: 5432
+      PG_META_DB_NAME: pse_forum
+      PG_META_DB_USER: postgres
+      PG_META_DB_PASSWORD: postgres
+    depends_on:
+      - pse-forum-postgres
+    networks:
+      - pse-forum-network
+
+networks:
+  pse-forum-network:
+    external: true 

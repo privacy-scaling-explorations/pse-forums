@@ -48,7 +48,9 @@ services:
 
   postgres:
     container_name: pse-forum-postgres
-    image: postgres:16
+    build:
+      context: .
+      dockerfile: postgres.Dockerfile
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -57,6 +59,11 @@ services:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./volumes/init.sql:/docker-entrypoint-initdb.d/01-init.sql
+      - ./volumes/storage-init.sql:/docker-entrypoint-initdb.d/02-storage-init.sql
+      - ./volumes/storage-functions.sql:/docker-entrypoint-initdb.d/03-storage-functions.sql
+      - ./volumes/postgresql.conf:/etc/postgresql/postgresql.conf
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
@@ -70,6 +77,7 @@ volumes:
   api_modules:
   shared_modules:
   postgres_data:
+  storage:
 
 networks:
   default:
