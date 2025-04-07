@@ -56,16 +56,6 @@ jobs:
       - name: Client checks OK
         run: exit 0
 
-  typos:
-    needs: changed-files
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: crate-ci/typos@v1.28.3
-        with:
-          config: apps/freedit/.typos.toml
-          files: ${{ needs.changed-files.outputs.all_changed_files }}
-
   _server:
     needs: changed-files
     if: needs.changed-files.outputs.server_any_changed == 'true'
