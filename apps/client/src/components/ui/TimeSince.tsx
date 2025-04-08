@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { TooltipTrigger } from "@radix-ui/react-tooltip";
 
 type TimeSinceProps = {
-  isoDateTime: string
+  isoDateTime?: string
   className?: string
 }
 
@@ -17,12 +17,13 @@ const TimeSinceBase = classed.span(
 export const TimeSince = ({ isoDateTime, className }: TimeSinceProps) => {
   const timeSince = useMemo(() => {
     // TODO Server should return a more standardized (ISO 8601) date/time string
+    if (!isoDateTime) return ""
     const iso8601 = `${isoDateTime.substring(0, 10)}T${isoDateTime.substring(11).replace(" ", "")}`
     return DateTime.fromISO(iso8601).toRelativeCalendar()
   }, [isoDateTime])
 
   return (
-    <Tooltip content={isoDateTime}>
+    <Tooltip content={isoDateTime ?? ""}>
       <TooltipTrigger asChild>
         <TimeSinceBase className={cn("italic", className)}>{timeSince}</TimeSinceBase>
       </TooltipTrigger>

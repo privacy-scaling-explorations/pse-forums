@@ -15,6 +15,8 @@ export interface PostCardProps extends VariantProps<typeof Card.Base> {
   postId?: string | number;
   className?: string;
   withHover?: boolean;
+  content?: string;
+  clampTitle?: boolean;
 }
 
 const PostCardBase = classed(Card.Base, {
@@ -46,16 +48,21 @@ const PostCommentCount = ({
   );
 };
 const PostTitle = classed.span(
-  "text-card-foreground font-inter line-clamp-2 lg:line-clamp-1 lg:w-full w-[90%]",
+  "text-card-foreground font-inter  lg:w-full w-[90%]",
   {
     variants: {
       size: {
         sm: "text-lg leading-[28px] font-semibold",
         lg: "text-[30px] leading-[36px] font-bold",
       },
+      clampTitle: {
+        true: "line-clamp-2 lg:line-clamp-1",
+        false: "l",
+      },
     },
     defaultVariants: {
       size: "sm",
+      clampTitle: true,
     },
   },
 );
@@ -69,6 +76,8 @@ const PostCard = ({
   postId,
   withHover = false,
   className,
+  content = "",
+  clampTitle = true,
 }: PostCardProps) => {
   return (
     <PostCardBase
@@ -85,12 +94,21 @@ const PostCard = ({
           {header && <div className="flex flex-col gap-1">{header}</div>}
           {title &&
             (withLink && postId ? (
-              <Link to="/post/$postId" params={{ postId: postId.toString() }}>
-                <PostTitle size={size}>{title}</PostTitle>
+              <Link to="/posts/$postId" params={{ postId: postId.toString() }}>
+                <PostTitle size={size} clampTitle={clampTitle}>
+                  {title}
+                </PostTitle>
               </Link>
             ) : (
-              <PostTitle size={size}>{title}</PostTitle>
+              <PostTitle size={size} clampTitle={clampTitle}>
+                {title}
+              </PostTitle>
             ))}
+          {content?.length > 0 && (
+            <span className="text-sm font-inter font-normal text-base-foreground line-clamp-3">
+              {content}
+            </span>
+          )}
         </div>
       )}
       {children}

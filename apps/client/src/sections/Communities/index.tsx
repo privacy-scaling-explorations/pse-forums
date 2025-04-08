@@ -1,7 +1,7 @@
 import { PageContent } from "@/components/PageContent";
 import { Tabs } from "@/components/ui/Tabs";
-import { AllCommunities } from "./_AllCommunities";
-
+import { CommunitiesList } from "./_CommunitiesList";
+import { useGlobalContext } from "@/contexts/GlobalContext";
 enum CommunityTabs {
   All = "all",
   Mod = "mod",
@@ -9,40 +9,36 @@ enum CommunityTabs {
 }
 
 export const CommunitiesPage = () => {
+  const { isLoggedIn } = useGlobalContext();
   return (
     <PageContent title="Communities">
       <Tabs
         size="xs"
         defaultValue={CommunityTabs.All}
-        items={[
-          {
-            id: CommunityTabs.All,
-            label: "All",
-            content: (
-              <div className="pt-6">
-                <AllCommunities />
-              </div>
-            ),
-          },
-          {
-            id: CommunityTabs.Mod,
-            label: "Mod",
-            content: (
-              <div className="pt-6">
-                <AllCommunities />
-              </div>
-            ),
-          },
-          {
-            id: CommunityTabs.Joined,
-            label: "Joined",
-            content: (
-              <div className="pt-6">
-                <AllCommunities />
-              </div>
-            ),
-          },
-        ]}
+        items={
+          [
+            {
+              id: CommunityTabs.All,
+              label: "All",
+              content: (
+                <div className="pt-6">
+                  <CommunitiesList view="all" />
+                </div>
+              ),
+            },
+            isLoggedIn
+              ? {
+                  id: CommunityTabs.Joined,
+                  label: "Joined",
+                  content: (
+                    <div className="pt-6">
+                      <CommunitiesList view="joined" />
+                    </div>
+                  ),
+                }
+              : undefined,
+          ].filter(Boolean) as any
+        }
       />
     </PageContent>
   );

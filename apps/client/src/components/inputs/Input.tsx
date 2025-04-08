@@ -71,7 +71,7 @@ export const InputWrapper = ({
 };
 
 export const InputBase = classed.input(
-  "flex min-h-9 w-full rounded-md text-base-foreground bg-base-background py-1 text-sm shadow-input transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-base-muted-foreground focus-visible:outline-none  disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+  "flex min-h-9 w-full rounded-md text-base-foreground bg-base-background py-1 text-sm shadow-base transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-base-muted-foreground focus-visible:outline-none  disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
   {
     variants: {
       withIcon: {

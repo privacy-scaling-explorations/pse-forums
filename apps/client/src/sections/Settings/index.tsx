@@ -11,7 +11,7 @@ export const SettingsPage = () => {
   const { isDarkMode, setIsDarkMode } = useGlobalContext();
   return (
     <PageContent title="Settings">
-      <AuthWrapper>
+      <AuthWrapper className="flex flex-col gap-6">
         <Banner.Base className="text-center">
           <Banner.Label size="sm">
             Please complete your profile to enhance your experience!

@@ -77,7 +77,7 @@ export const Content: FC<{ content: string }> = ({ content }) => {
                 </ol>
               ),
               p: ({ children, className }) => (
-                <p className={cn("text-base-foreground", className)}>
+                <p className={cn("text-base-foreground text-sm font-inter font-normal", className)}>
                   {children}
                 </p>
               ),
@@ -95,7 +95,7 @@ export const Content: FC<{ content: string }> = ({ content }) => {
                 </span>
               ),
               div: ({ children, className }) => (
-                <div className={cn("text-base-foreground", className)}>
+                <div className={cn("text-base-foreground text-sm font-inter font-normal", className)}>
                   {children}
                 </div>
               ),

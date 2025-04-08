@@ -1,25 +1,27 @@
 import { Select } from "@/components/inputs/Select";
 import { Input } from "@/components/inputs/Input";
 import { Tabs } from "@/components/ui/Tabs";
-import { useField, useForm } from "@tanstack/react-form";
+import { useForm } from "@tanstack/react-form";
 import { capitalize } from "@/lib/format";
-import { getToken, rspc } from "@/lib/rspc";
-import { type CreatePostSchema, createPostSchema } from "@/lib/schemas";
 import type { FormEvent } from "react";
 import { Button } from "@/components/ui/Button";
-import { useLoaderData, useParams, useSearch } from "@tanstack/react-router";
+import { useSearch } from "@tanstack/react-router";
 import { Textarea } from "@/components/inputs/Textarea";
 import { router } from "@/lib/router";
 import { PageContent } from "@/components/PageContent";
-import { membershipMocks } from "mocks/membershipMocks";
-import { useCreateDraftMutation } from "@/hooks/usePosts";
-import { badgesMocks } from "mocks/badgesMocks";
+import {
+  useCreateDraftMutation,
+  useGetBadges,
+  useCreatePostMutation,
+} from "@/hooks/usePosts";
 import { FileBadge } from "lucide-react";
 import { Card } from "@/components/cards/Card";
 import { Switch } from "@/components/inputs/Switch";
-import { useGlobalContext } from "@/contexts/GlobalContext";
 import { Mail as MailIcon } from "lucide-react";
 import { Tag } from "@/components/ui/Tag";
+import { useMemo, useCallback, useState } from "react";
+import { type CreatePostSchema } from "@/shared/schemas/post.schema";
+import { useGetUser } from "@/hooks/useAuth";
 
 enum TabName {
   Write = "write",
@@ -27,31 +29,104 @@ enum TabName {
 }
 
 export const PostCreate = () => {
-  const groups = useLoaderData({ from: "/_left-sidebar/post/create" }) ?? [];
-
   const createDraftMutation = useCreateDraftMutation();
-  const { user } = useGlobalContext();
+  const createPostMutation = useCreatePostMutation();
+  const [selectedBadge, setSelectedBadge] = useState<string[] | undefined>([]);
+  const { data: user } = useGetUser();
 
   const search = useSearch({ from: "/_left-sidebar/post/create" });
 
+  const { data: badges = [] } = useGetBadges();
+
+  const communities =
+    user?.communities?.map(({ id, name }: any) => ({
+      value: id,
+      label: name,
+    })) ?? [];
+
+  const userBadges = useMemo(() => {
+    return (
+      user?.badges?.map(({ id, name }: any) => ({
+        value: id,
+        label: name,
+      })) ?? []
+    );
+  }, [user]);
+
+  const badgeMap = useMemo(() => {
+    const map = new Map();
+    if (badges) {
+      badges.forEach((badge: any) => {
+        map.set(badge.id, badge.name);
+      });
+    }
+    return map;
+  }, [badges]);
+
+  const getBadgeName = useCallback(
+    (badgeId: string) => {
+      return badgeMap.get(badgeId) || "Unknown";
+    },
+    [badgeMap],
+  );
+
   const form = useForm<CreatePostSchema>({
     defaultValues: {
-      content: "",
-      gid: Number(search?.community) || null,
       title: "",
-      tags: [],
+      content: "",
+      author: {
+        id: user?.id?.toString() || null,
+        username: user?.username || null,
+        isAnon: false,
+        badges: userBadges,
+      },
+      isAnon: false,
+      community: search?.community ? String(search.community) : undefined,
     },
     onSubmit: async ({ value }) => {
-      getToken();
-      await rspc.mutation(["post.create", value]);
+      const submissionData = {
+        ...value,
+        author: {
+          id: user?.id?.toString() || null,
+          username: user?.username || null,
+          isAnon: value?.isAnon ?? false,
+          badges: selectedBadge || [],
+        },
+      };
+     
+      try {
+        const res = await createPostMutation.mutateAsync(submissionData);
+        if (res.id) {
+          router.navigate({ to: `/posts/${res.id}` });
+        }
+      } catch(err) {
+        console.log("err", err);
+      }
     },
-    validators: { onChange: createPostSchema },
+    validators: {
+      onChange: undefined
+    },
   });
 
-  const contentField = useField<CreatePostSchema, "content">({
-    form,
-    name: "content",
-  });
+  const handleAddTag = useCallback(
+    (tagId: string) => {
+      if (selectedBadge?.includes(tagId)) {
+        setSelectedBadge((prev) => prev?.filter((id) => id !== tagId));
+      } else {
+        setSelectedBadge((prev) => [...(prev || []), tagId]);
+      }
+    },
+    [selectedBadge],
+  );
+
+  const handleRemoveTag = useCallback(
+    (tagToRemove: string) => {
+      form.setFieldValue("tags", (prev: string[] | undefined) =>
+        (prev || []).filter((tag: string) => tag !== tagToRemove),
+      );
+    },
+    [form],
+  );
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -60,7 +135,7 @@ export const PostCreate = () => {
   }
 
   return (
-    <form className="w-full h-full pb-6" onSubmit={(e) => handleSubmit(e)}>
+    <form className="w-full h-full pb-6" onSubmit={handleSubmit}>
       <PageContent title="New Post" className="flex flex-col h-full">
         <Tabs
           defaultValue={TabName.Write}
@@ -82,19 +157,17 @@ export const PostCreate = () => {
 
         <div className="space-y-8">
           <div className="space-y-4">
-            <div className="lg:w-1/5 w-full">
+            <div className="lg:w-1/4 w-full">
               <form.Field
-                name="gid"
+                name="community"
                 children={(field) => (
                   <Select
                     label="Select a community"
-                    items={membershipMocks.map(({ id, name }) => ({
-                      value: id,
-                      label: name,
-                    }))}
-                    onValueChange={(value) => field.handleChange(Number(value))}
-                    value={field.state.value?.toString()}
+                    items={communities}
+                    onValueChange={(value) => field.handleChange(value)}
+                    value={field.state.value || ""}
                     field={field}
+                    disabled={user?.communities?.length === 0}
                   />
                 )}
               />
@@ -103,71 +176,54 @@ export const PostCreate = () => {
             <form.Field
               name="title"
               children={(field) => (
-                <>
-                  <Input
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    maxLength={200}
-                    placeholder={capitalize(field.name)}
-                    value={field.state.value}
-                    field={field}
-                    showCounter
-                  />
-                </>
+                <Input
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  maxLength={200}
+                  placeholder={capitalize(field.name)}
+                  value={field.state.value || ""}
+                  field={field}
+                  showCounter={false}
+                />
               )}
             />
 
-            <Textarea
-              id={contentField.name}
-              rows={4}
-              onChange={(e) => contentField.handleChange(e.target.value)}
-              value={contentField.state.value}
-              placeholder="Have something on your mind? Write it here!"
-              field={contentField}
+            <form.Field
+              name="content"
+              children={(field) => (
+                <Textarea
+                  id={field.name}
+                  rows={4}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  value={field.state.value || ""}
+                  placeholder="Have something on your mind? Write it here!"
+                  field={field}
+                />
+              )}
             />
           </div>
           <div className="flex flex-col gap-6">
             <div className="lg:w-1/4 w-full">
-              <form.Field
-                name="tags"
-                children={(field) => (
-                  <Select
-                    header={
-                      <div className="flex items-center gap-[6px] text-base-muted-foreground">
-                        <FileBadge className="size-[18px]" />
-                        <span className="text-base font-medium">Badges</span>
-                      </div>
-                    }
-                    label="Add badges"
-                    items={badgesMocks.map(({ id, name }) => ({
-                      value: id,
-                      label: (
-                        <div className="flex items-center gap-1">
-                          <MailIcon className="size-4" />
-                          <span>{name}</span>
-                        </div>
-                      ),
-                    }))}
-                    onValueChange={(value) => {
-                      const currentTags = field.state.value || [];
-                      if (!currentTags.includes(value)) {
-                        field.handleChange([...currentTags, value]);
-                      }
-                    }}
-                    field={field}
-                  />
-                )}
+              <Select
+                header={
+                  <div className="flex items-center gap-[6px] text-base-muted-foreground">
+                    <FileBadge className="size-[18px]" />
+                    <span className="text-base font-medium">Badges</span>
+                  </div>
+                }
+                label="Add badges"
+                items={userBadges}
+                onValueChange={handleAddTag}
+                value=""
               />
             </div>
-            {form.state.values?.tags?.length > 0 && (
+            {(selectedBadge ?? [])?.length > 0 && (
               <div className="flex gap-2.5 flex-wrap">
-                {form.state.values?.tags?.map((tag) => {
-                  return (
-                    <Tag key={tag} onRemove={() => {}}>
-                      <MailIcon className="size-4" />
-                      {badgesMocks.find(({ id }) => id === tag)?.name}
-                    </Tag>
-                  );
-                })}
+                {(selectedBadge ?? []).map((tag) => (
+                  <Tag key={tag} onRemove={() => handleRemoveTag(tag)}>
+                    <MailIcon className="size-4" />
+                    {getBadgeName(tag)}
+                  </Tag>
+                ))}
               </div>
             )}
           </div>
@@ -176,16 +232,16 @@ export const PostCreate = () => {
         <Card.Base variant="secondary" className="mt-auto">
           <div className="flex justify-end gap-2.5">
             <form.Field
-              name="postAsAnonymous"
+              name="isAnon"
               children={(field) => (
                 <Switch
                   label="Post as anonymous?"
                   description={
                     field.state.value
                       ? "Your name will not be displayed"
-                      : `You are posting as ${user?.name}`
+                      : `You are posting as ${user?.username}`
                   }
-                  checked={!!field.state.value}
+                  checked={field.state.value || false}
                   onChange={(e) => field.handleChange(e.target.checked)}
                   field={field}
                 />
@@ -198,8 +254,8 @@ export const PostCreate = () => {
               type="button"
               onClick={() => {
                 createDraftMutation.mutate({
-                  content: contentField.state.value,
-                  title: form.state.values.title,
+                  content: form.state.values.content || "",
+                  title: form.state.values.title || "",
                 });
               }}
             >
@@ -210,10 +266,10 @@ export const PostCreate = () => {
                 canSubmit,
                 isSubmitting,
               ]}
-              children={([_canSubmit, isSubmitting]) => (
+              children={([canSubmit, isSubmitting]) => (
                 <Button
                   aria-busy={isSubmitting}
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !canSubmit}
                   className="min-w-[160px]"
                 >
                   Post

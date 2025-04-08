@@ -1,5 +1,5 @@
 import { createContext, useContext, ReactNode, useState } from 'react';
-
+import { LoginModal } from '@/sections/Login/LoginModal';
 interface GlobalContextType {
   isMenuOpen: boolean;
   setIsMenuOpen: (value: boolean) => void;
@@ -9,6 +9,8 @@ interface GlobalContextType {
   user?: any;
   isLoggedIn: boolean;
   setIsLoggedIn: (value: boolean) => void;
+  showLoginModal: boolean;
+  setShowLoginModal: (value: boolean) => void;
 }
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
@@ -17,6 +19,7 @@ export function GlobalProvider({ children }: { children: ReactNode }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const user = {
     name: "John Doe",
     username: "john_doe",
@@ -31,6 +34,8 @@ export function GlobalProvider({ children }: { children: ReactNode }) {
     user,
     isLoggedIn,
     setIsLoggedIn,
+    showLoginModal,
+    setShowLoginModal,
   };
 
   return (

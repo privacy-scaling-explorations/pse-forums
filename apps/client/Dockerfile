@@ -1,15 +1,21 @@
-FROM nginx:alpine AS base
-WORKDIR /usr/share/nginx/html
+FROM node:20-alpine
 
-FROM oven/bun:latest AS builder
-WORKDIR /app
+WORKDIR /workspace/apps/client
+
+COPY package*.json ./
+
+# Install dependencies
+RUN yarn install --network-timeout 600000
+
+# Explicitly install the TanStack router plugin matching the router version
+RUN yarn add -D @tanstack/router-plugin@1.106.0
+
 COPY . .
-COPY .env .env
-RUN bun i --frozen-lockfile
-RUN bun vite build
 
-FROM base AS runtime
-RUN rm -fr ./*
-COPY --from=builder /app/dist ./
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Create empty module file for Rollup native modules
+RUN mkdir -p /workspace/apps/client/src/utils && \
+    echo "export default {};" > /workspace/apps/client/src/utils/empty-module.js
+
+EXPOSE 5173
+
+CMD ["yarn", "dev", "--", "--host", "0.0.0.0"]

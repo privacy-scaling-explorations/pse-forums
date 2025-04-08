@@ -1,0 +1,14 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "apps/shared"
+    },
+    {
+      "path": "apps/api"
+    },
+    {
+      "path": "apps/client"
+    }
+  ]
+} 

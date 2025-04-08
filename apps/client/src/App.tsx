@@ -1,5 +1,5 @@
-import type { router } from "lib/router";
-import { Providers } from "providers";
+import type { router } from "@/lib/router";
+import { Providers } from "@/providers";
 
 // Register the router instance for type safety
 declare module "@tanstack/react-router" {

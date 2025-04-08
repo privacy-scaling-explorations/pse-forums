@@ -1,0 +1,189 @@
+services:
+  client:
+    container_name: pse-forum-client
+    build:
+      context: ./apps/client
+      dockerfile: Dockerfile
+    environment:
+      - VITE_API_URL=http://localhost:3001
+      - NODE_ENV=${NODE_ENV}
+      - BROWSER=none
+      - DISABLE_OPEN=true
+    ports: 
+      - "5173:5173"
+    volumes:
+      - ./apps/client:/workspace/apps/client
+      - ./apps/shared:/workspace/apps/shared
+      - /workspace/apps/client/node_modules
+      - client_modules:/workspace/apps/client/node_modules
+    working_dir: /workspace/apps/client
+    command: yarn dev --host 0.0.0.0
+    depends_on:
+      - api
+    restart: unless-stopped
+    networks:
+      - pse-forum-network
+
+  api:
+    container_name: pse-forum-api
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    environment:
+      - PORT=${PORT}
+      - NODE_ENV=${NODE_ENV}
+      - HOST=${HOST}
+      - DATABASE_URL=${DATABASE_URL}
+    ports: 
+      - "${PORT}:${PORT}"
+    volumes:
+      - ./apps/api:/workspace/apps/api
+      - ./apps/shared:/workspace/apps/shared
+      - /workspace/apps/api/node_modules
+      - api_modules:/workspace/apps/api/node_modules
+      - shared_modules:/workspace/apps/shared/node_modules
+    working_dir: /workspace/apps/api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - pse-forum-network
+
+  postgres:
+    container_name: pse-forum-postgres
+    build:
+      context: .
+      dockerfile: postgres.Dockerfile
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./volumes/init.sql:/docker-entrypoint-initdb.d/01-init.sql
+      - ./volumes/storage-init.sql:/docker-entrypoint-initdb.d/02-storage-init.sql
+      - ./volumes/storage-functions.sql:/docker-entrypoint-initdb.d/03-storage-functions.sql
+      - ./volumes/postgresql.conf:/etc/postgresql/postgresql.conf
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - pse-forum-network
+
+  # Supabase Services
+  studio:
+    container_name: supabase-studio
+    image: supabase/studio:latest
+    restart: unless-stopped
+    environment:
+      STUDIO_PG_META_URL: http://meta:8080
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      DEFAULT_ORGANIZATION_NAME: Default Organization
+      DEFAULT_PROJECT_NAME: Default Project
+      SUPABASE_URL: http://kong:8000
+      SUPABASE_PUBLIC_URL: ${SUPABASE_PUBLIC_URL}
+      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY}
+      SUPABASE_SERVICE_KEY: ${SUPABASE_SERVICE_KEY}
+      DASHBOARD_USERNAME: ${DASHBOARD_USERNAME}
+      DASHBOARD_PASSWORD: ${DASHBOARD_PASSWORD}
+    depends_on:
+      - kong
+      - meta
+    networks:
+      - pse-forum-network
+
+  kong:
+    container_name: supabase-kong
+    image: kong:2.8.1
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./volumes/api/kong.yml:/var/lib/kong/kong.yml:ro
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /var/lib/kong/kong.yml
+      KONG_DNS_ORDER: LAST,A,CNAME
+      KONG_PLUGINS: request-transformer,cors,key-auth,acl,basic-auth
+      KONG_NGINX_PROXY_PROXY_BUFFER_SIZE: 160k
+      KONG_NGINX_PROXY_PROXY_BUFFERS: 64 160k
+      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY}
+      SUPABASE_SERVICE_KEY: ${SUPABASE_SERVICE_KEY}
+      DASHBOARD_USERNAME: ${DASHBOARD_USERNAME}
+      DASHBOARD_PASSWORD: ${DASHBOARD_PASSWORD}
+    networks:
+      - pse-forum-network
+
+  rest:
+    container_name: supabase-rest
+    image: postgrest/postgrest:v12.0.1
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    environment:
+      PGRST_DB_URI: ${PGRST_DB_URI}
+      PGRST_DB_SCHEMAS: public,storage
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: ${JWT_SECRET}
+      PGRST_DB_USE_LEGACY_GUCS: "false"
+    networks:
+      - pse-forum-network
+
+  storage:
+    container_name: supabase-storage
+    image: supabase/storage-api:v0.40.4
+    restart: unless-stopped
+    volumes:
+      - ./volumes/storage:/var/lib/storage
+    environment:
+      ANON_KEY: ${SUPABASE_ANON_KEY}
+      SERVICE_KEY: ${SUPABASE_SERVICE_KEY}
+      TENANT_ID: ${POOLER_TENANT_ID}
+      REGION: stub
+      GLOBAL_S3_BUCKET: storage
+      POSTGREST_URL: http://rest:3000
+      PGRST_JWT_SECRET: ${JWT_SECRET}
+      DATABASE_URL: ${DATABASE_URL}
+      FILE_SIZE_LIMIT: ${FILE_SIZE_LIMIT}
+      STORAGE_BACKEND: ${STORAGE_BACKEND}
+      FILE_STORAGE_BACKEND_PATH: /var/lib/storage
+    depends_on:
+      - rest
+    networks:
+      - pse-forum-network
+
+  meta:
+    container_name: supabase-meta
+    image: supabase/postgres-meta:v0.68.0
+    restart: unless-stopped
+    environment:
+      PG_META_PORT: 8080
+      PG_META_DB_HOST: postgres
+      PG_META_DB_PORT: 5432
+      PG_META_DB_NAME: ${POSTGRES_DB}
+      PG_META_DB_USER: ${POSTGRES_USER}
+      PG_META_DB_PASSWORD: ${POSTGRES_PASSWORD}
+    depends_on:
+      - postgres
+    networks:
+      - pse-forum-network
+
+volumes:
+  client_modules:
+  api_modules:
+  shared_modules:
+  postgres_data:
+  storage:
+
+networks:
+  pse-forum-network:
+    # Remove the explicit name to let Docker Compose handle the naming
+    # name: pse-forum-network 

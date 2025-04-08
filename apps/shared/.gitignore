@@ -1,0 +1,7 @@
+/dist
+/node_modules
+/target
+/bun.lockb
+/bunfig.toml
+/tsconfig.json
+/tsconfig.node.json

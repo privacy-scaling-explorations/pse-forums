@@ -1,4 +1,75 @@
-# PSE Forum
+# PSE Forums
+
+## Supabase Self-Hosted Setup
+
+This project includes a self-hosted Supabase setup that provides:
+- PostgreSQL database with custom extensions
+- REST API via PostgREST
+- Storage API
+- Authentication
+- Supabase Studio UI
+
+## Configuration
+
+All configuration is managed through a single `.env` file in the project root. This file contains all the environment variables needed for both the main application and the Supabase services.
+
+### Environment Variables
+
+The key environment variables include:
+- `SUPABASE_ANON_KEY` - Anonymous API key for client-side authentication
+- `SUPABASE_SERVICE_KEY` - Service role API key for server-side operations
+- `JWT_SECRET` - Secret used for JWT authentication
+- `DASHBOARD_USERNAME` and `DASHBOARD_PASSWORD` - Credentials for accessing Supabase Studio
+
+## Running the Application
+
+To start the entire application with Supabase services:
+
+```bash
+docker compose -f docker-compose.combined.yml --env-file .env up -d
+```
+
+This will start:
+1. The PostgreSQL database
+2. Supabase services (REST API, Storage, Meta, Studio)
+3. The application API
+4. The application client
+
+### Troubleshooting
+
+If you encounter a network error like:
+```
+network pse-forum-network was found but has incorrect label com.docker.compose.network
+```
+
+Run the following commands to fix it:
+```bash
+# Stop all containers
+docker compose down --remove-orphans
+
+# Remove the existing network
+docker network rm pse-forum-network
+
+# Start again
+docker compose -f docker-compose.combined.yml --env-file .env up -d
+```
+
+## Accessing Supabase
+
+### Supabase Studio
+- URL: http://localhost:8000
+- Username: `supabase` (or the value of `DASHBOARD_USERNAME` in .env)
+- Password: `this_password_is_insecure_and_should_be_updated` (or the value of `DASHBOARD_PASSWORD` in .env)
+
+### REST API
+- Base URL: http://localhost:8000/rest/v1
+- Authentication: Add header `apikey: [SUPABASE_ANON_KEY]`
+
+## Development
+
+When developing, you can access:
+- Client application: http://localhost:5173
+- API: http://localhost:3001
 
 ## Client
 
